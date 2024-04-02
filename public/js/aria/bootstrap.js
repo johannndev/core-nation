@@ -1,0 +1,1 @@
+angular.module('ariaApp', ['ariaApp.controllers', 'ariaApp.config', 'ariaApp.services', 'ariaApp.directives', 'ariaApp.global']);
