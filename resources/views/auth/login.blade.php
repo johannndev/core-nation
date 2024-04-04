@@ -1,60 +1,47 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="rootApp">
-<head>
-<title>Login Dulu</title>
+<x-guest-layout>
+    <!-- Session Status -->
+    <x-auth-session-status class="mb-4" :status="session('status')" />
 
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="">
-<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-
-<link rel="shortcut icon" href="{{ asset('img/ico/fav.ico') }}">
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ asset('img/ico/ico144.png') }}">
-<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('img/ico/ico114.png') }}">
-<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('img/ico/ico72.png') }}">
-<link rel="apple-touch-icon-precomposed" href="{{ asset('img/ico/ico57.png') }}">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('css/materialize.min.css') }}"/>
-</head>
-
-<body>
-
-<div class="container">
     <form method="POST" action="{{ route('login') }}">
-
         @csrf
 
+        <!-- username Address -->
         <div>
-            <label>Username</label>
-            <input name="username" type="text" id="username">
+            <x-input-label for="username" :value="__('username')" />
+            <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('username')" class="mt-2" />
         </div>
 
-        <div>
-            <label>Password</label>
-            <input name="password" type="password" value="" id="password">
+        <!-- Password -->
+        <div class="mt-4">
+            <x-input-label for="password" :value="__('Password')" />
+
+            <x-text-input id="password" class="block mt-1 w-full"
+                            type="password"
+                            name="password"
+                            required autocomplete="current-password" />
+
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li class="red-text">{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        <!-- Remember Me -->
+        <div class="block mt-4">
+            <label for="remember_me" class="inline-flex items-center">
+                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
+                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+            </label>
+        </div>
 
-        {{-- @if(session('status'))
-        <h4 class="red-text">{{session('status')}}</h4>
-        @endif --}}
+        <div class="flex items-center justify-end mt-4">
+            @if (Route::has('password.request'))
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                    {{ __('Forgot your password?') }}
+                </a>
+            @endif
 
-        <div><input class="btn" type="submit" value="Login"></div>
-</form>
-</div>
-
-<script src="{{ asset('js/jquery-2.1.4.min.js') }}"></script>
-<script src="{{ asset('js/materialize.min.js') }}"></script>
-
-
-</body>
-</html>
+            <x-primary-button class="ms-3">
+                {{ __('Log in') }}
+            </x-primary-button>
+        </div>
+    </form>
+</x-guest-layout>
