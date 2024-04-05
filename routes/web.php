@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,10 @@ Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 
 Route::get('/getItem', [HomeController::class, 'getItemAjax'])->middleware(['auth', 'verified'])->name('ajax.getitem');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/transaction/sell', [TransactionsController::class, 'sell'])->name('transaction.sell');
+
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
