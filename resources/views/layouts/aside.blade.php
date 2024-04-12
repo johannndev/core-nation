@@ -72,7 +72,7 @@
             ></path>
             </svg>
             <span class="flex-1 ml-3 text-left whitespace-nowrap"
-            >Pages</span
+            >Transactions</span
             >
             <svg
             aria-hidden="true"
@@ -91,24 +91,62 @@
         <ul id="dropdown-pages" class="hidden py-2 space-y-2">
             <li>
             <a
-                href="#"
+                href="{{route('transaction.index')}}"
                 class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                >Settings</a
+                >List</a
             >
             </li>
             <li>
             <a
                 href="#"
                 class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                >Kanban</a
+                >Cash In</a
             >
             </li>
             <li>
             <a
                 href="#"
                 class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                >Calendar</a
+                >Cash Out</a
             >
+            </li>
+
+            <li>
+                <a
+                    href="#"
+                    class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >Adjust</a
+                >
+            </li>
+            <li>
+                <a
+                    href="#"
+                    class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >Transfer</a
+                >
+            </li>
+            <li>
+                <a
+                    href="#"
+                    class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >Return</a
+                >
+            </li>
+
+            <li>
+                <a
+                    href="#"
+                    class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >Return Supplier</a
+                >
+            </li>
+
+            <li>
+                <a
+                    href="#"
+                    class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >Deleted List</a
+                >
             </li>
         </ul>
         </li>

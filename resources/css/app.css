@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.select2-container--default .select2-selection--single{
+    @apply h-full  w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+}
+.select2-container {
+    @apply !w-full
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    @apply h-[26px] absolute w-5 top-0 bottom-0 m-auto;
+}
+
+.select2-container--open .select2-dropdown--above{
+    @apply border border-gray-300
+}
+

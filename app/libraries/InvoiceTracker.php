@@ -1,10 +1,15 @@
 <?
 namespace App\Libraries;
 
+use App\Libraries\Apps as LibrariesApps;
 use App\Models\Updater,App\Models\BalanceTracker,App\Models\Customer,App\Models\Transaction;
 use App\Libraries\Keys;
 use App\Models\WarehouseItem, App\Models\Item, App\Models\CustomerStat;
-use Apps, App, Cache, Config, Dater, DB, Event, Input, InputForm, Redirect, Response, Session, URL, View, ModelException, Exception, Auth;
+
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+
 class InvoiceTracker extends StaticManager
 {
 	public static $types = array(
@@ -37,11 +42,11 @@ class InvoiceTracker extends StaticManager
 
 	protected static function toggleUpdater($entity_id,$update = true)
 	{
-		if(!$u = Updater::where('entity_id','=',$entity_id)->where('app_id','=',Apps::TRACK_INVOICE)->first())
+		if(!$u = Updater::where('entity_id','=',$entity_id)->where('app_id','=',LibrariesApps::TRACK_INVOICE)->first())
 			$u = new Updater;
-		$u->date = Dater::now()->format(Dater::$SQLFormat);
+		$u->date = Carbon::now()->toDateString();
 		$u->entity_id = $entity_id;
-		$u->app_id = Apps::TRACK_INVOICE;
+		$u->app_id = LibrariesApps::TRACK_INVOICE;
 		if($update)
 			$u->flag = Updater::NEED_UPDATE;
 		else
@@ -49,7 +54,7 @@ class InvoiceTracker extends StaticManager
 
 		if(!$u->save())
 			throw new \Exception('cannot save invoice');
-		Cache::forget(Keys::updater($entity_id,Apps::TRACK_INVOICE));
+		Cache::forget(Keys::updater($entity_id,LibrariesApps::TRACK_INVOICE));
 	}
 
 	public static function track($customer)
@@ -83,7 +88,7 @@ class InvoiceTracker extends StaticManager
 		if($balance < 0)
 		{
 			$balance = abs($balance);
-			$transactions = Transaction::where('date','<=',Dater::now()->format(Dater::$SQLFormat))->where('type','=',Transaction::TYPE_SELL)->where('receiver_id','=',$customer->id)->orderBy('date','desc')->orderBy('id','desc')->take(100)->get();
+			$transactions = Transaction::where('date','<=',Carbon::now()->toDateString())->where('type','=',Transaction::TYPE_SELL)->where('receiver_id','=',$customer->id)->orderBy('date','desc')->orderBy('id','desc')->take(100)->get();
 			foreach($transactions as $t)
 			{
 				$balance = $balance - abs($t->total);
@@ -126,7 +131,7 @@ class InvoiceTracker extends StaticManager
 		$partial_due = null;
 		if($balance > 0)
 		{
-			$transactions = Transaction::where('date','<=',Dater::now()->format(Dater::$SQLFormat))->where('type','=',Transaction::TYPE_BUY)->where('sender_id','=',$customer->id)->orderBy('date','desc')->orderBy('id','desc')->take(100)->get();
+			$transactions = Transaction::where('date','<=',Carbon::now()->toDateString())->where('type','=',Transaction::TYPE_BUY)->where('sender_id','=',$customer->id)->orderBy('date','desc')->orderBy('id','desc')->take(100)->get();
 			foreach($transactions as $t)
 			{
 				$balance = $balance - abs($t->total);

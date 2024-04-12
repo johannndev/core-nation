@@ -3,11 +3,15 @@ namespace App\Libraries;
 use App\Models\ItemGroup;
 use App\Models\Item, App\Models\ItemTag, App\Models\WarehouseItem;
 use Illuminate\Support\MessageBag, App\Models\Tag, App\Models\Customer;
-use Apps, App, Cache, Config, Dater, DB, Event, Input, InputForm, Redirect, Response, Session, URL, View, ModelException, Exception, Auth, Image;
+use Apps, App, Config, Dater, Event, Input, InputForm, Redirect, Response, Session, URL, View, ModelException, Exception, Auth, Image;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+
 class ItemsManager
 {
 	public static $_tags;
 	public static $_json;
+	
 
 	public function createItems($input, $inputTags, $file)
 	{
@@ -317,6 +321,8 @@ class ItemsManager
 		if(!$wi = WarehouseItem::where('warehouse_id','=',$warehouse_id)->where('item_id','=',$item->id)->lockForUpdate()->first())
 			$wi = WarehouseItem::create(array('warehouse_id' => $warehouse_id, 'item_id' => $item->id, 'quantity' => 0));
 
+			dd($wi);
+
 		$wi->quantity += $quantity;
 
 		if(!$wi->save())
@@ -330,6 +336,8 @@ class ItemsManager
 
 		if(!$wi = WarehouseItem::where('warehouse_id','=',$warehouse_id)->where('item_id','=',$item->id)->lockForUpdate()->first())
 			$wi = WarehouseItem::create(array('warehouse_id' => $warehouse_id, 'item_id' => $item->id, 'quantity' => 0));
+
+			dd($wi);
 
 		if(!$can_minus && ($wi->quantity - $quantity) < 0) //check if minus is allowed
 			throw new \Exception("{$item->name} cuma ada {$wi->quantity}, mau diambil {$quantity}");

@@ -1,9 +1,14 @@
 <?
 namespace App\Libraries;
 
+use App\Libraries\Apps as LibrariesApps;
 use App\Models\Updater,App\Models\HashTag,App\Models\HT,App\Models\Transaction;
 use App\Libraries\Keys;
-use Apps, App, Cache, Config, Dater, DB, Event, Input, InputForm, Redirect, Response, Session, URL, View, ModelException, Exception, Auth;
+
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Support\Facades\Cache as FacadesCache;
+
 class HashManager extends StaticManager
 {
 	public static $pattern = '/#(\w+)/';
@@ -22,7 +27,9 @@ class HashManager extends StaticManager
 			return true;
 
 		//save in the start of the month
-		$date = Dater::fromSQL($t->date);
+		// $date = Dater::fromSQL($t->date);
+		$date = Carbon::createFromFormat('Y-m-d',$t->date);
+		
 
 		$hashes = array();
 		$links = array();
@@ -44,7 +51,7 @@ class HashManager extends StaticManager
 				throw new Exception('cannot save hash transaction relation', 1);
 
 			$hashes[] = '#'.$hash->name;
-			$links[] = '<a href="'.URL::action('HashController@getTransactions',array($hash->id)).'">#'.$hash->name.'</a>';
+			$links[] = '<a href="'.route('hash.getTransactions',array($hash->id)).'">#'.$hash->name.'</a>';
 //			self::toggleUpdater($hash->id);
 		}
 
@@ -69,9 +76,9 @@ class HashManager extends StaticManager
 	{
 		if(!$u = Updater::where('entity_id','=',$entity_id)->where('app_id','=',Apps::TRACK_HASHTAG)->first())
 			$u = new Updater;
-		$u->date = Dater::now()->format(Dater::$SQLFormat);
+		$u->date = Carbon::now()->toDateString() ;
 		$u->entity_id = $entity_id;
-		$u->app_id = Apps::TRACK_HASHTAG;
+		$u->app_id = LibrariesApps::TRACK_HASHTAG;
 		if($update)
 			$u->flag = Updater::NEED_UPDATE;
 		else
@@ -79,14 +86,14 @@ class HashManager extends StaticManager
 
 		if(!$u->save())
 			throw new \Exception('cannot save updater');
-		Cache::forget(Keys::updater($entity_id,Apps::TRACK_HASHTAG));
+		FacadesCache::forget(Keys::updater($entity_id,LibrariesApps::TRACK_HASHTAG));
 	}
 
 	protected static function checkUpdater($hash_id)
 	{
 //		Cache::forget(Keys::updater($hash_id,Apps::TRACK_HASHTAG));
-		$u = Cache::remember(Keys::updater($hash_id,Apps::TRACK_HASHTAG), Keys::CACHE_GENERIC_TIME, function () use($hash_id) {
-			return Updater::where('entity_id','=',$hash_id)->where('app_id','=',Apps::TRACK_HASHTAG)->first();
+		$u = FacadesCache::remember(Keys::updater($hash_id,LibrariesApps::TRACK_HASHTAG), Keys::CACHE_GENERIC_TIME, function () use($hash_id) {
+			return Updater::where('entity_id','=',$hash_id)->where('app_id','=',LibrariesApps::TRACK_HASHTAG)->first();
 		});
 		if(!$u) return true;
 		if($u->flag == Updater::NEED_UPDATE) return true;

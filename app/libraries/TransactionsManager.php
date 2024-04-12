@@ -2,7 +2,8 @@
 namespace App\Libraries;
 use App\Models\Transaction, App\Models\CustomerStat;
 use App\Libraries\StatManager;
-use Apps, App, Cache, Config, Dater, DB, Event, Input, InputForm, Redirect, Response, Session, URL, View, ModelException, Exception, Auth;
+use Illuminate\Support\Facades\App;
+
 class TransactionsManager
 {
 	protected $_query;
@@ -15,7 +16,7 @@ class TransactionsManager
 		if($transaction->type != Transaction::TYPE_SELL)
 			return true;
 
-		$journal_id = \App::make('appsettings')->get('sell_100');
+		$journal_id = App::make('appsettings')->get('sell_100');
 		if(empty($journal_id)) //journal is not set
 			return true;
 

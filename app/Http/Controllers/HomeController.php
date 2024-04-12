@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\WarehouseItem;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
 	public function index()
 	{
-		return view('test.input');
+		return view('home');
 	}
 
     public function getIndex()
@@ -58,6 +59,13 @@ class HomeController extends Controller
 
         return response()->json($data);
 		
+	}
+
+	public function cekData()
+	{
+		$data = WarehouseItem::with('warehouse')->where('item_id','9990')->get();
+
+		dd($data);
 	}
 
 }

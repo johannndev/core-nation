@@ -1,9 +1,9 @@
 <?
 namespace App\Libraries;
 
-use Illuminate\Support\MessageBag, \Tag;
 use App\Models\CustomerStat, App\Models\Transaction;
-use Apps, App, Cache, Config, Dater, DB, Event, Input, InputForm, Redirect, Response, Session, URL, View, ModelException, Exception, Auth;
+use Illuminate\Support\Facades\DB;
+
 class StatManager extends BaseManager
 {
 	protected $stat;
@@ -72,11 +72,11 @@ class StatManager extends BaseManager
 		//update the balances in the transaction table
 		Transaction::where('sender_id','=',$id)
 			->where('date','>',$transaction->date)->lockforUpdate()
-			->update(array('sender_balance' => \DB::raw('sender_balance + '.$total)));
+			->update(array('sender_balance' => DB::raw('sender_balance + '.$total)));
 
 		Transaction::where('receiver_id','=',$id)
 			->where('date','>',$transaction->date)->lockforUpdate()
-			->update(array('receiver_balance' => \DB::raw('receiver_balance + '.$total)));
+			->update(array('receiver_balance' => DB::raw('receiver_balance + '.$total)));
 
 		if(!$this->stat->save())
 			return false;

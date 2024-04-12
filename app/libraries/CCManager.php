@@ -2,7 +2,8 @@
 namespace App\Libraries;
 
 use App\Models\Customer,App\Models\CustomerClass,App\Models\Transaction, App\Models\CustomerStat;
-use DB;
+use Illuminate\Support\Facades\DB;
+
 class CCManager extends BaseManager
 {
 	protected $ccs;
