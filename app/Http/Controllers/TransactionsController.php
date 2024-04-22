@@ -160,7 +160,7 @@ class TransactionsController extends Controller
 				//add balance to sender(supplier)
 				$sender_balance = $sm->add($transaction->sender_id,$transaction,true); //skip 1 because the transaction is already created?
 				if($sender_balance === false)
-                    // throw new ModelException($sm->getErrors());
+                    throw new ModelException($sm->getErrors());
 
 				$transaction->sender_balance = $sender_balance;
 				break;

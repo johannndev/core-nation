@@ -259,7 +259,7 @@
                                     <div>
                                         <input type="text" name="addMoreInputFields[0][itemId]"  id="id0"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
                                 
-                                        <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code0</label>
+                                        <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
                                         <input  onkeydown="return handleCode(event,0)" type="text" name="addMoreInputFields[0][code]"  id="code0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  />
                                     </div>
                                     <div>
@@ -361,12 +361,7 @@
 
                             </div>
 
-                            <div class="col-span-2">
-                                <label for="ongkir" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ongkir</label>
-                                <input type="text" name="ongkir" id="ongkir" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
-                            </div>
-
+                          
                         </div>
 
                         
