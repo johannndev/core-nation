@@ -58,12 +58,10 @@ class TransactionsController extends Controller
 
     public function sell()
     {
-		$itemnameList = Item::select('id','name')->get();
-
-		// dd($itemnameList);
+		$trType = 'sell';
 		
 		$bankList = Customer::where('type',Customer::TYPE_BANK)->orderBy('name','asc')->get();
-        return view('transactions.sell',compact('bankList','itemnameList'));
+        return view('transactions.sell',compact('bankList','trType'));
     }
 
     public function postSell(Request $request)
@@ -76,14 +74,11 @@ class TransactionsController extends Controller
 
 	public function buy()
     {
-		$itemnameList = Item::select('id','name')->get();
-
+		$trType = 'buy';
 		$defaultCust = Customer::where('id','2875')->first();
 
-		// dd($itemnameList);
 		
-		$bankList = Customer::where('type',Customer::TYPE_BANK)->orderBy('name','asc')->get();
-        return view('transactions.buy',compact('bankList','itemnameList','defaultCust'));
+        return view('transactions.buy',compact('defaultCust','trType'));
     }
 
 	public function postBuy(Request $request)
@@ -280,5 +275,127 @@ class TransactionsController extends Controller
 		return view('transactions.detail',compact('data','nameWh'));
 
     }
+
+	public function move()
+    {
+		$trType = 'move';
+		
+        return view('transactions.move',compact('trType'));
+    }
+
+	public function postMove(Request $request)
+	{
+		try {
+
+		$input = $request->query();
+		$sender = Customer::find($request->sender);
+		$receiver = Customer::find($request->recaiver);
+
+		DB::beginTransaction();
+
+		$transaction = new Transaction();
+        $transaction->date = $request->date;
+        $transaction->type = Transaction::TYPE_MOVE;
+        $transaction->description = ' ';
+		$transaction->detail_ids = ' ';
+		$transaction->due = '0000-00-00';
+        $transaction->save();
+
+		$transaction->sender_id = $sender->id;
+		$transaction->receiver_id = $receiver->id;
+
+		//start transaction
+		
+
+		//gets the transaction id
+		if(!$transaction->save())
+			throw new ModelException($transaction->getErrors(), __LINE__);
+
+		if(!$transaction->createDetails($request->addMoreInputFields))
+			throw new ModelException($transaction->getErrors(), __LINE__);
+
+		//update the transaction
+		if(!$transaction->save())
+			throw new ModelException($transaction->getErrors(), __LINE__);
+
+		HashManagerHelper::save($transaction);
+
+		//commit db transaction
+		DB::commit();
+
+		return redirect()->route('transaction.getDetail',$transaction->id);
+
+		} catch(ModelException $e) {
+			DB::rollBack();
+
+			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+
+		} catch(\Exception $e) {
+			DB::rollBack();
+
+			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+		}
+	}
+
+	public function use()
+    {
+		$trType = 'use';
+		
+        return view('transactions.use',compact('trType'));
+    }
+
+	public function postUse(Request $request)
+	{
+		try {
+
+		$warehouse = Customer::find($request->warehouse);
+	
+
+		//start transaction
+		DB::beginTransaction();
+
+		$transaction = new Transaction();
+        $transaction->date = $request->date;
+        $transaction->type = Transaction::TYPE_USE;
+        $transaction->description = ' ';
+		$transaction->detail_ids = ' ';
+		$transaction->receiver_id = ' ';
+		$transaction->due = '0000-00-00';
+        $transaction->save();
+
+		$transaction->sender_id = $warehouse->id;
+
+
+		//gets the transaction id
+		if(!$transaction->save())
+			throw new ModelException($transaction->getErrors(), __LINE__);
+
+		if(!$transaction->createDetails($request->addMoreInputFields))
+			throw new ModelException($transaction->getErrors(), __LINE__);
+
+		//update the transaction
+		if(!$transaction->save())
+			throw new ModelException($transaction->getErrors(), __LINE__);
+
+		HashManagerHelper::save($transaction);
+
+		//commit db transaction
+		DB::commit();
+
+		return redirect()->route('transaction.getDetail',$transaction->id);
+
+		} catch(ModelException $e) {
+			DB::rollBack();
+
+			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+		} catch(\Exception $e) {
+			DB::rollBack();
+
+			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+		}
+	}
+
+
+
 
 }

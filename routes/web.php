@@ -44,6 +44,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/buy', [TransactionsController::class, 'buy'])->name('transaction.buy');
     Route::post('/transaction/buy/post', [TransactionsController::class, 'postbuy'])->name('transaction.postBuy');
 
+    Route::get('/transaction/move', [TransactionsController::class, 'move'])->name('transaction.move');
+    Route::post('/transaction/move/post', [TransactionsController::class, 'postmove'])->name('transaction.postMove');
+
+    Route::get('/transaction/use', [TransactionsController::class, 'use'])->name('transaction.use');
+    Route::post('/transaction/use/post', [TransactionsController::class, 'postuse'])->name('transaction.postUse');
+
 
     Route::get('/transaction/{id}/detail', [TransactionsController::class, 'getDetail'])->name('transaction.getDetail');
 

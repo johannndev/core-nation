@@ -17,7 +17,7 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-sm text-gray-500">Invoice #{{$data->id}}</p>
-                    <p class="font-bold">{{$data->receiver->name}}</p>
+                    <p class="font-bold">{{$data->receiver ? $data->receiver->name : '' }}</p>
                 </div>
             </div>
             <div>
@@ -48,16 +48,21 @@
                             </div>
                         </div>
                        
+                        @if ($data->type != 8)
+
                         <div>
                             <div class="grid grid-cols-4 p-4">
                                 <div>
                                     <p class="font-bold">To</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p>{{$data->receiver->name}}</p>
+                                    <p>{{$data->receiver ? $data->receiver->name : '' }}</p>
                                 </div>
                             </div>
                         </div>
+                            
+                        @endif
+                        
 
                         @if ($data->description)
 

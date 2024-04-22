@@ -104,7 +104,7 @@
                 var search = $(this).val();
                 $.ajax({
                     url: '{{ route("ajax.getCostumer") }}',
-                    data: { search: search, type: "4" },
+                    data: { search: search, type: "2" },
                     success: function(users) {
                         var options = '';
                         users.forEach(function(user) {
@@ -121,7 +121,32 @@
                     return $(this).val() === selectedName;
                 }).data('id');
 
-                $('#customer').val(selectedId);
+                $('#sender').val(selectedId);
+                console.log('Selected: ' + selectedId); // Lakukan sesuatu dengan ID ini
+            });
+
+             $('#datalistRecaiver').on('input', function() {
+                var search = $(this).val();
+                $.ajax({
+                    url: '{{ route("ajax.getCostumer") }}',
+                    data: { search: search, type: "2" },
+                    success: function(users) {
+                        var options = '';
+                        users.forEach(function(user) {
+                            options += '<option value="' + user.name + '" data-id="' + user.id + '">';
+                        });
+                        $('#datalistOptionsRecaiver').html(options);
+                    }
+                });
+            });
+            // Jika Anda perlu menggunakan ID pengguna ketika opsi dipilih
+            $('#datalistRecaiver').on('change', function() {
+                var selectedName = $(this).val();
+                var selectedId = $('#datalistOptionsRecaiver option').filter(function() {
+                    return $(this).val() === selectedName;
+                }).data('id');
+
+                $('#recaiver').val(selectedId);
                 console.log('Selected: ' + selectedId); // Lakukan sesuatu dengan ID ini
             });
 

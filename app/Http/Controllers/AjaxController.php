@@ -44,10 +44,16 @@ class AjaxController extends Controller
 		if($request->wh_id){
 
 			$wh= WarehouseItem::where('item_id',$itemGet->id)->where('warehouse_id',$request->wh_id)->first();
+            
+            if ($wh) {
+                
+			    $whGet = $wh->quantity;
+               
+            } else {
+                $whGet = 0;
+            }
+            
 
-			// dd($wh, $itemGet->id,$request->wh_id);
-
-			$whGet = $wh->quantity;
 
 		}else{
 			$whGet = 0;
