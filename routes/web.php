@@ -24,7 +24,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/getItem', [HomeController::class, 'getItemAjax'])->middleware(['auth', 'verified'])->name('ajax.getitem');
+
 
 Route::get('/cek', [HomeController::class, 'cekData'])->name('');
 
@@ -32,11 +32,18 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/ajax/getCustomer', [AjaxController::class, 'getCostumer'])->name('ajax.getCostumer');
     Route::get('/ajax/getCustomerSingle', [AjaxController::class, 'getCostumerSingle'])->name('ajax.getCostumerSingle');
+    Route::get('/getItem', [AjaxController::class, 'getItemAjax'])->name('ajax.getitem');
+    Route::get('/getItemName', [AjaxController::class, 'getItem'])->name('ajax.getitemName');
 
     Route::get('/transaction', [TransactionsController::class, 'index'])->name('transaction.index');
     Route::get('/transaction/filter', [FilterQueryController::class, 'transactionFilter'])->name('transaction.filter');
+    
     Route::get('/transaction/sell', [TransactionsController::class, 'sell'])->name('transaction.sell');
     Route::post('/transaction/sell/post', [TransactionsController::class, 'postSell'])->name('transaction.postSell');
+
+    Route::get('/transaction/buy', [TransactionsController::class, 'buy'])->name('transaction.buy');
+    Route::post('/transaction/buy/post', [TransactionsController::class, 'postbuy'])->name('transaction.postBuy');
+
 
     Route::get('/transaction/{id}/detail', [TransactionsController::class, 'getDetail'])->name('transaction.getDetail');
 

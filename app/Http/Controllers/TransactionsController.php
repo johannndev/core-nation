@@ -17,6 +17,7 @@ use App\Libraries\InvoiceTracker;
 use App\Libraries\StatManager;
 use App\Libraries\TransactionsManager;
 use App\Models\Customer;
+use App\Models\Item;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Contracts\Session\Session;
@@ -32,7 +33,7 @@ class TransactionsController extends Controller
 	{
 		$allType = Transaction::$typesJSON;
 
-		$dataList = Transaction::with('receiver','sender')->orderBy('date','desc');;
+		$dataList = Transaction::with('receiver','sender')->orderBy('date','desc')->orderBy('id','desc');
 
 		if($request->from && $request->to){
 			$dataList = $dataList->whereDate('date','>=',$request->from)->whereDate('date','<=',$request->to);
@@ -57,8 +58,12 @@ class TransactionsController extends Controller
 
     public function sell()
     {
+		$itemnameList = Item::select('id','name')->get();
+
+		// dd($itemnameList);
+		
 		$bankList = Customer::where('type',Customer::TYPE_BANK)->orderBy('name','asc')->get();
-        return view('transactions.sell',compact('bankList'));
+        return view('transactions.sell',compact('bankList','itemnameList'));
     }
 
     public function postSell(Request $request)
@@ -66,6 +71,24 @@ class TransactionsController extends Controller
 		// dd($request);
 
 		return $this->createTransaction(Transaction::TYPE_SELL, $request);
+	}
+
+
+	public function buy()
+    {
+		$itemnameList = Item::select('id','name')->get();
+
+		$defaultCust = Customer::where('id','2875')->first();
+
+		// dd($itemnameList);
+		
+		$bankList = Customer::where('type',Customer::TYPE_BANK)->orderBy('name','asc')->get();
+        return view('transactions.buy',compact('bankList','itemnameList','defaultCust'));
+    }
+
+	public function postBuy(Request $request)
+	{
+		return $this->createTransaction(Transaction::TYPE_BUY, $request);
 	}
 
     protected function createTransaction($type = null, $request)
@@ -110,8 +133,6 @@ class TransactionsController extends Controller
 		$transaction->init($type);
 
 		// dd($request->addMoreInputFields);
-		
-
 		//gets the transaction id
 		if(!$transaction->save())
 
@@ -150,9 +171,13 @@ class TransactionsController extends Controller
 				//deduct balance from receiver(customer)
 				$receiver_balance = $sm->deduct($transaction->receiver_id,$transaction,true);
 				if($receiver_balance === false)
-                    // throw new ModelException($sm->getErrors());
+                    throw new ModelException($sm->getErrors());
 
 				$transaction->receiver_balance = $receiver_balance;
+
+				// $transaction->save();
+
+				// dd($receiver_balance,$transaction, $transaction->receiver_balance);
 				break;
 			default: //don't update stats for move, production
 				break;
@@ -217,7 +242,7 @@ class TransactionsController extends Controller
 
         // $request->session()->flash('success', 'Transaction # ' . $transaction->id. ' created.');
 
-		return redirect()->route('transaction.index');
+		return redirect()->route('transaction.getDetail',$transaction->id);
 		
         // return response()->json([
         //     'url' => route('transaction.getDetail',$transaction->id,$transaction->date),
@@ -246,20 +271,13 @@ class TransactionsController extends Controller
     public function getDetail($id)
     {
 
-		// $data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.warehouseItem' => function (Builder $query) {
-		// 	$query->whereIn('warehouse_id',StockManagerHelpers::$list);
-		// },'transactionDetail.item.warehouseItem.warehouse'])->where('id',$id)->first();
+		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+
+		$nameWh = StockManagerHelpers::$names;
 
 		
 
-		// dd($data);
-
-		// $folder = str_pad(substr($id, -2), 2, '0', STR_PAD_LEFT);
-		// dd($folder);
-
-		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item'])->where('id',$id)->first();
-
-		return view('transactions.detail',compact('data'));
+		return view('transactions.detail',compact('data','nameWh'));
 
     }
 

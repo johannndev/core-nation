@@ -5,14 +5,14 @@ import Alpine from 'alpinejs';
 import 'flowbite';
 
 
-import { Dismiss } from 'flowbite';
+// import { Dismiss } from 'flowbite';
 
-const dismiss = new Dismiss($targetEl, $triggerEl, options, instanceOptions);
+// const dismiss = new Dismiss($targetEl, $triggerEl, options, instanceOptions);
 
 
-// console.log(targetEl)
+// // console.log(targetEl)
 
-setTimeout(function () { dismiss.hide() }, 6000);
+// setTimeout(function () { dismiss.hide() }, 6000);
   
 
 

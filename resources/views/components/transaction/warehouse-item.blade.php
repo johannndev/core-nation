@@ -1,30 +1,17 @@
-<div>
-    <!-- Happiness is not something readymade. It comes from your own actions. - Dalai Lama -->
+@foreach ($arrayNameWh as $key => $item)
 
-    <div class="grid grid-cols-8 divide-x mt-6">
+<td class="wh-col hidden px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+    @isset($arrayStokWh[$key])
+        {{$arrayStokWh[$key]}}
+    @endisset
 
-       
-        @foreach ($arrayNameWh as $key => $item)
-        <div>
-            <div class="text-center">
-                <div>
-                    <p class="font-bold">{{$item}}</p>
-                </div>
-                <div class="">
-                    @isset($arrayStokWh[$key])
-                        {{$arrayStokWh[$key]}}
-                    @endisset
+    @empty($arrayStokWh[$key])
+        0
+    @endempty
+</td>
 
-                    @empty($arrayStokWh[$key])
-                       0
-                    @endempty
-                </div>
-            </div>
-        </div>
-        @endforeach
-        
-    </div>
+@endforeach
+    
+    
   
         
-   
-</div>

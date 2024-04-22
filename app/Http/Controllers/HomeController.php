@@ -50,16 +50,7 @@ class HomeController extends Controller
         return view('dashboard.smarthome');
 	}
 
-	public function getItemAjax(Request $request)
-	{
-
-		$itemId = $request->item_id;
-
-		$data = Item::find($itemId);
-
-        return response()->json($data);
-		
-	}
+	
 
 	public function cekData()
 	{

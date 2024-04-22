@@ -225,24 +225,60 @@
                         
                     </div>
                 </div>
+
+                <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row items-center  lg:space-y-0 lg:space-x-4">
+                    <div>
+                        <p class="me-2">Show:</p>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center ">
+                            <input checked id="image-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="image-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Image</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center ">
+                            <input checked id="barcode-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="barcode-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Barcode</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center ">
+                            <input id="sku-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="sku-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">SKU</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center ">
+                            <input id="wh-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="wh-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Warehouse Stok</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="p-4">
-                                    <div class="flex items-center">
-                                        <div  class="w-4 h-4"></div>
-                                    
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-4 py-3">Item</th>
-                               
+                                <th scope="col" class="image-col  px-4 py-3">Image</th>
+                                <th scope="col" class="barcode-col  px-4 py-3">Barcode</th>
+                                <th scope="col" class="sku-col hidden px-4 py-3">SKU</th>
                                 <th scope="col" class="px-4 py-3">Code</th>
-                             
+                                <th scope="col" class="px-4 py-3">Name</th>
+                                <th scope="col" class="px-4 py-3">Desc</th>
+                                <th scope="col" class="sku-col hidden px-4 py-3">NB</th>
                                 <th scope="col" class="px-4 py-3">Quantity</th>
                                 <th scope="col" class="px-4 py-3">Price</th>
                                 <th scope="col" class="px-4 py-3">Discount(%)</th>
                                 <th scope="col" class="px-4 py-3">Sub-Total</th>
+                                @foreach ($nameWh as $wh)
+                                    <th scope="col" class=" wh-col hidden px-4 py-3">{{$wh}}</th>
+                                @endforeach
+                               
+                                
                             </tr>
                         </thead>
                         <tbody  id="accordion-collapse" data-accordion="collapse">
@@ -255,30 +291,38 @@
                             
                            
                             <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <td class="w-4 px-4 py-3">
-                                    <div class="flex items-center">
-                                        <button type="button" class="" data-accordion-target="#accordion-collapse-body-{{$itemTd->id}}" aria-expanded="false" aria-controls="accordion-collapse-body-{{$itemTd->id}}" >
-                                           
-                                            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                                <th scope="row" class="flex items-center px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    <div class="h-8 w-8 mr-3">
+                           
+                                <th scope="row" id="" class="image-col  px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <div class="h-20 w-20 mr-3">
                                         <x-partial.image :idItem="$idItem" :type="$type"/>
                                     </div>
-                                   
-                                    {{$itemTd->item->name}}
 
-                                    
                                 </th>
-                               
-                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+
+                                <td class="barcode-col  px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{$itemTd->item->id}}
+                                </td>
+
+                                <td class="sku-col hidden px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{$itemTd->item->code}}
                                 </td>
-                              
+
+
+                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{$itemTd->item->getItemCode()}}
+                                </td>
+                               
+                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-normal max-w-40 dark:text-white">
+                                    <p class="min-w-40">{{$itemTd->item->getItemName()}}</p>
+                                </td>
+
+                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-normal dark:text-white">
+                                    <p class="min-w-40">{{$itemTd->item->group? $itemTd->item->group->description : $itemTd->item->description}}</p>
+                                    
+                                </td>
+                                <td class="sku-col hidden px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{$itemTd->description2}}
+                                </td>
 
                                 <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{$itemTd->quantity}}
@@ -295,91 +339,11 @@
                                 <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{$itemTd->total}}
                                 </td>
+
+                                <x-transaction.warehouse-item  :idItem="$idItem"/>
                                
                             </tr>
-                            <tr class="border-b bg-gray-100 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 hidden" id="accordion-collapse-body-{{$itemTd->id}}"  aria-labelledby="accordion-collapse-heading-{{$itemTd->id}}">
-                                <td colspan="11">
-                                    <div class="p-4">
-                                        <div class="grid grid-cols-3 gap-4 ">
-
-                                            <div >
-
-                                                <div class="w-4/6 mr-3">
-                                                    <x-partial.image :idItem="$idItem" :type="$type"/>
-                                                </div>
-
-                                                {{-- <img src="https://flowbite.s3.amazonaws.com/blocks/application-ui/products/imac-front-image.png" alt="{{$itemTd->item->name}} Image" class=""> --}}
-
-                                               
-                                            </div>
-
-                                            <div class="col-span-2">
-                                                <div class="grid grid-cols-2 divide-x gap-4">
-                                                    <div>
-                                                        <div class="grid grid-cols-2 py-4">
-                                                            <div>
-                                                                <p class="font-bold">Barcode</p>
-                                                            </div>
-                                                            <div class="text-right">
-                                                                <p> {{$itemTd->item->id}}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="grid grid-cols-2 p-4">
-                                                            <div>
-                                                                <p class="font-bold">SKU</p>
-                                                            </div>
-                                                            <div class="text-right">
-                                                                <p> {{$itemTd->item->pcode}}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-
-                                                <div class="grid grid-cols-1 divide-y">
-                                                    <div>
-                                                       
-                                                        <div class="py-4">
-                                                            <div>
-                                                                <p class="font-bold">Description</p>
-                                                            </div>
-                                                            <div class="col-span-3">
-                                                                <p> {{$itemTd->item->description}}</p>
-                                                            </div>
-                                                        </div>
-                                                       
-                                                    </div>
-                                                    <div>
-                                                       
-                                                        <div class="py-4">
-                                                            <div>
-                                                                <p class="font-bold">Np</p>
-                                                            </div>
-                                                            <div class="col-span-3">
-                                                                <p> {{$itemTd->item->description2}}</p>
-                                                            </div>
-                                                        </div>
-                                                       
-                                                    </div>
-                                                    
-                                                </div>
-
-                                                
-                                                
-                                            </div>
-
-                                            
-
-                                        </div>
-
-                                        
-
-                                        <x-transaction.warehouse-item  :idItem="$idItem"/>
-                                    </div>
-                                </td>
-                            </tr>
+                          
                                 
                             @empty
                                 
@@ -433,5 +397,81 @@
             </div>
         </div>
       </section>
+
+      @push('jsBody')
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggleNamaImage = document.getElementById('image-checkbox');
+            var namaColumnImage = document.querySelectorAll('.image-col');
+            var toggleNamaBarcode = document.getElementById('barcode-checkbox');
+            var namaColumnBarcode = document.querySelectorAll('.barcode-col');
+            var toggleNamaSku = document.getElementById('sku-checkbox');
+            var namaColumnSku = document.querySelectorAll('.sku-col');
+            var toggleNamaWh = document.getElementById('wh-checkbox');
+            var namaColumnWh = document.querySelectorAll('.wh-col');
+
+            toggleNamaImage.addEventListener('change', function() {
+                if (toggleNamaImage.checked) {
+                    namaColumnImage.forEach(function(barcode) {
+                        barcode.classList.remove('hidden');
+                    });
+                } else {
+                    namaColumnImage.forEach(function(image) {
+                        image.classList.add('hidden');
+                    });
+                }
+            });
+
+            toggleNamaBarcode.addEventListener('change', function() {
+                if (toggleNamaBarcode.checked) {
+                    namaColumnBarcode.forEach(function(barcode) {
+                        barcode.classList.remove('hidden');
+                    });
+                } else {
+                    namaColumnBarcode.forEach(function(barcode) {
+                        barcode.classList.add('hidden');
+                    });
+                }
+            });
+
+            toggleNamaSku.addEventListener('change', function() {
+                if (toggleNamaSku.checked) {
+                    namaColumnSku.forEach(function(sku) {
+                        sku.classList.remove('hidden');
+                    });
+                } else {
+                    namaColumnSku.forEach(function(sku) {
+                        sku.classList.add('hidden');
+                    });
+                }
+            });
+
+            toggleNamaWh.addEventListener('change', function() {
+                if (toggleNamaWh.checked) {
+                    namaColumnWh.forEach(function(wh) {
+                        wh.classList.remove('hidden');
+                    });
+                } else {
+                    namaColumnWh.forEach(function(wh) {
+                        wh.classList.add('hidden');
+                    });
+                }
+            });
+        });
+
+        // $('#image-checkbox').change(function(){
+        //     if (this.checked) {
+        //        console.log('cek')
+              
+        //        document.getElementById("image-col").classList.remove("hidden");
+               
+        //     } else {
+        //         document.getElementById("image-col").classList.add("hidden");
+        //     }
+        // });
+      </script>
+          
+      @endpush
 
 </x-layouts.layout>

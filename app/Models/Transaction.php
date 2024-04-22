@@ -492,4 +492,35 @@ class Transaction extends Model
 		return $wi;
 	}
 
+	public function attachOngkir($date, $receiver_id, $total, $account_id)
+	{
+		if(empty($account_id))
+			throw new ModelException('Freight cost account not set');
+
+		$sm = new StatManagerHelper;
+		$transaction = new Transaction;
+		$transaction->date = $date;
+		$transaction->init(Transaction::TYPE_CASH_IN);
+		$transaction->total = $total;
+		$transaction->invoice = $this->invoice;
+		$transaction->receiver_id = $receiver_id;
+		$transaction->sender_id = $account_id;
+
+		$sender_balance = $sm->add($transaction->sender_id,$transaction);
+		if($sender_balance === false)
+			throw new ModelException($sm->getErrors()->first());
+
+		$receiver_balance = $sm->add($transaction->receiver_id,$transaction);
+		if($receiver_balance === false)
+			throw new ModelException($sm->getErrors()->first());
+
+		$transaction->sender_balance = $sender_balance;
+		$transaction->receiver_balance = $receiver_balance;
+		if(!$transaction->save())
+			throw new ModelException($transaction->getErrors()->first());
+
+		return $transaction;
+	}
+
+
 }

@@ -2,7 +2,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">New Sell</p>
+        <p class="text-2xl font-bold">New Buy</p>
 
        
     </div>
@@ -35,7 +35,7 @@
    
 
 
-    <form action="{{route('transaction.postSell')}}" method="post" >
+    <form action="{{route('transaction.postBuy')}}" method="post" >
 
         @csrf
 
@@ -59,10 +59,27 @@
 
                             </div>
 
+                            <div class="col-span-2">
+                                <label for="customer" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sender</label>
+
+                                <input id="customer" name="customer" hidden>
+                                <input type="text" id="datalistSender" list="datalistOptionsSender" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="off">
+                                <datalist id="datalistOptionsSender">
+                                    <!-- Options akan diisi oleh jQuery AJAX -->
+                                </datalist>
+
+                                {{-- <input type="text" name="customer" id="customer" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"> --}}
+                                {{-- <select class="customer-select js-example-basic-single select2-tailwind" name="customer">
+                                    
+                                
+                                </select> --}}
+
+                            </div>
+
                             <div class="col-span-2 ">
                                 <label for="warehouse" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Warehouse</label>
-                                <input id="warehouse" name="warehouse" hidden>
-                                <input type="text" id="datalistWh" list="datalistOptionsWh" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="off">
+                                <input id="warehouse" name="warehouse" hidden value="{{$defaultCust->id}}">
+                                <input type="text" id="datalistWh" list="datalistOptionsWh" value="{{$defaultCust->name}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="off">
                                 <datalist id="datalistOptionsWh">
                                     <!-- Options akan diisi oleh jQuery AJAX -->
                                 </datalist>
@@ -76,22 +93,7 @@
                             </div>
 
                             
-                            <div class="col-span-2">
-                                <label for="customer" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Customer</label>
-
-                                <input id="customer" name="customer" hidden>
-                                <input type="text" id="datalistCus" list="datalistOptionsCus" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="off">
-                                <datalist id="datalistOptionsCus">
-                                    <!-- Options akan diisi oleh jQuery AJAX -->
-                                </datalist>
-
-                                {{-- <input type="text" name="customer" id="customer" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"> --}}
-                                {{-- <select class="customer-select js-example-basic-single select2-tailwind" name="customer">
-                                    
-                                
-                                </select> --}}
-
-                            </div>
+                           
 
                             <div class="col-span-2">
                                 <label for="invoice" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Invoice</label>

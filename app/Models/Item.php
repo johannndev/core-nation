@@ -100,9 +100,36 @@ class Item extends Model
 		self::TYPE_ASSET_TETAP => 'Asset Tetap',
 	);
 
+	public function getItemCode()
+	{
+		switch($this->type)
+		{
+			case self::TYPE_ASSET_LANCAR: $name = $this->code; break;
+			default: $name = $this->name; break;
+		}
+		return $name;
+	}
+
+	public function getItemName()
+	{
+		switch($this->type)
+		{
+			case self::TYPE_ASSET_LANCAR: $name = $this->name; break;
+			default: $name = $this->group ? $this->group->alias : $this->alias; break;
+		}
+		return $name;
+	}
+
 	
 	public function warehouseItem(): HasMany
     {
         return $this->hasMany(WarehouseItem::class, 'item_id', 'id');
     }
+
+	public function group()
+	{
+		return $this->belongsTo('App\Models\ItemGroup', 'group_id');
+	}
+
+	
 }

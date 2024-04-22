@@ -25,6 +25,14 @@
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 		{{-- <link rel="stylesheet" href="{{asset('css/select2Custom.css')}}"> --}}
 
+		<style>
+			/* Contoh styling */
+			.active, .autocomplete-items div:hover {
+    background-color: #e9e9e9;
+}
+
+		</style>
+
 	</head>
 	<body class="font-sans antialiased">
 	  <div class="antialiased bg-gray-50 dark:bg-gray-900">
