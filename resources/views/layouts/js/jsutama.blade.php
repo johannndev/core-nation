@@ -8,6 +8,7 @@
 
 <script>
 
+
     $(document).on("keypress", function(e){
         if(e.which == 13){e.preventDefault();}
     })
@@ -22,8 +23,18 @@
 
             var valCode = $('#code'+id).val()
 
-            var wh= $('#warehouse').val();
+          
             var se = $('#sender').val();
+
+
+            if( "{{$trType}}" == "move"){
+                var wh= $('#sender').val();
+            }else{
+
+                var wh= $('#warehouse').val();
+
+            }
+
             var whId = 0;
 
             if(wh){
@@ -199,26 +210,37 @@
             success: function (res) {
 
                 console.log(res);
-                
+                var errorCode = res['error'];
             
+                if(errorCode === 0 ){
 
-                $('#id'+itemLineId).val(res.data.id);
-                $('#code'+itemLineId).val(res.data.code);
-                $('#name'+itemLineId).val(res.data.name);
-                $('#price'+itemLineId).val(res.data.price);
-                $('#wh'+itemLineId).val(res.whQty);
-                $('#discount'+itemLineId).val(0);
+                    
+                    $('#id'+itemLineId).val(res.data.data.id);
+                    $('#code'+itemLineId).val(res.data.data.code);
+                    $('#name'+itemLineId).val(res.data.data.name);
+                    $('#price'+itemLineId).val(res.data.data.price);
+                    $('#wh'+itemLineId).val(res.data.whQty);
+                    $('#discount'+itemLineId).val(0);
 
-                
-                document.getElementById("gridItemLoading"+itemLineId).classList.add("hidden");
-                document.getElementById("gridItem"+itemLineId).classList.remove("hidden");
-                document.getElementById("quantity"+itemLineId).focus();
-                
-                getTotalItem(1,itemLineId,0);
+                    
+                    document.getElementById("gridItemLoading"+itemLineId).classList.add("hidden");
+                    document.getElementById("gridItem"+itemLineId).classList.remove("hidden");
+                    document.getElementById("quantity"+itemLineId).focus();
+                    
+                    getTotalItem(1,itemLineId,0);
+
+                }else{
+
+                    toastClose(itemLineId);
+
+
+                }
+
                 
 
             
-            }
+            },
+          
         });
 
 
@@ -315,6 +337,23 @@
 
     function remove(val) {
         $('.addField'+val).remove();
+    }
+
+    function toastClose(itemLineId){
+        document.getElementById("toast-danger-js").classList.remove("hidden");
+
+                    
+        document.getElementById("gridItemLoading"+itemLineId).classList.add("hidden");
+        document.getElementById("gridItem"+itemLineId).classList.remove("hidden");
+        document.getElementById("code"+itemLineId).focus();
+
+        document.getElementById('dangerText').innerHTML += "Item not found"
+
+        setTimeout(function () { 
+
+            document.getElementById("toast-danger-js").classList.add("hidden");
+
+        }, 6000);
     }
 
 </script>

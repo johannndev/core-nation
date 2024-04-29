@@ -25,4 +25,13 @@ class FilterQueryController extends Controller
        return redirect()->route('transaction.index',$queryFilter);
 
     }
+
+    public function transactionFilterDelete(Request $request)
+    {
+       
+        $queryFilter = $this->getQuery($request->query()); 
+       
+       return redirect()->route('transaction.delete',$queryFilter);
+
+    }
 }

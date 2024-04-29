@@ -2,7 +2,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">New Buy</p>
+        <p class="text-2xl font-bold">New Return</p>
 
        
     </div>
@@ -30,12 +30,7 @@
 
 </div>
 
-   
-
-   
-
-
-    <form action="{{route('transaction.postBuy')}}" method="post" >
+    <form action="{{route('transaction.postReturn')}}" method="post" >
 
         @csrf
 
@@ -53,13 +48,7 @@
 
                             </div>
 
-                            <div>
-                                <label for="due" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Due</label>
-                                <input type="date" name="due" id="due" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
-
-                            </div>
-
-                           
+ 
 
                             <x-partial.data-list :dataProp='$dataListPropSender' />
 

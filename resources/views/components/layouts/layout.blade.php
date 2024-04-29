@@ -51,6 +51,14 @@
 		 
 		</main>
 
+		<x-partial.toast-danger-js />
+
+		@if (session('success'))
+
+			<x-partial.toast-success />
+
+		@endif
+
     @stack('jsBody')
 
     

@@ -2,7 +2,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">New Buy</p>
+        <p class="text-2xl font-bold">New Return Supplier</p>
 
        
     </div>
@@ -30,12 +30,7 @@
 
 </div>
 
-   
-
-   
-
-
-    <form action="{{route('transaction.postBuy')}}" method="post" >
+    <form action="{{route('transaction.postReturnSupplier')}}" method="post" >
 
         @csrf
 
@@ -61,9 +56,13 @@
 
                            
 
-                            <x-partial.data-list :dataProp='$dataListPropSender' />
+                           
+
+                           
 
                             <x-partial.data-list :dataProp='$dataListPropRecaiver' />
+
+                            <x-partial.data-list :dataProp='$dataListPropResaller' />
 
                             
                            

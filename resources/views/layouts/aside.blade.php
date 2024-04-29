@@ -98,14 +98,14 @@
             </li>
             <li>
             <a
-                href="#"
+                href="{{route('transaction.cashIn')}}"
                 class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 >Cash In</a
             >
             </li>
             <li>
             <a
-                href="#"
+                href="{{route('transaction.cashOut')}}"
                 class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 >Cash Out</a
             >
@@ -113,21 +113,21 @@
 
             <li>
                 <a
-                    href="#"
+                    href="{{route('transaction.adjust')}}"
                     class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     >Adjust</a
                 >
             </li>
             <li>
                 <a
-                    href="#"
+                    href="{{route('transaction.transfer')}}"
                     class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     >Transfer</a
                 >
             </li>
             <li>
                 <a
-                    href="#"
+                    href="{{route('transaction.return')}}"
                     class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     >Return</a
                 >
@@ -135,7 +135,7 @@
 
             <li>
                 <a
-                    href="#"
+                    href="{{route('transaction.returnSupplier')}}"
                     class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     >Return Supplier</a
                 >
@@ -143,7 +143,7 @@
 
             <li>
                 <a
-                    href="#"
+                    href="{{route('transaction.delete')}}"
                     class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     >Deleted List</a
                 >

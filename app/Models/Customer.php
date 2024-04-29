@@ -42,5 +42,12 @@ class Customer extends Model
 		array('id' => self::TYPE_RESELLER, 'name' => 'Reseller'),
 	);
 
+	public static $defaultWH = 2875;
+
 	public static $notAdjustable = array(Customer::TYPE_VACCOUNT, Customer::TYPE_VWAREHOUSE, Customer::TYPE_WAREHOUSE);
+
+	public function stat()
+	{
+		return $this->hasOne('App\Models\CustomerStat');
+	}
 }
