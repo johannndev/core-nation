@@ -33,7 +33,7 @@ class ContributorController extends Controller
 			"id" => "customerId",
 			"idList" => "datalistSender",
 			"idOption" => "datalistOptionsSender",
-			"type" => Customer::TYPE_CUSTOMER.",".Customer::TYPE_RESELLER.",".Customer::TYPE_WAREHOUSE,
+			"type" => Customer::TYPE_WAREHOUSE,
 			"default" => $default,
 			
 			
