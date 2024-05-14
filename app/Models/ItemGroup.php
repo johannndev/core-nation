@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\LocalHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
@@ -27,6 +28,8 @@ class ItemGroup extends Model
 	{
 		return $this->hasMany('App\Models\Item','group_id');
 	}
+
+	public $timestamps = false;
 
 	// public function getDetailLink()
 	// {
@@ -55,7 +58,7 @@ class ItemGroup extends Model
 		$folder = str_pad(substr($id, -2), 2, '0', STR_PAD_LEFT);
 
 		if($number > 0)
-			return 'https://cdn.corenationactive.com'.Config::get('local.item_image_url').$folder.'/'.$id.'-'.$number.'.jpg';
-		return 'https://cdn.corenationactive.com'.Config::get('local.item_image_url').$folder.'/'.$id.'.jpg';
+			return 'https://cdn.corenationactive.com'.LocalHelper::$var['item_image_url'].$folder.'/'.$id.'-'.$number.'.jpg';
+		return 'https://cdn.corenationactive.com'.LocalHelper::$var['item_image_url'].$folder.'/'.$id.'.jpg';
 	}
 }

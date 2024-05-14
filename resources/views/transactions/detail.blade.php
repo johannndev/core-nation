@@ -291,15 +291,15 @@
                             @forelse ($data->transactionDetail as $itemTd)
                             @php
                                 $idItem = $itemTd->item->id;
-                                $type = 'items';
+                                $url = $itemTd->item->getImageUrl();
                             @endphp
                             
                            
                             <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
                            
                                 <th scope="row" id="" class="image-col  px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    <div class="h-20 w-20 mr-3">
-                                        <x-partial.image :idItem="$idItem" :type="$type"/>
+                                    <div class=" mr-3">
+                                        <x-partial.image type="h-20 w-20" :url="$url" />
                                     </div>
 
                                 </th>

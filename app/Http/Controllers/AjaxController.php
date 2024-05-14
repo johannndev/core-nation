@@ -12,8 +12,8 @@ class AjaxController extends Controller
 {
     public function getCostumer(Request $request)
     {
-        
-        $customer = Customer::where('name','like','%'.$request->search.'%')->whereIn('type',[$request->type])->get();
+       
+        $customer = Customer::where('name','like','%'.$request->search.'%')->whereIn('type',explode(",",$request->type))->get();
 
         // $customer = $customer->get(['id', 'name']);
         return response()->json($customer, 200);

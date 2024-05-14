@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\AsetLancarController;
+use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\DeletedController;
 use App\Http\Controllers\FilterQueryController;
 use App\Http\Controllers\HashController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionsController;
 use Illuminate\Support\Facades\Route;
@@ -76,15 +79,44 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/delete/filter', [FilterQueryController::class, 'transactionFilterDelete'])->name('transaction.deletefilter');
     Route::get('/transaction/{id}/delete/detail', [DeletedController::class, 'getDetailDelete'])->name('transaction.getDetailDelete');
 
+    Route::get('/item', [ItemsController::class, 'index'])->name('item.index');
+    Route::get('/item/create', [ItemsController::class, 'create'])->name('item.create');
+    Route::post('/item/store', [ItemsController::class, 'postCreate'])->name('item.post');
+    Route::get('/item/{id}/edit', [ItemsController::class, 'edit'])->name('item.edit');
+    Route::post('/item/{id}/update', [ItemsController::class, 'postEdit'])->name('item.update');
+    Route::get('/item/filter', [FilterQueryController::class, 'itemFilter'])->name('item.filter');
+    Route::get('/item/{id}/detail', [ItemsController::class, 'detail'])->name('item.detail');
+    Route::get('/item/{id}/transaction', [ItemsController::class, 'transaction'])->name('item.transaction');
+    Route::get('/item/{id}/transaction/filter', [FilterQueryController::class, 'itemTransFilter'])->name('item.transactionFilter');
+    Route::get('/item/{id}/stat', [ItemsController::class, 'stat'])->name('item.stat');
+    Route::get('/item/{id}/stat/filter', [FilterQueryController::class, 'itemStatFilter'])->name('item.statFilter');
+    Route::get('/item/group', [ItemsController::class, 'group'])->name('item.group');
+    Route::get('/item/group/filter', [FilterQueryController::class, 'itemGroupTransFilter'])->name('item.filterGroup');
+    Route::get('/item/group/{id}/detail', [ItemsController::class, 'groupDetail'])->name('item.detailGroup');
+    Route::get('/item/group/{id}/stat', [ItemsController::class, 'groupStat'])->name('item.statGroup');
+    Route::get('/item/group/{id}/stat/filter', [FilterQueryController::class, 'itemGroupStatFilter'])->name('item.statFilterGroup');
 
+    Route::get('/asset-lancar', [AsetLancarController::class, 'index'])->name('asetLancar.index');
+    Route::get('/asset-lancar/create', [AsetLancarController::class, 'create'])->name('asetLancar.create');
+    Route::post('/asset-lancar/store', [AsetLancarController::class, 'postCreate'])->name('asetLancar.postCreate');
+    Route::get('/asset-lancar/{id}/edit', [AsetLancarController::class, 'edit'])->name('asetLancar.edit');
+    Route::post('/asset-lancar/{id}/update', [AsetLancarController::class, 'postEdit'])->name('asetLancar.update');
+    Route::get('/asset-lancar/filter', [FilterQueryController::class, 'assetLancarFilter'])->name('asetLancar.filter');
+    Route::get('/asset-lancar/{id}/detail', [AsetLancarController::class, 'detail'])->name('asetLancar.detail');
+    Route::get('/asset-lancar/{id}/transaction', [AsetLancarController::class, 'transaction'])->name('asetLancar.transaction');
+    Route::get('/asset-lancar/{id}/transaction/filter', [FilterQueryController::class, 'assetLancarTransFilter'])->name('asetLancar.transactionFilter');
+    Route::get('/asset-lancar/{id}/stat', [AsetLancarController::class, 'stat'])->name('asetLancar.stat');
+    Route::get('/asset-lancar/{id}/stat/filter', [FilterQueryController::class, 'assetLancarStatFilter'])->name('asetLancar.statFilter');
 
-   
+    Route::get('/contributors', [ContributorController::class, 'index'])->name('contributor.index');
+    Route::get('/contributors/filter', [FilterQueryController::class, 'contributorFilter'])->name('contributor.filter');
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
 });
 
 require __DIR__.'/auth.php';

@@ -11,16 +11,15 @@ class Image extends Component
     /**
      * Create a new component instance.
      */
-    public $idItem;
+    public $url;
     public $type;
-    public $urlImage;
-    public function __construct($idItem,$type)
+    
+    public function __construct($url, $type)
     {
-        $this->$idItem = $idItem;
-
-        $folder = str_pad(substr($this->$idItem, -2), 2, '0', STR_PAD_LEFT);
-
-        $this->urlImage = 'https://cdn.corenationactive.com/img/'.$type.'/'.$folder.'/'.$this->$idItem.'.jpg';
+        $this->url = $url;
+        $this->type = $type;
+        
+    
     }
 
     /**

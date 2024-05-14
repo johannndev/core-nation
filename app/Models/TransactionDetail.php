@@ -19,6 +19,8 @@ class TransactionDetail extends Model
 		'quantity' => 'required',
 	);
 
+	protected $dates = ['date'];
+
 	protected $fillable = array('item_id', 'quantity', 'price', 'discount');
 
 	public static function table()

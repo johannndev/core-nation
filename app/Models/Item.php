@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Helpers\LocalHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
+use Illuminate\Support\Facades\DB;
 
 class Item extends Model
 {
@@ -12,7 +15,7 @@ class Item extends Model
 
     protected $table = 'items';
 
-    protected $fillable = array('name', 'code', 'pcode', 'price' , 'cost', 'description', 'description2','url');
+    protected $fillable = array('name', 'code', 'pcode', 'price' , 'cost','tag_ids', 'description', 'description2','url');
 
 	const BRAND_00 = 0;
 	const BRAND_CA = 1;
@@ -120,16 +123,65 @@ class Item extends Model
 		return $name;
 	}
 
+	public function getItemInWarehouse($itemId)
+	{
+		$total = DB::table('items')->select(array(
+			'items.id',
+			DB::raw('SUM(warehouse_item.quantity) as total_quantity'),
+		))->where('items.id','=', $itemId)->join('warehouse_item','items.id','=','warehouse_item.item_id')->leftJoin('customers','customers.id','=','warehouse_item.warehouse_id')->where('customers.type','=',Customer::TYPE_WAREHOUSE)->where(function($query) use($itemId) {
+			$query->where('customers.deleted_at','=',null)->orWhere('customers.deleted_at','=','0000-00-00 00:00:00');
+		})->first();
+
+		if(!$total) return 0;
+		return $total->total_quantity;
+	}
+
 	
 	public function warehouseItem(): HasMany
     {
         return $this->hasMany(WarehouseItem::class, 'item_id', 'id');
     }
 
+	public function tags()
+	{
+		return $this->belongsToMany('App\Models\Tag','item_tag','item_id');
+	}
+
 	public function group()
 	{
 		return $this->belongsTo('App\Models\ItemGroup', 'group_id');
 	}
+	
+	public function getImageUrl()
+	{
+		if($this->type == Item::TYPE_ITEM && $this->group_id > 0)
+			return self::getImagePath($this->group_id);
+		return self::getImagePath($this->id);
+	}
+
+	public function getUploadPath()
+	{
+		$folder = str_pad(substr($this->id, -2), 2, '0', STR_PAD_LEFT);
+
+		return LocalHelper::$var['item_image_path'].$folder;
+	}
+
+	public static function getImagePath($id)
+	{
+		$folder = str_pad(substr($id, -2), 2, '0', STR_PAD_LEFT);
+
+		return 'https://cdn.corenationactive.com'.LocalHelper::$var['item_image_url'].$folder.'/'.$id.'.jpg';
+	}
+
+	public function printDescription2()
+	{
+		if($this->type == Item::TYPE_ITEM)
+			return $this->group->description2;
+		return $this->description2;
+	}
+
+
+
 
 	
 }

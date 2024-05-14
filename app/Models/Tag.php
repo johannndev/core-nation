@@ -40,12 +40,16 @@ class Tag extends Model
 
 	public static function loadSizes()
 	{
-		return Tag::where('type','=',self::TYPE_SIZE)->lists('code','id');
+		return Tag::where('type','=',self::TYPE_SIZE)->pluck('code','id');
 	}
 
 	public static function loadGenres()
 	{
-		return Tag::where('type','=',self::TYPE_TYPE)->lists('code','id');
+		$genre = Tag::where('type','=',self::TYPE_TYPE);
+
+		$genre = $genre->pluck('code','id');
+
+		return $genre;
 	}
 
 	public static function table()

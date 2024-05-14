@@ -171,7 +171,7 @@
             ></path>
             </svg>
             <span class="flex-1 ml-3 text-left whitespace-nowrap"
-            >Sales</span
+            >Stuff</span
             >
             <svg
             aria-hidden="true"
@@ -189,29 +189,56 @@
         </button>
         <ul id="dropdown-sales" class="hidden py-2 space-y-2">
             <li>
-            <a
-                href="#"
-                class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                >Products</a
-            >
+
+                <div class="flex justify-between">
+
+                    <a href="{{route('item.index')}}" class=" flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Item</a>
+
+                    <a href="{{route('item.create')}}" class="flex items-center py-2 px-4  w-auto text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                          
+                          
+                    </a>
+                    
+                </div>
+          
             </li>
             <li>
             <a
-                href="#"
+                href="{{route('item.group')}}"
                 class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                >Billing</a
+                >Item Group</a
             >
             </li>
             <li>
-            <a
-                href="#"
-                class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                >Invoice</a
-            >
+
+                <div class="flex justify-between">
+
+                    <a href="{{route('asetLancar.index')}}" class=" flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Asset Lancar</a>
+
+                    <a href="{{route('asetLancar.create')}}" class="flex items-center py-2 px-4  w-auto text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                          
+                          
+                    </a>
+                    
+                </div>
+          
+            </li>
+            <li>
+                <a
+                    href="{{route('contributor.index')}}"
+                    class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >Contributors </a
+                >
             </li>
         </ul>
         </li>
-        <li>
+        {{-- <li>
         <a
             href="#"
             class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
@@ -298,9 +325,9 @@
             >
             </li>
         </ul>
-        </li>
+        </li> --}}
     </ul>
-    <ul
+    {{-- <ul
         class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700"
     >
         <li>
@@ -365,7 +392,7 @@
             <span class="ml-3">Help</span>
         </a>
         </li>
-    </ul>
+    </ul> --}}
     </div>
     <div
     class="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20"
