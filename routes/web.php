@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AddrbookController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AsetLancarController;
 use App\Http\Controllers\ContributorController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DeletedController;
 use App\Http\Controllers\FilterQueryController;
 use App\Http\Controllers\HashController;
@@ -31,6 +33,8 @@ Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 
 
 
 Route::get('/cek', [HomeController::class, 'cekData'])->name('');
+
+Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filter.get');
 
 Route::middleware('auth')->group(function () {
 
@@ -110,6 +114,21 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/contributors', [ContributorController::class, 'index'])->name('contributor.index');
     Route::get('/contributors/filter', [FilterQueryController::class, 'contributorFilter'])->name('contributor.filter');
+
+    Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index');
+    Route::get('/customer/create', [CustomerController::class, 'create'])->name('customer.create');
+   
+    Route::get('/customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
+    Route::post('/customer/{id}/update', [CustomerController::class, 'postEdit'])->name('customer.update');
+    Route::get('/customer/{id}/transaction', [CustomerController::class, 'transaction'])->name('customer.transaction');
+    Route::get('/customer/{id}/detail', [CustomerController::class, 'detail'])->name('customer.detail');
+    Route::get('/customer/{id}/item', [CustomerController::class, 'items'])->name('customer.items');
+    Route::get('/customer/{id}/stat', [CustomerController::class, 'stat'])->name('customer.stat');
+
+    Route::post('/customer/store', [AddrbookController::class, 'postCreate'])->name('addrbook.store');
+    Route::post('/customer/{id}/update', [AddrbookController::class, 'postEdit'])->name('addrbook.update');
+    Route::post('/addrbook/{id}/delete', [AddrbookController::class, 'postDelete'])->name('addrbook.delete');
+    Route::post('/addrbook/{id}/restore', [AddrbookController::class, 'postRestore'])->name('addrbook.restore');
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
 

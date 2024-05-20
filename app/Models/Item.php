@@ -123,6 +123,31 @@ class Item extends Model
 		return $name;
 	}
 
+	public function getOnlineName()
+	{
+		$name = 'CoreNation ';
+
+		//asset lancar
+		if($this->type == ITEM::TYPE_ASSET_LANCAR)
+		 	return $name.$this->name;
+
+		//brand
+		switch($this->brand) {
+			case Item::BRAND_CA: $name .= 'Premium '.$this->group->alias;
+				break;
+			case Item::BRAND_CX:
+				$name .= 'Men ';
+				if(intval(substr($this->pcode,2,1)) == 9)
+					$name .= 'Elite ';
+				$name .= $this->group->alias;
+				break;
+			default:
+				$name .= 'Active '.$this->group->alias;
+				break;
+		}
+		return $name;
+	}
+
 	public function getItemInWarehouse($itemId)
 	{
 		$total = DB::table('items')->select(array(
@@ -147,9 +172,36 @@ class Item extends Model
 		return $this->belongsToMany('App\Models\Tag','item_tag','item_id');
 	}
 
+	public function sizeTag()
+	{
+		return $this->belongsTo('App\Models\Tag', 'size');
+	}
+
 	public function group()
 	{
 		return $this->belongsTo('App\Models\ItemGroup', 'group_id');
+	}
+
+	public function getSize()
+	{
+		return !empty($this->sizeTag) ? $this->sizeTag->code : '';
+	}
+
+	public function getDisc()
+	{
+		//brand
+		$disc = 0;
+		switch($this->brand) {
+			case Item::BRAND_CB: $disc = 50;
+				break;
+			case Item::BRAND_CC:
+				if(substr($this->pcode,3,1) == '0')
+					$disc = 30;
+				break;
+			default:
+				break;
+		}
+		return $disc;
 	}
 	
 	public function getImageUrl()
@@ -179,6 +231,19 @@ class Item extends Model
 			return $this->group->description2;
 		return $this->description2;
 	}
+
+	public static function getDetailUrl($id,$type)
+	{
+		switch($type)
+		{
+			case self::TYPE_ASSET_LANCAR: $action = 'asetLancar.detail'; break;
+			case self::TYPE_ASSET_TETAP: $action = 'item.detail'; break;
+			default: $action = 'item.detail'; break;
+		}
+		return Route($action,$id);
+	}
+
+
 
 
 

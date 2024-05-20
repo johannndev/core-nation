@@ -59,6 +59,12 @@
 
 		@endif
 
+		@if (session('fail'))
+
+			<x-partial.toast-fail />
+
+		@endif
+
     @stack('jsBody')
 
     

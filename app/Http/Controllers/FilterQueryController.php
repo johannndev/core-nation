@@ -137,4 +137,30 @@ class FilterQueryController extends Controller
        return redirect()->route('contributor.index',$queryFilter);
 
     }
+
+    private function getQueryWithId($queryParams){
+
+        $coll =  collect($queryParams);
+
+        $queryParams = $coll->except(['_token', 'action'])->toArray();
+
+        $nullQueries = [];
+        foreach($queryParams as $key => $value){
+            if(!is_null($value)){
+               $nullQueries[$key] = $value;
+            }
+        }
+
+        return $nullQueries;
+    }
+
+
+    public function getFilter(Request $request)
+    {
+       
+        $queryFilter = $this->getQueryWithId($request->input());
+       
+        return redirect()->route($request->action,$queryFilter);
+
+    }
 }
