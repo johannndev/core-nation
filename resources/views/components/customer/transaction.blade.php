@@ -11,7 +11,9 @@
                     <th scope="col" class="px-4 py-3">Total</th>
                     <th scope="col" class="px-4 py-3">Items</th>
                     <th scope="col" class="px-4 py-3">Sender</th>
+                    <th scope="col" class="px-4 py-3">Balance</th>
                     <th scope="col" class="px-4 py-3">Receiver</th>
+                    <th scope="col" class="px-4 py-3">Balance</th>
                
       
                     
@@ -42,8 +44,18 @@
                         @endisset
                     </td>
                     <td class="px-4 py-3">
+                        @isset($item->sender)
+                            {{Number::format($item->sender->stat->balance,2)}}
+                        @endisset
+                    </td>
+                    <td class="px-4 py-3">
                         @isset($item->receiver)
                             {{$item->receiver->name}}
+                        @endisset
+                    </td>
+                    <td class="px-4 py-3">
+                        @isset($item->receiver)
+                            {{Number::format($item->receiver->stat->balance,2)}}
                         @endisset
                     </td>
                   

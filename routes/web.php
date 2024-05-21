@@ -11,6 +11,7 @@ use App\Http\Controllers\HashController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransactionsController;
 use Illuminate\Support\Facades\Route;
 
@@ -117,7 +118,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index');
     Route::get('/customer/create', [CustomerController::class, 'create'])->name('customer.create');
-   
     Route::get('/customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
     Route::post('/customer/{id}/update', [CustomerController::class, 'postEdit'])->name('customer.update');
     Route::get('/customer/{id}/transaction', [CustomerController::class, 'transaction'])->name('customer.transaction');
@@ -125,8 +125,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/customer/{id}/item', [CustomerController::class, 'items'])->name('customer.items');
     Route::get('/customer/{id}/stat', [CustomerController::class, 'stat'])->name('customer.stat');
 
-    Route::post('/customer/store', [AddrbookController::class, 'postCreate'])->name('addrbook.store');
-    Route::post('/customer/{id}/update', [AddrbookController::class, 'postEdit'])->name('addrbook.update');
+    Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index');
+    Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create');
+    Route::get('/supplier/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
+    Route::get('/supplier/{id}/transaction', [SupplierController::class, 'transaction'])->name('supplier.transaction');
+    Route::get('/supplier/{id}/detail', [SupplierController::class, 'detail'])->name('supplier.detail');
+    Route::get('/supplier/{id}/item', [SupplierController::class, 'items'])->name('supplier.items');
+    Route::get('/supplier/{id}/stat', [SupplierController::class, 'stat'])->name('supplier.stat');
+
+    Route::post('/addrbook/store', [AddrbookController::class, 'postCreate'])->name('addrbook.store');
+    Route::post('/addrbook/{id}/update', [AddrbookController::class, 'postEdit'])->name('addrbook.update');
     Route::post('/addrbook/{id}/delete', [AddrbookController::class, 'postDelete'])->name('addrbook.delete');
     Route::post('/addrbook/{id}/restore', [AddrbookController::class, 'postRestore'])->name('addrbook.restore');
 

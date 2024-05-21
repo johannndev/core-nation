@@ -27,7 +27,7 @@ class ListIndex extends Component
     public function render(): View|Closure|string
     {
         
-        $dataList = Customer::with('stat')->where('type',$this->type);
+        $dataList = Customer::with('stat','locations')->where('type',$this->type);
 
         if(Request('name')) {
 			$name = str_replace(' ', '%', Request('name'));
@@ -41,6 +41,8 @@ class ListIndex extends Component
 			$dataList = $dataList->onlyTrashed();
         
         $dataList = $dataList->orderBy('name','asc')->paginate(50)->withQueryString();
+
+        // dd($dataList);
         
         return view('components.customer.list-index',compact('dataList'));
     }

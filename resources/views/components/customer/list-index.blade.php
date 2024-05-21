@@ -6,6 +6,11 @@
                     
                     <th scope="col" class="px-4 py-3">Name</th>
                     <th scope="col" class="px-4 py-3">Balance</th>
+                    @if ($type != App\Models\Customer::TYPE_CUSTOMER)
+
+                    <th scope="col" class="px-4 py-3">Location</th>
+
+                    @endif
                     <th scope="col" class="px-4 py-3">Actions</th>
                     
                 </tr>
@@ -24,6 +29,23 @@
                     </th>
            
                     <td class="px-4 py-3">{{$item->stat->balance}}</td>
+
+                    @if ($type != App\Models\Customer::TYPE_CUSTOMER)
+
+                    <td class="px-4 py-3">
+                        
+
+                        @isset($item->locations)
+
+                            {{$item->getLocation($item->locations)}}
+                                
+                        @endisset
+                       
+
+                        
+                    </td>
+
+                    @endif
                  
                     <td class="px-4 py-3">
                         <a href="{{route($nameType.'.detail',$item->id)}}" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Detail</button>

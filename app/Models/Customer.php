@@ -50,4 +50,18 @@ class Customer extends Model
 	{
 		return $this->hasOne('App\Models\CustomerStat');
 	}
+
+	public function locations()
+	{
+		return $this->belongsToMany('App\Models\Location', 'location_customer');
+	}
+
+	public function getLocation($data)
+	{
+
+		$local = $data->implode('name', ', ');
+
+		return $local;
+		
+	}
 }
