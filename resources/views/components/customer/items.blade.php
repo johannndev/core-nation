@@ -76,7 +76,7 @@
                         @endif
                        
                     </td>
-                    <td class="px-4 py-3">{{$item->item->price}}</td>
+                    <td class="px-4 py-3">{{Number::format($item->item->price,2)}}</td>
                     <td class="px-4 py-3">{{$item->quantity}}</td>
                     <td class="px-4 py-3  online-col hidden">{{$item->item->getDisc()}}</td>
                  

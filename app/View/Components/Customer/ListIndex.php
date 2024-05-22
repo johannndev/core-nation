@@ -2,10 +2,19 @@
 
 namespace App\View\Components\Customer;
 
+use App\Helpers\DateHelper;
+use App\Helpers\KeysHelper;
 use App\Models\Customer;
+use App\Models\Depreciation;
+use App\Models\Item;
+use App\Models\WarehouseItem;
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
+
 
 class ListIndex extends Component
 {
@@ -41,6 +50,8 @@ class ListIndex extends Component
 			$dataList = $dataList->onlyTrashed();
         
         $dataList = $dataList->orderBy('name','asc')->paginate(50)->withQueryString();
+
+     
 
         // dd($dataList);
         

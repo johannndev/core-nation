@@ -13,6 +13,7 @@ use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -132,6 +133,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/supplier/{id}/detail', [SupplierController::class, 'detail'])->name('supplier.detail');
     Route::get('/supplier/{id}/item', [SupplierController::class, 'items'])->name('supplier.items');
     Route::get('/supplier/{id}/stat', [SupplierController::class, 'stat'])->name('supplier.stat');
+
+    Route::get('/warehouse', [WarehouseController::class, 'index'])->name('warehouse.index');
+    Route::get('/warehouse/create', [WarehouseController::class, 'create'])->name('warehouse.create');
+    Route::get('/warehouse/{id}/edit', [WarehouseController::class, 'edit'])->name('warehouse.edit');
+    Route::get('/warehouse/{id}/transaction', [WarehouseController::class, 'transaction'])->name('warehouse.transaction');
+    Route::get('/warehouse/{id}/detail', [WarehouseController::class, 'detail'])->name('warehouse.detail');
+    Route::get('/warehouse/{id}/item', [WarehouseController::class, 'items'])->name('warehouse.items');
+    Route::get('/warehouse/{id}/stat', [WarehouseController::class, 'stat'])->name('warehouse.stat');
 
     Route::post('/addrbook/store', [AddrbookController::class, 'postCreate'])->name('addrbook.store');
     Route::post('/addrbook/{id}/update', [AddrbookController::class, 'postEdit'])->name('addrbook.update');

@@ -6,7 +6,7 @@ use App\Models\Customer;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
-class SupplierController extends Controller
+class WarehouseController extends Controller
 {
     private function customer($id)
     {
@@ -15,37 +15,42 @@ class SupplierController extends Controller
         return $customer->name;
     }
 
+
     public function index()
     {
-        $customerType = Customer::TYPE_SUPPLIER;
+        $customerType = Customer::TYPE_WAREHOUSE;
       
-        $nameType = "supplier";
+        $nameType = "warehouse";
 
 
-        return view('supplier.index',compact('customerType','nameType'));
+        return view('warehouse.index',compact('customerType','nameType'));
     }
 
     public function create()
     {
-        $customerType = Customer::TYPE_SUPPLIER;
-        $action = 'supplier.detail';
+        $customerType = Customer::TYPE_WAREHOUSE;
+        $action = 'warehouse.detail';
       
 
-        return view('supplier.create',compact('customerType','action'));
+        return view('warehouse.create',compact('customerType','action'));
     }
-    
 
+   
 
     public function Edit($id)
     {
         $cid = $id;
-        $action = 'supplier.detail';
-        return view('supplier.edit',compact('action','cid'));
+        $action = 'warehouse.detail';
+        return view('warehouse.edit',compact('action','cid'));
     }
+
+    
+
 
     public function transaction($id)
     {
        
+
         $cid = $id;
 
         $typeList = Transaction::$typesJSON;
@@ -54,18 +59,18 @@ class SupplierController extends Controller
         // dd($nameCustomer);
 
        
-        return view('supplier.transaction',compact('cid','typeList','nameCustomer'));
+        return view('warehouse.transaction',compact('cid','typeList','nameCustomer'));
     }
 
     public function detail($id)
     {
         $cid = $id;
         $nameCustomer = $this->customer($id);
-        $nameType = 'supplier';
+        $nameType = 'warehouse';
 
-        $customerType = Customer::TYPE_CUSTOMER;
+        $customerType = Customer::TYPE_WAREHOUSE;
 
-        return view('supplier.detail',compact('cid','nameCustomer','nameType','customerType'));
+        return view('warehouse.detail',compact('cid','nameCustomer','nameType','customerType'));
     }
 
     public function items($id)
@@ -74,7 +79,7 @@ class SupplierController extends Controller
         $nameCustomer = $this->customer($id);
         
 
-        return view('supplier.item',compact('cid','nameCustomer'));
+        return view('warehouse.item',compact('cid','nameCustomer'));
     }
 
     public function stat($id)
@@ -84,7 +89,6 @@ class SupplierController extends Controller
 
         $start = date('Y');
 
-        return view('supplier.stat',compact('cid','start','nameCustomer'));
+        return view('warehouse.stat',compact('cid','start','nameCustomer'));
     }
-
 }

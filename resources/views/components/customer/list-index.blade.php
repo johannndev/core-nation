@@ -5,7 +5,9 @@
                 <tr>
                     
                     <th scope="col" class="px-4 py-3">Name</th>
+                    @if ($type != App\Models\Customer::TYPE_WAREHOUSE)
                     <th scope="col" class="px-4 py-3">Balance</th>
+                    @endif
                     @if ($type != App\Models\Customer::TYPE_CUSTOMER)
 
                     <th scope="col" class="px-4 py-3">Location</th>
@@ -27,8 +29,9 @@
                         <a href="{{route($nameType.'.transaction',$item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->name}}</a>
 
                     </th>
-           
-                    <td class="px-4 py-3">{{$item->stat->balance}}</td>
+                    @if ($type != App\Models\Customer::TYPE_WAREHOUSE)
+                    <td class="px-4 py-3">{{Number::format($item->stat->balance,2)}}</td>
+                    @endif
 
                     @if ($type != App\Models\Customer::TYPE_CUSTOMER)
 

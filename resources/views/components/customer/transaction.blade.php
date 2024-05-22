@@ -36,8 +36,8 @@
                     <td class="px-4 py-3">{{$item->invoice}}</td>
                    
                     <td class="px-4 py-3 w-60">{{$item->description}}</td>
-                    <td class="px-4 py-3">{{$item->total}}</td>
-                    <td class="px-4 py-3">{{$item->total_items}}</td>
+                    <td class="px-4 py-3">{{Number::format($item->total,2)}}</td>
+                    <td class="px-4 py-3">{{Number::format($item->total_items,2)}}</td>
                     <td class="px-4 py-3">
                         @isset($item->sender)
                             {{$item->sender->name}}

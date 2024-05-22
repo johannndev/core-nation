@@ -17,6 +17,7 @@
     <div class="p-4">
 
         <div class="grid grid-cols-3 gap-4">
+            @if ($data->type != App\Models\Customer::TYPE_WAREHOUSE)
             <div>
                 <div class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -32,6 +33,7 @@
                     <p class="font-bold text-2xl">{{number_format($data->stat->balance,2)}}</p>
                 </div>
             </div>
+            @endif
 
             <div>
                 <div class="flex items-center">
