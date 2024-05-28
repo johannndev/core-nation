@@ -10,6 +10,7 @@ use App\Models\CustomerStat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class AddrbookController extends Controller
 {
@@ -26,12 +27,17 @@ class AddrbookController extends Controller
 
     public function postCreate(Request $request)
 	{
+		$requiredProp = "y";
+
+		if($request->type == Customer::TYPE_VWAREHOUSE || $request->type == Customer::TYPE_VACCOUNT){
+			$requiredProp = "n";
+		}
 
         $rules = [
-            'address'  => 'required',
+            'address'  => [Rule::requiredIf($requiredProp == 'y')],
             'name'  => 'required',
             'description' => 'required',
-            'initial' => 'required',
+            'initial' => [Rule::requiredIf($requiredProp == 'y')],
             
 		];
 
@@ -83,9 +89,16 @@ class AddrbookController extends Controller
 			throw new ModelException($customer->getErrors(), __LINE__);
 
 		//create stat
+
+		if($request->initial){
+			$initDepo = $request->initial;
+		}else{
+			$initDepo = 0;
+		}
+
 		$stat = new CustomerStat();
 		$stat->customer_id = $customer->id;
-		$stat->balance = $request->initial;
+		$stat->balance = $initDepo;
 		if(!$stat->save())
 			throw new ModelException($stat->getErrors(), __LINE__);
 
@@ -118,9 +131,17 @@ class AddrbookController extends Controller
 
     public function postEdit(Request $request,$id)
 	{
+		$customer = Customer::findOrFail($id);
+
+		$requiredProp = "y";
+
+		if($customer->type == Customer::TYPE_VWAREHOUSE || $customer->type == Customer::TYPE_VACCOUNT){
+			$requiredProp = "n";
+		}
+
 
         $rules = [
-            'address'  => 'required',
+            'address'  => [Rule::requiredIf($requiredProp == 'y')],
             'name'  => 'required',
             'description' => 'required',
            
@@ -143,9 +164,16 @@ class AddrbookController extends Controller
 
 		DB::beginTransaction();
 
-		$customer = Customer::findOrFail($id);
+		if($request->type){
+			$typeCustomer = $request->type;
+		}else{
+			$typeCustomer = $customer->type;
+	
+		}
 
-        $customerTypeName = Customer::$types[$request->type];
+		
+
+        $customerTypeName = Customer::$types[$typeCustomer];
 
         $customer->address = $request->address;
         $customer->description = $request->description;
@@ -161,7 +189,7 @@ class AddrbookController extends Controller
         }
 
 		$customer->name = ucfirst(trim($request->name));
-		$customer->type = $request->type;
+		$customer->type = $typeCustomer;
 
 		if($this->checkExist($customer))
 			throw new \Exception($customerTypeName.' already exists');
@@ -175,7 +203,7 @@ class AddrbookController extends Controller
 
 		DB::commit();
 
-        return redirect()->route($request->action,$customer->id)->with('success', Customer::$types[$request->type].' edited.');
+        return redirect()->route($request->action,$customer->id)->with('success', Customer::$types[$typeCustomer].' edited.');
 
 		} catch(ModelException $e) {
 			DB::rollBack();
@@ -193,6 +221,8 @@ class AddrbookController extends Controller
     public function postDelete($id, Request $request)
 	{
 		$customer = Customer::where('id', '=', $id)->where('type', '=', $request->type)->first();
+
+	
 
         $customerTypeName = Customer::$types[$request->type];
 

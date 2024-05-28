@@ -2,33 +2,29 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">{{$nameCustomer}} | Transaction List </p>
+        <p class="text-2xl font-bold">{{$nameCustomer}} | Stat</p>
 
        
     </div>
 
-    
     <div class="mb-8">
-    
-        
-
         <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
             <ul class="flex flex-wrap -mb-px">
             
               
                 <li class="me-2">
-                    <a href="{{route('supplier.detail',$cid)}}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Detail</a>
+                    <a href="{{route('vwarehouse.detail',$cid)}}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Detail</a>
                 </li>
                 <li class="me-2">
-                    <a href="{{route('supplier.transaction',$cid)}}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Transaction</a>
-                </li>
-
-                <li class="me-2">
-                    <a href="{{route('supplier.items',$cid)}}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Items</a>
+                    <a href="{{route('vwarehouse.transaction',$cid)}}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" aria-current="page">Transaction</a>
                 </li>
 
                 <li class="me-2">
-                    <a href="{{route('supplier.stat',$cid)}}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Stats</a>
+                    <a href="{{route('vwarehouse.items',$cid)}}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Items</a>
+                </li>
+
+                <li class="me-2">
+                    <a href="{{route('vwarehouse.stat',$cid)}}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500">Stats</a>
                 </li>
                 
             </ul>
@@ -42,36 +38,45 @@
             <div class="mx-auto  ">
                 <!-- Start coding here -->
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-                    <form action="{{route('filter.get',['id' => $cid, 'action' =>'supplier.transaction'])}}" method="post">
+                    <form action="{{route('filter.get',['id' => $cid, 'action' =>'vwarehouse.stat'])}}" method="post">
+
+                        @csrf
+
                         <div class="flex flex-col md:flex-row items-end justify-between p-4">
-                            @csrf
+                        
                             
                             <div class="w-full md:w-4/6">
                             
-                                <div class="grid gap-4 md:grid-cols-5">
-                                    <div>
-                                        <label for="from" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">From</label>
-                                        <input type="date" id="from" name="from" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  value="{{Request('from')}}"/>
-                                    </div>
-                                    <div>
-                                        <label for="to" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">To</label>
-                                        <input type="date" id="to" name="to" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  value="{{Request('to')}}"/>
-                                    </div>
+                                <div class="grid gap-4 md:grid-cols-5 items-end">
+                                   
                                     <div>
 
-                                        <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type</label>
-                                        <select id="type" name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <label for="month" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Month</label>
+                                        <select id="month" name="month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
-                                            @foreach ($typeList as $item)
-                                                <option {{Request('type')==$item['id'] ? 'selected' : ''}} value="{{$item['id']}}">{{$item['name']}}</option>
-                                            @endforeach
-                                            
-                                          
+                                            @for ($i = 1; $i <= 12; $i++)
+                                                <option {{Request('month') == $i ? 'selected' : ''}}  value="{{$i}}">{{$i}}</option>
+                                            @endfor
+                                        
+                                        </select>
+
+                                    </div>
+
+                                    <div>
+
+                                        <label for="year" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year</label>
+                                        <select id="year" name="year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                                            @for ($i = $start; $i >= $start-5; $i--)
+                                                <option  {{Request('year') == $i ? 'selected' : ''}}  value="{{$i}}">{{$i}}</option>
+                                            @endfor
+                                        
                                         </select>
 
                                     </div>
                                     
 
+                                   
                                    
 
                                 </div>
@@ -84,10 +89,10 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-4 w-4 mr-2 " viewbox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
                                     </svg>
-                                    Search
+                                    Filter
                                 </button>
 
-                                <a href="{{route('supplier.transaction',$cid)}}" class="flex items-center justify-center py-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                <a href="{{route('vwarehouse.stat',$cid)}}" class="flex items-center justify-center py-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
 
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -107,10 +112,8 @@
                             
                         </div>
                     </form>
-                  
                    
-                    <x-customer.transaction :cid='$cid' />
-
+                    <x-customer.stat :cid='$cid' />
                    
                 </div>
             </div>
@@ -122,7 +125,7 @@
     @push('jsBody')
 
     <script>
-     
+  
 
      
     </script>

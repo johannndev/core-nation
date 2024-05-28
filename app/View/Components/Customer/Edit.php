@@ -28,6 +28,12 @@ class Edit extends Component
     {
         $data = Customer::findOrFail($this->cid);
 
-        return view('components.customer.edit',compact('data'));
+        $hideProp = "show";
+
+        if($data->type == Customer::TYPE_VWAREHOUSE || $data->type == Customer::TYPE_VACCOUNT){
+            $hideProp = "hidden";
+        }
+
+        return view('components.customer.edit',compact('data','hideProp'));
     }
 }

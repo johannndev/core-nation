@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddrbookController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AsetLancarController;
@@ -11,8 +12,11 @@ use App\Http\Controllers\HashController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ResellerController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\VAccountController;
+use App\Http\Controllers\VWarehouseController;
 use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
@@ -141,6 +145,38 @@ Route::middleware('auth')->group(function () {
     Route::get('/warehouse/{id}/detail', [WarehouseController::class, 'detail'])->name('warehouse.detail');
     Route::get('/warehouse/{id}/item', [WarehouseController::class, 'items'])->name('warehouse.items');
     Route::get('/warehouse/{id}/stat', [WarehouseController::class, 'stat'])->name('warehouse.stat');
+
+    Route::get('/vwarehouse', [VWarehouseController::class, 'index'])->name('vwarehouse.index');
+    Route::get('/vwarehouse/create', [VWarehouseController::class, 'create'])->name('vwarehouse.create');
+    Route::get('/vwarehouse/{id}/edit', [VWarehouseController::class, 'edit'])->name('vwarehouse.edit');
+    Route::get('/vwarehouse/{id}/transaction', [VWarehouseController::class, 'transaction'])->name('vwarehouse.transaction');
+    Route::get('/vwarehouse/{id}/detail', [VWarehouseController::class, 'detail'])->name('vwarehouse.detail');
+    Route::get('/vwarehouse/{id}/item', [VWarehouseController::class, 'items'])->name('vwarehouse.items');
+    Route::get('/vwarehouse/{id}/stat', [VWarehouseController::class, 'stat'])->name('vwarehouse.stat');
+
+    Route::get('/account', [AccountController::class, 'index'])->name('account.index');
+    Route::get('/account/create', [AccountController::class, 'create'])->name('account.create');
+    Route::get('/account/{id}/edit', [AccountController::class, 'edit'])->name('account.edit');
+    Route::get('/account/{id}/transaction', [AccountController::class, 'transaction'])->name('account.transaction');
+    Route::get('/account/{id}/detail', [AccountController::class, 'detail'])->name('account.detail');
+    Route::get('/account/{id}/item', [AccountController::class, 'items'])->name('account.items');
+    Route::get('/account/{id}/stat', [AccountController::class, 'stat'])->name('account.stat');
+
+    Route::get('/vaccount', [VAccountController::class, 'index'])->name('vaccount.index');
+    Route::get('/vaccount/create', [VAccountController::class, 'create'])->name('vaccount.create');
+    Route::get('/vaccount/{id}/edit', [VAccountController::class, 'edit'])->name('vaccount.edit');
+    Route::get('/vaccount/{id}/transaction', [VAccountController::class, 'transaction'])->name('vaccount.transaction');
+    Route::get('/vaccount/{id}/detail', [VAccountController::class, 'detail'])->name('vaccount.detail');
+    Route::get('/vaccount/{id}/item', [VAccountController::class, 'items'])->name('vaccount.items');
+    Route::get('/vaccount/{id}/stat', [VAccountController::class, 'stat'])->name('vaccount.stat');
+
+    Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller.index');
+    Route::get('/reseller/create', [ResellerController::class, 'create'])->name('reseller.create');
+    Route::get('/reseller/{id}/edit', [ResellerController::class, 'edit'])->name('reseller.edit');
+    Route::get('/reseller/{id}/transaction', [ResellerController::class, 'transaction'])->name('reseller.transaction');
+    Route::get('/reseller/{id}/detail', [ResellerController::class, 'detail'])->name('reseller.detail');
+    Route::get('/reseller/{id}/item', [ResellerController::class, 'items'])->name('reseller.items');
+    Route::get('/reseller/{id}/stat', [ResellerController::class, 'stat'])->name('reseller.stat');
 
     Route::post('/addrbook/store', [AddrbookController::class, 'postCreate'])->name('addrbook.store');
     Route::post('/addrbook/{id}/update', [AddrbookController::class, 'postEdit'])->name('addrbook.update');

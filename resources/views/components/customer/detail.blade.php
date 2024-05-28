@@ -17,7 +17,7 @@
     <div class="p-4">
 
         <div class="grid grid-cols-3 gap-4">
-            @if ($data->type != App\Models\Customer::TYPE_WAREHOUSE)
+            @if ($hideProp == "show")
             <div>
                 <div class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -42,7 +42,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                       </svg>
     
-                    <p class="font-medium ml-2">ADDRESS</p>
+                    <p class="font-medium ml-2">Address</p>
                 </div>
 
                 <div class="mt-2">
@@ -121,6 +121,32 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                  </svg>
+
+                  
+                
+
+                <p class="font-medium ml-2">Description</p>
+            </div>
+
+            <div class="mt-2">
+                @if ($data->description)
+
+                    <p class="mb-6">{{$data->description}}</p>
+
+                  
+                    
+                @else
+                    No description
+                @endif
+                
             </div>
         </div>
 

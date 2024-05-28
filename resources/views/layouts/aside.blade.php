@@ -206,6 +206,24 @@
               
                 </li>
 
+                 <li>
+        
+                    <div class="flex justify-between">
+        
+                        <a href="{{route('reseller.index')}}" class=" flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Reseller</a>
+        
+                        <a href="{{route('reseller.create')}}" class="flex items-center py-2 px-4  w-auto text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                              
+                              
+                        </a>
+                        
+                    </div>
+              
+                </li>
+
                 <li>
         
                     <div class="flex justify-between">
@@ -231,6 +249,60 @@
                         <a href="{{route('warehouse.index')}}" class=" flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Warehouse</a>
         
                         <a href="{{route('warehouse.create')}}" class="flex items-center py-2 px-4  w-auto text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                              
+                              
+                        </a>
+                        
+                    </div>
+              
+                </li>
+
+                <li>
+        
+                    <div class="flex justify-between">
+        
+                        <a href="{{route('vwarehouse.index')}}" class=" flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">V. Warehouse</a>
+        
+                        <a href="{{route('vwarehouse.create')}}" class="flex items-center py-2 px-4  w-auto text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                              
+                              
+                        </a>
+                        
+                    </div>
+              
+                </li>
+
+                <li>
+        
+                    <div class="flex justify-between">
+        
+                        <a href="{{route('account.index')}}" class=" flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Account</a>
+        
+                        <a href="{{route('account.create')}}" class="flex items-center py-2 px-4  w-auto text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                              
+                              
+                        </a>
+                        
+                    </div>
+              
+                </li>
+
+                <li>
+        
+                    <div class="flex justify-between">
+        
+                        <a href="{{route('vaccount.index')}}" class=" flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">V. Account</a>
+        
+                        <a href="{{route('vaccount.create')}}" class="flex items-center py-2 px-4  w-auto text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>

@@ -27,7 +27,17 @@ class Detail extends Component
     {
         $data = Customer::withTrashed()->findOrFail($this->cid);
 
+        $hideProp = "show";
+
+        if($data->type == Customer::TYPE_WAREHOUSE){
+            $hideProp = "hidden";
+        }
+
+        if($data->type == Customer::TYPE_VWAREHOUSE){
+            $hideProp = "hidden";
+        }
+
        
-        return view('components.customer.detail',compact('data'));
+        return view('components.customer.detail',compact('data','hideProp'));
     }
 }

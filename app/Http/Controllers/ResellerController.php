@@ -6,7 +6,7 @@ use App\Models\Customer;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
-class VWarehouseController extends Controller
+class ResellerController extends Controller
 {
     private function customer($id)
     {
@@ -18,21 +18,21 @@ class VWarehouseController extends Controller
 
     public function index()
     {
-        $customerType = Customer::TYPE_VWAREHOUSE;
+        $customerType = Customer::TYPE_RESELLER;
       
-        $nameType = "vwarehouse";
+        $nameType = "reseller";
 
 
-        return view('vwarehouse.index',compact('customerType','nameType'));
+        return view('reseller.index',compact('customerType','nameType'));
     }
 
     public function create()
     {
-        $customerType = Customer::TYPE_VWAREHOUSE;
-        $action = 'vwarehouse.detail';
+        $customerType = Customer::TYPE_RESELLER;
+        $action = 'reseller.detail';
       
 
-        return view('vwarehouse.create',compact('customerType','action'));
+        return view('reseller.create',compact('customerType','action'));
     }
 
    
@@ -40,8 +40,8 @@ class VWarehouseController extends Controller
     public function Edit($id)
     {
         $cid = $id;
-        $action = 'vwarehouse.detail';
-        return view('vwarehouse.edit',compact('action','cid'));
+        $action = 'reseller.detail';
+        return view('reseller.edit',compact('action','cid'));
     }
 
     
@@ -59,18 +59,18 @@ class VWarehouseController extends Controller
         // dd($nameCustomer);
 
        
-        return view('vwarehouse.transaction',compact('cid','typeList','nameCustomer'));
+        return view('reseller.transaction',compact('cid','typeList','nameCustomer'));
     }
 
     public function detail($id)
     {
         $cid = $id;
         $nameCustomer = $this->customer($id);
-        $nameType = "vwarehouse";
+        $nameType = "reseller";
 
-        $customerType = Customer::TYPE_VWAREHOUSE;
+        $customerType = Customer::TYPE_RESELLER;
 
-        return view('vwarehouse.detail',compact('cid','nameCustomer','nameType','customerType'));
+        return view('reseller.detail',compact('cid','nameCustomer','nameType','customerType'));
     }
 
     public function items($id)
@@ -79,7 +79,7 @@ class VWarehouseController extends Controller
         $nameCustomer = $this->customer($id);
         
 
-        return view('vwarehouse.item',compact('cid','nameCustomer'));
+        return view('reseller.item',compact('cid','nameCustomer'));
     }
 
     public function stat($id)
@@ -89,6 +89,6 @@ class VWarehouseController extends Controller
 
         $start = date('Y');
 
-        return view('vwarehouse.stat',compact('cid','start','nameCustomer'));
+        return view('reseller.stat',compact('cid','start','nameCustomer'));
     }
 }

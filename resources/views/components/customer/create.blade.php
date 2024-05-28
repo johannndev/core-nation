@@ -20,12 +20,18 @@
 
                             </div>
 
+                            @if ($hideProp == 'show')
+                                
+                          
+
                             <div class="col-span-2">
                                 <label for="address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Address</label>
                                 <textarea name="address" id="address" rows="4" class="block p-2.5 w-full text-sm  rounded-lg border  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('address') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" >{{old('address')}}</textarea>
 
 
                             </div>
+
+                            @endif
 
                             {{-- <div class="col-span-2">
                                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
@@ -58,12 +64,13 @@
 
                             </div>
 
-
+                            @if ($hidePropInitial == 'show')
                             <div class="col-span-2">
                                 <label for="initial" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Initial Balance</label>
                                 <input type="number" value="0" name="initial" id="initial" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('initial') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('initial')}}">
 
                             </div>
+                            @endif
 
                             <div  class="col-span-2">
                                

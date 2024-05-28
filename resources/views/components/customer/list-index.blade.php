@@ -5,7 +5,7 @@
                 <tr>
                     
                     <th scope="col" class="px-4 py-3">Name</th>
-                    @if ($type != App\Models\Customer::TYPE_WAREHOUSE)
+                    @if ($hidePropBalance == 'show')
                     <th scope="col" class="px-4 py-3">Balance</th>
                     @endif
                     @if ($type != App\Models\Customer::TYPE_CUSTOMER)
@@ -29,7 +29,7 @@
                         <a href="{{route($nameType.'.transaction',$item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->name}}</a>
 
                     </th>
-                    @if ($type != App\Models\Customer::TYPE_WAREHOUSE)
+                    @if ($hidePropBalance == 'show')
                     <td class="px-4 py-3">{{Number::format($item->stat->balance,2)}}</td>
                     @endif
 
