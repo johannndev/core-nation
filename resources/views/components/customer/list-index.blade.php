@@ -40,6 +40,8 @@
 
                         @isset($item->locations)
 
+                           
+
                             {{$item->getLocation($item->locations)}}
                                 
                         @endisset

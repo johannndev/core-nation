@@ -11,6 +11,7 @@ use App\Http\Controllers\FilterQueryController;
 use App\Http\Controllers\HashController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\OperationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResellerController;
 use App\Http\Controllers\SupplierController;
@@ -182,6 +183,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/addrbook/{id}/update', [AddrbookController::class, 'postEdit'])->name('addrbook.update');
     Route::post('/addrbook/{id}/delete', [AddrbookController::class, 'postDelete'])->name('addrbook.delete');
     Route::post('/addrbook/{id}/restore', [AddrbookController::class, 'postRestore'])->name('addrbook.restore');
+
+    Route::get('/operation', [OperationController::class, 'index'])->name('operation.index');
+    Route::get('/operation/create', [OperationController::class, 'create'])->name('operation.create');
+    Route::post('/operation/store', [OperationController::class, 'store'])->name('operation.store');
+    Route::get('/operation/{id}/edit', [OperationController::class, 'edit'])->name('operation.edit');
+    Route::patch('/operation/{id}/store', [OperationController::class, 'update'])->name('operation.update');
+    Route::get('/operation/{id}/account/edit', [OperationController::class, 'editAccount'])->name('operation.account.edit');
+    Route::patch('/operation/{id}/account/update', [OperationController::class, 'updateAccount'])->name('operation.account.update');
+    Route::get('/operation/{id}/detail', [OperationController::class, 'detail'])->name('operation.detail');
+    Route::get('/operation/{id}/account', [OperationController::class, 'account'])->name('operation.account');
+    Route::get('/operation/account', [OperationController::class, 'accountList'])->name('operation.account.list');
+    Route::get('/operation/account/create', [OperationController::class, 'createAccount'])->name('operation.account.create');
+    Route::post('/operation/account/store', [OperationController::class, 'postCreateAccount'])->name('operation.postCreateAccount');
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
 

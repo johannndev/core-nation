@@ -11,9 +11,11 @@ use App\Models\WarehouseItem;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class ListIndex extends Component
@@ -43,6 +45,20 @@ class ListIndex extends Component
         }
 
         $dataList = Customer::with('stat','locations')->where('type',$this->type);
+
+        if($this->type == Customer::TYPE_RESELLER || $this->type == Customer::TYPE_WAREHOUSE){
+            
+            if(Auth::user()->location_id > 0 ){
+
+                $uid = Auth::user()->location_id ;
+
+                $dataList = $dataList->whereHas('locations', function (Builder $query) use($uid) {
+                    $query->where('id', $uid);
+                });
+
+            }
+           
+        }
 
         if(Request('name')) {
 			$name = str_replace(' ', '%', Request('name'));

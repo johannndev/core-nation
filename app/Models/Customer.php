@@ -64,4 +64,17 @@ class Customer extends Model
 		return $local;
 		
 	}
+
+	public function scopeAccounts($query)
+	{
+		return $query->where('type','=',Customer::TYPE_ACCOUNT);
+	}
+
+	public function operation()
+	{
+		return $this->belongsTo('App\Models\Operation','parent_id');
+	}
+
+
+	
 }
