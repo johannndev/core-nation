@@ -19,7 +19,7 @@
         console.log(event.key);
 
         
-        alert('tombol yang ditekan '+event.key);
+        alert('tombol yang ditekan '+event.keyCode);
         
 
         if (event.key === "Enter") {
