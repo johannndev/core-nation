@@ -18,9 +18,9 @@
     function handleCode(event, id) {
         console.log(event.key);
 
-        if(event.key === "Tab"){
-            alert('ini tab');
-        }
+        
+        alert('ini '+event.key);
+        
 
         if (event.key === "Enter") {
 
