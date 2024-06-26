@@ -35,6 +35,11 @@
 
 	</head>
 	<body class="font-sans antialiased">
+
+		<div class="relative">
+			<x-partial.enter-virtual />
+		</div>
+
 	  <div class="antialiased bg-gray-50 dark:bg-gray-900">
       
 
