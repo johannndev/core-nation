@@ -14,7 +14,7 @@
     const inputs = document.querySelectorAll('input');
 
     inputs.forEach(input =>{
-        input.addEventListener('focus', () =>{
+        input.addEventListener('DomContentLoaded','focus', () =>{
             console.log(`field focused: ${input.id}`);
 
             const inputElement = document.getElementById(input.id);
