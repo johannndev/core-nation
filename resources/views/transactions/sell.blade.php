@@ -229,14 +229,14 @@
                                         <input type="text" name="addMoreInputFields[0][itemId]"  id="id0"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
                                 
                                         <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
-                                        <input  onkeydown="return handleCode(event,0)" type="text" name="addMoreInputFields[0][code]"  id="code0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  />
+                                        <input  onkeydown="return handleCode(event,0)" type="text" name="addMoreInputFields[0][code]"  id="code0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search" />
                                     </div>
                                     <div>
                                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
                                        
                                         <div class="">
                                 
-                                            <input id="name0" list="name-list0" onkeydown="handleName(event,0)" autocomplete="off" type="text" name="addMoreInputFields[0][name]"  class="nameList register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""   />
+                                            <input id="name0" list="name-list0" onkeydown="handleName(event,0)" autocomplete="off" type="text" name="addMoreInputFields[0][name]"  class="nameList register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  inputmode="text" />
 
                                             <datalist id="name-list0"></datalist>
 
