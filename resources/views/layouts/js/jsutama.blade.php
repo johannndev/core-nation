@@ -14,8 +14,10 @@
     const inputs = document.querySelectorAll('input');
 
     inputs.forEach(input =>{
-        input.addEventListener('DomContentLoaded','focus', () =>{
+        input.addEventListener('focus', () =>{
             console.log(`field focused: ${input.id}`);
+
+            console.log('get id '+input.id)
 
             const inputElement = document.getElementById(input.id);
             const getInputId = inputElement.getAttribute('data-id');
