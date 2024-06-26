@@ -8,20 +8,146 @@
 
 <script>
 
+    var inputName;
+    var inputId;
 
-    $(document).on("keypress", function(e){
-        if(e.which == 13){e.preventDefault();}
+    const inputs = document.querySelectorAll('input');
+
+    inputs.forEach(input =>{
+        input.addEventListener('focus', () =>{
+            console.log(`field focused: ${input.id}`);
+
+            const inputElement = document.getElementById(input.id);
+            const getInputId = inputElement.getAttribute('data-id');
+            const getInputName = inputElement.getAttribute('data-name');
+
+            inputName = getInputName;
+            inputId = getInputId;
+
+            console.log(getInputId);
+            console.log(getInputName);
+
+            const goBtn = document.getElementById('virtualEnterKay');
+
+            if(getInputId){
+                goBtn.classList.remove('hidden');
+            }else{
+                goBtn.classList.add('hidden');
+            }
+
+           
+        });
+
+        input.addEventListener('blur', () =>{
+            console.log(`field blur: ${input.id}`);
+
+            const goBtn = document.getElementById('virtualEnterKay');
+
+            const inputElement = document.getElementById(input.id);
+            const getInputId = inputElement.getAttribute('data-id');
+            const getInputName = inputElement.getAttribute('data-name');
+
+            if(getInputName == 'code' || getInputName == 'name' || getInputName == 'quantity' || getInputName == 'price' || getInputName == 'discount'){
+                
+            }else{
+                goBtn.classList.add('hidden');
+            }
+        });
+    } );
+
+    
+    // $( document ).ready( function () {
+    //     const elems = document.querySelectorAll('[data-input="value"]');
+
+    //     const focus = elems.addEventListener('focus', function(){
+    //         var idElemen = this.id;
+
+    //         console.log('muncul');
+    //     })
+
+
+    //     // console.log(elems);
+    // });
+
+  
+
+    const tombol = document.getElementById('virtualEnterKay');
+
+    tombol.addEventListener('click', function(){
+       
+            if(inputName == 'code'){
+
+                handleCode(null,inputId,'code');
+
+            }else if(inputName == 'name'){
+
+                handleName(null,inputId,'name');
+
+            }else if(inputName == 'quantity'){
+
+                handleQty(null,inputId,'quantity');
+
+            }else if(inputName == 'price'){
+
+                handlePrice(null,inputId,'price');
+
+            }else if(inputName == 'discount'){
+
+                handleDisc(null,inputId,'discount');
+
+            }else{
+
+            }
+        
     })
 
 
+    $(document).on("keypress", function(e){
+        // console.log(e)
 
-    function handleCode(event, id) {
-        console.log(event.key);
+        // var iid = e.target.id;
+        // const getInput = document.getElementById(iid);
+        // const getInputId = getInput.getAttribute('data-id');
+        // const getInputName = getInput.getAttribute('data-name');
 
-        console.log(event);
+        // inputName = getInputName;
+        // inputId = getInputId;
+
+        // const Focus = getInput.addEventListener('focus', function(){
+        //     var idElemen = this.id;
+
+        //     console.log('muncul');
+        // })
+
+        // console.log(getInputId);
+        // console.log(getInputName);
+
+        if(e.which == 13){e.preventDefault();}
+    })
+
+    function changeCode(name, id){
+
+        const inputTrigger = document.getElementById(name+id);
+
+        console.log(inputTrigger);
+
+        const button = document.getElementById('virtualEnterKay');
+
+        const Focus = inputTrigger.addEventListener('focus', function(){
+            var idElemen = this.id;
+
+            console.log('muncul');
+        })
+       
+    }
+
+    function handleCode(event, id,get=null) {
+        // console.log(event.key);
+
+        // console.log(event);
         
 
-        if (event.key === "Enter") {
+        if (get === "code" || event.key === "Enter") {
 
             // var price = $('#code'+id).val();
             // alert('Function called without submitting the form! '+price);
@@ -61,8 +187,8 @@
         return true; // Memastikan bahwa input lainnya tetap berfungsi normal
     }
 
-    function handleName(event, id) {
-        console.log('haha');
+    function handleName(event, id, get=null) {
+        // console.log('haha');
         // Menggunakan debounce teknik untuk menunda eksekusi
         clearTimeout(window.inputTimeout);
 
@@ -85,7 +211,7 @@
         }, 300); // Delay 300 milidetik
 
         
-        if (event.key === "Enter") {
+        if (get === "name" || event.key === "Enter") {
 
             // console.log('masuk')
 
@@ -116,13 +242,13 @@
         
     }
 
-    function handleQty(event, id) {
+    function handleQty(event, id,get=null) {
 
         getTotalItem(1,id);
 
         totalQty()
 
-        if (event.key === "Enter") {
+        if (get === "quantity" || event.key === "Enter") {
 
             console.log('dienter')
 
@@ -135,11 +261,11 @@
         return true; // Memastikan bahwa input lainnya tetap berfungsi normal
     }
 
-    function handlePrice(event, id) {
+    function handlePrice(event, id,get=null) {
 
         getTotalItem(1,id,0);
 
-        if (event.key === "Enter") {
+        if (get === "price" || event.key === "Enter") {
 
             console.log('dienter')
 
@@ -166,7 +292,7 @@
         return true; // Memastikan bahwa input lainnya tetap berfungsi normal
     }
 
-    function handleDisc(event, id) {
+    function handleDisc(event, id,get=null) {
 
         var discVal = $('#discount'+id).val()
 
@@ -175,7 +301,7 @@
 
 
 
-        if (event.key === "Enter") {
+        if (get === "discount" || event.key === "Enter") {
 
             console.log('dienter')
 
