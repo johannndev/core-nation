@@ -26,7 +26,7 @@
             inputName = getInputName;
             inputId = getInputId;
 
-            console.log(getInputId);
+            console.log('get id '+getInputId);
             console.log(getInputName);
 
             const goBtn = document.getElementById('virtualEnterKay');
