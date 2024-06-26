@@ -84,6 +84,8 @@ class Transaction extends Model
 		'receiver_id' => 'required|different:sender_id',
 	);
 
+	
+
 	public static function table()
 	{
 		return 'transactions';

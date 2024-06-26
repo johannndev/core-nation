@@ -12,8 +12,10 @@ use App\Http\Controllers\HashController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\OperationController;
+use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResellerController;
+use App\Http\Controllers\SetoranController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\VAccountController;
@@ -49,7 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/ajax/getCustomerCash', [AjaxController::class, 'getCostumerCash'])->name('ajax.getCostumerCash');
     Route::get('/ajax/getCustomerSingle', [AjaxController::class, 'getCostumerSingle'])->name('ajax.getCostumerSingle');
     Route::get('/getItem', [AjaxController::class, 'getItemAjax'])->name('ajax.getitem');
+    Route::get('/getItemId', [AjaxController::class, 'getItemId'])->name('ajax.getitemId');
     Route::get('/getItemName', [AjaxController::class, 'getItem'])->name('ajax.getitemName');
+    Route::get('/getInvoice', [AjaxController::class, 'getInvoice'])->name('ajax.getInvoice');
 
     Route::get('/transaction', [TransactionsController::class, 'index'])->name('transaction.index');
     Route::get('/transaction/filter', [FilterQueryController::class, 'transactionFilter'])->name('transaction.filter');
@@ -196,6 +200,31 @@ Route::middleware('auth')->group(function () {
     Route::get('/operation/account', [OperationController::class, 'accountList'])->name('operation.account.list');
     Route::get('/operation/account/create', [OperationController::class, 'createAccount'])->name('operation.account.create');
     Route::post('/operation/account/store', [OperationController::class, 'postCreateAccount'])->name('operation.postCreateAccount');
+
+    Route::get('/produksi', [ProduksiController::class, 'index'])->name('produksi.index');
+    Route::get('/produksi/create', [ProduksiController::class, 'create'])->name('produksi.create');
+    Route::post('/produksi/store', [ProduksiController::class, 'storeProduksi'])->name('produksi.store');
+    Route::get('/produksi/{id}/detail', [ProduksiController::class, 'detail'])->name('produksi.detail');
+    Route::patch('/produksi/{id}/detail/updateJahit', [ProduksiController::class, 'postSaveRow'])->name('produksi.postSaveRow');
+    Route::patch('/produksi/{id}/detail/updatewc', [ProduksiController::class, 'postEdit'])->name('produksi.postEdit');
+    Route::post('/produksi/{id}/detail/split', [ProduksiController::class, 'postPisahJahit'])->name('produksi.postPisahJahit');
+    Route::patch('/produksi/{id}/detail/gantiJahit', [ProduksiController::class, 'postGantiJahit'])->name('produksi.postGantiJahit');
+    Route::patch('/produksi/{id}/setor', [ProduksiController::class, 'postSetor'])->name('produksi.postSetor');
+
+    Route::get('/produksi/potong/list', [ProduksiController::class, 'getPotongList'])->name('produksi.getPotongList');
+    Route::get('/produksi/potong/create', [ProduksiController::class, 'getPotongCreate'])->name('produksi.getPotongCreate');
+    Route::post('/produksi/potong/store', [ProduksiController::class, 'createPotong'])->name('produksi.createPotong');
+    Route::get('/produksi/potong/{id}/create', [ProduksiController::class, 'getPotongEdit'])->name('produksi.getPotongEdit');
+    Route::patch('/produksi/potong/{id}/update', [ProduksiController::class, 'updatePotong'])->name('produksi.updatePotong');
+    Route::delete('/produksi/potong/{id}/delete', [ProduksiController::class, 'postDeletePotong'])->name('produksi.postDeletePotong');
+
+    Route::get('/setoran', [SetoranController::class, 'index'])->name('setoran.index');
+    Route::get('/setoran/{id}/detail', [SetoranController::class, 'detail'])->name('setoran.detail');
+    Route::patch('/setoran/{id}/updatekode', [SetoranController::class, 'postEditItem'])->name('setoran.postEditItem');
+    Route::patch('/setoran/{id}/detail/updatewc', [SetoranController::class, 'postEdit'])->name('setoran.postEdit');
+    Route::patch('/setoran/{id}/detail/gantiJahit', [SetoranController::class, 'postGantiJahit'])->name('setoran.postGantiJahit');
+    Route::patch('/setoran/{id}/detail/gantiStatus', [SetoranController::class, 'postEditStatus'])->name('setoran.postEditStatus');
+    Route::patch('/setoran/{id}/detail/postGudang', [SetoranController::class, 'postGudang'])->name('setoran.postGudang');
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
 

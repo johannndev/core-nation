@@ -383,7 +383,7 @@ class ItemsManagerHelper
 		if(!$wi = WarehouseItem::where('warehouse_id','=',$warehouse_id)->where('item_id','=',$item->id)->lockForUpdate()->first())
 			$wi = WarehouseItem::create(array('warehouse_id' => $warehouse_id, 'item_id' => $item->id, 'quantity' => 0));
 
-			dd($wi);
+			// dd($wi);
 
 		$wi->quantity += $quantity;
 
@@ -399,7 +399,7 @@ class ItemsManagerHelper
 		if(!$wi = WarehouseItem::where('warehouse_id','=',$warehouse_id)->where('item_id','=',$item->id)->lockForUpdate()->first())
 			$wi = WarehouseItem::create(array('warehouse_id' => $warehouse_id, 'item_id' => $item->id, 'quantity' => 0));
 
-			dd($wi);
+			// dd($wi);
 
 		if(!$can_minus && ($wi->quantity - $quantity) < 0) //check if minus is allowed
 			throw new \Exception("{$item->name} cuma ada {$wi->quantity}, mau diambil {$quantity}");

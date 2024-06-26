@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Item;
+use App\Models\Produksi;
 use App\Models\WarehouseItem;
 use Exception;
 use Illuminate\Http\Request;
 
 class AjaxController extends Controller
 {
+
+
+
     public function getCostumer(Request $request)
     {
        
@@ -44,6 +48,23 @@ class AjaxController extends Controller
         
         return response()->json($item, 200);
     }
+
+    public function getItemId(Request $request)
+    {
+       
+        $item = Item::where('id','like','%'.$request->search.'%')->orderBy('name','asc')->skip(0)->take(10)->get();
+        
+        return response()->json($item, 200);
+    }
+
+    public function getInvoice(Request $request)
+    {
+      
+        $setoran = Produksi::where('invoice','like','%'.$request->search.'%')->where('id',$request->id)->get();
+        
+        return response()->json($setoran, 200);
+    }
+
 
     public function getItemAjax(Request $request)
 	{

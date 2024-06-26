@@ -16,6 +16,12 @@
 
 
     function handleCode(event, id) {
+        console.log(event.key);
+
+        if(event.key === "Tab"){
+            alert('ini tab');
+        }
+
         if (event.key === "Enter") {
 
             // var price = $('#code'+id).val();
@@ -79,8 +85,7 @@
             }
         }, 300); // Delay 300 milidetik
 
-       
-
+        
         if (event.key === "Enter") {
 
             // console.log('masuk')

@@ -37,6 +37,8 @@
             <div>
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                     <div class="grid grid-cols-1 divide-y">
+                        @isset($data->sender)
+
                         <div>
                             <div class="grid grid-cols-4 p-4">
                                 <div>
@@ -47,6 +49,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        @endisset
                        
                         @if ($data->type != 8)
 
