@@ -75,33 +75,36 @@
 
     console.log(tombol);
 
-    tombol.addEventListener('click', function(){
-       
-            if(inputName == 'code'){
+    if(tombol){
 
-                handleCode(null,inputId,'code');
-
-            }else if(inputName == 'name'){
-
-                handleName(null,inputId,'name');
-
-            }else if(inputName == 'quantity'){
-
-                handleQty(null,inputId,'quantity');
-
-            }else if(inputName == 'price'){
-
-                handlePrice(null,inputId,'price');
-
-            }else if(inputName == 'discount'){
-
-                handleDisc(null,inputId,'discount');
-
-            }else{
-
-            }
+        tombol.addEventListener('click', function(){
         
-    })
+                if(inputName == 'code'){
+
+                    handleCode(null,inputId,'code');
+
+                }else if(inputName == 'name'){
+
+                    handleName(null,inputId,'name');
+
+                }else if(inputName == 'quantity'){
+
+                    handleQty(null,inputId,'quantity');
+
+                }else if(inputName == 'price'){
+
+                    handlePrice(null,inputId,'price');
+
+                }else if(inputName == 'discount'){
+
+                    handleDisc(null,inputId,'discount');
+
+                }else{
+
+                }
+            
+        })
+    }
 
 
     $(document).on("keypress", function(e){
