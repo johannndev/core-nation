@@ -56,18 +56,6 @@
     } );
 
     
-    // $( document ).ready( function () {
-    //     const elems = document.querySelectorAll('[data-input="value"]');
-
-    //     const focus = elems.addEventListener('focus', function(){
-    //         var idElemen = this.id;
-
-    //         console.log('muncul');
-    //     })
-
-
-    //     // console.log(elems);
-    // });
 
   
 
