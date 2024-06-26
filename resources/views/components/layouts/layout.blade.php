@@ -44,7 +44,7 @@
       
     @include('layouts.aside')
 		
-		<x-partial.enter-virtual />
+
 	
 		<main class="p-4 md:ml-64 h-auto pt-20">
 		  
