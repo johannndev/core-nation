@@ -27,7 +27,7 @@
             console.log(getInputId);
             console.log(getInputName);
 
-            const goBtn = document.getElementById('virtualEnterKay');
+            const goBtn = document.getElementById('enterKey');
 
             if(getInputId){
                 goBtn.classList.remove('hidden');
@@ -41,7 +41,7 @@
         input.addEventListener('blur', () =>{
             console.log(`field blur: ${input.id}`);
 
-            const goBtn = document.getElementById('virtualEnterKay');
+            const goBtn = document.getElementById('enterKey');
 
             const inputElement = document.getElementById(input.id);
             const getInputId = inputElement.getAttribute('data-id');
