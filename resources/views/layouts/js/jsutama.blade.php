@@ -73,7 +73,7 @@
 
     const tombol = document.getElementById('virtualEnterKay');
 
-    dd(tombol);
+    console.log(tombol);
 
     tombol.addEventListener('click', function(){
        
