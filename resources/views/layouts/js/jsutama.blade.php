@@ -19,7 +19,7 @@
         console.log(event.key);
 
         
-        alert('ini '+event.key);
+        alert('ini '+event+ 'tombol'+event);
         
 
         if (event.key === "Enter") {
