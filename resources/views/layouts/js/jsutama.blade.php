@@ -73,6 +73,8 @@
 
     const tombol = document.getElementById('virtualEnterKay');
 
+    dd(tombol);
+
     tombol.addEventListener('click', function(){
        
             if(inputName == 'code'){
