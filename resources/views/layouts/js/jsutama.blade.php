@@ -18,8 +18,7 @@
     function handleCode(event, id) {
         console.log(event.key);
 
-        
-        alert('tombol yang ditekan '+event.keyCode);
+        console.log(event);
         
 
         if (event.key === "Enter") {
