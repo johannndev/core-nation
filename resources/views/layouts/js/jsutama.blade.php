@@ -27,31 +27,24 @@
             console.log(getInputId);
             console.log(getInputName);
 
-            const goBtn = document.getElementById('virtualEnterKay');
+            const goBtn = document.getElementById('btn'+input.id);
 
-            if(getInputId){
-                goBtn.classList.remove('hidden');
-            }else{
-                goBtn.classList.add('hidden');
-            }
-
+           
+            goBtn.classList.remove('hidden');
+        
            
         });
 
         input.addEventListener('blur', () =>{
             console.log(`field blur: ${input.id}`);
 
-            const goBtn = document.getElementById('virtualEnterKay');
+            const goBtn = document.getElementById('btn'+input.id);
 
             const inputElement = document.getElementById(input.id);
             const getInputId = inputElement.getAttribute('data-id');
             const getInputName = inputElement.getAttribute('data-name');
 
-            if(getInputName == 'code' || getInputName == 'name' || getInputName == 'quantity' || getInputName == 'price' || getInputName == 'discount'){
-                
-            }else{
-                goBtn.classList.add('hidden');
-            }
+            
         });
     } );
 
@@ -59,36 +52,36 @@
 
   
 
-    const tombol = document.getElementById('virtualEnterKay');
+    // const tombol = document.getElementById('virtualEnterKay');
     
 
-    tombol.addEventListener('click', function(){
+    // tombol.addEventListener('click', function(){
        
-            if(inputName == 'code'){
+    //         if(inputName == 'code'){
 
-                handleCode(null,inputId,'code');
+    //             handleCode(null,inputId,'code');
 
-            }else if(inputName == 'name'){
+    //         }else if(inputName == 'name'){
 
-                handleName(null,inputId,'name');
+    //             handleName(null,inputId,'name');
 
-            }else if(inputName == 'quantity'){
+    //         }else if(inputName == 'quantity'){
 
-                handleQty(null,inputId,'quantity');
+    //             handleQty(null,inputId,'quantity');
 
-            }else if(inputName == 'price'){
+    //         }else if(inputName == 'price'){
 
-                handlePrice(null,inputId,'price');
+    //             handlePrice(null,inputId,'price');
 
-            }else if(inputName == 'discount'){
+    //         }else if(inputName == 'discount'){
 
-                handleDisc(null,inputId,'discount');
+    //             handleDisc(null,inputId,'discount');
 
-            }else{
+    //         }else{
 
-            }
+    //         }
         
-    })
+    // })
 
 
     $(document).on("keypress", function(e){
@@ -114,65 +107,100 @@
         if(e.which == 13){e.preventDefault();}
     })
 
-    function changeCode(name, id){
-
-        const inputTrigger = document.getElementById(name+id);
-
-        console.log(inputTrigger);
-
-        const button = document.getElementById('virtualEnterKay');
-
-        const Focus = inputTrigger.addEventListener('focus', function(){
-            var idElemen = this.id;
-
-            console.log('muncul');
-        })
-       
-    }
-
     function handleCode(event, id,get=null) {
         // console.log(event.key);
 
-        // console.log(event);
-        
+        console.log(event);
 
-        if (get === "code" || event.key === "Enter") {
+        if(event == null){
+            if(get === "code" ){
 
-            // var price = $('#code'+id).val();
-            // alert('Function called without submitting the form! '+price);
+                   // var price = $('#code'+id).val();
+                // alert('Function called without submitting the form! '+price);
 
-            var valCode = $('#code'+id).val()
+                var valCode = $('#code'+id).val()
 
-          
-            var se = $('#sender').val();
+                const goBtn = document.getElementById('btncode'+id);
+
+                goBtn.classList.add('hidden');
 
 
-            if( "{{$trType}}" == "move"){
+                var se = $('#sender').val();
+
+
+                if( "{{$trType}}" == "move"){
+                    var wh= $('#sender').val();
+                }else{
+
+                    var wh= $('#warehouse').val();
+
+                }
+
+                var whId = 0;
+
+                if(wh){
+                    whId = wh;
+                }else{
+                    whId = se;
+                }
+
+                console.log(whId);
+
+                getItem(valCode,id,whId)
+
+                document.getElementById("quantity"+id).focus();
+
+                // event.preventDefault(); // Mencegah form dari submitting
+                // codeFunction(id);
+                return false; // Mengembalikan false untuk mencegah aksi default
+
+            }
+        }else{
+            if(event.key === "Enter" ){
+
+                // var price = $('#code'+id).val();
+                // alert('Function called without submitting the form! '+price);
+
+                var valCode = $('#code'+id).val()
+
+                const goBtn = document.getElementById('btncode'+id);
+
+                goBtn.classList.add('hidden');
+
+
+                var se = $('#sender').val();
+
+
+                if( "{{$trType}}" == "move"){
                 var wh= $('#sender').val();
-            }else{
+                }else{
 
                 var wh= $('#warehouse').val();
 
-            }
+                }
 
-            var whId = 0;
+                var whId = 0;
 
-            if(wh){
+                if(wh){
                 whId = wh;
-            }else{
+                }else{
                 whId = se;
+                }
+
+                console.log(whId);
+
+                getItem(valCode,id,whId)
+
+                document.getElementById("quantity"+id).focus();
+
+                // event.preventDefault(); // Mencegah form dari submitting
+                // codeFunction(id);
+                return false; // Mengembalikan false untuk mencegah aksi default
+
             }
 
-            console.log(whId);
-
-            getItem(valCode,id,whId)
-
-            document.getElementById("quantity"+id).focus();
-
-            // event.preventDefault(); // Mencegah form dari submitting
-            // codeFunction(id);
-            return false; // Mengembalikan false untuk mencegah aksi default
         }
+    
         return true; // Memastikan bahwa input lainnya tetap berfungsi normal
     }
 
@@ -199,10 +227,15 @@
             }
         }, 300); // Delay 300 milidetik
 
-        
-        if (get === "name" || event.key === "Enter") {
+        if(event == null){
+
+            if (get === "name") {
 
             // console.log('masuk')
+
+            const goBtn = document.getElementById('btnname'+id);
+
+            goBtn.classList.add('hidden');
 
             var valCode = $('#name'+id).val()
 
@@ -222,9 +255,44 @@
 
             document.getElementById("quantity"+id).focus();
 
-    
+
             return false; // Mengembalikan false untuk mencegah aksi default
+            }
+
+        }else{
+
+            if ( event.key === "Enter") {
+
+                // console.log('masuk')
+
+                const goBtn = document.getElementById('btnname'+id);
+
+                goBtn.classList.add('hidden');
+
+                var valCode = $('#name'+id).val()
+
+                var wh= $('#warehouse').val();
+                var se = $('#sender').val();
+                var whId = 0;
+
+                if(wh){
+                    whId = wh;
+                }else{
+                    whId = se;
+                }
+
+                console.log(whId);
+
+                getItem(valCode,id,whId)
+
+                document.getElementById("quantity"+id).focus();
+
+        
+                return false; // Mengembalikan false untuk mencegah aksi default
+            }
+
         }
+      
         return true; // Memastikan bahwa input lainnya tetap berfungsi normal
         
 
@@ -237,7 +305,13 @@
 
         totalQty()
 
-        if (get === "quantity" || event.key === "Enter") {
+        if(event == null){
+
+            if (get === "quantity") {
+
+            const goBtn = document.getElementById('btnquantity'+id);
+
+            goBtn.classList.add('hidden');
 
             console.log('dienter')
 
@@ -246,7 +320,28 @@
             // event.preventDefault(); // Mencegah form dari submitting
             // codeFunction(id);
             return false; // Mengembalikan false untuk mencegah aksi default
+            }
+
+        }else{
+            if ( event.key === "Enter") {
+
+            const goBtn = document.getElementById('btnquantity'+id);
+
+            goBtn.classList.add('hidden');
+
+            console.log('dienter')
+
+            document.getElementById("price"+id).focus();
+
+            // event.preventDefault(); // Mencegah form dari submitting
+            // codeFunction(id);
+            return false; // Mengembalikan false untuk mencegah aksi default
+
+            }
+
         }
+
+       
         return true; // Memastikan bahwa input lainnya tetap berfungsi normal
     }
 
@@ -254,9 +349,15 @@
 
         getTotalItem(1,id,0);
 
-        if (get === "price" || event.key === "Enter") {
+        if(event == null){
+
+            if (get === "price") {
 
             console.log('dienter')
+
+            const goBtn = document.getElementById('btnprice'+id);
+
+            goBtn.classList.add('hidden');
 
             if( "{{$trType}}" == "move" ||  "{{$trType}}" == "use"){
                 ++id 
@@ -272,12 +373,47 @@
 
             }
 
-          
+
 
             // event.preventDefault(); // Mencegah form dari submitting
             // codeFunction(id);
             return false; // Mengembalikan false untuk mencegah aksi default
+            }
+
+        }else{
+
+            if ( event.key === "Enter") {
+
+            console.log('dienter')
+
+            const goBtn = document.getElementById('btnprice'+id);
+
+            goBtn.classList.add('hidden');
+
+            if( "{{$trType}}" == "move" ||  "{{$trType}}" == "use"){
+                ++id 
+
+                console.log(id)
+
+                addLine(id);
+
+                document.getElementById("code"+id).focus();
+            }else{
+
+                document.getElementById("discount"+id).focus();
+
+            }
+
+
+
+            // event.preventDefault(); // Mencegah form dari submitting
+            // codeFunction(id);
+            return false; // Mengembalikan false untuk mencegah aksi default
+            }
+
         }
+
+
         return true; // Memastikan bahwa input lainnya tetap berfungsi normal
     }
 
@@ -288,9 +424,13 @@
         getTotalItem(2,id,discVal);
 
 
+        if(event == null){
 
+            if (get === "discount" ) {
 
-        if (get === "discount" || event.key === "Enter") {
+            const goBtn = document.getElementById('btndiscount'+id);
+
+            goBtn.classList.add('hidden');
 
             console.log('dienter')
 
@@ -304,7 +444,33 @@
             // event.preventDefault(); // Mencegah form dari submitting
             // codeFunction(id);
             return false; // Mengembalikan false untuk mencegah aksi default
+            }
+
+        }else{
+
+            if ( event.key === "Enter") {
+
+            const goBtn = document.getElementById('btndiscount'+id);
+
+            goBtn.classList.add('hidden');
+
+            console.log('dienter')
+
+            ++id 
+
+            console.log(id)
+
+            addLine(id);
+
+            document.getElementById("code"+id).focus();
+            // event.preventDefault(); // Mencegah form dari submitting
+            // codeFunction(id);
+            return false; // Mengembalikan false untuk mencegah aksi default
+            }
+
         }
+
+        
         return true; // Memastikan bahwa input lainnya tetap berfungsi normal
     }
 

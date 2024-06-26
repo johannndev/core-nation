@@ -79,13 +79,13 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-4 gap-4 mb-4 ">
+                        <div class="grid grid-cols-4 md:grid-cols-4 gap-4 mb-4 ">
 
-                            <div>
+                            <div class="col-span-3 md:col-span-1">
                                 <p class="font-bold">Paid for this transaction</p>
                             </div>
 
-                            <div>
+                            <div class="col-span-1 md:col-span-1">
                                 <label class="inline-flex items-center cursor-pointer">
                                     <input name="paid" id="paid" type="checkbox" value="1" class="sr-only peer">
                                     <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
@@ -227,28 +227,68 @@
                                 </div>
                                 
                                 <div class="grid gap-6 mb-6 md:grid-cols-8 items-end addField0 "id="gridItem0">
-                                    <div>
-                                        <input type="text" name="addMoreInputFields[0][itemId]"  id="id0"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
+                                    <div class="flex items-end w-full">
+
+                                        <div class="w-full">
+
+                                            <input type="text" name="addMoreInputFields[0][itemId]"  id="id0"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
                                 
-                                        <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
-                                        <input oninput="changeCode('code',0)" data-input="value" data-name="code" data-id="0" onkeydown="return handleCode(event,0)" type="text" name="addMoreInputFields[0][code]"  id="code0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="text" />
+                                            <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
+                                            <input data-input="value" data-name="code" data-id="0" onkeydown="return handleCode(event,0)" type="text" name="addMoreInputFields[0][code]"  id="code0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="text" />
+
+                                        </div>
+
+                                        <div id="btncode0" class="hidden">
+                                            <button type="button" onclick="handleCode(null,0,'code')"  class=" ms-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex md:hidden items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20 7V8.2C20 9.88016 20 10.7202 19.673 11.362C19.3854 11.9265 18.9265 12.3854 18.362 12.673C17.7202 13 16.8802 13 15.2 13H4M4 13L8 9M4 13L8 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                        
+                                                <span class="sr-only">Icon description</span>
+                                            </button>
+                                        </div>
+
+                                        
                                     </div>
                                     <div>
                                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
-                                       
-                                        <div class="">
-                                
-                                            <input data-name="name" data-id="0" id="name0" list="name-list0" onkeydown="handleName(event,0)" autocomplete="off" type="text" name="addMoreInputFields[0][name]"  class="nameList register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  inputmode="search" />
+                                        
+                                        <div class="flex items-end w-full ">
 
-                                            <datalist id="name-list0"></datalist>
+                                        
+                                            <div class=" w-full">
+                                    
+                                                <input data-name="name" data-id="0" id="name0" list="name-list0" onkeydown="handleName(event,0)" autocomplete="off" type="text" name="addMoreInputFields[0][name]"  class="nameList register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  inputmode="search" />
 
+                                                <datalist id="name-list0"></datalist>
+
+                                            </div>
+                                            <div id="btnname0" class="hidden">
+                                                <button type="button" onclick="handleName(null,0,'name')"  class=" ms-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex md:hidden items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20 7V8.2C20 9.88016 20 10.7202 19.673 11.362C19.3854 11.9265 18.9265 12.3854 18.362 12.673C17.7202 13 16.8802 13 15.2 13H4M4 13L8 9M4 13L8 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                            
+                                                    <span class="sr-only">Icon description</span>
+                                                </button>
+                                            </div>
                                         </div>
                                    
                                 
                                     </div>
                                     <div>
                                         <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 ">Quantity </label>
-                                        <input data-name="quantity" data-id="0" onkeyup="return handleQty(event,0)" type="text" name="addMoreInputFields[0][quantity]"  id="quantity0" class="qty register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+
+                                        <div class="flex items-end w-full">
+
+                                            <div class="w-full">
+                                                <input data-name="quantity" data-id="0" onkeyup="return handleQty(event,0)" type="text" name="addMoreInputFields[0][quantity]"  id="quantity0" class="qty register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                            </div>
+
+                                            <div id="btnquantity0" class="hidden">
+                                                <button type="button" onclick="handleQty(null,0,'quantity')"  class=" ms-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex md:hidden items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20 7V8.2C20 9.88016 20 10.7202 19.673 11.362C19.3854 11.9265 18.9265 12.3854 18.362 12.673C17.7202 13 16.8802 13 15.2 13H4M4 13L8 9M4 13L8 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                            
+                                                    <span class="sr-only">Icon description</span>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>  
                                     <div>
                                         <label for="wh" class="block mb-2 text-sm font-medium text-gray-900 ">Warehouse</label>
@@ -257,12 +297,47 @@
                                 
                                     <div>
                                         <label for="price" class="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
-                                        <input data-name="price" data-id="0" onkeyup="return handlePrice(event,0)" type="text" name="addMoreInputFields[0][price]"  id="price0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+
+                                        <div class="flex items-end w-full">
+
+                                            <div class="w-full">
+                                                <input data-name="price" data-id="0" onkeyup="return handlePrice(event,0)" type="text" name="addMoreInputFields[0][price]"  id="price0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                            </div>
+    
+    
+                                            <div id="btnprice0" class="hidden">
+                                                <button type="button" onclick="handlePrice(null,0,'price')"  class=" ms-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex md:hidden items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20 7V8.2C20 9.88016 20 10.7202 19.673 11.362C19.3854 11.9265 18.9265 12.3854 18.362 12.673C17.7202 13 16.8802 13 15.2 13H4M4 13L8 9M4 13L8 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                            
+                                                    <span class="sr-only">Icon description</span>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                        
                                     </div> 
                                     
                                     <div>
                                         <label for="discount" class="block mb-2 text-sm font-medium text-gray-900 ">Discount</label>
-                                        <input data-name="discount" data-id="0" onkeyup="return handleDisc(event,0)" type="text" name="addMoreInputFields[0][discount]"   id="discount0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+
+                                        <div class="flex items-end w-full">
+
+                                            <div class="w-full">
+                                                <input data-name="discount" data-id="0" onkeyup="return handleDisc(event,0)" type="text" name="addMoreInputFields[0][discount]"   id="discount0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                            </div>
+                                            
+    
+                                            <div id="btndiscount0" class="hidden">
+                                                <button type="button" onclick="handleDisc(null,0,'discount')"  class=" ms-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex md:hidden items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20 7V8.2C20 9.88016 20 10.7202 19.673 11.362C19.3854 11.9265 18.9265 12.3854 18.362 12.673C17.7202 13 16.8802 13 15.2 13H4M4 13L8 9M4 13L8 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                            
+                                                    <span class="sr-only">Icon description</span>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                        
+
                                     </div> 
                                 
                                     <div>
