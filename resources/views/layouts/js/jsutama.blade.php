@@ -17,8 +17,6 @@
         input.addEventListener('focus', () =>{
             console.log(`field focused: ${input.id}`);
 
-            console.log('get id '+input.id)
-
             const inputElement = document.getElementById(input.id);
             const getInputId = inputElement.getAttribute('data-id');
             const getInputName = inputElement.getAttribute('data-name');
@@ -26,7 +24,7 @@
             inputName = getInputName;
             inputId = getInputId;
 
-            console.log('get id '+getInputId);
+            console.log(getInputId);
             console.log(getInputName);
 
             const goBtn = document.getElementById('virtualEnterKay');
@@ -74,39 +72,35 @@
   
 
     const tombol = document.getElementById('virtualEnterKay');
+    
 
-    console.log(tombol);
+    tombol.addEventListener('click', function(){
+       
+            if(inputName == 'code'){
 
-    if(tombol){
+                handleCode(null,inputId,'code');
 
-        tombol.addEventListener('click', function(){
+            }else if(inputName == 'name'){
+
+                handleName(null,inputId,'name');
+
+            }else if(inputName == 'quantity'){
+
+                handleQty(null,inputId,'quantity');
+
+            }else if(inputName == 'price'){
+
+                handlePrice(null,inputId,'price');
+
+            }else if(inputName == 'discount'){
+
+                handleDisc(null,inputId,'discount');
+
+            }else{
+
+            }
         
-                if(inputName == 'code'){
-
-                    handleCode(null,inputId,'code');
-
-                }else if(inputName == 'name'){
-
-                    handleName(null,inputId,'name');
-
-                }else if(inputName == 'quantity'){
-
-                    handleQty(null,inputId,'quantity');
-
-                }else if(inputName == 'price'){
-
-                    handlePrice(null,inputId,'price');
-
-                }else if(inputName == 'discount'){
-
-                    handleDisc(null,inputId,'discount');
-
-                }else{
-
-                }
-            
-        })
-    }
+    })
 
 
     $(document).on("keypress", function(e){
