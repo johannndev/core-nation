@@ -228,11 +228,6 @@ class ItemsController extends Controller
 		}else{
 			$to = Carbon::now()->endOfMonth()->toDateString();
 		}
-
-
-		
-
-
 		
 		$data = TransactionDetail::select(array(
 			"transaction_type",
@@ -369,9 +364,6 @@ class ItemsController extends Controller
         $dataTotal = $dataTotal->orderBy("date", 'DESC')->get();
 
 		// dd($dataTotal);
-
-		
-		
 
 
 		$dataListPropCustomer = [

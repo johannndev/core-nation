@@ -26,13 +26,11 @@ class Items extends Component
         $query = WarehouseItem::with('item', 'item.group','item.sizeTag')->where('warehouse_id','=',$this->cid);
 
         if(Request('name')) {
-
-            $name = Request('name');
-
-			$query = $query->whereHas('item', function($query) use($name) {
-				$query->where('code','LIKE', "%$name%");
-			});
-		}
+          $name = str_replace(' ', '%', Request('name'));
+    			$query = $query->whereHas('item', function($query) use($name) {
+  				  $query->where('code','LIKE', "%$name%");
+  			  });
+  		  }
 
         if(Request('show0')){
             $query = $query->where('quantity','>',0);
@@ -41,21 +39,21 @@ class Items extends Component
         if (Request('sort') == 'qtyasc') {
             $query = $query->orderBy('quantity',  'asc');
         }elseif(Request('sort') == 'codedesc'){
-            $query = $query->whereHas('item', function($query)  {
-				$query->orderBy('code','desc');
-			});
+          $query = $query->whereHas('item', function($query)  {
+				  $query->orderBy('code','desc');
+			  });
         }elseif(Request('sort') == 'codeasc'){
-            $query = $query->whereHas('item', function($query)  {
-				$query->orderBy('code','asc');
-			});
+          $query = $query->whereHas('item', function($query)  {
+				  $query->orderBy('code','asc');
+	  		});
         }elseif(Request('sort') == 'namedesc'){
-            $query = $query->whereHas('item', function($query)  {
-				$query->orderBy('name','desc');
-			});
+          $query = $query->whereHas('item', function($query)  {
+		  		$query->orderBy('name','desc');
+			  });
         }elseif(Request('sort') == 'nameasc'){
-            $query = $query->whereHas('item', function($query)  {
-				$query->orderBy('name','asc');
-			});
+          $query = $query->whereHas('item', function($query)  {
+				  $query->orderBy('name','asc');
+  			});
         } else {
             $query = $query->orderBy('quantity',  'desc');
         }
