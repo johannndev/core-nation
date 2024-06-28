@@ -96,7 +96,7 @@ class SetoranController extends Controller
 		if($request->invoice)
 			$query = $query->where('invoice','=', $request->invoice);
 
-		$produksi = $query->orderBy('id','desc')->paginate(30);
+		$produksi = $query->orderBy('id','desc')->paginate(30)->withQueryString();
 
 
         $sg = Produksi::STATUS_GUDANG;

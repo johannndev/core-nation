@@ -85,7 +85,7 @@
 
 
     $(document).on("keypress", function(e){
-        // console.log(e)
+        console.log(e)
 
         // var iid = e.target.id;
         // const getInput = document.getElementById(iid);

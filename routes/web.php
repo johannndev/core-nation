@@ -218,6 +218,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/produksi/potong/{id}/update', [ProduksiController::class, 'updatePotong'])->name('produksi.updatePotong');
     Route::delete('/produksi/potong/{id}/delete', [ProduksiController::class, 'postDeletePotong'])->name('produksi.postDeletePotong');
 
+    Route::get('/produksi/jahit/list', [ProduksiController::class, 'getJahitList'])->name('produksi.getJahitList');
+    Route::get('/produksi/jahit/create', [ProduksiController::class, 'getJahitCreate'])->name('produksi.getJahitCreate');
+    Route::post('/produksi/jahit/store', [ProduksiController::class, 'createJahit'])->name('produksi.createJahit');
+    Route::get('/produksi/jahit/{id}/create', [ProduksiController::class, 'getJahitEdit'])->name('produksi.getJahitEdit');
+    Route::patch('/produksi/jahit/{id}/update', [ProduksiController::class, 'updateJahit'])->name('produksi.updateJahit');
+    Route::delete('/produksi/jahit/{id}/delete', [ProduksiController::class, 'postDeleteJahit'])->name('produksi.postDeleteJahit');
+    
+
     Route::get('/setoran', [SetoranController::class, 'index'])->name('setoran.index');
     Route::get('/setoran/{id}/detail', [SetoranController::class, 'detail'])->name('setoran.detail');
     Route::patch('/setoran/{id}/updatekode', [SetoranController::class, 'postEditItem'])->name('setoran.postEditItem');

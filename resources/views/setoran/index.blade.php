@@ -57,7 +57,7 @@
                                 <!-- Modal header -->
                                 <div class="flex items-start justify-between px-6 py-4 rounded-t">
                                     <h3 class="text-lg font-normal text-gray-500 dark:text-gray-400">
-                                        Filter Setoran
+                                        Filter barang sudah setor
                                     </h3>
                                     <button type="button"
                                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"

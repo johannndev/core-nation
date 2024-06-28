@@ -17,6 +17,7 @@ class ProduksiController extends Controller
     {
 		$jahitList = Worker::jahit()->get();
 		$potongList = Worker::potong()->get();
+        $statusList = Produksi::$statusJSON;
 
         $from = $request->from;
 		$to = $request->to;
@@ -85,11 +86,11 @@ class ProduksiController extends Controller
 		if($request->invoice)
 			$query = $query->where('invoice','=', $request->invoice);
 
-		$produksi = $query->orderBy('id','desc')->paginate(30);
+		$produksi = $query->orderBy('id','desc')->paginate(30)->withQueryString();
 
 		
 
-        return view('produksi.index',compact('produksi','jahitList','potongList'));
+        return view('produksi.index',compact('produksi','jahitList','potongList','statusList'));
     }
 
 	public function detail(Request $request, $id)
@@ -397,6 +398,70 @@ class ProduksiController extends Controller
 		$w->delete();
 
 		return redirect()->route('produksi.getPotongList')->with('success', $w->name.' deleted');
+	}
+
+	public function getJahitList()
+	{
+		
+		$dataList = Worker::jahit()->withTrashed()->paginate();
+		
+		return view('produksi.jahit',compact('dataList'));
+	}
+
+	public function getJahitCreate()
+	{
+
+		return view('produksi.jahit-create');
+	}
+
+	public function createJahit(Request $request)
+	{
+		$input = $request->name;
+
+		$w = new Worker;
+		$w->name = trim($input);
+		$w->type = Worker::TYPE_JAHIT;
+		if(!$w->save())
+		{
+			pre($w->getErrors());exit;
+			return redirect()->back()->with('errorMessage',$w->getMessage());
+		}
+
+		return redirect()->route('produksi.getJahitList')->with('success', $w->name.' created');
+	}
+
+	public function getJahitEdit($id)
+	{
+		$data = Worker::findOrfail($id);
+
+		return view('produksi.jahit-edit',compact('data'));
+	}
+
+	public function updateJahit(Request $request,$id)
+	{
+		$input = $request->name;
+
+		$w = Worker::findOrFail($id);
+		$w->name = trim($input);
+		$w->type = Worker::TYPE_JAHIT;
+		if(!$w->save())
+		{
+			pre($w->getErrors());exit;
+			return redirect()->back()->with('errorMessage',$w->getMessage());
+		}
+
+		return redirect()->route('produksi.getJahitList')->with('success', $w->name.' created');
+	}
+
+	public function postDeleteJahit($id)
+	{
+		$w = Worker::where('id', '=', $id)->where('type', '=', Worker::TYPE_JAHIT)->first();
+		
+		if(!$w)
+			return abort(404);
+		$w->delete();
+
+		return redirect()->route('produksi.getJahitList')->with('success', $w->name.' deleted');
 	}
 
 
