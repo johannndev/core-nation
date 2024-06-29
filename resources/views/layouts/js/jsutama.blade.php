@@ -163,8 +163,6 @@
     }
 
     function handleDisc(event, id) {
-console.log("mulai")
-console.log(event)
         var discVal = $('#discount'+id).val()
 
         getTotalItem(2,id,discVal);
@@ -317,8 +315,9 @@ console.log(event)
 
        
 
-    function addLine(itemLineId) {
-
+    function addLine(itemLineId, event) {
+console.log("mulai")
+console.log(event)
         var addHtml = "";
         
         i = itemLineId;
