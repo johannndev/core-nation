@@ -163,7 +163,8 @@
     }
 
     function handleDisc(event, id) {
-
+console.log("mulai")
+console.log(event)
         var discVal = $('#discount'+id).val()
 
         getTotalItem(2,id,discVal);
