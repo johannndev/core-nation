@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddrbookController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AsetLancarController;
+use App\Http\Controllers\BoronganController;
 use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DeletedController;
@@ -225,7 +226,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/produksi/jahit/{id}/update', [ProduksiController::class, 'updateJahit'])->name('produksi.updateJahit');
     Route::delete('/produksi/jahit/{id}/delete', [ProduksiController::class, 'postDeleteJahit'])->name('produksi.postDeleteJahit');
     
-
     Route::get('/setoran', [SetoranController::class, 'index'])->name('setoran.index');
     Route::get('/setoran/{id}/detail', [SetoranController::class, 'detail'])->name('setoran.detail');
     Route::patch('/setoran/{id}/updatekode', [SetoranController::class, 'postEditItem'])->name('setoran.postEditItem');
@@ -233,6 +233,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/setoran/{id}/detail/gantiJahit', [SetoranController::class, 'postGantiJahit'])->name('setoran.postGantiJahit');
     Route::patch('/setoran/{id}/detail/gantiStatus', [SetoranController::class, 'postEditStatus'])->name('setoran.postEditStatus');
     Route::patch('/setoran/{id}/detail/postGudang', [SetoranController::class, 'postGudang'])->name('setoran.postGudang');
+
+    Route::get('/borongan', [BoronganController::class, 'index'])->name('borongan.index');
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
 

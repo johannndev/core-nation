@@ -27,10 +27,10 @@
             console.log(getInputId);
             console.log(getInputName);
 
-            const goBtn = document.getElementById('btn'+input.id);
+            // const goBtn = document.getElementById('btn'+input.id);
 
            
-            goBtn.classList.remove('hidden');
+            // goBtn.classList.remove('hidden');
         
            
         });
@@ -38,7 +38,7 @@
         input.addEventListener('blur', () =>{
             console.log(`field blur: ${input.id}`);
 
-            const goBtn = document.getElementById('btn'+input.id);
+            // const goBtn = document.getElementById('btn'+input.id);
 
             const inputElement = document.getElementById(input.id);
             const getInputId = inputElement.getAttribute('data-id');
@@ -120,9 +120,9 @@
 
                 var valCode = $('#code'+id).val()
 
-                const goBtn = document.getElementById('btncode'+id);
+                // const goBtn = document.getElementById('btncode'+id);
 
-                goBtn.classList.add('hidden');
+                // goBtn.classList.add('hidden');
 
 
                 var se = $('#sender').val();
@@ -163,9 +163,9 @@
 
                 var valCode = $('#code'+id).val()
 
-                const goBtn = document.getElementById('btncode'+id);
+                // const goBtn = document.getElementById('btncode'+id);
 
-                goBtn.classList.add('hidden');
+                // goBtn.classList.add('hidden');
 
 
                 var se = $('#sender').val();
@@ -233,9 +233,9 @@
 
             // console.log('masuk')
 
-            const goBtn = document.getElementById('btnname'+id);
+            // const goBtn = document.getElementById('btnname'+id);
 
-            goBtn.classList.add('hidden');
+            // goBtn.classList.add('hidden');
 
             var valCode = $('#name'+id).val()
 
@@ -265,9 +265,9 @@
 
                 // console.log('masuk')
 
-                const goBtn = document.getElementById('btnname'+id);
+                // const goBtn = document.getElementById('btnname'+id);
 
-                goBtn.classList.add('hidden');
+                // goBtn.classList.add('hidden');
 
                 var valCode = $('#name'+id).val()
 
@@ -309,9 +309,9 @@
 
             if (get === "quantity") {
 
-            const goBtn = document.getElementById('btnquantity'+id);
+            // const goBtn = document.getElementById('btnquantity'+id);
 
-            goBtn.classList.add('hidden');
+            // goBtn.classList.add('hidden');
 
             console.log('dienter')
 
@@ -325,9 +325,9 @@
         }else{
             if ( event.key === "Enter") {
 
-            const goBtn = document.getElementById('btnquantity'+id);
+            // const goBtn = document.getElementById('btnquantity'+id);
 
-            goBtn.classList.add('hidden');
+            // goBtn.classList.add('hidden');
 
             console.log('dienter')
 
@@ -355,9 +355,9 @@
 
             console.log('dienter')
 
-            const goBtn = document.getElementById('btnprice'+id);
+            // const goBtn = document.getElementById('btnprice'+id);
 
-            goBtn.classList.add('hidden');
+            // goBtn.classList.add('hidden');
 
             if( "{{$trType}}" == "move" ||  "{{$trType}}" == "use"){
                 ++id 
@@ -386,9 +386,9 @@
 
             console.log('dienter')
 
-            const goBtn = document.getElementById('btnprice'+id);
+            // const goBtn = document.getElementById('btnprice'+id);
 
-            goBtn.classList.add('hidden');
+            // goBtn.classList.add('hidden');
 
             if( "{{$trType}}" == "move" ||  "{{$trType}}" == "use"){
                 ++id 
@@ -428,9 +428,9 @@
 
             if (get === "discount" ) {
 
-            const goBtn = document.getElementById('btndiscount'+id);
+            // const goBtn = document.getElementById('btndiscount'+id);
 
-            goBtn.classList.add('hidden');
+            // goBtn.classList.add('hidden');
 
             console.log('dienter')
 
@@ -450,9 +450,9 @@
 
             if ( event.key === "Enter") {
 
-            const goBtn = document.getElementById('btndiscount'+id);
+            // const goBtn = document.getElementById('btndiscount'+id);
 
-            goBtn.classList.add('hidden');
+            // goBtn.classList.add('hidden');
 
             console.log('dienter')
 
