@@ -323,7 +323,7 @@
                                         <div class="flex items-end w-full">
 
                                             <div class="w-full">
-                                                <input data-name="discount" data-id="0" onkeyup="return handleDisc(event,0)" type="search" name="addMoreInputFields[0][discount]"   id="discount0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search" />
+                                                <input data-name="discount" data-id="0" onkeyup="return handleDisc(event,0)" type="search"  onblur="handleDisc(null,0,'discount')" name="addMoreInputFields[0][discount]"   id="discount0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search" />
                                             </div>
                                             
     
