@@ -2,7 +2,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">Group List</p>
+        <p class="text-2xl font-bold">Borongan List</p>
 
        
     </div>
@@ -104,7 +104,7 @@
                                    
                                     <th scope="row" class="px-4 py-3  whitespace-nowrap ">
                                         
-                                        <a href="{{route('item.detail',$item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->date}}</a>
+                                        <a href="{{route('borongan.detail',$item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->date}}</a>
 
                                     </th>
                            

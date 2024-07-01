@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Borongan;
+use App\Models\BoronganDetail;
 use App\Models\Worker;
 use Illuminate\Http\Request;
 
@@ -27,6 +28,14 @@ class BoronganController extends Controller
 
         return view('borongan.index',compact('dataList','jahitList'));
     }
+
+	public function detail($id){
+		$borongan = Borongan::findOrFail($id);
+
+		$detaiList = BoronganDetail::with('item')->where('borongan_id','=',$id)->get();
+
+		return view('borongan.detail',compact('borongan','detaiList'));
+	}
 
    
 }

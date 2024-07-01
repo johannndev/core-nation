@@ -235,6 +235,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/setoran/{id}/detail/postGudang', [SetoranController::class, 'postGudang'])->name('setoran.postGudang');
 
     Route::get('/borongan', [BoronganController::class, 'index'])->name('borongan.index');
+    Route::get('/borongan/{id}/detail', [BoronganController::class, 'detail'])->name('borongan.detail');
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
 
