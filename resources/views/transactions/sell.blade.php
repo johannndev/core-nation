@@ -256,7 +256,7 @@
                                         
                                             <div class=" w-full">
                                     
-                                                <input data-name="name" data-id="0" id="name0" list="name-list0" onblur="handleName(null,0,'name')" onkeydown="handleName(event,0)" autocomplete="off" type="text" name="addMoreInputFields[0][name]"  class="nameList register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  inputmode="search" />
+                                                <input data-name="name" data-id="0" id="name0" list="name-list0" onkeydown="handleName(event,0)" autocomplete="off" type="search" name="addMoreInputFields[0][name]"  class="nameList register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  inputmode="search" />
 
                                                 <datalist id="name-list0"></datalist>
 
@@ -278,7 +278,7 @@
                                         <div class="flex items-end w-full">
 
                                             <div class="w-full">
-                                                <input data-name="quantity" data-id="0" onblur="handleQty(null,0,'quantity')" onkeyup="return handleQty(event,0)" type="text" name="addMoreInputFields[0][quantity]"  id="quantity0" class="qty register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                                <input data-name="quantity" data-id="0"  onkeyup="return handleQty(event,0)" type="search" name="addMoreInputFields[0][quantity]"  id="quantity0" class="qty register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                                             </div>
 
                                             {{-- <div id="btnquantity0" class="hidden">
@@ -301,7 +301,7 @@
                                         <div class="flex items-end w-full">
 
                                             <div class="w-full">
-                                                <input data-name="price" data-id="0" onblur="handlePrice(null,0,'price')" onkeyup="return handlePrice(event,0)" type="text" name="addMoreInputFields[0][price]"  id="price0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                                <input data-name="price" data-id="0"  onkeyup="return handlePrice(event,0)" type="search" name="addMoreInputFields[0][price]"  id="price0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                                             </div>
     
     
@@ -323,7 +323,7 @@
                                         <div class="flex items-end w-full">
 
                                             <div class="w-full">
-                                                <input data-name="discount" data-id="0" onblur="handleDisc(null,0,'discount')" onkeyup="return handleDisc(event,0)" type="text" name="addMoreInputFields[0][discount]"   id="discount0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                                <input data-name="discount" data-id="0" onkeyup="return handleDisc(event,0)" type="search" name="addMoreInputFields[0][discount]"   id="discount0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                                             </div>
                                             
     
