@@ -1,6 +1,4 @@
 <div>
-
-
     <form action="{{route('addrbook.store', ['type' => $type, 'action' => $action])}}" method="post" enctype="multipart/form-data">
 
         @csrf

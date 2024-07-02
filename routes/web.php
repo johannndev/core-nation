@@ -17,6 +17,7 @@ use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResellerController;
 use App\Http\Controllers\SetoranController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\VAccountController;
@@ -236,6 +237,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/borongan', [BoronganController::class, 'index'])->name('borongan.index');
     Route::get('/borongan/{id}/detail', [BoronganController::class, 'detail'])->name('borongan.detail');
+
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update');
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
 

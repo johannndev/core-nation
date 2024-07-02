@@ -11,6 +11,8 @@ class AppSetting extends Model
 
     protected $table = 'app_settings';
 
+	public $timestamps = false;
+
 	public static $desc = array(
 		'tutup_buku' => 'tanggal tutup buku tiap bulan',
 		'sell_100' => 'treat sell items w/ 100% discount as journal entry',
