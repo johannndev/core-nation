@@ -7,12 +7,13 @@ use App\Models\User;
 use App\Models\WarehouseItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
 
 class HomeController extends Controller
 {
 	public function index()
 	{
-		dd(User::with('permissions')->get());
+		dd('1',Permission::with('roles')->get());
 
 		return view('home');
 	}
