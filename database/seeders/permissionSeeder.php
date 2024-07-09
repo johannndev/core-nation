@@ -98,8 +98,6 @@ class permissionSeeder extends Seeder
             ['name' => 'vaccount search', 'label' =>'Search'],
             ['name' => 'vaccount delete', 'label' =>'Delete'],
             ['name' => 'vaccount restore', 'label' =>'Restore'],
-            ['name' => 'produksi delete potong', 'label' =>'List'],
-            ['name' => 'produksi delete jahit', 'label' =>'Create'],
             ['name' => 'item list', 'label' => 'List'],
             ['name' => 'item create', 'label' => 'Create'],
             ['name' => 'item edit', 'label' => 'Edit'],
