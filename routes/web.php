@@ -288,18 +288,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/profit-loss', [ReportController::class, 'profitLoss'])->name('report.profitLoss')->middleware('permission:report nett cash');
     Route::get('/reports/cash', [ReportController::class, 'cash'])->name('report.cash')->middleware('permission:report nett cash');
 
-    Route::get('/user', [UserRoleController::class, 'userList'])->name('user.list');
-    Route::get('/user/create', [UserRoleController::class, 'userCreate'])->name('user.create');
-    Route::post('/user/store', [UserRoleController::class, 'userStore'])->name('user.store');
-    Route::get('/user/{id}/edit', [UserRoleController::class, 'userEdit'])->name('user.edit');
-    Route::patch('/user/{id}/update', [UserRoleController::class, 'userUpdate'])->name('user.update');
-    Route::post('/user/{id}/ban', [UserRoleController::class, 'ban'])->name('user.ban');
+    Route::get('/user', [UserRoleController::class, 'userList'])->name('user.list')->middleware('permission:user list');
+    Route::get('/user/create', [UserRoleController::class, 'userCreate'])->name('user.create')->middleware('permission:user create');
+    Route::post('/user/store', [UserRoleController::class, 'userStore'])->name('user.store')->middleware('permission:user create');
+    Route::get('/user/{id}/edit', [UserRoleController::class, 'userEdit'])->name('user.edit')->middleware('permission:user edit');
+    Route::patch('/user/{id}/update', [UserRoleController::class, 'userUpdate'])->name('user.update')->middleware('permission:user edit');
+    Route::post('/user/{id}/ban', [UserRoleController::class, 'ban'])->name('user.ban')->middleware('permission:user ban');
     
-    Route::get('/role', [UserRoleController::class, 'indexRole'])->name('role.indexRole');
-    Route::get('/role/create', [UserRoleController::class, 'createRole'])->name('role.createRole');
-    Route::post('/role/store', [UserRoleController::class, 'storeRole'])->name('role.storeRole');
-    Route::get('/role/{id}/edit', [UserRoleController::class, 'editRole'])->name('role.editRole');
-    Route::post('/role/{id}/update', [UserRoleController::class, 'roleUpdate'])->name('role.roleUpdate');
+    Route::get('/role', [UserRoleController::class, 'indexRole'])->name('role.indexRole')->middleware('permission:user role');
+    Route::get('/role/create', [UserRoleController::class, 'createRole'])->name('role.createRole')->middleware('permission:user create role');
+    Route::post('/role/store', [UserRoleController::class, 'storeRole'])->name('role.storeRole')->middleware('permission:user create role');
+    Route::get('/role/{id}/edit', [UserRoleController::class, 'editRole'])->name('role.editRole')->middleware('permission:user edit role');
+    Route::post('/role/{id}/update', [UserRoleController::class, 'roleUpdate'])->name('role.roleUpdate')->middleware('permission:user edit role');
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
 
