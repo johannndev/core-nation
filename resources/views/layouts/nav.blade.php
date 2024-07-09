@@ -601,7 +601,7 @@
           <div class="py-3 px-4">
             <span
               class="block text-sm font-semibold text-gray-900 dark:text-white"
-              >Neil Sims</span
+              >{{Auth::user()->username}}</span
             >
             <span
               class="block text-sm text-gray-900 truncate dark:text-white"
@@ -709,11 +709,15 @@
             aria-labelledby="dropdown"
           >
             <li>
-              <a
-                href="#"
-                class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Sign out</a
-              >
+              <form method="POST" action="{{ route('logout') }}">
+                @csrf
+
+                <a href="{{route('logout')}}" onclick="event.preventDefault(); this.closest('form').submit();"  class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >Sign out</a>
+
+              
+            </form>
+            
             </li>
           </ul>
         </div>
