@@ -11,7 +11,7 @@ class HomeController extends Controller
 {
 	public function index()
 	{
-		dd(Auth::user()->getRoleNames());
+		dd(Auth::user()->permissions);
 
 		return view('home');
 	}
