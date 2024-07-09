@@ -52,37 +52,37 @@ Route::get('/set-user', function () {
 });
 
 
-Route::get('/role-create', function () {
+// Route::get('/role-create', function () {
     
-    $perm = [
+//     $perm = [
         
-        'produksi list',
-        'produksi create',
-        'produksi edit',
-        'produksi detail',
-        'produksi search',
-        'produksi setor',
-        'produksi jahit',
-        'produksi jahit create',
-        'produksi jahit edit',
-        'produksi jahit delete',
-        'produksi potong',
-        'produksi potong create',
-        'produksi potong edit',
-        'produksi potong delete',
-    ];
+//         'produksi list',
+//         'produksi create',
+//         'produksi edit',
+//         'produksi detail',
+//         'produksi search',
+//         'produksi setor',
+//         'produksi jahit',
+//         'produksi jahit create',
+//         'produksi jahit edit',
+//         'produksi jahit delete',
+//         'produksi potong',
+//         'produksi potong create',
+//         'produksi potong edit',
+//         'produksi potong delete',
+//     ];
 
-    foreach($perm as $p){
+//     foreach($perm as $p){
 
-        $permission = Permission::create(['name' => $p]);
+//         $permission = Permission::create(['name' => $p]);
 
-    }
+//     }
 
    
     
 
-    return 'berhasil';
-});
+//     return 'berhasil';
+// });
 
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
