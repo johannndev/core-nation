@@ -13,7 +13,7 @@ class HomeController extends Controller
 {
 	public function index()
 	{
-		dd('1',Permission::with('roles')->get()->toArray());
+		// dd('1',Permission::with('roles')->get()->toArray());
 
 		return view('home');
 	}
