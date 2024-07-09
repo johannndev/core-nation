@@ -15,15 +15,19 @@ use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\OperationController;
 use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ResellerController;
 use App\Http\Controllers\SetoranController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\VAccountController;
 use App\Http\Controllers\VWarehouseController;
 use App\Http\Controllers\WarehouseController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Permission;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +42,46 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
+});
+
+Route::get('/set-user', function () {
+
+    User::where('role_id', '>', 0)->update(['role_id' => 0]);
+
+    return 'berhasil';
+});
+
+
+Route::get('/role-create', function () {
+    
+    $perm = [
+        
+        'produksi list',
+        'produksi create',
+        'produksi edit',
+        'produksi detail',
+        'produksi search',
+        'produksi setor',
+        'produksi jahit',
+        'produksi jahit create',
+        'produksi jahit edit',
+        'produksi jahit delete',
+        'produksi potong',
+        'produksi potong create',
+        'produksi potong edit',
+        'produksi potong delete',
+    ];
+
+    foreach($perm as $p){
+
+        $permission = Permission::create(['name' => $p]);
+
+    }
+
+   
+    
+
+    return 'berhasil';
 });
 
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -57,189 +101,205 @@ Route::middleware('auth')->group(function () {
     Route::get('/getItemName', [AjaxController::class, 'getItem'])->name('ajax.getitemName');
     Route::get('/getInvoice', [AjaxController::class, 'getInvoice'])->name('ajax.getInvoice');
 
-    Route::get('/transaction', [TransactionsController::class, 'index'])->name('transaction.index');
-    Route::get('/transaction/filter', [FilterQueryController::class, 'transactionFilter'])->name('transaction.filter');
+    Route::get('/transaction', [TransactionsController::class, 'index'])->name('transaction.index')->middleware('permission:transactions.list');
+    Route::get('/transaction/filter', [FilterQueryController::class, 'transactionFilter'])->name('transaction.filter')->middleware('permission:transactions.list');
     
-    Route::get('/transaction/sell', [TransactionsController::class, 'sell'])->name('transaction.sell');
-    Route::post('/transaction/sell/post', [TransactionsController::class, 'postSell'])->name('transaction.postSell');
+    Route::get('/transaction/sell', [TransactionsController::class, 'sell'])->name('transaction.sell')->middleware('permission:transactions.sell');
+    Route::post('/transaction/sell/post', [TransactionsController::class, 'postSell'])->name('transaction.postSell')->middleware('permission:transactions.sell');
 
-    Route::get('/transaction/buy', [TransactionsController::class, 'buy'])->name('transaction.buy');
-    Route::post('/transaction/buy/post', [TransactionsController::class, 'postbuy'])->name('transaction.postBuy');
+    Route::get('/transaction/buy', [TransactionsController::class, 'buy'])->name('transaction.buy')->middleware('permission:transactions.buy');
+    Route::post('/transaction/buy/post', [TransactionsController::class, 'postbuy'])->name('transaction.postBuy')->middleware('permission:transactions.buy');
 
-    Route::get('/transaction/move', [TransactionsController::class, 'move'])->name('transaction.move');
-    Route::post('/transaction/move/post', [TransactionsController::class, 'postmove'])->name('transaction.postMove');
+    Route::get('/transaction/move', [TransactionsController::class, 'move'])->name('transaction.move')->middleware('permission:transactions.move');
+    Route::post('/transaction/move/post', [TransactionsController::class, 'postmove'])->name('transaction.postMove')->middleware('permission:transactions.move');
 
-    Route::get('/transaction/use', [TransactionsController::class, 'use'])->name('transaction.use');
-    Route::post('/transaction/use/post', [TransactionsController::class, 'postuse'])->name('transaction.postUse');
+    Route::get('/transaction/use', [TransactionsController::class, 'use'])->name('transaction.use')->middleware('permission:transactions.use');
+    Route::post('/transaction/use/post', [TransactionsController::class, 'postuse'])->name('transaction.postUse')->middleware('permission:transactions.use');
 
-    Route::get('/transaction/cash-in', [TransactionsController::class, 'cashIn'])->name('transaction.cashIn');
-    Route::post('/transaction/cash-in/post', [TransactionsController::class, 'postCashIn'])->name('transaction.cashInPost');
+    Route::get('/transaction/cash-in', [TransactionsController::class, 'cashIn'])->name('transaction.cashIn')->middleware('permission:transactions.cashIn');
+    Route::post('/transaction/cash-in/post', [TransactionsController::class, 'postCashIn'])->name('transaction.cashInPost')->middleware('permission:transactions.cashIn');
 
-    Route::get('/transaction/cash-out', [TransactionsController::class, 'cashOut'])->name('transaction.cashOut');
-    Route::post('/transaction/cash-out/post', [TransactionsController::class, 'postCashOut'])->name('transaction.cashOutPost');
+    Route::get('/transaction/cash-out', [TransactionsController::class, 'cashOut'])->name('transaction.cashOut')->middleware('permission:transactions.cashOut');
+    Route::post('/transaction/cash-out/post', [TransactionsController::class, 'postCashOut'])->name('transaction.cashOutPost')->middleware('permission:transactions.cashOut');
 
-    Route::get('/transaction/adjust', [TransactionsController::class, 'adjust'])->name('transaction.adjust');
-    Route::post('/transaction/adjust/post', [TransactionsController::class, 'postAdjust'])->name('transaction.postAdjust');
+    Route::get('/transaction/adjust', [TransactionsController::class, 'adjust'])->name('transaction.adjust')->middleware('permission:transactions.adjust');
+    Route::post('/transaction/adjust/post', [TransactionsController::class, 'postAdjust'])->name('transaction.postAdjust')->middleware('permission:transactions.adjust');
 
-    Route::get('/transaction/transfer', [TransactionsController::class, 'transfer'])->name('transaction.transfer');
-    Route::post('/transaction/transfer/post', [TransactionsController::class, 'postTransfer'])->name('transaction.postTransfer');
+    Route::get('/transaction/transfer', [TransactionsController::class, 'transfer'])->name('transaction.transfer')->middleware('permission:transactions.transfer');
+    Route::post('/transaction/transfer/post', [TransactionsController::class, 'postTransfer'])->name('transaction.postTransfer')->middleware('permission:transactions.transfer');
 
-    Route::get('/transaction/return', [TransactionsController::class, 'return'])->name('transaction.return');
-    Route::post('/transaction/return/post', [TransactionsController::class, 'postReturn'])->name('transaction.postReturn');
+    Route::get('/transaction/return', [TransactionsController::class, 'return'])->name('transaction.return')->middleware('permission:transactions.return');
+    Route::post('/transaction/return/post', [TransactionsController::class, 'postReturn'])->name('transaction.postReturn')->middleware('permission:transactions.return');
 
-    Route::get('/transaction/return-supplier', [TransactionsController::class, 'returnSupplier'])->name('transaction.returnSupplier');
-    Route::post('/transaction/return-supplier/post', [TransactionsController::class, 'postReturnSupplier'])->name('transaction.postReturnSupplier');
+    Route::get('/transaction/return-supplier', [TransactionsController::class, 'returnSupplier'])->name('transaction.returnSupplier')->middleware('permission:transactions transactions.returnSuplier');
+    Route::post('/transaction/return-supplier/post', [TransactionsController::class, 'postReturnSupplier'])->name('transaction.postReturnSupplier')->middleware('permission:transactions.returnSuplier');
 
-    Route::get('/transaction/{id}/detail', [TransactionsController::class, 'getDetail'])->name('transaction.getDetail');
+    Route::get('/transaction/{id}/detail', [TransactionsController::class, 'getDetail'])->name('transaction.getDetail')->middleware('permission:transactions.detail');
 
-    Route::get('/transaction/delete', [DeletedController::class, 'index'])->name('transaction.delete');
-    Route::get('/transaction/delete/filter', [FilterQueryController::class, 'transactionFilterDelete'])->name('transaction.deletefilter');
-    Route::get('/transaction/{id}/delete/detail', [DeletedController::class, 'getDetailDelete'])->name('transaction.getDetailDelete');
+    Route::get('/transaction/delete', [DeletedController::class, 'index'])->name('transaction.delete')->middleware('permission:transactions.deleteList');
+    Route::get('/transaction/delete/filter', [FilterQueryController::class, 'transactionFilterDelete'])->name('transaction.deletefilter')->middleware('permission:transactions.deleteList');
+    Route::get('/transaction/{id}/delete/detail', [DeletedController::class, 'getDetailDelete'])->name('transaction.getDetailDelete')->middleware('permission:transactions.deleteList');
 
-    Route::get('/item', [ItemsController::class, 'index'])->name('item.index');
-    Route::get('/item/create', [ItemsController::class, 'create'])->name('item.create');
-    Route::post('/item/store', [ItemsController::class, 'postCreate'])->name('item.post');
-    Route::get('/item/{id}/edit', [ItemsController::class, 'edit'])->name('item.edit');
-    Route::post('/item/{id}/update', [ItemsController::class, 'postEdit'])->name('item.update');
-    Route::get('/item/filter', [FilterQueryController::class, 'itemFilter'])->name('item.filter');
-    Route::get('/item/{id}/detail', [ItemsController::class, 'detail'])->name('item.detail');
-    Route::get('/item/{id}/transaction', [ItemsController::class, 'transaction'])->name('item.transaction');
-    Route::get('/item/{id}/transaction/filter', [FilterQueryController::class, 'itemTransFilter'])->name('item.transactionFilter');
-    Route::get('/item/{id}/stat', [ItemsController::class, 'stat'])->name('item.stat');
-    Route::get('/item/{id}/stat/filter', [FilterQueryController::class, 'itemStatFilter'])->name('item.statFilter');
-    Route::get('/item/group', [ItemsController::class, 'group'])->name('item.group');
-    Route::get('/item/group/filter', [FilterQueryController::class, 'itemGroupTransFilter'])->name('item.filterGroup');
-    Route::get('/item/group/{id}/detail', [ItemsController::class, 'groupDetail'])->name('item.detailGroup');
-    Route::get('/item/group/{id}/stat', [ItemsController::class, 'groupStat'])->name('item.statGroup');
-    Route::get('/item/group/{id}/stat/filter', [FilterQueryController::class, 'itemGroupStatFilter'])->name('item.statFilterGroup');
+    Route::get('/item', [ItemsController::class, 'index'])->name('item.index')->middleware('permission:item list');
+    Route::get('/item/create', [ItemsController::class, 'create'])->name('item.create')->middleware('permission:item create');
+    Route::post('/item/store', [ItemsController::class, 'postCreate'])->name('item.post')->middleware('permission:item create');
+    Route::get('/item/{id}/edit', [ItemsController::class, 'edit'])->name('item.edit')->middleware('permission:item edit');
+    Route::post('/item/{id}/update', [ItemsController::class, 'postEdit'])->name('item.update')->middleware('permission:item edit');
+    Route::get('/item/filter', [FilterQueryController::class, 'itemFilter'])->name('item.filter')->middleware('permission:item search');
+    Route::get('/item/{id}/detail', [ItemsController::class, 'detail'])->name('item.detail')->middleware('permission:item detail');
+    Route::get('/item/{id}/transaction', [ItemsController::class, 'transaction'])->name('item.transaction')->middleware('permission:item transaction');
+    Route::get('/item/{id}/transaction/filter', [FilterQueryController::class, 'itemTransFilter'])->name('item.transactionFilter')->middleware('permission:item transaction');
+    Route::get('/item/{id}/stat', [ItemsController::class, 'stat'])->name('item.stat')->middleware('permission:item stat');
+    Route::get('/item/{id}/stat/filter', [FilterQueryController::class, 'itemStatFilter'])->name('item.statFilter')->middleware('permissionitem stat');
+    Route::get('/item/group', [ItemsController::class, 'group'])->name('item.group')->middleware('permission:item group');
+    Route::get('/item/group/filter', [FilterQueryController::class, 'itemGroupTransFilter'])->name('item.filterGroup')->middleware('permission:item group');
+    Route::get('/item/group/{id}/detail', [ItemsController::class, 'groupDetail'])->name('item.detailGroup')->middleware('permission:item group');
+    Route::get('/item/group/{id}/stat', [ItemsController::class, 'groupStat'])->name('item.statGroup')->middleware('permission:item group');
+    Route::get('/item/group/{id}/stat/filter', [FilterQueryController::class, 'itemGroupStatFilter'])->name('item.statFilterGroup')->middleware('permission:item group');
 
-    Route::get('/asset-lancar', [AsetLancarController::class, 'index'])->name('asetLancar.index');
-    Route::get('/asset-lancar/create', [AsetLancarController::class, 'create'])->name('asetLancar.create');
-    Route::post('/asset-lancar/store', [AsetLancarController::class, 'postCreate'])->name('asetLancar.postCreate');
-    Route::get('/asset-lancar/{id}/edit', [AsetLancarController::class, 'edit'])->name('asetLancar.edit');
-    Route::post('/asset-lancar/{id}/update', [AsetLancarController::class, 'postEdit'])->name('asetLancar.update');
-    Route::get('/asset-lancar/filter', [FilterQueryController::class, 'assetLancarFilter'])->name('asetLancar.filter');
-    Route::get('/asset-lancar/{id}/detail', [AsetLancarController::class, 'detail'])->name('asetLancar.detail');
-    Route::get('/asset-lancar/{id}/transaction', [AsetLancarController::class, 'transaction'])->name('asetLancar.transaction');
-    Route::get('/asset-lancar/{id}/transaction/filter', [FilterQueryController::class, 'assetLancarTransFilter'])->name('asetLancar.transactionFilter');
-    Route::get('/asset-lancar/{id}/stat', [AsetLancarController::class, 'stat'])->name('asetLancar.stat');
-    Route::get('/asset-lancar/{id}/stat/filter', [FilterQueryController::class, 'assetLancarStatFilter'])->name('asetLancar.statFilter');
+    Route::get('/asset-lancar', [AsetLancarController::class, 'index'])->name('asetLancar.index')->middleware('permission:asset lancar list');
+    Route::get('/asset-lancar/create', [AsetLancarController::class, 'create'])->name('asetLancar.create')->middleware('permission:asset lancar create');
+    Route::post('/asset-lancar/store', [AsetLancarController::class, 'postCreate'])->name('asetLancar.postCreate')->middleware('permission:asset lancar create');
+    Route::get('/asset-lancar/{id}/edit', [AsetLancarController::class, 'edit'])->name('asetLancar.edit')->middleware('permission:asset lancar edit');
+    Route::post('/asset-lancar/{id}/update', [AsetLancarController::class, 'postEdit'])->name('asetLancar.update')->middleware('permission:asset lancar edit');
+    Route::get('/asset-lancar/filter', [FilterQueryController::class, 'assetLancarFilter'])->name('asetLancar.filter')->middleware('permission:asset lancar search');
+    Route::get('/asset-lancar/{id}/detail', [AsetLancarController::class, 'detail'])->name('asetLancar.detail')->middleware('permission:asset lancar detail');
+    Route::get('/asset-lancar/{id}/transaction', [AsetLancarController::class, 'transaction'])->name('asetLancar.transaction')->middleware('permission:asset lancar transaction');
+    Route::get('/asset-lancar/{id}/transaction/filter', [FilterQueryController::class, 'assetLancarTransFilter'])->name('asetLancar.transactionFilter')->middleware('permission:asset lancar transaction');
+    Route::get('/asset-lancar/{id}/stat', [AsetLancarController::class, 'stat'])->name('asetLancar.stat')->middleware('permission:asset lancar stat');
+    Route::get('/asset-lancar/{id}/stat/filter', [FilterQueryController::class, 'assetLancarStatFilter'])->name('asetLancar.statFilter')->middleware('permission:asset lancar stat');
 
-    Route::get('/contributors', [ContributorController::class, 'index'])->name('contributor.index');
-    Route::get('/contributors/filter', [FilterQueryController::class, 'contributorFilter'])->name('contributor.filter');
+    Route::get('/contributors', [ContributorController::class, 'index'])->name('contributor.index')->middleware('permission:contributor');
+    Route::get('/contributors/filter', [FilterQueryController::class, 'contributorFilter'])->name('contributor.filter')->middleware('permission:contributor');
 
-    Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index');
-    Route::get('/customer/create', [CustomerController::class, 'create'])->name('customer.create');
-    Route::get('/customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
-    Route::post('/customer/{id}/update', [CustomerController::class, 'postEdit'])->name('customer.update');
-    Route::get('/customer/{id}/transaction', [CustomerController::class, 'transaction'])->name('customer.transaction');
-    Route::get('/customer/{id}/detail', [CustomerController::class, 'detail'])->name('customer.detail');
-    Route::get('/customer/{id}/item', [CustomerController::class, 'items'])->name('customer.items');
-    Route::get('/customer/{id}/stat', [CustomerController::class, 'stat'])->name('customer.stat');
+    Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index')->middleware('permission:customer list')->middleware('permission:customer list');
+    Route::get('/customer/create', [CustomerController::class, 'create'])->name('customer.create')->middleware('permission:customer create')->middleware('permission:customer create');
+    Route::get('/customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit')->middleware('permission:customer edit')->middleware('permission:customer edit');
+    Route::post('/customer/{id}/update', [CustomerController::class, 'postEdit'])->name('customer.update')->middleware('permission:customer edit')->middleware('permission:customer edit');
+    Route::get('/customer/{id}/transaction', [CustomerController::class, 'transaction'])->name('customer.transaction')->middleware('permission:customer transaction')->middleware('permission:customer transaction');
+    Route::get('/customer/{id}/detail', [CustomerController::class, 'detail'])->name('customer.detail')->middleware('permission:customer detail')->middleware('permission:customer detail');
+    Route::get('/customer/{id}/item', [CustomerController::class, 'items'])->name('customer.items')->middleware('permission:customer item')->middleware('permission:customer item');
+    Route::get('/customer/{id}/stat', [CustomerController::class, 'stat'])->name('customer.stat')->middleware('permission:customer stat')->middleware('permission:customer stat');
 
-    Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index');
-    Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create');
-    Route::get('/supplier/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
-    Route::get('/supplier/{id}/transaction', [SupplierController::class, 'transaction'])->name('supplier.transaction');
-    Route::get('/supplier/{id}/detail', [SupplierController::class, 'detail'])->name('supplier.detail');
-    Route::get('/supplier/{id}/item', [SupplierController::class, 'items'])->name('supplier.items');
-    Route::get('/supplier/{id}/stat', [SupplierController::class, 'stat'])->name('supplier.stat');
+    Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index')->middleware('permission:supplier list');
+    Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create')->middleware('permission:supplier create');
+    Route::get('/supplier/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit')->middleware('permission:supplier edit');
+    Route::get('/supplier/{id}/transaction', [SupplierController::class, 'transaction'])->name('supplier.transaction')->middleware('permission:supplier transaction');
+    Route::get('/supplier/{id}/detail', [SupplierController::class, 'detail'])->name('supplier.detail')->middleware('permission:supplier detail');
+    Route::get('/supplier/{id}/item', [SupplierController::class, 'items'])->name('supplier.items')->middleware('permission:supplier item');
+    Route::get('/supplier/{id}/stat', [SupplierController::class, 'stat'])->name('supplier.stat')->middleware('permission:supplier stat');
 
-    Route::get('/warehouse', [WarehouseController::class, 'index'])->name('warehouse.index');
-    Route::get('/warehouse/create', [WarehouseController::class, 'create'])->name('warehouse.create');
-    Route::get('/warehouse/{id}/edit', [WarehouseController::class, 'edit'])->name('warehouse.edit');
-    Route::get('/warehouse/{id}/transaction', [WarehouseController::class, 'transaction'])->name('warehouse.transaction');
-    Route::get('/warehouse/{id}/detail', [WarehouseController::class, 'detail'])->name('warehouse.detail');
-    Route::get('/warehouse/{id}/item', [WarehouseController::class, 'items'])->name('warehouse.items');
-    Route::get('/warehouse/{id}/stat', [WarehouseController::class, 'stat'])->name('warehouse.stat');
+    Route::get('/warehouse', [WarehouseController::class, 'index'])->name('warehouse.index')->middleware('permission:warehouse list');
+    Route::get('/warehouse/create', [WarehouseController::class, 'create'])->name('warehouse.create')->middleware('permission:warehouse create');
+    Route::get('/warehouse/{id}/edit', [WarehouseController::class, 'edit'])->name('warehouse.edit')->middleware('permission:warehouse edit');
+    Route::get('/warehouse/{id}/transaction', [WarehouseController::class, 'transaction'])->name('warehouse.transaction')->middleware('permission:warehouse transaction');
+    Route::get('/warehouse/{id}/detail', [WarehouseController::class, 'detail'])->name('warehouse.detail')->middleware('permission:warehouse detail');
+    Route::get('/warehouse/{id}/item', [WarehouseController::class, 'items'])->name('warehouse.items')->middleware('permission:warehouse item');
+    Route::get('/warehouse/{id}/stat', [WarehouseController::class, 'stat'])->name('warehouse.stat')->middleware('permission:warehouse stat');
 
-    Route::get('/vwarehouse', [VWarehouseController::class, 'index'])->name('vwarehouse.index');
-    Route::get('/vwarehouse/create', [VWarehouseController::class, 'create'])->name('vwarehouse.create');
-    Route::get('/vwarehouse/{id}/edit', [VWarehouseController::class, 'edit'])->name('vwarehouse.edit');
-    Route::get('/vwarehouse/{id}/transaction', [VWarehouseController::class, 'transaction'])->name('vwarehouse.transaction');
-    Route::get('/vwarehouse/{id}/detail', [VWarehouseController::class, 'detail'])->name('vwarehouse.detail');
-    Route::get('/vwarehouse/{id}/item', [VWarehouseController::class, 'items'])->name('vwarehouse.items');
-    Route::get('/vwarehouse/{id}/stat', [VWarehouseController::class, 'stat'])->name('vwarehouse.stat');
+    Route::get('/vwarehouse', [VWarehouseController::class, 'index'])->name('vwarehouse.index')->middleware('permission:vwarehouse list');
+    Route::get('/vwarehouse/create', [VWarehouseController::class, 'create'])->name('vwarehouse.create')->middleware('permission:vwarehouse create');
+    Route::get('/vwarehouse/{id}/edit', [VWarehouseController::class, 'edit'])->name('vwarehouse.edit')->middleware('permission:vwarehouse edit');
+    Route::get('/vwarehouse/{id}/transaction', [VWarehouseController::class, 'transaction'])->name('vwarehouse.transaction')->middleware('permission:vwarehouse transaction');
+    Route::get('/vwarehouse/{id}/detail', [VWarehouseController::class, 'detail'])->name('vwarehouse.detail')->middleware('permission:vwarehouse detail');
+    Route::get('/vwarehouse/{id}/item', [VWarehouseController::class, 'items'])->name('vwarehouse.items')->middleware('permission:vwarehouse item');
+    Route::get('/vwarehouse/{id}/stat', [VWarehouseController::class, 'stat'])->name('vwarehouse.stat')->middleware('permission:vwarehouse stat');
 
-    Route::get('/account', [AccountController::class, 'index'])->name('account.index');
-    Route::get('/account/create', [AccountController::class, 'create'])->name('account.create');
-    Route::get('/account/{id}/edit', [AccountController::class, 'edit'])->name('account.edit');
-    Route::get('/account/{id}/transaction', [AccountController::class, 'transaction'])->name('account.transaction');
-    Route::get('/account/{id}/detail', [AccountController::class, 'detail'])->name('account.detail');
-    Route::get('/account/{id}/item', [AccountController::class, 'items'])->name('account.items');
-    Route::get('/account/{id}/stat', [AccountController::class, 'stat'])->name('account.stat');
+    Route::get('/account', [AccountController::class, 'index'])->name('account.index')->middleware('permission:account list');
+    Route::get('/account/create', [AccountController::class, 'create'])->name('account.create')->middleware('permission:account create');
+    Route::get('/account/{id}/edit', [AccountController::class, 'edit'])->name('account.edit')->middleware('permission:account edit');
+    Route::get('/account/{id}/transaction', [AccountController::class, 'transaction'])->name('account.transaction')->middleware('permission:account transaction');
+    Route::get('/account/{id}/detail', [AccountController::class, 'detail'])->name('account.detail')->middleware('permission:account detail');
+    Route::get('/account/{id}/item', [AccountController::class, 'items'])->name('account.items')->middleware('permission:account item');
+    Route::get('/account/{id}/stat', [AccountController::class, 'stat'])->name('account.stat')->middleware('permission:account stat');
 
-    Route::get('/vaccount', [VAccountController::class, 'index'])->name('vaccount.index');
-    Route::get('/vaccount/create', [VAccountController::class, 'create'])->name('vaccount.create');
-    Route::get('/vaccount/{id}/edit', [VAccountController::class, 'edit'])->name('vaccount.edit');
-    Route::get('/vaccount/{id}/transaction', [VAccountController::class, 'transaction'])->name('vaccount.transaction');
-    Route::get('/vaccount/{id}/detail', [VAccountController::class, 'detail'])->name('vaccount.detail');
-    Route::get('/vaccount/{id}/item', [VAccountController::class, 'items'])->name('vaccount.items');
-    Route::get('/vaccount/{id}/stat', [VAccountController::class, 'stat'])->name('vaccount.stat');
+    Route::get('/vaccount', [VAccountController::class, 'index'])->name('vaccount.index')->middleware('permission:vaccount list');
+    Route::get('/vaccount/create', [VAccountController::class, 'create'])->name('vaccount.create')->middleware('permission:vaccount create');
+    Route::get('/vaccount/{id}/edit', [VAccountController::class, 'edit'])->name('vaccount.edit')->middleware('permission:vaccount edit');
+    Route::get('/vaccount/{id}/transaction', [VAccountController::class, 'transaction'])->name('vaccount.transaction')->middleware('permission:vaccount transaction');
+    Route::get('/vaccount/{id}/detail', [VAccountController::class, 'detail'])->name('vaccount.detail')->middleware('permission:vaccount detail');
+    Route::get('/vaccount/{id}/item', [VAccountController::class, 'items'])->name('vaccount.items')->middleware('permission:vaccount item');
+    Route::get('/vaccount/{id}/stat', [VAccountController::class, 'stat'])->name('vaccount.stat')->middleware('permission:vaccount stat');
 
-    Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller.index');
-    Route::get('/reseller/create', [ResellerController::class, 'create'])->name('reseller.create');
-    Route::get('/reseller/{id}/edit', [ResellerController::class, 'edit'])->name('reseller.edit');
-    Route::get('/reseller/{id}/transaction', [ResellerController::class, 'transaction'])->name('reseller.transaction');
-    Route::get('/reseller/{id}/detail', [ResellerController::class, 'detail'])->name('reseller.detail');
-    Route::get('/reseller/{id}/item', [ResellerController::class, 'items'])->name('reseller.items');
-    Route::get('/reseller/{id}/stat', [ResellerController::class, 'stat'])->name('reseller.stat');
+    Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller.index')->middleware('permission:reseller list');
+    Route::get('/reseller/create', [ResellerController::class, 'create'])->name('reseller.create')->middleware('permission:reseller create');
+    Route::get('/reseller/{id}/edit', [ResellerController::class, 'edit'])->name('reseller.edit')->middleware('permission:reseller edit');
+    Route::get('/reseller/{id}/transaction', [ResellerController::class, 'transaction'])->name('reseller.transaction')->middleware('permission:reseller transaction');
+    Route::get('/reseller/{id}/detail', [ResellerController::class, 'detail'])->name('reseller.detail')->middleware('permission:reseller detail');
+    Route::get('/reseller/{id}/item', [ResellerController::class, 'items'])->name('reseller.items')->middleware('permission:reseller item');
+    Route::get('/reseller/{id}/stat', [ResellerController::class, 'stat'])->name('reseller.stat')->middleware('permission:reseller stat');
 
-    Route::post('/addrbook/store', [AddrbookController::class, 'postCreate'])->name('addrbook.store');
-    Route::post('/addrbook/{id}/update', [AddrbookController::class, 'postEdit'])->name('addrbook.update');
-    Route::post('/addrbook/{id}/delete', [AddrbookController::class, 'postDelete'])->name('addrbook.delete');
-    Route::post('/addrbook/{id}/restore', [AddrbookController::class, 'postRestore'])->name('addrbook.restore');
+    Route::post('/addrbook/store', [AddrbookController::class, 'postCreate'])->name('addrbook.store')->middleware('permission:customer create|supplier create|reseller create|warehouse create|vwarehouse create|account create|vaccount create');
+    Route::post('/addrbook/{id}/update', [AddrbookController::class, 'postEdit'])->name('addrbook.update')->middleware('permission:customer edit|supplier edit|reseller edit|warehouse edit|vwarehouse edit|account edit|vaccount edit');
+    Route::post('/addrbook/{id}/delete', [AddrbookController::class, 'postDelete'])->name('addrbook.delete')->middleware('permission:customer delete|supplier delete|reseller delete|warehouse delete|vwarehouse delete|account delete|vaccount delete');
+    Route::post('/addrbook/{id}/restore', [AddrbookController::class, 'postRestore'])->name('addrbook.restore')->middleware('permission:customer restore|supplier restore|reseller restore|warehouse restore|vwarehouse restore|account restore|vaccount restore');
 
-    Route::get('/operation', [OperationController::class, 'index'])->name('operation.index');
-    Route::get('/operation/create', [OperationController::class, 'create'])->name('operation.create');
-    Route::post('/operation/store', [OperationController::class, 'store'])->name('operation.store');
-    Route::get('/operation/{id}/edit', [OperationController::class, 'edit'])->name('operation.edit');
-    Route::patch('/operation/{id}/store', [OperationController::class, 'update'])->name('operation.update');
-    Route::get('/operation/{id}/account/edit', [OperationController::class, 'editAccount'])->name('operation.account.edit');
-    Route::patch('/operation/{id}/account/update', [OperationController::class, 'updateAccount'])->name('operation.account.update');
-    Route::get('/operation/{id}/detail', [OperationController::class, 'detail'])->name('operation.detail');
-    Route::get('/operation/{id}/account', [OperationController::class, 'account'])->name('operation.account');
-    Route::get('/operation/account', [OperationController::class, 'accountList'])->name('operation.account.list');
-    Route::get('/operation/account/create', [OperationController::class, 'createAccount'])->name('operation.account.create');
-    Route::post('/operation/account/store', [OperationController::class, 'postCreateAccount'])->name('operation.postCreateAccount');
+    Route::get('/operation', [OperationController::class, 'index'])->name('operation.index')->middleware('permission:operation list');
+    Route::get('/operation/create', [OperationController::class, 'create'])->name('operation.create')->middleware('permission:operation create');
+    Route::post('/operation/store', [OperationController::class, 'store'])->name('operation.store')->middleware('permission:operation create');
+    Route::get('/operation/{id}/edit', [OperationController::class, 'edit'])->name('operation.edit')->middleware('permission:operation edit');
+    Route::patch('/operation/{id}/store', [OperationController::class, 'update'])->name('operation.update')->middleware('permission:operation edit');
+    Route::get('/operation/{id}/account/edit', [OperationController::class, 'editAccount'])->name('operation.account.edit')->middleware('permission:operation account edit');
+    Route::patch('/operation/{id}/account/update', [OperationController::class, 'updateAccount'])->name('operation.account.update')->middleware('permission:operation account edit');
+    Route::get('/operation/{id}/detail', [OperationController::class, 'detail'])->name('operation.detail')->middleware('permission:operation detail');
+    Route::get('/operation/{id}/account', [OperationController::class, 'account'])->name('operation.account')->middleware('permission:operation account detail');
+    Route::get('/operation/account', [OperationController::class, 'accountList'])->name('operation.account.list')->middleware('permission:operation account');
+    Route::get('/operation/account/create', [OperationController::class, 'createAccount'])->name('operation.account.create')->middleware('permission:operation account create');
+    Route::post('/operation/account/store', [OperationController::class, 'postCreateAccount'])->name('operation.postCreateAccount')->middleware('permission:operation account create');
 
-    Route::get('/produksi', [ProduksiController::class, 'index'])->name('produksi.index');
-    Route::get('/produksi/create', [ProduksiController::class, 'create'])->name('produksi.create');
-    Route::post('/produksi/store', [ProduksiController::class, 'storeProduksi'])->name('produksi.store');
-    Route::get('/produksi/{id}/detail', [ProduksiController::class, 'detail'])->name('produksi.detail');
-    Route::patch('/produksi/{id}/detail/updateJahit', [ProduksiController::class, 'postSaveRow'])->name('produksi.postSaveRow');
-    Route::patch('/produksi/{id}/detail/updatewc', [ProduksiController::class, 'postEdit'])->name('produksi.postEdit');
-    Route::post('/produksi/{id}/detail/split', [ProduksiController::class, 'postPisahJahit'])->name('produksi.postPisahJahit');
-    Route::patch('/produksi/{id}/detail/gantiJahit', [ProduksiController::class, 'postGantiJahit'])->name('produksi.postGantiJahit');
-    Route::patch('/produksi/{id}/setor', [ProduksiController::class, 'postSetor'])->name('produksi.postSetor');
+    Route::get('/produksi', [ProduksiController::class, 'index'])->name('produksi.index')->middleware('permission:produksi list');
+    Route::get('/produksi/create', [ProduksiController::class, 'create'])->name('produksi.create')->middleware('permission:produksi create');
+    Route::post('/produksi/store', [ProduksiController::class, 'storeProduksi'])->name('produksi.store')->middleware('permission:produksi create');
+    Route::get('/produksi/{id}/detail', [ProduksiController::class, 'detail'])->name('produksi.detail')->middleware('permission:produksi detail');
+    Route::patch('/produksi/{id}/detail/updateJahit', [ProduksiController::class, 'postSaveRow'])->name('produksi.postSaveRow')->middleware('permission:produksi edit');
+    Route::patch('/produksi/{id}/detail/updatewc', [ProduksiController::class, 'postEdit'])->name('produksi.postEdit')->middleware('permission:produksi edit');
+    Route::post('/produksi/{id}/detail/split', [ProduksiController::class, 'postPisahJahit'])->name('produksi.postPisahJahit')->middleware('permission:produksi edit');
+    Route::patch('/produksi/{id}/detail/gantiJahit', [ProduksiController::class, 'postGantiJahit'])->name('produksi.postGantiJahit')->middleware('permission:produksi edit');
+    Route::patch('/produksi/{id}/setor', [ProduksiController::class, 'postSetor'])->name('produksi.postSetor')->middleware('permission:produksi setor');
 
-    Route::get('/produksi/potong/list', [ProduksiController::class, 'getPotongList'])->name('produksi.getPotongList');
-    Route::get('/produksi/potong/create', [ProduksiController::class, 'getPotongCreate'])->name('produksi.getPotongCreate');
-    Route::post('/produksi/potong/store', [ProduksiController::class, 'createPotong'])->name('produksi.createPotong');
-    Route::get('/produksi/potong/{id}/create', [ProduksiController::class, 'getPotongEdit'])->name('produksi.getPotongEdit');
-    Route::patch('/produksi/potong/{id}/update', [ProduksiController::class, 'updatePotong'])->name('produksi.updatePotong');
-    Route::delete('/produksi/potong/{id}/delete', [ProduksiController::class, 'postDeletePotong'])->name('produksi.postDeletePotong');
+    Route::get('/produksi/potong/list', [ProduksiController::class, 'getPotongList'])->name('produksi.getPotongList')->middleware('permission:produksi potong');
+    Route::get('/produksi/potong/create', [ProduksiController::class, 'getPotongCreate'])->name('produksi.getPotongCreate')->middleware('permission:produksi potong create');
+    Route::post('/produksi/potong/store', [ProduksiController::class, 'createPotong'])->name('produksi.createPotong')->middleware('permission:produksi potong create');
+    Route::get('/produksi/potong/{id}/edit', [ProduksiController::class, 'getPotongEdit'])->name('produksi.getPotongEdit')->middleware('permission:produksi potong edit');
+    Route::patch('/produksi/potong/{id}/update', [ProduksiController::class, 'updatePotong'])->name('produksi.updatePotong')->middleware('permission:produksi potong edit');
+    Route::delete('/produksi/potong/{id}/delete', [ProduksiController::class, 'postDeletePotong'])->name('produksi.postDeletePotong')->middleware('permission:produksi potong delete');
 
-    Route::get('/produksi/jahit/list', [ProduksiController::class, 'getJahitList'])->name('produksi.getJahitList');
-    Route::get('/produksi/jahit/create', [ProduksiController::class, 'getJahitCreate'])->name('produksi.getJahitCreate');
-    Route::post('/produksi/jahit/store', [ProduksiController::class, 'createJahit'])->name('produksi.createJahit');
-    Route::get('/produksi/jahit/{id}/create', [ProduksiController::class, 'getJahitEdit'])->name('produksi.getJahitEdit');
-    Route::patch('/produksi/jahit/{id}/update', [ProduksiController::class, 'updateJahit'])->name('produksi.updateJahit');
-    Route::delete('/produksi/jahit/{id}/delete', [ProduksiController::class, 'postDeleteJahit'])->name('produksi.postDeleteJahit');
+    Route::get('/produksi/jahit/list', [ProduksiController::class, 'getJahitList'])->name('produksi.getJahitList')->middleware('permission:produksi jahit');
+    Route::get('/produksi/jahit/create', [ProduksiController::class, 'getJahitCreate'])->name('produksi.getJahitCreate')->middleware('permission:jahit create');
+    Route::post('/produksi/jahit/store', [ProduksiController::class, 'createJahit'])->name('produksi.createJahit')->middleware('permission:jahit create');
+    Route::get('/produksi/jahit/{id}/edit', [ProduksiController::class, 'getJahitEdit'])->name('produksi.getJahitEdit')->middleware('permission:jahit edit');
+    Route::patch('/produksi/jahit/{id}/update', [ProduksiController::class, 'updateJahit'])->name('produksi.updateJahit')->middleware('permission:jahit edit');
+    Route::delete('/produksi/jahit/{id}/delete', [ProduksiController::class, 'postDeleteJahit'])->name('produksi.postDeleteJahit')->middleware('permission:jahit delete');
     
-    Route::get('/setoran', [SetoranController::class, 'index'])->name('setoran.index');
-    Route::get('/setoran/{id}/detail', [SetoranController::class, 'detail'])->name('setoran.detail');
-    Route::patch('/setoran/{id}/updatekode', [SetoranController::class, 'postEditItem'])->name('setoran.postEditItem');
-    Route::patch('/setoran/{id}/detail/updatewc', [SetoranController::class, 'postEdit'])->name('setoran.postEdit');
-    Route::patch('/setoran/{id}/detail/gantiJahit', [SetoranController::class, 'postGantiJahit'])->name('setoran.postGantiJahit');
-    Route::patch('/setoran/{id}/detail/gantiStatus', [SetoranController::class, 'postEditStatus'])->name('setoran.postEditStatus');
-    Route::patch('/setoran/{id}/detail/postGudang', [SetoranController::class, 'postGudang'])->name('setoran.postGudang');
+    Route::get('/setoran', [SetoranController::class, 'index'])->name('setoran.index')->middleware('permission:setoran list');
+    Route::get('/setoran/{id}/detail', [SetoranController::class, 'detail'])->name('setoran.detail')->middleware('permission:setoran detail');
+    Route::patch('/setoran/{id}/updatekode', [SetoranController::class, 'postEditItem'])->name('setoran.postEditItem')->middleware('permission:setoran edit item');
+    Route::patch('/setoran/{id}/detail/updatewc', [SetoranController::class, 'postEdit'])->name('setoran.postEdit')->middleware('permission:setoran edit');
+    Route::patch('/setoran/{id}/detail/gantiJahit', [SetoranController::class, 'postGantiJahit'])->name('setoran.postGantiJahit')->middleware('permission:setoran edit jahit');
+    Route::patch('/setoran/{id}/detail/gantiStatus', [SetoranController::class, 'postEditStatus'])->name('setoran.postEditStatus')->middleware('permission:setoran edit status');
+    Route::patch('/setoran/{id}/detail/postGudang', [SetoranController::class, 'postGudang'])->name('setoran.postGudang')->middleware('permission:setoran ke gudang');
 
-    Route::get('/borongan', [BoronganController::class, 'index'])->name('borongan.index');
-    Route::get('/borongan/{id}/detail', [BoronganController::class, 'detail'])->name('borongan.detail');
+    Route::get('/borongan', [BoronganController::class, 'index'])->name('borongan.index')->middleware('permission:borongan list');
+    Route::get('/borongan/{id}/detail', [BoronganController::class, 'detail'])->name('borongan.detail')->middleware('permission:borongan detail');
 
-    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
-    Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update');
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index')->middleware('permission:setting edit');
+    Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update')->middleware('permission:setting edit');
+
+    Route::get('/reports/profit-loss', [ReportController::class, 'profitLoss'])->name('report.profitLoss')->middleware('permission:report nett cash');
+    Route::get('/reports/cash', [ReportController::class, 'cash'])->name('report.cash')->middleware('permission:report nett cash');
+
+    Route::get('/user', [UserRoleController::class, 'userList'])->name('user.list')->middleware('permission:user list');
+    Route::get('/user/create', [UserRoleController::class, 'userCreate'])->name('user.create')->middleware('permission:user create');
+    Route::post('/user/store', [UserRoleController::class, 'userStore'])->name('user.store')->middleware('permission:user create');
+    Route::get('/user/{id}/edit', [UserRoleController::class, 'userEdit'])->name('user.edit')->middleware('permission:user edit');
+    Route::patch('/user/{id}/update', [UserRoleController::class, 'userUpdate'])->name('user.update')->middleware('permission:user edit');
+    Route::post('/user/{id}/ban', [UserRoleController::class, 'ban'])->name('user.ban')->middleware('permission:user ban');
+    
+    Route::get('/role', [UserRoleController::class, 'indexRole'])->name('role.indexRole')->middleware('permission:user role');
+    Route::get('/role/create', [UserRoleController::class, 'createRole'])->name('role.createRole')->middleware('permission:user create role');
+    Route::post('/role/store', [UserRoleController::class, 'storeRole'])->name('role.storeRole')->middleware('permission:user create role');
+    Route::get('/role/{id}/edit', [UserRoleController::class, 'editRole'])->name('role.editRole')->middleware('permission:user edit role');
+    Route::post('/role/{id}/update', [UserRoleController::class, 'roleUpdate'])->name('role.roleUpdate')->middleware('permission:user edit role');
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
 

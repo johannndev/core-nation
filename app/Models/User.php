@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -51,4 +52,18 @@ class User extends Authenticatable
     {
         return 'username';
     }
+
+    public static function generatePassword()
+	{
+		$string = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ12356789_!@#$%^&*';
+		$pass = '';
+		$length = 9;
+		for($i = 0; $i < 9; $i++)
+		{
+			$bit = mt_rand(0,strlen($string)-1);
+			$pass .= substr($string,$bit,1);
+		}
+
+		return $pass;
+	}
 }

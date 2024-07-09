@@ -13,6 +13,11 @@ class Customer extends Model
     protected $table = 'customers';
     protected $guarded = [];
 
+	public static function table()
+	{
+		return 'customers';
+	}
+
     const TYPE_CUSTOMER = 1;
 	const TYPE_WAREHOUSE = 2;
 	const TYPE_BANK = 3;
@@ -74,6 +79,8 @@ class Customer extends Model
 	{
 		return $this->belongsTo('App\Models\Operation','parent_id');
 	}
+
+	
 
 
 	
