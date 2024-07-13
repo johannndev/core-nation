@@ -16,6 +16,7 @@ class BoronganDetail extends Model
 	{
 		return 'prod_borongandetail';
 	}
+	public $timestamps = false;
 
 	public function item()
 	{

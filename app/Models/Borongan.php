@@ -27,6 +27,8 @@ class Borongan extends Model
 		return $this->belongsTo('App\Models\Worker','jahit_id');
 	}
 
+	public $timestamps = false;
+
 	// public function getDetailLink()
 	// {
 	// 	return \URL::action('BoronganController@getDetail',array($this->id));

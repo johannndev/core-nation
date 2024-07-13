@@ -280,6 +280,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/setoran/{id}/detail/postGudang', [SetoranController::class, 'postGudang'])->name('setoran.postGudang')->middleware('permission:setoran ke gudang');
 
     Route::get('/borongan', [BoronganController::class, 'index'])->name('borongan.index')->middleware('permission:borongan list');
+    Route::get('/borongan/ajax', [BoronganController::class, 'getAjaxBorongan'])->name('borongan.ajax')->middleware('permission:borongan create');
+    Route::get('/borongan/create', [BoronganController::class, 'create'])->name('borongan.create')->middleware('permission:borongan create');
+    Route::post('/borongan/store', [BoronganController::class, 'postAdd'])->name('borongan.postAdd')->middleware('permission:borongan create');
     Route::get('/borongan/{id}/detail', [BoronganController::class, 'detail'])->name('borongan.detail')->middleware('permission:borongan detail');
 
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index')->middleware('permission:setting edit');
