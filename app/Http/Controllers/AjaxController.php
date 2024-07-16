@@ -17,7 +17,7 @@ class AjaxController extends Controller
     public function getCostumer(Request $request)
     {
        
-        $customer = Customer::where('name','like','%'.$request->search.'%')->whereIn('type',explode(",",$request->type))->get();
+        $customer = Customer::where('name','like','%'.$request->search.'%')->whereIn('type',explode(",",$request->type))->paginate();
 
         // $customer = $customer->get(['id', 'name']);
         return response()->json($customer, 200);
@@ -44,7 +44,9 @@ class AjaxController extends Controller
     public function getItem(Request $request)
     {
        
-        $item = Item::where('name','like','%'.$request->q.'%')->orderBy('name','asc')->get();
+        $item = Item::where('name','like','%'.$request->search.'%')->orderBy('name','asc')->paginate();
+
+        // dd($item);
         
         return response()->json($item, 200);
     }

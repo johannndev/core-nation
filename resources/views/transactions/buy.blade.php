@@ -61,9 +61,9 @@
 
                            
 
-                            <x-partial.data-list :dataProp='$dataListPropSender' />
+                            <x-partial.select-addr :dataProp='$dataListPropSender' />
 
-                            <x-partial.data-list :dataProp='$dataListPropRecaiver' />
+                            <x-partial.select-addr :dataProp='$dataListPropRecaiver' />
 
                             
                            

@@ -6,22 +6,61 @@
     @apply text-blue-500
 }
 
+.select2-selection { overflow: hidden; }
+.select2-selection__rendered { white-space: normal; word-break: break-all; }
+
+
 .select2-container--default .select2-selection--single{
-    @apply h-full  w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
-}
-.select2-container.select2-container--default {
-    @apply !w-full
+    @apply !pb-9 !pt-1.5 ps-0.5 pe-2 !border !border-gray-300 !rounded-lg !text-sm;
 }
 
-.select2-container.select2-container--default.select2-container--open {
-    @apply !w-11/12  
+.not-valid .select2-container--default{
+    @apply !border-red-500 !bg-red-50 !text-red-900
 }
 
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    @apply h-[26px] absolute w-5 top-0 bottom-0 m-auto;
+.not-valid .select2-selection--single{
+    @apply !border-red-500 !bg-red-50 !text-red-900
 }
 
-.select2-container--open .select2-dropdown--above{
-    @apply border border-gray-300
+.not-valid .select2-selection__placeholder {
+    @apply !text-red-900
+}
+
+
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+    @apply !top-2;
+}
+
+.select2-dropdown{
+    @apply !border !rounded-lg !border-gray-300 !mb-4 !p-3;
+}
+
+.select2-search--dropdown{
+    @apply !px-0 
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    @apply !border !border-gray-300 !rounded-lg !p-2.5 !text-sm
+}
+
+.select2-container--open .select2-dropdown--below{
+    @apply !border-t-[1px] !w-56 ;
+
+}
+
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable{
+    @apply !rounded-lg !p-2.5 !text-sm
+}
+
+.select2-container--default .select2-results__option--selected{
+    @apply !rounded-lg !p-2.5 !text-sm
+}
+
+.select2-results__option{
+    @apply !rounded-lg !p-2.5 !text-sm !mt-1
+}
+
+.select2-container .select2-container--default .select2-container--open{
+    top: 430.4px !important;
 }
 
