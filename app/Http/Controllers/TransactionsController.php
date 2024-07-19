@@ -6,6 +6,7 @@ use App\Exceptions\ModelException;
 use App\Helpers\AppSettingsHelper;
 use App\Helpers\CCManagerHelper;
 use App\Helpers\DateHelper;
+use App\Helpers\DeleterHelper;
 use App\Helpers\HashManagerHelper;
 use App\Helpers\InvoiceTrackerHelpers;
 use App\Helpers\StatManagerHelper;
@@ -301,16 +302,23 @@ class TransactionsController extends Controller
 		}
 	}
 
-    public function getDetail($id)
+    public function getDetail($id, Request $request)
     {
 
 		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
 
 		$nameWh = StockManagerHelpers::$names;
 
-		
+		if($request->receipt == 1){
 
-		return view('transactions.detail',compact('data','nameWh'));
+			return view('layouts.receipt',compact('data','nameWh'));
+			
+
+		}else{
+			return view('transactions.detail',compact('data','nameWh'));
+		}
+
+		
 
     }
 
@@ -926,6 +934,32 @@ class TransactionsController extends Controller
 	public function postReturnSupplier(Request $request)
 	{
 		return $this->createTransaction(Transaction::TYPE_RETURN_SUPPLIER, $request);
+	}
+
+	public function postDelete($id)
+	{
+		
+		if(!$t = Transaction::where('id','=',$id)->first())
+			return App::abort(404);
+
+			DB::beginTransaction();
+
+		
+		$deleter = new DeleterHelper;
+		$deleted = $deleter->delete($t);
+		InvoiceTrackerHelpers::flag($t);
+		HashManagerHelper::delete($t);
+
+	
+
+		DB::commit();
+
+		return redirect()->route('transaction.getDetailDelete',$id)->with('success', 'Transaction # ' . $deleted->id. ' deleted.');
+
+
+		
+
+		
 	}
 
 	

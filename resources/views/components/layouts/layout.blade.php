@@ -49,7 +49,7 @@
 		
 
 	
-		<main class="p-4 md:ml-64 h-auto pt-20">
+		<main class="p-4 print:ml-0 md:ml-64 h-auto pt-28  print:pt-0 md:pt-20">
 		  
         {{ $slot }}
 		 

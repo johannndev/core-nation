@@ -21,30 +21,41 @@
 <h3 class="title center"><img src="{{ asset('img/logo20px.jpg') }}" width="15px" />&nbsp;CORENATION</h3>
 <div class="center">@corenationactive</div>
 <hr/>
-<div class="float-left">Bill No: {{ $transaction->invoice }}</div>
-<div class="float-right">Date: {{ $transaction->printDate() }}</div>
+<div class="float-left">Bill No: {{ $data->id }}</div>
+<div class="float-right">Date: {{\Carbon\Carbon::parse($data->date)->format('d/m/Y')}}</div>
 <div class="clear"></div>
 <hr/>
-<? $subtotal = 0; ?>
+@php
+
+	$subtotal =0;
+		
+	@endphp
+
 <div class="content">
-@foreach($details as $d)
+@foreach($data->transactionDetail as $d)
 <div class="row">
-	<div>{{ $d['quantity'] }} x {{ $d['name'] }}
-		@if($d['discount'] > 0)
-		( {{ $d['discount'] }} % )
+	<div>{{ $d->quantity }} x {{ $d->item->getItemName() }}
+		@if($d->discount > 0)
+		( {{ $d->discount }} % )
 		@endif
 	</div>
-	<div class="right">{{ nf($d['total']) }}</div>
+	<div class="right">{{ Number::format($d->total) }}</div>
 </div>
-<? $subtotal += $d['total']; ?>
+
+	@php
+
+	$subtotal += $d->total;
+		
+	@endphp
+
 @endforeach
 </div>
 <hr>
-@if($transaction->discount > 0)
-<div class="right">Subtotal: {{ nf($subtotal) }}</div>
-<div class="right">Discount: {{ nf($transaction->discount) }}%</div>
+@if($data->discount > 0)
+<div class="right">Subtotal: {{ Number::format($subtotal) }}</div>
+<div class="right">Discount: {{ Number::format($data->discount) }}%</div>
 @endif
-<div class="right">Total: {{ nf(0 - $transaction->total) }}</div>
+<div class="right">Total: {{ Number::format($data->total) }}</div>
 <hr>
 <p class="center">Thank you for shopping with CORENATION</p>
 </body>

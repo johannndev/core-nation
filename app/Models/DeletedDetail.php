@@ -12,6 +12,8 @@ class DeletedDetail extends Model
     protected $table = 'deleted_details';
 
     protected $guarded = [];
+    public $timestamps = false;
+
 
     public function item()
 	{

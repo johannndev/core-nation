@@ -24,7 +24,7 @@
 
                 <div class="text-right">
                     <p class="text-sm text-gray-500">Total</p>
-                    <p class="font-bold text-xl">{{number_format($data->total,2)}}</p>
+                    <p class="font-bold text-lg md:text-xl">{{number_format($data->total,2)}}</p>
                 </div>
 
             </div>
@@ -32,16 +32,16 @@
 
         <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-2 gap-4">
 
             <div>
-                <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-                    <div class="grid grid-cols-1 divide-y">
+                <div class="bg-white dark:bg-gray-800 relative print:shadow-none shadow-md sm:rounded-lg overflow-hidden">
+                    <div class="grid grid-cols-1 divide-y print:divide-y-0">
                         @isset($data->sender)
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
                                     <p class="font-bold">From</p>
                                 </div>
                                 <div class="col-span-3">
@@ -55,8 +55,8 @@
                         @if ($data->type != 8)
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
                                     <p class="font-bold">To</p>
                                 </div>
                                 <div class="col-span-3">
@@ -71,8 +71,8 @@
                         @if ($data->description)
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
                                     <p class="font-bold">Note</p>
                                 </div>
                                 <div class="col-span-3">
@@ -88,11 +88,11 @@
             </div>
 
             <div>
-                <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-                    <div class="grid grid-cols-1 divide-y">
+                <div class="bg-white dark:bg-gray-800 relative  print:shadow-none shadow-md sm:rounded-lg overflow-hidden">
+                    <div class="grid grid-cols-1 divide-y print:divide-y-0">
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
                                     <p class="font-bold">Date</p>
                                 </div>
                                 <div class="col-span-3">
@@ -102,8 +102,8 @@
                         </div>
                        
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-3">
                                     <p class="font-bold">Due</p>
                                 </div>
                                 <div class="col-span-3">
@@ -113,8 +113,8 @@
                         </div>
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
                                     <p class="font-bold">Invoice Discount</p>
                                 </div>
                                 <div class="col-span-3">
@@ -124,8 +124,8 @@
                         </div>
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
                                     <p class="font-bold">Adjustment</p>
                                 </div>
                                 <div class="col-span-3">
@@ -137,8 +137,8 @@
                         @if($data->ppn > 0)
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
                                     <p class="font-bold">PPN</p>
                                 </div>
                                 <div class="col-span-3">
@@ -150,8 +150,8 @@
                         @endif
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
                                     <p class="font-bold">Items</p>
                                 </div>
                                 <div class="col-span-3">
@@ -164,8 +164,8 @@
                         @if($data->user)
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
                                     <p class="font-bold">User</p>
                                 </div>
                                 <div class="col-span-3">
@@ -177,8 +177,8 @@
                         @endif
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
                                     <p class="font-bold">Total Before Disc</p>
                                 </div>
                                 <div class="col-span-3">
@@ -201,27 +201,27 @@
     </div>
 
     <section class="bg-gray-50 dark:bg-gray-900 mb-8">
-        <div class=" ">
-            <div class="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
-                <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
+        <div class="">
+            <div class="relative overflow-hidden bg-white print:shadow-none shadow-md dark:bg-gray-800 sm:rounded-lg">
+                <div class="print:hidden flex  px-4 py-3  flex-row items-center justify-between ">
                     <div class="flex items-center flex-1 space-x-4">
-                        <button type="button" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                        <button onClick="window.print()" type="button" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                             <svg  class="w-4 h-4 mr-2"  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                 <path fill-rule="evenodd" d="M8 3a2 2 0 0 0-2 2v3h12V5a2 2 0 0 0-2-2H8Zm-3 7a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h1v-4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v4h1a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2H5Zm4 11a1 1 0 0 1-1-1v-4h8v4a1 1 0 0 1-1 1H9Z" clip-rule="evenodd"/>
                             </svg>
                             Print
                         </button>
-                        <button type="button" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                        <a href="{{route('transaction.getDetail',[$data->id,'receipt'=>1])}}" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                             <svg class="w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                 <path fill-rule="evenodd" d="M5.617 2.076a1 1 0 0 1 1.09.217L8 3.586l1.293-1.293a1 1 0 0 1 1.414 0L12 3.586l1.293-1.293a1 1 0 0 1 1.414 0L16 3.586l1.293-1.293A1 1 0 0 1 19 3v18a1 1 0 0 1-1.707.707L16 20.414l-1.293 1.293a1 1 0 0 1-1.414 0L12 20.414l-1.293 1.293a1 1 0 0 1-1.414 0L8 20.414l-1.293 1.293A1 1 0 0 1 5 21V3a1 1 0 0 1 .617-.924ZM9 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H9Zm0 4a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Zm0 4a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z" clip-rule="evenodd"/>
                               </svg>
                               
                            
-                            Recaipt
-                        </button>
+                            Receipt
+                        </a>
                     </div>
-                    <div class="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
-                        <button type="button" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 rounded-lg">
+                    <div class="">
+                        <button type="button" id="deleteButton" data-modal-target="deleteModal" data-modal-toggle="deleteModal" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 rounded-lg">
                             
 
                             <svg class="h-3.5 w-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -230,38 +230,71 @@
                               
                            Delete
                         </button>
+
+                      
+                        
+                        <!-- Main modal -->
+                        <div id="deleteModal" tabindex="-1" aria-hidden="true" class=" hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+                            <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                                <!-- Modal content -->
+                                <div class="relative p-4 mt-40 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                                    <button type="button" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="deleteModal">
+                                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                    <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                                    <p class=" text-gray-500 dark:text-gray-300">Are you sure you want to delete this item?</p>
+                                    <p class="mb-4 text-gray-500 dark:text-gray-300">For every deleted transaction, your IQ will drop by 1pt</p>
+                                    <div class="flex justify-center items-center space-x-4">
+                                        <button data-modal-toggle="deleteModal" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                                            No, cancel
+                                        </button>
+
+                                        <form action="{{route('transaction.destroy',$data->id)}}" method="post">
+
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                                Yes, I'm sure
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                    
                         
                     </div>
                 </div>
 
-                <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row items-center  lg:space-y-0 lg:space-x-4">
-                    <div>
+                <div class="print:hidden flex flex-wrap px-4 py-3 space-y-2  items-center  lg:space-y-0 ">
+                    <div class="w-full md:w-auto md:mr-6">
                         <p class="me-2">Show:</p>
                     </div>
 
-                    <div>
+                    <div class="mr-4">
                         <div class="flex items-center ">
                             <input checked id="image-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="image-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Image</label>
                         </div>
                     </div>
 
-                    <div>
+                    <div class="mr-4">
                         <div class="flex items-center ">
                             <input checked id="barcode-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="barcode-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Barcode</label>
                         </div>
                     </div>
 
-                    <div>
+                    <div class="mr-4">
                         <div class="flex items-center ">
                             <input id="sku-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="sku-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">SKU</label>
                         </div>
                     </div>
 
-                    <div>
+                    <div class="mr-4">
                         <div class="flex items-center ">
                             <input id="wh-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="wh-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Warehouse Stok</label>
@@ -269,28 +302,28 @@
                     </div>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                    <table class="w-full print:table-fixed text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs print:text-[10px] text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="image-col  px-4 py-3">Image</th>
-                                <th scope="col" class="barcode-col  px-4 py-3">Barcode</th>
-                                <th scope="col" class="sku-col hidden px-4 py-3">SKU</th>
-                                <th scope="col" class="px-4 py-3">Code</th>
-                                <th scope="col" class="px-4 py-3">Name</th>
-                                <th scope="col" class="px-4 py-3">Desc</th>
-                                <th scope="col" class="sku-col hidden px-4 py-3">NB</th>
-                                <th scope="col" class="px-4 py-3">Quantity</th>
-                                <th scope="col" class="px-4 py-3">Price</th>
-                                <th scope="col" class="px-4 py-3">Discount(%)</th>
-                                <th scope="col" class="px-4 py-3">Sub-Total</th>
+                                <th scope="col" class="image-col  px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">Image</th>
+                                <th scope="col" class="barcode-col  px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">Barcode</th>
+                                <th scope="col" class="sku-col hidden px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">SKU</th>
+                                <th scope="col" class="px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">Code</th>
+                                <th scope="col" class="px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">Name</th>
+                                <th scope="col" class="px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">Desc</th>
+                                <th scope="col" class="sku-col hidden px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">NB</th>
+                                <th scope="col" class="px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">Quantity</th>
+                                <th scope="col" class="px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">Price</th>
+                                <th scope="col" class="px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">Discount(%)</th>
+                                <th scope="col" class="px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">Sub-Total</th>
                                 @foreach ($nameWh as $wh)
-                                    <th scope="col" class=" wh-col hidden px-4 py-3">{{$wh}}</th>
+                                    <th scope="col" class=" wh-col hidden px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">{{$wh}}</th>
                                 @endforeach
                                
                                 
                             </tr>
                         </thead>
-                        <tbody  id="accordion-collapse" data-accordion="collapse">
+                        <tbody  id="accordion-collapse" data-accordion="collapse" class="print:text-[10px]">
 
                             @forelse ($data->transactionDetail as $itemTd)
                             @php
@@ -301,52 +334,52 @@
                            
                             <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
                            
-                                <th scope="row" id="" class="image-col  px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <th scope="row" id="" class="image-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <div class=" mr-3">
-                                        <x-partial.image type="h-20 w-20" :url="$url" />
+                                        <x-partial.image type="h-20 w-20 print:h-10 print:w-10" :url="$url" />
                                     </div>
 
                                 </th>
 
-                                <td class="barcode-col  px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
                                     {{$itemTd->item->id}}
                                 </td>
 
-                                <td class="sku-col hidden px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <td class="sku-col hidden px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
                                     {{$itemTd->item->code}}
                                 </td>
 
 
-                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
                                     {{$itemTd->item->getItemCode()}}
                                 </td>
                                
-                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-normal max-w-40 dark:text-white">
-                                    <p class="min-w-40">{{$itemTd->item->getItemName()}}</p>
+                                <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-normal max-w-40 dark:text-white">
+                                    <p class="min-w-40 print:min-w-0 print:whitespace-normal print:break-words ">{{$itemTd->item->getItemName()}}</p>
                                 </td>
 
-                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-normal dark:text-white">
-                                    <p class="min-w-40">{{$itemTd->item->group? $itemTd->item->group->description : $itemTd->item->description}}</p>
+                                <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900  whitespace-normal dark:text-white">
+                                    <p class="min-w-40 print:min-w-0  print:whitespace-normal print:break-words ">{{$itemTd->item->group? $itemTd->item->group->description : $itemTd->item->description}}</p>
                                     
                                 </td>
-                                <td class="sku-col hidden px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <td class="sku-col hidden px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{$itemTd->description2}}
                                 </td>
 
-                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{$itemTd->quantity}}
                                 </td>
 
-                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{$itemTd->price}}
+                                <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{Number::format($itemTd->price)}}
                                 </td>
 
-                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{$itemTd->discount}}
+                                <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{Number::format($itemTd->discount)}}
                                 </td>
 
-                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{$itemTd->total}}
+                                <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{Number::format($itemTd->total)}}
                                 </td>
 
                                 <x-transaction.warehouse-item  :idItem="$idItem"/>
@@ -361,6 +394,26 @@
                             
                         </tbody>
                     </table>
+                </div>
+
+                <div class="mt-2 hidden print:block">
+                    
+
+                    <div class="grid grid-cols-12">
+
+                        <div class="col-span-4">
+                            <p>Yang Mengetahui,</p>
+                        </div>
+
+                        <div class="col-span-4">
+                            <p>Pemberi,</p>
+                        </div>
+
+                        <div class="col-span-4">
+                            <p>Penerima,</p>
+                        </div>
+
+                    </div>
                 </div>
                 {{-- <nav class="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0" aria-label="Table navigation">
                     <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
@@ -406,6 +459,7 @@
             </div>
         </div>
       </section>
+
 
       @push('jsBody')
 

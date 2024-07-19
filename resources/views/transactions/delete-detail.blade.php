@@ -24,7 +24,7 @@
 
                 <div class="text-right">
                     <p class="text-sm text-gray-500">Total</p>
-                    <p class="font-bold text-xl">{{number_format($data->total,2)}}</p>
+                    <p class="font-bold text-lg md:text-xl">{{number_format($data->total,2)}}</p>
                 </div>
 
             </div>
@@ -32,14 +32,14 @@
 
         <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-2 gap-4">
 
             <div>
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                     <div class="grid grid-cols-1 divide-y">
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div class="col-span-2">
                                     <p class="font-bold">From</p>
                                 </div>
                                 <div class="col-span-3">
@@ -51,8 +51,8 @@
                         @if ($data->type != 8)
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div class="col-span-2">
                                     <p class="font-bold">To</p>
                                 </div>
                                 <div class="col-span-3">
@@ -67,8 +67,8 @@
                         @if ($data->description)
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div class="col-span-2">
                                     <p class="font-bold">Note</p>
                                 </div>
                                 <div class="col-span-3">
@@ -87,8 +87,8 @@
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                     <div class="grid grid-cols-1 divide-y">
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div class="col-span-2">
                                     <p class="font-bold">Date</p>
                                 </div>
                                 <div class="col-span-3">
@@ -98,8 +98,8 @@
                         </div>
                        
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div class="col-span-2">
                                     <p class="font-bold">Due</p>
                                 </div>
                                 <div class="col-span-3">
@@ -109,8 +109,8 @@
                         </div>
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div class="col-span-2">
                                     <p class="font-bold">Invoice Discount</p>
                                 </div>
                                 <div class="col-span-3">
@@ -120,8 +120,8 @@
                         </div>
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div class="col-span-2">
                                     <p class="font-bold">Adjustment</p>
                                 </div>
                                 <div class="col-span-3">
@@ -133,8 +133,8 @@
                         @if($data->ppn > 0)
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div class="col-span-2">
                                     <p class="font-bold">PPN</p>
                                 </div>
                                 <div class="col-span-3">
@@ -146,8 +146,8 @@
                         @endif
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div class="col-span-2">
                                     <p class="font-bold">Items</p>
                                 </div>
                                 <div class="col-span-3">
@@ -160,8 +160,8 @@
                         @if($data->user)
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div class="col-span-2">
                                     <p class="font-bold">User</p>
                                 </div>
                                 <div class="col-span-3">
@@ -173,8 +173,8 @@
                         @endif
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div class="col-span-2">
                                     <p class="font-bold">Total Before Disc</p>
                                 </div>
                                 <div class="col-span-3">
@@ -199,65 +199,34 @@
     <section class="bg-gray-50 dark:bg-gray-900 mb-8">
         <div class=" ">
             <div class="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
-                <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
-                    <div class="flex items-center flex-1 space-x-4">
-                        <button type="button" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                            <svg  class="w-4 h-4 mr-2"  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd" d="M8 3a2 2 0 0 0-2 2v3h12V5a2 2 0 0 0-2-2H8Zm-3 7a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h1v-4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v4h1a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2H5Zm4 11a1 1 0 0 1-1-1v-4h8v4a1 1 0 0 1-1 1H9Z" clip-rule="evenodd"/>
-                            </svg>
-                            Print
-                        </button>
-                        <button type="button" class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                            <svg class="w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd" d="M5.617 2.076a1 1 0 0 1 1.09.217L8 3.586l1.293-1.293a1 1 0 0 1 1.414 0L12 3.586l1.293-1.293a1 1 0 0 1 1.414 0L16 3.586l1.293-1.293A1 1 0 0 1 19 3v18a1 1 0 0 1-1.707.707L16 20.414l-1.293 1.293a1 1 0 0 1-1.414 0L12 20.414l-1.293 1.293a1 1 0 0 1-1.414 0L8 20.414l-1.293 1.293A1 1 0 0 1 5 21V3a1 1 0 0 1 .617-.924ZM9 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H9Zm0 4a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Zm0 4a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z" clip-rule="evenodd"/>
-                              </svg>
-                              
-                           
-                            Recaipt
-                        </button>
-                    </div>
-                    <div class="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
-                        <button type="button" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 rounded-lg">
-                            
 
-                            <svg class="h-3.5 w-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd" d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd"/>
-                            </svg>
-                              
-                           Delete
-                        </button>
-                   
-                        
-                    </div>
-                </div>
-
-                <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row items-center  lg:space-y-0 lg:space-x-4">
-                    <div>
+                <div class="print:hidden  flex flex-wrap px-4 py-3 space-y-2  items-center  lg:space-y-0">
+                    <div class="w-full md:w-auto md:mr-6">
                         <p class="me-2">Show:</p>
                     </div>
 
-                    <div>
+                    <div class="mr-4">
                         <div class="flex items-center ">
                             <input checked id="image-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="image-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Image</label>
                         </div>
                     </div>
 
-                    <div>
+                    <div class="mr-4">
                         <div class="flex items-center ">
                             <input checked id="barcode-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="barcode-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Barcode</label>
                         </div>
                     </div>
 
-                    <div>
+                    <div class="mr-4">
                         <div class="flex items-center ">
                             <input id="sku-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="sku-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">SKU</label>
                         </div>
                     </div>
 
-                    <div>
+                    <div class="mr-4">
                         <div class="flex items-center ">
                             <input id="wh-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="wh-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Warehouse Stok</label>
@@ -290,8 +259,8 @@
 
                             @forelse ($data->transactionDetail as $itemTd)
                             @php
-                                $idItem = $itemTd->item->id;
-                                $type = 'items';
+                              $idItem = $itemTd->item->id;
+                              $url = $itemTd->item->getImageUrl();
                             @endphp
                             
                            
@@ -299,7 +268,8 @@
                            
                                 <th scope="row" id="" class="image-col  px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <div class="h-20 w-20 mr-3">
-                                        <x-partial.image :idItem="$idItem" :type="$type"/>
+                                       
+                                        <x-partial.image type="h-20 w-20 print:h-10 print:w-10" :url="$url" />
                                     </div>
 
                                 </th>
