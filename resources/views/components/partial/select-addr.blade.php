@@ -4,7 +4,7 @@
 
         <div class="@error($dataProp['id']) not-valid @enderror">
             <div class="relative mb-4">
-                <select class="{{$dataProp['id']}}" name="{{$dataProp['id']}}">
+                <select class="{{$dataProp['id']}}" name="{{$dataProp['id']}}" id="{{$dataProp['id']}}">
                     <option ></option>
                 </select>
 

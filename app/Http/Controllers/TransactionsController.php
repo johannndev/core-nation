@@ -327,7 +327,7 @@ class TransactionsController extends Controller
 		$trType = 'move';
 
 		$dataListPropRecaiver = [
-			"label" => "Recaver",
+			"label" => "Receiver",
 			"id" => "recaiver",
 			"idList" => "datalistRecaiver",
 			"idOption" => "datalistOptionsRecaiver",

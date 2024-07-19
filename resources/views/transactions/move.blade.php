@@ -2,7 +2,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">New Buy</p>
+        <p class="text-2xl font-bold">New Move</p>
 
        
     </div>
@@ -53,10 +53,10 @@
 
                             </div>
 
-                            <x-partial.data-list :dataProp='$dataListPropSender' />
+                            <x-partial.select-addr :dataProp='$dataListPropSender' />
 
 
-                            <x-partial.data-list :dataProp='$dataListPropRecaiver' />
+                            <x-partial.select-addr :dataProp='$dataListPropRecaiver' />
  
 
                             <div class="col-span-2">
@@ -173,16 +173,24 @@
                                         <input type="text" name="addMoreInputFields[0][itemId]"  id="id0"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
                                 
                                         <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
-                                        <input  onkeydown="return handleCode(event,0)" type="text" name="addMoreInputFields[0][code]"  id="code0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  />
+                                        <input  onkeydown="return handleCode(event,0)" type="search" name="addMoreInputFields[0][code]"  id="code0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  inputmode="search"/>
                                     </div>
                                     <div>
                                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
                                        
                                         <div class="">
                                 
-                                            <input id="name0" list="name-list0" onkeydown="handleName(event,0)" autocomplete="off" type="text" name="addMoreInputFields[0][name]"  class="nameList register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""   />
-
-                                            <datalist id="name-list0"></datalist>
+                                            <div class="relative ">
+                                                <select class="select2-ajax-item" id="name0" name="addMoreInputFields[0][name]" data-customId="0">
+                                                    
+                                                    <option ></option>
+                                                </select>
+                                
+                                                @error('')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                                
+                                            </div>
 
                                         </div>
                                    
@@ -190,7 +198,7 @@
                                     </div>
                                     <div>
                                         <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 ">Quantity </label>
-                                        <input onkeyup="return handleQty(event,0)" type="text" name="addMoreInputFields[0][quantity]"  id="quantity0" class="qty register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                        <input onkeyup="return handleQty(event,0)" type="search" name="addMoreInputFields[0][quantity]"  id="quantity0" class="qty register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search"/>
                                     </div>  
                                     <div>
                                         <label for="wh" class="block mb-2 text-sm font-medium text-gray-900 ">Warehouse</label>
@@ -199,12 +207,12 @@
                                 
                                     <div>
                                         <label for="price" class="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
-                                        <input onkeyup="return handlePrice(event,0)" type="text" name="addMoreInputFields[0][price]"  id="price0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                        <input onkeyup="return handlePrice(event,0)" type="search" name="addMoreInputFields[0][price]"  id="price0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search"/>
                                     </div> 
                                     
                                     <div class="hidden">
                                         <label for="discount" class="block mb-2 text-sm font-medium text-gray-900 ">Discount</label>
-                                        <input hidden onkeyup="return handleDisc(event,0)" type="text" name="addMoreInputFields[0][discount]"   id="discount0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                        <input hidden onkeyup="return handleDisc(event,0)" type="search" name="addMoreInputFields[0][discount]"   id="discount0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search"/>
                                     </div> 
                                 
                                     <div>
