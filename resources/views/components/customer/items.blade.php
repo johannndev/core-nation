@@ -1,10 +1,10 @@
 <div>
-    <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row items-center  lg:space-y-0 lg:space-x-4">
-        <div>
+    <div class="flex flex-wrap px-4 py-3 space-y-2  items-center  lg:space-y-0">
+        <div class="w-full md:w-auto md:mr-6">
             <p class="me-2">Show:</p>
         </div>
 
-        <div>
+        <div class="mr-4">
             <div class="flex items-center ">
                 <input id="image-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                 <label for="image-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Image</label>
@@ -12,7 +12,7 @@
 
         </div>
 
-        <div>
+        <div class="mr-4">
             <div class="flex items-center ">
                 <input id="online-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                 <label for="online-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Online</label>

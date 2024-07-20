@@ -47,12 +47,12 @@
                             
                             <div class="w-full md:w-4/6">
                             
-                                <div class="grid gap-4 md:grid-cols-5 items-end">
-                                    <div>
+                                <div class="grid gap-4 grid-cols-5 items-end">
+                                    <div class="col-span-5 md:col-span-1">
                                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
                                         <input type="text" id="name" name="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  value="{{Request('name')}}"/>
                                     </div>
-                                    <div>
+                                    <div class="col-span-5 md:col-span-1">
 
                                         <label for="sort" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sort</label>
                                         <select id="sort" name="sort" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -70,7 +70,7 @@
                                         </select>
 
                                     </div>
-                                    <div class="col-span-2">
+                                    <div class="col-span-5 md:col-span-2">
                                         <label class="inline-flex items-center cursor-pointer py-2.5">
                                             <span class="me-3 text-sm font-medium text-gray-900 dark:text-gray-300">Hide 0</span>
                                             <input type="checkbox" value="show" name="show0" class="sr-only peer"  {{Request('show0') ? 'checked' : ''}} >
@@ -87,7 +87,7 @@
                                     
                                 
                             </div>
-                            <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                            <div class="mt-4 w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                                 <button type="submit" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-4 w-4 mr-2 " viewbox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
