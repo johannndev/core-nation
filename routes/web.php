@@ -234,6 +234,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/addrbook/{id}/update', [AddrbookController::class, 'postEdit'])->name('addrbook.update')->middleware('permission:customer edit|supplier edit|reseller edit|warehouse edit|vwarehouse edit|account edit|vaccount edit');
     Route::post('/addrbook/{id}/delete', [AddrbookController::class, 'postDelete'])->name('addrbook.delete')->middleware('permission:customer delete|supplier delete|reseller delete|warehouse delete|vwarehouse delete|account delete|vaccount delete');
     Route::post('/addrbook/{id}/restore', [AddrbookController::class, 'postRestore'])->name('addrbook.restore')->middleware('permission:customer restore|supplier restore|reseller restore|warehouse restore|vwarehouse restore|account restore|vaccount restore');
+    Route::get('/addrbook/downloand/transaction', [AddrbookController::class, 'exportTransaction'])->name('export.transaction')->middleware('permission:customer create|supplier create|reseller create|warehouse create|vwarehouse create|account create|vaccount create');
+    Route::get('/addrbook/downloand/item', [AddrbookController::class, 'exportItem'])->name('export.item')->middleware('permission:customer create|supplier create|reseller create|warehouse create|vwarehouse create|account create|vaccount create');
 
     Route::get('/operation', [OperationController::class, 'index'])->name('operation.index')->middleware('permission:operation list');
     Route::get('/operation/create', [OperationController::class, 'create'])->name('operation.create')->middleware('permission:operation create');

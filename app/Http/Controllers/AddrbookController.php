@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ModelException;
+use App\Exports\AddrBookItemExport;
+use App\Exports\AddrBookTransactionExport;
 use App\Helpers\CCManagerHelper;
 use App\Helpers\DateHelper;
 use App\Models\Customer;
@@ -11,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AddrbookController extends Controller
 {
@@ -254,5 +257,16 @@ class AddrbookController extends Controller
 		$customer->restore();
 
         return redirect()->route($request->action.'.index')->with('success',$customer->name.' deleted');
+	}
+
+	public function exportTransaction(Request $request) 
+	{
+		return Excel::download(new AddrBookTransactionExport($request->from,$request->to,$request->type,$request->cid), $request->filename.'.csv');
+	}
+
+	public function exportItem(Request $request) 
+	{
+
+		return Excel::download(new AddrBookItemExport($request->cid,$request->name,$request->sort,$request->show0,), $request->filename.'.csv');
 	}
 }

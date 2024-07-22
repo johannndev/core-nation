@@ -109,6 +109,15 @@
                                     Clear
                                 </a>
 
+                                <a href="{{route('export.item',['cid'=>$cid, 'name'=>Request('name'), 'sort'=>Request('sort'), 'show0'=>Request('show0'),'page'=>Request('page'),'filename'=>'customer_item'])}}" class="flex items-center justify-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4 mr-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                      </svg>
+
+                                    Download CSV
+                                </a>
+
                             
                             </div>
 

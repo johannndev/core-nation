@@ -32,10 +32,12 @@
 
                     </th>
            
-                    <td class="px-4 py-3">{{$item->type_name}}</td>
+                    <td class="px-4 py-3">
+                        <span class="text-nowrap bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{$item->type_name}}</span>
+                    </td>
                     <td class="px-4 py-3">{{$item->invoice}}</td>
                    
-                    <td class="px-4 py-3 w-60">{{$item->description}}</td>
+                    <td class="px-4 py-3 w-60 des-link">{!! $item->description !!}</td>
                     <td class="px-4 py-3">{{Number::format($item->total,2)}}</td>
                     <td class="px-4 py-3">{{Number::format($item->total_items,2)}}</td>
                     <td class="px-4 py-3">
