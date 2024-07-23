@@ -469,7 +469,7 @@
         @endif
 
 
-        @if(auth()->user()->can('operation list') || auth()->user()->can('account list')  )
+        @if(auth()->user()->can('operation list') || auth()->user()->can('operation account')  )
         <li>
 
             <button
@@ -530,13 +530,13 @@
                 </li>
                 @endcan
 
-                @can('account list')
+                @can('operation account')
                 
                 <li>
 
                     <div class="flex justify-between">
 
-                        <a href="{{route('account.index')}}" class=" flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Account List</a>
+                        <a href="{{route('operation.account.list')}}" class=" flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Account List</a>
 
                         <a href="{{route('operation.account.create')}}" class="flex items-center py-2 px-4  w-auto text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
