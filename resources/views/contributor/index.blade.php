@@ -79,7 +79,7 @@
                                     
                                 
                             </div>
-                            <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                            <div class="mt-4 w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                                 <button type="submit" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-4 w-4 mr-2 " viewbox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
@@ -108,10 +108,9 @@
                         </div>
                     </form>
                    
-                    <div class="overflow-x-auto">
+                   
                        
-                    </div>
-
+                   
                  
 
                    
@@ -132,7 +131,9 @@
                 </h2>
                 <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="accordion-collapse-heading-1">
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 ">
+                    <div class="overflow-x-auto">
                     <x-contributor.top />
+                    </div>
                 </div>
                 </div>
                 <h2 id="accordion-collapse-heading-2">
@@ -145,7 +146,9 @@
                 </h2>
                 <div id="accordion-collapse-body-2" class="hidden" aria-labelledby="accordion-collapse-heading-2">
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700">
+                    <div class="overflow-x-auto">
                     <x-contributor.brand />
+                    </div>
                 </div>
                 </div>
                 <h2 id="accordion-collapse-heading-3">
@@ -158,7 +161,9 @@
                 </h2>
                 <div id="accordion-collapse-body-3" class="hidden" aria-labelledby="accordion-collapse-heading-3">
                 <div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700">
+                    <div class="overflow-x-auto">
                     <x-contributor.type />
+                    </div>
                 </div>
                 </div>
 
@@ -172,7 +177,9 @@
                 </h2>
                 <div id="accordion-collapse-body-4" class="hidden" aria-labelledby="accordion-collapse-heading-4">
                 <div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700">
+                    <div class="overflow-x-auto">
                     <x-contributor.size />
+                    </div>
                 </div>
                 </div>
 

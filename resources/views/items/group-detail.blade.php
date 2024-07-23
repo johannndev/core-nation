@@ -10,7 +10,7 @@
    
     <div class="mb-8">
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-2 gap-4">
 
             <div>
                 <x-partial.image type="w-full" :url="$urlImage" />
@@ -102,9 +102,9 @@
     
 @foreach($items as $item)
     <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-6">
-        <div class="flex justify-between items-center  border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center  border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
             <div class="pl-4">
-                <h2 class=" text-xl font-extrabold tracking-tight text-gray-900 dark:text-white"> {{ $item->id }}-{{ $item->code }}-<a href="{{route('item.detail',$item->id)}}" class="text-blue-500">{{ $item->name }}</a> </h2>
+                <h2 class=" md:text-xl font-extrabold tracking-tight text-gray-900 dark:text-white"> {{ $item->id }}-{{ $item->code }}-<a href="{{route('item.detail',$item->id)}}" class="text-blue-500">{{ $item->name }}</a> </h2>
             </div>
 
             <div>

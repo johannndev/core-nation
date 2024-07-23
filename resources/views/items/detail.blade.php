@@ -29,7 +29,7 @@
     </div>
     <div class="mb-8">
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-2 gap-4">
 
             <div>
                 <x-partial.image type="w-full" :url="$urlImage" />
@@ -162,7 +162,7 @@
                                     <p class="font-bold">Group	</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p><a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ $data->group->name }}</a></p>
+                                    <p><a href="{{route('item.detailGroup',$data->group->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ $data->group->name }}</a></p>
                                 </div>
                             </div>
                         </div>
