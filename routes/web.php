@@ -268,11 +268,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/produksi/potong/{id}/delete', [ProduksiController::class, 'postDeletePotong'])->name('produksi.postDeletePotong')->middleware('permission:produksi potong delete');
 
     Route::get('/produksi/jahit/list', [ProduksiController::class, 'getJahitList'])->name('produksi.getJahitList')->middleware('permission:produksi jahit');
-    Route::get('/produksi/jahit/create', [ProduksiController::class, 'getJahitCreate'])->name('produksi.getJahitCreate')->middleware('permission:jahit create');
-    Route::post('/produksi/jahit/store', [ProduksiController::class, 'createJahit'])->name('produksi.createJahit')->middleware('permission:jahit create');
-    Route::get('/produksi/jahit/{id}/edit', [ProduksiController::class, 'getJahitEdit'])->name('produksi.getJahitEdit')->middleware('permission:jahit edit');
-    Route::patch('/produksi/jahit/{id}/update', [ProduksiController::class, 'updateJahit'])->name('produksi.updateJahit')->middleware('permission:jahit edit');
-    Route::delete('/produksi/jahit/{id}/delete', [ProduksiController::class, 'postDeleteJahit'])->name('produksi.postDeleteJahit')->middleware('permission:jahit delete');
+    Route::get('/produksi/jahit/create', [ProduksiController::class, 'getJahitCreate'])->name('produksi.getJahitCreate')->middleware('permission:produksi jahit create');
+    Route::post('/produksi/jahit/store', [ProduksiController::class, 'createJahit'])->name('produksi.createJahit')->middleware('permission:produksi jahit create');
+    Route::get('/produksi/jahit/{id}/edit', [ProduksiController::class, 'getJahitEdit'])->name('produksi.getJahitEdit')->middleware('permission:produksi jahit edit');
+    Route::patch('/produksi/jahit/{id}/update', [ProduksiController::class, 'updateJahit'])->name('produksi.updateJahit')->middleware('permission:produksi jahit edit');
+    Route::delete('/produksi/jahit/{id}/delete', [ProduksiController::class, 'postDeleteJahit'])->name('produksi.postDeleteJahit')->middleware('permission:produksi jahit delete');
     
     Route::get('/setoran', [SetoranController::class, 'index'])->name('setoran.index')->middleware('permission:setoran list');
     Route::get('/setoran/{id}/detail', [SetoranController::class, 'detail'])->name('setoran.detail')->middleware('permission:setoran detail');

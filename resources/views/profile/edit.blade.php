@@ -1,29 +1,29 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+<x-layouts.layout>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+        <p class="text-2xl font-bold">Account settings</p>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
-        </div>
+       
     </div>
-</x-app-layout>
+
+    <div class="mb-8">
+        <section class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4 ">
+            @include('profile.partials.update-profile-information-form')
+        <section>
+    </div>
+
+    <div class="mb-8">
+        <section class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4 ">
+            @include('profile.partials.update-password-form')
+        <section>
+    </div>
+
+    <div class="mb-8">
+        <section class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4 ">
+            @include('profile.partials.delete-user-form')
+        <section>
+    </div>
+
+
+</x-layouts.layout>

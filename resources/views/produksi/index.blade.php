@@ -35,7 +35,7 @@
                             <!-- Modal content -->
                             <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
                                 <!-- Modal header -->
-                                <div class="flex items-start justify-between px-6 py-4 rounded-t">
+                                <div class="mt-20 flex items-start justify-between px-6 py-4 rounded-t">
                                     <h3 class="text-lg font-normal text-gray-500 dark:text-gray-400">
                                         Filter barang di produksi
                                     </h3>
@@ -164,7 +164,7 @@
                                     <th scope="col" class="px-4 py-3">Size</th>
                                     <th scope="col" class="px-4 py-3">Warna</th>
                                     <th scope="col" class="px-4 py-3">Costumer</th>
-                                    <th scope="col" class="px-4 py-3">Jahit</th>
+                                    <th scope="col" class="px-4 py-3 ">Jahit</th>
                                     <th scope="col" class="px-4 py-3">Action</th>
                                     
                                 </tr>
@@ -210,7 +210,7 @@
                                     </td>
                                     <td class="px-4 py-3">{{$row->warna}}</td>
                                     <td class="px-4 py-3">{{$row->customer}}</td>
-                                    <td class="px-4 py-3 text-center">
+                                    <td class="px-4 py-3 text-center ">
                                         @if ($row->jahit_date)
 
                                             <p>{{$row->jahit_date}}</p>
@@ -229,7 +229,7 @@
 
 
 
-                                            <select id="jahitUpdate" name="jahitUpdate" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <select id="jahitUpdate" name="jahitUpdate" class="w-28 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="">Choose</option>
                                                 @foreach ($jahitList as $item)
                                                     <option {{Request('jahit_id') == $item->id ? "selected" : ""}} value="{{$item->id}}">{{$item->name}}</option>
