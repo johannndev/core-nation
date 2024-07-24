@@ -39,8 +39,8 @@
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                     <div class="grid grid-cols-1 divide-y">
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Name</p>
                                 </div>
                                 <div class="col-span-3">
@@ -50,8 +50,8 @@
                         </div>
                        
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Type</p>
                                 </div>
                                 <div class="col-span-3">
@@ -62,8 +62,8 @@
 
                         @if($data->type == \App\Models\Item::TYPE_ITEM)
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Alias</p>
                                 </div>
                                 <div class="col-span-3">
@@ -73,8 +73,8 @@
                         </div>
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Description</p>
                                 </div>
                                 <div class="col-span-3">
@@ -86,8 +86,8 @@
                         @else
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Alias</p>
                                 </div>
                                 <div class="col-span-3">
@@ -97,8 +97,8 @@
                         </div>
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Description</p>
                                 </div>
                                 <div class="col-span-3">
@@ -113,8 +113,8 @@
                       
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">NB</p>
                                 </div>
                                 <div class="col-span-3">
@@ -126,8 +126,8 @@
                         
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Price</p>
                                 </div>
                                 <div class="col-span-3">
@@ -143,8 +143,8 @@
                        
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Cost</p>
                                 </div>
                                 <div class="col-span-3">
@@ -157,8 +157,8 @@
                         
                         @if($data->group)
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Group	</p>
                                 </div>
                                 <div class="col-span-3">
@@ -169,8 +169,8 @@
                         @endif
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Edit</p>
                                 </div>
                                 <div class="col-span-3">
@@ -181,8 +181,8 @@
 
                       
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Tags</p>
                                 </div>
                                 <div class="col-span-3">
@@ -198,8 +198,8 @@
                         
 
                         <div>
-                            <div class="grid grid-cols-4 p-4">
-                                <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Show 0</p>
                                 </div>
                                 <div class="col-span-3">
