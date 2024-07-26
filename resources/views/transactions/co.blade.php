@@ -88,16 +88,24 @@
                                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
                                        
                                         <div class="">
-                                            <input id="customer0" name="addMoreInputFields[0][customer]" hidden>
-                                            <input id="name0" list="name-list0" onkeyup="handleName(event,0)" autocomplete="off" type="text" name=""  class="nameList register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""   />
-
-                                            <datalist id="name-list0"></datalist>
+                                            <div class="relative ">
+                                                <select class="select2-ajax-item" id="name0" name="addMoreInputFields[0][customer]" data-customId="0">
+                                                    
+                                                    <option ></option>
+                                                </select>
+                                
+                                                @error('')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                                
+                                            </div>
 
                                         </div>
                                    
                                 
                                     </div>
                                     <div>
+                                        <input type="text" id="limitInvoice0" value="0" hidden>
                                         <label for="invoice" class="block mb-2 text-sm font-medium text-gray-900 ">Invoice </label>
                                         <input onkeyup="return handleInvoice(event,0)" type="text" name="addMoreInputFields[0][invoice]"  id="invoice0" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                                     </div>  

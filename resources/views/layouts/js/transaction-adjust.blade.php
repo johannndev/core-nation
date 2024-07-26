@@ -4,6 +4,114 @@
         if(e.which == 13){e.preventDefault();}
     })
 
+    $(document).ready(function() {
+
+        $('#receiver').select2({
+            width: '100%',
+            placeholder: "Pilih ",
+            minimumInputLength:2,
+            ajax: {
+                url: '{{ route("ajax.getCostumerCash") }}',
+                dataType: "json",
+                data: (params) => {
+                    let query = {
+                        search: params.term,
+                        page: params.page || 1,
+                    };
+                    return query;
+                },
+                processResults: data => {
+                    return {
+                        results: data.data.map((row) => {
+                            return { text: row.name, id: row.id, balance: row.stat.balance };
+                        }),
+                        pagination: {
+                            more: data.current_page < data.last_page,
+                        },
+                    };
+                },
+                cache: true
+            },
+
+            templateResult: function (data) {
+                if (data.loading) return data.text;
+                var $result = $('<span></span>');
+                $result.text(data.text + ' (Balance: ' + data.balance + ')');
+                return $result;
+            }
+        });
+
+
+        $('#sender').select2({
+            width: '100%',
+            placeholder: "Pilih ",
+            minimumInputLength:2,
+            ajax: {
+                url: '{{ route("ajax.getCostumerCash") }}',
+                dataType: "json",
+                data: (params) => {
+                    let query = {
+                        search: params.term,
+                        page: params.page || 1,
+                    };
+                    return query;
+                },
+                processResults: data => {
+                    return {
+                        results: data.data.map((row) => {
+                            return { text: row.name, id: row.id, balance: row.stat.balance};
+                        }),
+                        pagination: {
+                            more: data.current_page < data.last_page,
+                        },
+                    };
+                },
+                cache: true
+               
+            },
+
+            templateResult: function (data) {
+                if (data.loading) return data.text;
+                var $result = $('<span></span>');
+                $result.text(data.text + ' (Balance: ' + data.balance + ')');
+                return $result;
+            }
+           
+           
+        });
+
+        
+        $('#receiver').on('select2:select', function(e) {
+            
+
+
+            var valCode = $(this).val();
+
+            console.log(e.params.data);
+
+            $('#value-receiver').val(e.params.data.balance);
+    
+    
+            // alert('Selected ID: ' + selectedId);
+        });
+
+        $('#sender').on('select2:select', function(e) {
+            
+
+
+            var valCode = $(this).val();
+
+            console.log(e.params.data);
+
+            $('#value-sender').val(e.params.data.balance);
+    
+    
+            // alert('Selected ID: ' + selectedId);
+        });
+    
+    
+    })
+
     function handleRecaiver(event) {
        
        // Menggunakan debounce teknik untuk menunda eksekusi

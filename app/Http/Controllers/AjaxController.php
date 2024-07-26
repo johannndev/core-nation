@@ -26,7 +26,7 @@ class AjaxController extends Controller
     public function getCostumerCash(Request $request)
     {
        
-        $customer = Customer::with('stat')->where('name','like','%'.$request->search.'%')->whereNotIn('type',[Customer::TYPE_BANK,Customer::TYPE_VWAREHOUSE,Customer::TYPE_WAREHOUSE,Customer::TYPE_VACCOUNT])->get();
+        $customer = Customer::with('stat')->where('name','like','%'.$request->search.'%')->whereNotIn('type',[Customer::TYPE_BANK,Customer::TYPE_VWAREHOUSE,Customer::TYPE_WAREHOUSE,Customer::TYPE_VACCOUNT])->paginate();
 
         // $customer = $customer->get(['id', 'name']);
         return response()->json($customer, 200);

@@ -75,10 +75,17 @@
                                         <label for="receiver" class="block mb-2 text-sm font-medium text-gray-900 ">Credit(+)</label>
                                        
                                         <div class="">
-                                            <input id="receiverId" name="receiver" hidden>
-                                            <input id="receiver" list="name-list-recaiver" onkeyup="handleRecaiver(event)" autocomplete="off" type="text" name=""  class="nameList register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""   />
-
-                                            <datalist id="name-list-recaiver"></datalist>
+                                            <div class="relative ">
+                                                <select class="select2-ajax-item" id="receiver" name="receiver" data-customId="0">
+                                                    
+                                                    <option></option>
+                                                </select>
+                                
+                                                @error('')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                                
+                                            </div>
 
                                         </div>
                                    
@@ -93,10 +100,17 @@
                                         <label for="sender" class="block mb-2 text-sm font-medium text-gray-900 ">Debit(+)</label>
                                        
                                         <div class="">
-                                            <input id="senderId" name="sender" hidden>
-                                            <input id="sender" list="name-list-sender" onkeyup="handleSender(event)" autocomplete="off" type="text" name=""  class="nameList register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""   />
-
-                                            <datalist id="name-list-sender"></datalist>
+                                            <div class="relative ">
+                                                <select class="select2-ajax-item" id="sender" name="sender" data-customId="0">
+                                                    
+                                                    <option></option>
+                                                </select>
+                                
+                                                @error('')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                                
+                                            </div>
 
                                         </div>
                                    

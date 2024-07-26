@@ -628,6 +628,8 @@ class TransactionsController extends Controller
 
 			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
 		} catch(\Exception $e) {
+
+			dd($e);
 			DB::rollBack();
 
 			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
@@ -649,6 +651,8 @@ class TransactionsController extends Controller
 
 		$sender = $request->sender;
 		$receiver = $request->receiver;
+
+		// dd($sender, $receiver);
 
 		if(empty($sender))
 			throw new \Exception('sender (-) cannot be empty');
