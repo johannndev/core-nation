@@ -109,18 +109,18 @@
                                     <div>
                                         <input type="text" id="limitInvoice0" value="0" hidden>
                                         <label for="invoice" class="block mb-2 text-sm font-medium text-gray-900 ">Invoice </label>
-                                        <input onkeyup="return handleInvoice(event,0,1)" type="text" name="addMoreInputFields[0][invoice]"  id="invoice0" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                        <input onkeyup="return handleInvoice(event,0,1)" type="search" name="addMoreInputFields[0][invoice]"  id="invoice0" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search"/>
                                     </div>  
                                  
                                 
                                     <div>
                                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 ">Note</label>
-                                        <input onkeyup="return handleDescription(event,0)" type="text" name="addMoreInputFields[0][description]"  id="description0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                        <input onkeyup="return handleDescription(event,0)" type="search" name="addMoreInputFields[0][description]"  id="description0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search"/>
                                     </div> 
                                     
                                     <div>
                                         <label for="total" class="block mb-2 text-sm font-medium text-gray-900 ">Total</label>
-                                        <input onkeyup="return handletTotal(event,0)" type="text" name="addMoreInputFields[0][total]"   id="total0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                                        <input onkeyup="return handletTotal(event,0)" type="search" name="addMoreInputFields[0][total]"   id="total0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search"/>
                                     </div> 
                                 
                                 
