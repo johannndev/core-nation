@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Http\Controllers\WarehousesController,App\Http\Controllers\BankAccountsController,App\Http\Controllers\SuppliersController,App\Http\Controllers\VWarehousesController,App\Http\Controllers\VAccountsController,App\Http\Controllers\ResellersController,;
 class Customer extends Model
 {
     use HasFactory, SoftDeletes;
@@ -81,7 +81,7 @@ class Customer extends Model
 	}
 
 	public function getDetailLink() {
-	  return $this->generateLink('getDetail');
+	  return $this->generateLink('detail');
 	}
 
 	protected function generateLink($action)
@@ -89,19 +89,19 @@ class Customer extends Model
 		if(!$this->id) return '';
 		switch($this->type)
 		{
-			case self::TYPE_WAREHOUSE: $action = 'WarehousesController@'.$action; break;
-			case self::TYPE_BANK: $action = 'BankAccountsController@'.$action; break;
-			case self::TYPE_SUPPLIER: $action = 'SuppliersController@'.$action; break;
-			case self::TYPE_VWAREHOUSE: $action = 'VWarehousesController@'.$action; break;
-			case self::TYPE_VACCOUNT: $action = 'VAccountsController@'.$action; break;
-			case self::TYPE_RESELLER: $action = 'ResellersController@'.$action; break;
+			case self::TYPE_WAREHOUSE: $class = WarehousesController::class; break;
+			case self::TYPE_BANK: $class = BankAccountsController::class; break;
+			case self::TYPE_SUPPLIER: $class = SuppliersController::class; break;
+			case self::TYPE_VWAREHOUSE: $class = VWarehousesController::class; break;
+			case self::TYPE_VACCOUNT: $class = VAccountsController::class; break;
+			case self::TYPE_RESELLER: $class = ResellersController::class; break;
 			case self::TYPE_ACCOUNT:
-				if($action == 'getDetail') $action = 'getAccountDetail';
-				$action = 'OperationsController@'.$action;
+				if($action == 'detail') $action = 'account-detail';
+				$class = OperationsController::class;
 				break;
-			default: $action = 'CustomersController@'.$action; break;
+			default: $class = CustomersController::class; break;
 		}
-		return \URL::action($action,array($this->id));
+		return \URL::action([$class,$action], ['id' => $this->id]);
 	}
   
 	
