@@ -90,16 +90,16 @@ class Customer extends Model
 		switch($this->type)
 		{
 			case self::TYPE_WAREHOUSE: $action = 'warehouse.'.$action; break;
-			case self::TYPE_BANK: $action = 'warehouse.'.$action; break;
-			case self::TYPE_SUPPLIER: $action = 'warehouse.'.$action; break;
-			case self::TYPE_VWAREHOUSE: $action = 'warehouse.'.$action; break;
-			case self::TYPE_VACCOUNT: $action = 'warehouse.'.$action; break;
-			case self::TYPE_RESELLER: $action = 'warehouse.'.$action; break;
+			case self::TYPE_BANK: $action = 'account.'.$action; break;
+			case self::TYPE_SUPPLIER: $action = 'suppoer.'.$action; break;
+			case self::TYPE_VWAREHOUSE: $action = 'vwarehouse.'.$action; break;
+			case self::TYPE_VACCOUNT: $action = 'vaccount.'.$action; break;
+			case self::TYPE_RESELLER: $action = 'reseller.'.$action; break;
 			case self::TYPE_ACCOUNT:
-				if($action == 'detail') $action = 'account-detail';
-				$action = 'warehouse.'.$action;
+				if($action == 'detail') $action = 'account';
+				$action = 'operation.'.$action;
 				break;
-			default: $action = 'warehouse.'.$action; break;
+			default: $action = 'customer.'.$action; break;
 		}
 		return \URL::route($action, ['id' => $this->id]);
 	}

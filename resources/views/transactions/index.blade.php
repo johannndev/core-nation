@@ -147,12 +147,15 @@
                                     <td class="px-4 py-3">{{number_format($item->total_items,2)}}</td>
                                     <td class="px-4 py-3">
                                       @isset($item->sender)
-                                        {{$item->sender->getDetailLink()}}
-                                        {{$item->sender->name}}
+                                          <a href="{{$item->sender->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->sender->name}}</a>
                                       @endisset
                                     </td>
                                     <td class="px-4 py-3">@isset($item->sender) {{number_format($item->sender_balance,2)}}@endisset</td>
-                                    <td class="px-4 py-3">{{$item->receiver ? $item->receiver->name : "-" }}</td>
+                                    <td class="px-4 py-3">
+                                      @isset($item->receiver)
+                                          <a href="{{$item->receiver->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->receiver->name}}</a>
+                                      @endisset
+                                    </td>
                                     <td class="px-4 py-3">{{number_format($item->receiver_balance,2)}}</td>
                                     
                                     
