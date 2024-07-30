@@ -101,8 +101,6 @@ class Customer extends Model
 				break;
 			default: $action = 'warehouse.'.$action; break;
 		}
-		return \URL::action($action, ['id' => $this->id]);
+		return \URL::route($action, ['id' => $this->id]);
 	}
-  
-	
 }
