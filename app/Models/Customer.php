@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Http\Controllers\WarehousesController,App\Http\Controllers\BankAccountsController,App\Http\Controllers\SuppliersController,App\Http\Controllers\VWarehousesController,App\Http\Controllers\VAccountsController,App\Http\Controllers\ResellersController,;
+use App\Http\Controllers\WarehousesController,App\Http\Controllers\BankAccountsController,App\Http\Controllers\SuppliersController,App\Http\Controllers\VWarehousesController,App\Http\Controllers\VAccountsController,App\Http\Controllers\ResellersController;
 class Customer extends Model
 {
     use HasFactory, SoftDeletes;
