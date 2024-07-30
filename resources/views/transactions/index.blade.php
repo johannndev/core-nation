@@ -134,7 +134,7 @@
 
                                 <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                     <th scope="row" class="px-4 py-3  whitespace-nowrap ">
-                                        
+
                                         <a href="{{route('transaction.getDetail',$item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{\Carbon\Carbon::parse($item->date)->format('d/m/Y')}}</a>
 
                                         </th>
