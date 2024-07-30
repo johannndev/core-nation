@@ -91,7 +91,7 @@ class Customer extends Model
 		{
 			case self::TYPE_WAREHOUSE: $action = 'warehouse.'.$action; break;
 			case self::TYPE_BANK: $action = 'account.'.$action; break;
-			case self::TYPE_SUPPLIER: $action = 'suppoer.'.$action; break;
+			case self::TYPE_SUPPLIER: $action = 'supplier.'.$action; break;
 			case self::TYPE_VWAREHOUSE: $action = 'vwarehouse.'.$action; break;
 			case self::TYPE_VACCOUNT: $action = 'vaccount.'.$action; break;
 			case self::TYPE_RESELLER: $action = 'reseller.'.$action; break;
