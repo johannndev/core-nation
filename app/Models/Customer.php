@@ -89,19 +89,19 @@ class Customer extends Model
 		if(!$this->id) return '';
 		switch($this->type)
 		{
-			case self::TYPE_WAREHOUSE: $class = WarehousesController::class; break;
-			case self::TYPE_BANK: $class = BankAccountsController::class; break;
-			case self::TYPE_SUPPLIER: $class = SuppliersController::class; break;
-			case self::TYPE_VWAREHOUSE: $class = VWarehousesController::class; break;
-			case self::TYPE_VACCOUNT: $class = VAccountsController::class; break;
-			case self::TYPE_RESELLER: $class = ResellersController::class; break;
+			case self::TYPE_WAREHOUSE: $action = 'warehouse.'.$action; break;
+			case self::TYPE_BANK: $action = 'warehouse.'.$action; break;
+			case self::TYPE_SUPPLIER: $action = 'warehouse.'.$action; break;
+			case self::TYPE_VWAREHOUSE: $action = 'warehouse.'.$action; break;
+			case self::TYPE_VACCOUNT: $action = 'warehouse.'.$action; break;
+			case self::TYPE_RESELLER: $action = 'warehouse.'.$action; break;
 			case self::TYPE_ACCOUNT:
 				if($action == 'detail') $action = 'account-detail';
-				$class = OperationsController::class;
+				$action = 'warehouse.'.$action;
 				break;
-			default: $class = CustomersController::class; break;
+			default: $action = 'warehouse.'.$action; break;
 		}
-		return \URL::action([$class,$action], ['id' => $this->id]);
+		return \URL::action($action, ['id' => $this->id]);
 	}
   
 	
