@@ -80,8 +80,29 @@ class Customer extends Model
 		return $this->belongsTo('App\Models\Operation','parent_id');
 	}
 
-	
+	public function getDetailLink() {
+	  return $this->generateLink('getDetail');
+	}
 
-
+	protected function generateLink($action)
+	{
+		if(!$this->id) return '';
+		switch($this->type)
+		{
+			case self::TYPE_WAREHOUSE: $action = 'WarehousesController@'.$action; break;
+			case self::TYPE_BANK: $action = 'BankAccountsController@'.$action; break;
+			case self::TYPE_SUPPLIER: $action = 'SuppliersController@'.$action; break;
+			case self::TYPE_VWAREHOUSE: $action = 'VWarehousesController@'.$action; break;
+			case self::TYPE_VACCOUNT: $action = 'VAccountsController@'.$action; break;
+			case self::TYPE_RESELLER: $action = 'ResellersController@'.$action; break;
+			case self::TYPE_ACCOUNT:
+				if($action == 'getDetail') $action = 'getAccountDetail';
+				$action = 'OperationsController@'.$action;
+				break;
+			default: $action = 'CustomersController@'.$action; break;
+		}
+		return \URL::action($action,array($this->id));
+	}
+  
 	
 }
