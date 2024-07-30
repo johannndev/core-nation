@@ -17,7 +17,10 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-sm text-gray-500">Invoice #{{$data->id}}</p>
-                    <p class="font-bold">{{$data->receiver ? $data->receiver->name : '' }}</p>
+                    <p class="font-bold">
+                    @isset($data->receiver)
+                      <a href="{{$data->receiver->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$data->receiver->name}}</a>
+                    @endisset
                 </div>
             </div>
             <div>
@@ -45,7 +48,7 @@
                                     <p class="font-bold">From</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p>{{$data->sender->name}}</p>
+                                    <a href="{{$data->sender->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$data->sender->name}}</a>
                                 </div>
                             </div>
                         </div>
