@@ -63,7 +63,9 @@
                                     <p class="font-bold">To</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p>{{$data->receiver ? $data->receiver->name : '' }}</p>
+                                  @isset($data->receiver)
+                                    <a href="{{$data->receiver->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$data->receiver->name}}</a>
+                                  @endisset
                                 </div>
                             </div>
                         </div>
@@ -349,7 +351,7 @@
                                 </td>
 
                                 <td class="sku-col hidden px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                    {{$itemTd->item->code}}
+                                    <a href="{{ $itemTd->item->getLink() }}"></a>{{$itemTd->item->code}}</a>
                                 </td>
 
 
