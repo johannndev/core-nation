@@ -63,7 +63,9 @@
                                     <p class="font-bold">To</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p>{{$data->receiver ? $data->receiver->name : '' }}</p>
+                                  @isset($data->receiver)
+                                    <a href="{{$data->receiver->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$data->receiver->name}}</a>
+                                  @endisset
                                 </div>
                             </div>
                         </div>
