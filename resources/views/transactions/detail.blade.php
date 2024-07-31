@@ -351,7 +351,7 @@
                                 </td>
 
                                 <td class="sku-col hidden px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                    {{$itemTd->item->code}}
+                                    <a href="{{ $itemTd->item->getLink() }}"></a>{{$itemTd->item->code}}</a>
                                 </td>
 
 
