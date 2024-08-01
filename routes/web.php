@@ -96,6 +96,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/ajax/getCustomer', [AjaxController::class, 'getCostumer'])->name('ajax.getCostumer');
     Route::get('/ajax/getCustomerCash', [AjaxController::class, 'getCostumerCash'])->name('ajax.getCostumerCash');
     Route::get('/ajax/getCustomerSingle', [AjaxController::class, 'getCostumerSingle'])->name('ajax.getCostumerSingle');
+    Route::get('/ajax/sellBatch', [AjaxController::class, 'sellBatch'])->name('ajax.sellBatch');
     Route::get('/getItem', [AjaxController::class, 'getItemAjax'])->name('ajax.getitem');
     Route::get('/getItemId', [AjaxController::class, 'getItemId'])->name('ajax.getitemId');
     Route::get('/getItemName', [AjaxController::class, 'getItem'])->name('ajax.getitemName');
@@ -106,6 +107,10 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/transaction/sell', [TransactionsController::class, 'sell'])->name('transaction.sell')->middleware('permission:transactions.sell');
     Route::post('/transaction/sell/post', [TransactionsController::class, 'postSell'])->name('transaction.postSell')->middleware('permission:transactions.sell');
+
+    Route::get('/transaction/sell-batch', [TransactionsController::class, 'sellBatch'])->name('transaction.postSellBatch')->middleware('permission:transactions.sell');
+
+    Route::post('/transaction/sell-batch/store', [TransactionsController::class, 'postSellBatch'])->name('transaction.sellBatchStore')->middleware('permission:transactions.sell');
 
     Route::get('/transaction/buy', [TransactionsController::class, 'buy'])->name('transaction.buy')->middleware('permission:transactions.buy');
     Route::post('/transaction/buy/post', [TransactionsController::class, 'postbuy'])->name('transaction.postBuy')->middleware('permission:transactions.buy');

@@ -115,4 +115,52 @@ class AjaxController extends Controller
 	
 		
 	}
+
+    public function sellBatch(Request $request){
+        $whid = $request->whId;
+
+        $data = $request->csvInput;
+
+        $rows = preg_split('/[\/n\s]+/', trim($data));
+
+        $array = array();
+
+        foreach ($rows as $row) {
+            // Memecah setiap baris menjadi elemen array
+            $elements = explode(',', $row);
+            
+            // Menambah elemen ke dalam array
+            $array[] = array(
+                'id' => $elements[0],
+                'qty' => $elements[1],
+                'price' => $elements[2]
+            );
+        }
+
+        $qtyPluck = collect($array)->pluck('qty','id')->toArray();
+        $qtyPrice = collect($array)->pluck('price','id')->toArray();
+
+        
+
+        $collect = collect($array)->pluck('id');
+
+        $item = Item::whereIn('id',$collect)->orderBy('name','asc')->get();
+
+        $dataList = [];
+
+        foreach($item as $i){
+            $dataList[] = [
+                'id' => $i->id,
+                'code' => $i->code,
+                'quantity'=>(float)$qtyPluck[$i->id],
+                'warehouse'=> $i->getQtyWarehouse($i->id,$whid),
+                'price' => (float)$qtyPrice[$i->id] 
+            ];
+        }
+
+
+        return response()->json($dataList);
+
+        // dd($dataList);
+    }
 }

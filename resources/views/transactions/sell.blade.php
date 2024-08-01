@@ -34,7 +34,7 @@
 
 
 
-    <form action="{{route('transaction.postSell')}}" method="post" >
+    <form action="{{route('transaction.postSell')}}" method="post" id="myForm">
 
         @csrf
 

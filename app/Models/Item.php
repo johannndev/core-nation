@@ -161,10 +161,22 @@ class Item extends Model
 		return $total->total_quantity;
 	}
 
+	public function getQtyWarehouse($itemId,$whId){
+		$data = WarehouseItem::where('item_id',$itemId)->where('warehouse_id',$whId)->first();
+
+		if($data){
+			$qty = $data->quantity;
+		}else{
+			$qty = 0.00;
+		}
+
+		return $qty;
+	}
+
 	
 	public function warehouseItem(): HasMany
     {
-        return $this->hasMany(WarehouseItem::class, 'item_id', 'id');
+        return $this->hasMany(WarehouseItem::class, 'item_id', 'id')->where('warehouse_id',2875);
     }
 
 	public function tags()

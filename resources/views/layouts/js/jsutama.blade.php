@@ -453,6 +453,33 @@
 
     }
 
+    function remove(val) {
+
+        console.log(val)
+
+        if(val == 0){
+
+            $('#name'+val).val(null).trigger('change.select2');
+
+            $('#id'+val).val(null);
+            $('#code'+val).val(null);
+            $('#price'+val).val(null);
+            $('#wh'+val).val(null);
+            $('#discount'+val).val(null);
+            $('#quantity'+val).val(null);
+            $('#subtotal'+val).val(null);
+
+          
+
+        }else{
+
+            $('.addField'+val).remove();
+
+        }
+
+        
+    }
+
     function newLine2(itemLineId){
 
         var i = itemLineId;
