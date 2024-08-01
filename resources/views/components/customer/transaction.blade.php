@@ -42,7 +42,7 @@
                     <td class="px-4 py-3">{{Number::format($item->total_items,2)}}</td>
                     <td class="px-4 py-3">
                         @isset($item->sender)
-                            {{$item->sender->name}}
+                            <a href="{{$item->sender->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->sender->name}}</a>
                         @endisset
                     </td>
                     <td class="px-4 py-3">
@@ -52,7 +52,7 @@
                     </td>
                     <td class="px-4 py-3">
                         @isset($item->receiver)
-                            {{$item->receiver->name}}
+                          <a href="{{$item->receiver->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->receiver->name}}</a>
                         @endisset
                     </td>
                     <td class="px-4 py-3">

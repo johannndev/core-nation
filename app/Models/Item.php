@@ -254,11 +254,15 @@ class Item extends Model
 		}
 		return Route($action,$id);
 	}
-
-
-
-
-
-
 	
+	public function getLink()
+	{
+		switch($this->type)
+		{
+			case self::TYPE_ASSET_LANCAR: $action = 'asetLancar.detail'; break;
+			case self::TYPE_ASSET_TETAP: $action = 'item.detail'; break;
+			default: $action = 'item.detail'; break;
+		}
+		return Route($action,$this->id);
+	}
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Http\Controllers\WarehousesController,App\Http\Controllers\BankAccountsController,App\Http\Controllers\SuppliersController,App\Http\Controllers\VWarehousesController,App\Http\Controllers\VAccountsController,App\Http\Controllers\ResellersController;
 class Customer extends Model
 {
     use HasFactory, SoftDeletes;
@@ -80,8 +80,27 @@ class Customer extends Model
 		return $this->belongsTo('App\Models\Operation','parent_id');
 	}
 
-	
+	public function getDetailLink() {
+	  return $this->generateLink('detail');
+	}
 
-
-	
+	protected function generateLink($action)
+	{
+		if(!$this->id) return '';
+		switch($this->type)
+		{
+			case self::TYPE_WAREHOUSE: $action = 'warehouse.'.$action; break;
+			case self::TYPE_BANK: $action = 'account.'.$action; break;
+			case self::TYPE_SUPPLIER: $action = 'supplier.'.$action; break;
+			case self::TYPE_VWAREHOUSE: $action = 'vwarehouse.'.$action; break;
+			case self::TYPE_VACCOUNT: $action = 'vaccount.'.$action; break;
+			case self::TYPE_RESELLER: $action = 'reseller.'.$action; break;
+			case self::TYPE_ACCOUNT:
+				if($action == 'detail') $action = 'account';
+				$action = 'operation.'.$action;
+				break;
+			default: $action = 'customer.'.$action; break;
+		}
+		return \URL::route($action, ['id' => $this->id]);
+	}
 }

@@ -747,8 +747,7 @@ class TransactionsController extends Controller
 
 	public function adjust()
     {
-
-        return view('transactions.adjust');
+      return view('transactions.adjust');
     }
 
 	public function postAdjust(Request $request)
@@ -803,8 +802,6 @@ class TransactionsController extends Controller
 		
 		$transaction->due = '0000-00-00';
 		$transaction->save();
-
-		
 	
 		$transaction->total = abs($transaction->total);
 
@@ -868,11 +865,10 @@ class TransactionsController extends Controller
 	}
 
 	public function transfer()
-    {
-
+  {
 		$bankList = Customer::whereIn('type',[Customer::TYPE_BANK,Customer::TYPE_VACCOUNT])->orderBy('name','asc')->get();
-        return view('transactions.transfer',compact('bankList'));
-    }
+      return view('transactions.transfer',compact('bankList'));
+  }
 
 	public function postTransfer(Request $request)
 	{
@@ -890,10 +886,7 @@ class TransactionsController extends Controller
 
 		DB::beginTransaction();
 
-		
-		
 		$transaction = new Transaction();
-
 		$transaction->date = $request->date;
 		$transaction->type = Transaction::TYPE_TRANSFER;
 		$transaction->description = ' ';
@@ -906,9 +899,6 @@ class TransactionsController extends Controller
 		$transaction->due = '0000-00-00';
 		$transaction->save();
 
-		
-
-
 		$transaction->total = abs($transaction->total);
 
 		if(!$senderData = Customer::find($sender))
@@ -919,8 +909,6 @@ class TransactionsController extends Controller
 
 		$transaction->sender_type = $senderData->type;
 		$transaction->receiver_type = $receiverData->type;
-
-	
 
 		// if(!$transaction->validate())
 		// 	throw new ModelException($transaction->getErrors());
@@ -970,8 +958,6 @@ class TransactionsController extends Controller
 
 		return redirect()->route('transaction.getDetail',$transaction->id)->with('success', 'Transfer # ' . $transaction->id. ' created.');
 
-		
-
 		} catch(ModelException $e) {
 			DB::rollBack();
 
@@ -986,8 +972,6 @@ class TransactionsController extends Controller
 	public function return()
     {
 		$trType = 'buy';
-
-		
 
 		$dataListPropSender = [
 			"label" => "Sender",
@@ -1005,9 +989,6 @@ class TransactionsController extends Controller
 			"idOption" => "datalistOptionsWh",
 			"type" => Customer::TYPE_WAREHOUSE,
 		];
-
-		
-		
         return view('transactions.return',compact('trType','dataListPropRecaiver','dataListPropSender'));
     }
 
@@ -1038,9 +1019,6 @@ class TransactionsController extends Controller
 			"type" => Customer::TYPE_WAREHOUSE,
 			"default" => Customer::$defaultWH,
 		];
-
-		
-		
         return view('transactions.return-supplier',compact('trType','dataListPropRecaiver','dataListPropResaller'));
     }
 
@@ -1051,34 +1029,18 @@ class TransactionsController extends Controller
 
 	public function postDelete($id)
 	{
-		
 		if(!$t = Transaction::where('id','=',$id)->first())
 			return App::abort(404);
 
 			DB::beginTransaction();
 
-		
 		$deleter = new DeleterHelper;
 		$deleted = $deleter->delete($t);
 		InvoiceTrackerHelpers::flag($t);
 		HashManagerHelper::delete($t);
 
-	
-
 		DB::commit();
 
 		return redirect()->route('transaction.getDetailDelete',$id)->with('success', 'Transaction # ' . $deleted->id. ' deleted.');
-
-
-		
-
-		
 	}
-
-	
-
-
-
-
-
 }
