@@ -32,14 +32,14 @@ class AddrbookController extends Controller
 	{
 		$requiredProp = "y";
 
-		if($request->type == Customer::TYPE_VWAREHOUSE || $request->type == Customer::TYPE_VACCOUNT){
+		if($request->type == Customer::TYPE_VWAREHOUSE || $request->type == Customer::TYPE_VACCOUNT || $request->type == Customer::TYPE_WAREHOUSE){
 			$requiredProp = "n";
 		}
 
         $rules = [
             'address'  => [Rule::requiredIf($requiredProp == 'y')],
             'name'  => 'required',
-            'description' => 'required',
+           
             'initial' => [Rule::requiredIf($requiredProp == 'y')],
             
 		];
@@ -67,7 +67,7 @@ class AddrbookController extends Controller
 		$customer = new Customer();
 
         $customer->address = $request->address;
-        $customer->description = $request->description;
+        $customer->description = '';
         // $customer->phone = $request->phone;
         // $customer->phone2 = $request->phone2;
         // $customer->email = $request->email;

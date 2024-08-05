@@ -109,7 +109,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/transaction/sell/post', [TransactionsController::class, 'postSell'])->name('transaction.postSell')->middleware('permission:transactions.sell');
 
     Route::get('/transaction/sell-batch', [TransactionsController::class, 'sellBatch'])->name('transaction.postSellBatch')->middleware('permission:transactions.sell');
-
     Route::post('/transaction/sell-batch/store', [TransactionsController::class, 'postSellBatch'])->name('transaction.sellBatchStore')->middleware('permission:transactions.sell');
 
     Route::get('/transaction/buy', [TransactionsController::class, 'buy'])->name('transaction.buy')->middleware('permission:transactions.buy');
@@ -117,6 +116,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/transaction/move', [TransactionsController::class, 'move'])->name('transaction.move')->middleware('permission:transactions.move');
     Route::post('/transaction/move/post', [TransactionsController::class, 'postmove'])->name('transaction.postMove')->middleware('permission:transactions.move');
+    Route::get('/transaction/move-batch', [TransactionsController::class, 'moveBatch'])->name('transaction.postMoveBatch')->middleware('permission:transactions.move');
+    Route::post('/transaction/move-batch/store', [TransactionsController::class, 'postMoveBatch'])->name('transaction.moveBatchStore')->middleware('permission:transactions.sell');
 
     Route::get('/transaction/use', [TransactionsController::class, 'use'])->name('transaction.use')->middleware('permission:transactions.use');
     Route::post('/transaction/use/post', [TransactionsController::class, 'postuse'])->name('transaction.postUse')->middleware('permission:transactions.use');

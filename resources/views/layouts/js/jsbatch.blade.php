@@ -13,6 +13,8 @@
 
         var warehouse = $('#warehouse').val();
 
+        console.log(warehouse);
+
         if (csvInput.length > 0) {
             $.ajax({
                 url: '{{ route("ajax.sellBatch") }}',
