@@ -63,7 +63,7 @@
 
                                   @foreach ($roleList as $item)
 
-                                     <option {{old('role',$data->getRoleNames()[0]) == $item->name ? 'selected' : ''  }} value="{{$item->name}}">{{$item->name}}</option>
+                                     <option {{old('role',$userRole) == $item->name ? 'selected' : ''  }} value="{{$item->name}}">{{$item->name}}</option>
                                       
                                   @endforeach
                                 
@@ -84,14 +84,16 @@
                                 </select>
                             </div>
 
-                            <div>
-                                <div class="flex items-center mb-4">
-                                    <input id="update_password" name="update_password" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="update_password" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Update Password?</label>
-                                </div>
-                            </div>
+                            
 
                            
+                        </div>
+
+                        <div>
+                            <div class="flex items-center mb-4">
+                                <input id="update_password" name="update_password" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="update_password" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Update Password?</label>
+                            </div>
                         </div>
   
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mt-4 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>

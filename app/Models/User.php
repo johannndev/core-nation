@@ -66,4 +66,10 @@ class User extends Authenticatable
 
 		return $pass;
 	}
+
+    public function location()
+	{
+		return $this->belongsTo('App\Models\Location','location_id');
+	}
+    
 }

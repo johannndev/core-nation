@@ -19,14 +19,14 @@ class UserRoleController extends Controller
     
 
     public function userList(){
-        $dataList = User::with('roles')->paginate();
+        $dataList = User::with('roles','location')->withoutRole('superadmin')->paginate();
 
         return view('user-role.user',compact('dataList'));
     }
 
     public function userCreate(){
 
-        $roleList = Role::whereNotIn('name',['ban'])->get();
+        $roleList = Role::whereNotIn('name',['ban','superadmin'])->get();
         $lokalList = Location::all();
 
         return view('user-role.user-create',compact('roleList','lokalList'));
@@ -84,11 +84,19 @@ class UserRoleController extends Controller
     public function userEdit($id){
         $data = User::with('roles')->findOrFail($id);
 
-        $roleList = Role::whereNotIn('name',['ban'])->get();
+        $roleList = Role::whereNotIn('name',['ban','superadmin'])->get();
 
         $lokalList = Location::all();
 
-        return view('user-role.user-edit',compact('data','roleList','lokalList'));
+        // dd(count($data->roles));
+
+        if(count($data->roles) > 0){
+            $userRole = $data->getRoleNames()[0];
+        }else{
+            $userRole = '';
+        }
+
+        return view('user-role.user-edit',compact('data','roleList','lokalList','userRole'));
     }
 
     public function userUpdate(Request $request, $id){
@@ -105,7 +113,7 @@ class UserRoleController extends Controller
             $user->username = $request->name;
             $user->role_id = $role->id;
             $user->location_id = $request->city;
-            
+
             $password = '';
             if($request->update_password)
             {
@@ -154,7 +162,7 @@ class UserRoleController extends Controller
 
     public function indexRole(){
 
-        $dataList = Role::whereNotIn('name',['ban'])->get();
+        $dataList = Role::whereNotIn('name',['ban','superadmin'])->get();
 
         return view('user-role.role',compact('dataList'));
     }

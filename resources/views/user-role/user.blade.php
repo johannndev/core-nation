@@ -23,6 +23,7 @@
                                         
                                         <th scope="col" class="px-4 py-3">Name</th>
                                         <th scope="col" class="px-4 py-3">Role</th>
+                                        <th scope="col" class="px-4 py-3">Location</th>
                                         <th scope="col" class="px-4 py-3">Actions</th>
                                         
                                     </tr>
@@ -47,6 +48,14 @@
                                                 {{$string}}
                                             @endisset
                                             
+                                        </th>
+
+                                        <th class="px-4 py-3">
+
+                                            @isset($item->location)
+                                                {{$item->location->name}}
+                                            @endisset
+
                                         </th>
                                      
                                         <td class="px-4 py-3 flex">

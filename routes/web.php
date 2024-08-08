@@ -28,6 +28,7 @@ use App\Http\Controllers\WarehouseController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,9 +45,14 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('/set-user', function () {
+Route::get('/role-set', function () {
 
-    User::where('role_id', '>', 0)->update(['role_id' => 0]);
+    $permission = Permission::create(['name' => 'superadmin']);
+
+    $role = Role::where('name','superadmin')->first();
+
+    $role->syncPermissions('superadmin');
+
 
     return 'berhasil';
 });
