@@ -47,11 +47,13 @@ Route::get('/', function () {
 
 Route::get('/role-set', function () {
 
-    $permission = Permission::create(['name' => 'superadmin']);
+    $role = Role::create(['name' => 'ban']);
 
-    $role = Role::where('name','superadmin')->first();
+    // $permission = Permission::create(['name' => 'superadmin']);
 
-    $role->syncPermissions('superadmin');
+    // $role = Role::where('name','superadmin')->first();
+
+    // $role->syncPermissions('superadmin');
 
 
     return 'berhasil';
