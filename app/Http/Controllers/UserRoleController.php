@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ModelException;
+use App\Models\Location;
 use App\Models\User;
 use App\Models\UserSetting;
 use GuzzleHttp\Psr7\Response;
@@ -26,8 +27,9 @@ class UserRoleController extends Controller
     public function userCreate(){
 
         $roleList = Role::whereNotIn('name',['ban'])->get();
+        $lokalList = Location::all();
 
-        return view('user-role.user-create',compact('roleList'));
+        return view('user-role.user-create',compact('roleList','lokalList'));
     }
 
     public function userStore(Request $request){
@@ -40,7 +42,7 @@ class UserRoleController extends Controller
 
             $user = new User;
             $user->username = $request->name;
-           
+            $user->location_id = $request->city;
             $user->role_id = $role->id;
     
             $password = User::generatePassword();
@@ -84,7 +86,9 @@ class UserRoleController extends Controller
 
         $roleList = Role::whereNotIn('name',['ban'])->get();
 
-        return view('user-role.user-edit',compact('data','roleList'));
+        $lokalList = Location::all();
+
+        return view('user-role.user-edit',compact('data','roleList','lokalList'));
     }
 
     public function userUpdate(Request $request, $id){
@@ -100,6 +104,7 @@ class UserRoleController extends Controller
 
             $user->username = $request->name;
             $user->role_id = $role->id;
+            $user->location_id = $request->city;
             
             $password = '';
             if($request->update_password)
