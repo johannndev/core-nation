@@ -5,6 +5,7 @@ namespace App\View\Components\Customer;
 use App\Models\Customer;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class Detail extends Component
@@ -26,6 +27,20 @@ class Detail extends Component
     public function render(): View|Closure|string
     {
         $data = Customer::withTrashed()->findOrFail($this->cid);
+
+        $custLokal = $data->locations->pluck('name','id')->toArray();
+        $userLokal = Auth::user()->location_id;
+
+       
+        if($userLokal > 0){
+            if($data->locations){
+                if(array_key_exists($userLokal,$custLokal)){
+                    
+                }else{
+                    abort(404);
+                }
+            }
+        }
 
         $hideProp = "show";
 

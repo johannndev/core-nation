@@ -46,7 +46,7 @@ class ListIndex extends Component
 
         $dataList = Customer::with('stat','locations')->where('type',$this->type);
 
-        if($this->type == Customer::TYPE_RESELLER || $this->type == Customer::TYPE_WAREHOUSE){
+        if($this->type != Customer::TYPE_CUSTOMER || $this->type != Customer::TYPE_ACCOUNT){
             
             if(Auth::user()->location_id > 0 ){
 
@@ -72,6 +72,8 @@ class ListIndex extends Component
 			$dataList = $dataList->onlyTrashed();
         
         $dataList = $dataList->orderBy('name','asc')->paginate(50)->withQueryString();
+
+        // dd($dataList->toArray());
 
      
 

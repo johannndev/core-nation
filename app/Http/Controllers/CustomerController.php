@@ -13,6 +13,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::withTrashed()->findOrFail($id);
 
+      
         return $customer->name;
     }
 
@@ -50,7 +51,8 @@ class CustomerController extends Controller
 
     public function transaction($id)
     {
-       
+
+      
 
         $cid = $id;
 

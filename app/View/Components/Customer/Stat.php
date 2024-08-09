@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
 
@@ -29,6 +30,22 @@ class Stat extends Component
     public function render(): View|Closure|string
     {
         $customer = Customer::withTrashed()->findOrFail($this->cid);
+
+
+        $custLokal = $customer->locations->pluck('name','id')->toArray();
+        $userLokal = Auth::user()->location_id;
+
+       
+        if($userLokal > 0){
+            if($customer->locations){
+                if(array_key_exists($userLokal,$custLokal)){
+                    
+                }else{
+                    abort(404);
+                }
+            }
+        }
+
         $start = date('Y');
 
         if(Request('month')){

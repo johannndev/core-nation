@@ -2,11 +2,13 @@
 
 namespace App\View\Components\Customer;
 
+use App\Models\Customer;
 use App\Models\Transaction as ModelsTransaction;
 use App\Models\TransactionDetail;
 use Closure;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class Transaction extends Component
@@ -26,6 +28,24 @@ class Transaction extends Component
     public function render(): View|Closure|string
     {
         // $dataList = TransactionDetail::with('transaction','transaction.receiver','transaction.sender')->orderBy('date','desc');
+
+        $customer = Customer::with('locations')->withTrashed()->findOrFail($this->cid);
+
+        $custLokal = $customer->locations->pluck('name','id')->toArray();
+        $userLokal = Auth::user()->location_id;
+
+       
+        if($userLokal > 0){
+            if($customer->locations){
+                if(array_key_exists($userLokal,$custLokal)){
+                    
+                }else{
+                    abort(404);
+                }
+            }
+        }
+
+        // dd($customer);
 
         $dataList = ModelsTransaction::with('receiver','sender','receiver.stat','sender.stat')->whereAny(['sender_id','receiver_id'],$this->cid)->orderBy('date','desc');
 
