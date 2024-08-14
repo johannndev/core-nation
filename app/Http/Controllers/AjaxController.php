@@ -59,6 +59,14 @@ class AjaxController extends Controller
         return response()->json($item, 200);
     }
 
+    public function getItemSetoran(Request $request)
+    {
+       
+        $item = Item::where('name','like','%'.$request->search.'%')->orWhere('id','like','%'.$request->search.'%')->orderBy('name','asc')->paginate();
+        
+        return response()->json($item, 200);
+    }
+
     public function getInvoice(Request $request)
     {
       

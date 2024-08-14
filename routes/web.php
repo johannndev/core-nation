@@ -102,6 +102,7 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 Route::middleware('auth')->group(function () {
 
     Route::get('/ajax/getCustomer', [AjaxController::class, 'getCostumer'])->name('ajax.getCostumer');
+    Route::get('/ajax/getItemSetoran', [AjaxController::class, 'getItemSetoran'])->name('ajax.getItemSetoran');
     Route::get('/ajax/getCustomerCash', [AjaxController::class, 'getCostumerCash'])->name('ajax.getCostumerCash');
     Route::get('/ajax/getCustomerSingle', [AjaxController::class, 'getCostumerSingle'])->name('ajax.getCostumerSingle');
     Route::get('/ajax/sellBatch', [AjaxController::class, 'sellBatch'])->name('ajax.sellBatch');

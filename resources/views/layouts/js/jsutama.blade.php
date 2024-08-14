@@ -574,7 +574,7 @@
 
             <div class="grid gap-6 mb-6 md:grid-cols-8 items-end addField`+i+` "id="gridItem`+i+`">
                 <div>
-                    <input type="text" name="addMoreInputFields[`+i+`][itemId]"  id="id0"  placeholder=""  aria-valuetext="`+i+`" aria-label="id" hidden/>
+                    <input type="text" name="addMoreInputFields[`+i+`][itemId]"  id="id`+i+`"  placeholder=""  aria-valuetext="`+i+`" aria-label="id" hidden/>
 
                     <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
                     <input  onkeydown="return handleCode(event,`+i+`)" type="search" inputmode="search" name="addMoreInputFields[`+i+`][code]"  id="code`+i+`" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  />

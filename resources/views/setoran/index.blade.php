@@ -200,7 +200,7 @@
                                     <th scope="col" class="px-4 py-3">Costumer</th>
                                     <th scope="col" class="px-4 py-3">Jahit</th>
                                     <th scope="col" class="px-4 py-3 w-40">Invoice</th>
-                                    <th scope="col" class="px-4 py-3"></th>
+                                    {{-- <th scope="col" class="px-4 py-3"></th> --}}
                                     
                                 </tr>
                             </thead>
@@ -233,24 +233,120 @@
                                             {{$code}}
                                         @else
 
-                                        <form action="{{route('setoran.postEditItem',$row->id)}}" method="post" id="form-code-{{$row->id}}">
 
-                                            @csrf
+                                            @if ($row->item_id)
+                                                {{$code}}
+                                            @else
 
-                                            @method('PATCH')
+                                                <!-- Modal toggle -->
+                                                <button data-modal-target="kode-model-{{$row->id}}" data-modal-toggle="kode-model-{{$row->id}}" class="text-blue-500 hover:text-blue-600 hover:underline  font-medium " type="button">
+                                                    {{$code}}
+                                                </button>
+                                                
+                                                <!-- Main modal -->
+                                                <div id="kode-model-{{$row->id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                                    <div class="relative p-4 w-full max-w-md max-h-full">
+                                                        <!-- Modal content -->
+                                                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                            <!-- Modal header -->
+                                                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                                                    Update item for serial <span class="font-bold">{{$row->serial()}}</span>
+                                                                </h3>
+                                                                <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="kode-model-{{$row->id}}">
+                                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                                    </svg>
+                                                                    <span class="sr-only">Close modal</span>
+                                                                </button>
+                                                            </div>
 
-                                           
-                                            
+                                                            <form action="{{route('setoran.postEditItem',$row->id)}}" method="post" class="space-y-4" >
+                                                            <!-- Modal body -->
+                                                            @csrf
 
-                                            <input onkeyup="return handleCode(event,{{$row->id}})"  type="text" id="codeList{{$row->id}}" list="codeOption{{$row->id}}" name="code" value="{{$code}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="off">
-                                            <datalist id="codeOption{{$row->id}}">
-                                                <!-- Options akan diisi oleh jQuery AJAX -->
-                                            </datalist>
-                                        
+                                                            @method('PATCH')
 
-                                            {{-- <input type="text" id="code" name="code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  value="{{$code}}"/> --}}
+                                                            <div class="p-4 md:p-5">
+                                                                
+                                                                <div>
+                                                                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Old Item</label>
+                                                                    <p>{{$code}}</p>
+                                                                </div>
 
-                                        </form>
+                                                                <div class="mt-4">
+                                                                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New Item</label>
+                                                                    <div class=" w-full">
+
+                                                                        <div class="relative ">
+                                                                            <select class="select2-ajax-item" id="code{{$row->id}}" name="code" data-customId="0">
+                                                                                
+                                                                                <option ></option>
+                                                                            </select>
+                                                            
+                                                                            @error('')
+                                                                                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                                            @enderror
+                                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                    
+                                                                    
+                                                                    
+                                                            
+                                                            </div>
+
+                                                            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                                                <button  type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                                                                <button data-modal-hide="kode-model-{{$row->id}}" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                                                            </div>
+
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+
+                                                @push('jsBody')
+
+                                                <script>
+                                                    $(document).ready(function() {
+                
+                                                        $('#code{{$row->id}}').select2({
+                                                            width: '100%',
+                                                            placeholder: "Pilih ",
+                                                            minimumInputLength:2,
+                                                            ajax: {
+                                                                url: '{{ route("ajax.getItemSetoran") }}',
+                                                                dataType: "json",
+                                                                data: (params) => {
+                                                                    let query = {
+                                                                        search: params.term,
+                                                                        page: params.page || 1,
+                                                                    };
+                                                                    return query;
+                                                                },
+                                                                processResults: data => {
+                                                                    return {
+                                                                        results: data.data.map((row) => {
+                                                                            return { text: row.name, id: row.id };
+                                                                        }),
+                                                                        pagination: {
+                                                                            more: data.current_page < data.last_page,
+                                                                        },
+                                                                    };
+                                                                },
+                                                            },
+                                                        });
+
+
+                                                    })
+                                                </script>
+
+                                                @endpush
+  
+                                            @endif
+                                      
                                             
                                         @endif
 
@@ -263,7 +359,7 @@
                                     </td>
 
                                     <td class="px-4 py-3 text-center">
-                                        <p>{{$row->potong_date}}</p>
+                                        <p class="text-nowrap">{{$row->potong_date}}</p>
                                         @isset($row->potong)
                                         <hr class="h-px my-1 bg-gray-400 border-0 dark:bg-gray-700">
                                         <p>{{$row->potong->name}}</p>
@@ -279,7 +375,7 @@
                                     <td class="px-4 py-3">{{$row->warna}}</td>
                                     <td class="px-4 py-3">{{$row->customer}}</td>
                                     <td class="px-4 py-3 text-center ">
-                                        <p class="">{{$row->jahit_date}}</p>
+                                        <p class="text-nowrap">{{$row->jahit_date}}</p>
                                         @isset($row->jahit)
                                             <hr class="h-px my-1 bg-gray-400 border-0 dark:bg-gray-700">
                                             <p>{{$row->jahit->name}}</p>
@@ -295,53 +391,114 @@
                                            
                                         @else
 
-                                            <form action="{{route('setoran.postGudang',$row->id)}}" method="post" id="form-invoice-{{$row->id}}">
+                                         <!-- Modal toggle -->
+                                            <button data-modal-target="invoice-model-{{$row->id}}" data-modal-toggle="invoice-model-{{$row->id}}" class="text-blue-500 hover:text-blue-600 hover:underline  font-medium " type="button">
+                                               To Gudang
+                                            </button>
+                                            
+                                            <!-- Main modal -->
+                                            <div id="invoice-model-{{$row->id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                                <div class="relative p-4 w-full max-w-md max-h-full">
+                                                    <!-- Modal content -->
+                                                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                        <!-- Modal header -->
+                                                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                                                Update invoice for serial <span class="font-bold">{{$row->serial()}}</span>
+                                                            </h3>
+                                                            <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="invoice-model-{{$row->id}}">
+                                                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                                </svg>
+                                                                <span class="sr-only">Close modal</span>
+                                                            </button>
+                                                        </div>
 
-                                                @csrf
+                                                        <form action="{{route('setoran.postGudang',$row->id)}}" method="post" class="space-y-4" >
+                                                        <!-- Modal body -->
+                                                        @csrf
 
-                                                @method('PATCH')
+                                                        @method('PATCH')
 
-                                        
-                                                    
-                                                <input  type="text" id="invoiceList{{$row->id}}" list="invoiceOption{{$row->id}}" name="invoice" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="off">
-                                                <datalist id="invoiceOption{{$row->id}}">
-                                                    @if ($row->item_id > 0)
-                                                        <option value="{{$row->invoice}}">
-                                                    @endif
-                                                    
-                                                    <!-- Options akan diisi oleh jQuery AJAX -->
-                                                </datalist>
-                                            </form>
+                                                        <div class="p-4 md:p-5">
+                                                            
+                                                            <div>
+                                                                <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Invoice</label>
+                                                                <input  type="text"  name="invoice" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
+                                                            </div>
+
+                                                            
+                                                                
+                                                                
+                                                                
+                                                        
+                                                        </div>
+
+                                                        <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                                            <button  type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                                                            <button data-modal-hide="invoice-model-{{$row->id}}" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                                                        </div>
+
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div> 
+
+                                           
 
                                         @endif
                                         
                                         
                                     </td>
-                                    <td class="px-4 py-3 ">
-                                        <div class="flex items-center justify-end h-full">
-
-                                            <button id="action-dropdown-button-{{$row->id}}" data-dropdown-toggle="action-dropdown-{{$row->id}}" class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
-                                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                                    {{-- <td class="px-4 py-3 ">
+                                        <div class="">
+                                            <button type="button" id="deleteButton" data-modal-target="deleteModal{{$row->id}}" data-modal-toggle="deleteModal{{$row->id}}" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 rounded-lg">
+                                                
+                    
+                                                <svg class="h-3.5 w-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path fill-rule="evenodd" d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd"/>
                                                 </svg>
+                                                  
+                                               Delete
                                             </button>
-                                            <div id="action-dropdown-{{$row->id}}" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                                                <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="action-dropdown-button-{{$row->id}}">
-                                                    <li>
-                                                        <button  onclick="document.getElementById('form-code-{{$row->id}}').submit();" class="block w-full text-left py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update</button>
-                                                    </li>
-                                                    <li>
-                                                        <button onclick="document.getElementById('form-invoice-{{$row->id}}').submit();"  class="block w-full text-left py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Gudang</button>
-                                                    </li>
-                                                </ul>
-                                                <div class="py-1">
-                                                    <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
+                    
+                                          
+                                            
+                                            <!-- Main modal -->
+                                            <div id="deleteModal{{$row->id}}" tabindex="-1" aria-hidden="true" class=" hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+                                                <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                                                    <!-- Modal content -->
+                                                    <div class="relative p-4 mt-40 md:mt-0 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                                                        <button type="button" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="deleteModal{{$row->id}}">
+                                                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                                            <span class="sr-only">Close modal</span>
+                                                        </button>
+                                                        <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                                                        <p class=" text-gray-500 dark:text-gray-300">Are you sure you want to delete this item?</p>
+                                                       
+                                                        <div class="flex justify-center items-center space-x-4 mt-4">
+                                                            <button data-modal-toggle="deleteModal{{$row->id}}" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                                                                No, cancel
+                                                            </button>
+                    
+                                                            <form action="{{route('transaction.destroy',$row->id)}}" method="post">
+                    
+                                                                @csrf
+                                                                @method('DELETE')
+                    
+                                                                <button type="submit" class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                                                    Yes, I'm sure
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-
+                                       
+                                            
                                         </div>
                                        
-                                    </td>
+                                    </td> --}}
                                     
                                     
                                 </tr>
