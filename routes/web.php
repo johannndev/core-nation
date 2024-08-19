@@ -13,6 +13,7 @@ use App\Http\Controllers\HashController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\OperationController;
+use App\Http\Controllers\PoController;
 use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
@@ -29,6 +30,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,37 +62,38 @@ Route::get('/role-set', function () {
 });
 
 
-// Route::get('/role-create', function () {
+Route::get('/role-create', function () {
     
-//     $perm = [
+    $perm = [
         
-//         'produksi list',
-//         'produksi create',
-//         'produksi edit',
-//         'produksi detail',
-//         'produksi search',
-//         'produksi setor',
-//         'produksi jahit',
-//         'produksi jahit create',
-//         'produksi jahit edit',
-//         'produksi jahit delete',
-//         'produksi potong',
-//         'produksi potong create',
-//         'produksi potong edit',
-//         'produksi potong delete',
-//     ];
+        'po create',
+        'po list',
+        'po detail',
+        'po delete',
+        'cnpo update',
+        'cnpo kosong',
+        'cnpo delete',
+        'cnpo list',
+        'cnpo detail',
+        'po item',
+        
 
-//     foreach($perm as $p){
 
-//         $permission = Permission::create(['name' => $p]);
+       
+        
+    ];
 
-//     }
+    foreach($perm as $p){
+
+        $permission = Permission::create(['name' => $p]);
+
+    }
 
    
     
 
-//     return 'berhasil';
-// });
+    return 'berhasil';
+});
 
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -100,6 +103,16 @@ Route::get('/cek', [HomeController::class, 'cekData'])->name('');
 Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filter.get');
 
 Route::middleware('auth')->group(function () {
+
+
+    Route::get('/transaction/po', [PoController::class, 'index'])->name('transaction.Poindex')->middleware('permission:cnpo list');
+    Route::get('/transaction/po/{id}/detail', [PoController::class, 'getDetail'])->name('transaction.Podetail')->middleware('permission:cnpo detail');
+
+    Route::delete('/transaction/po/{id}/delete', [PoController::class, 'delete'])->name('transaction.podelete')->middleware('permission:cnpo delete');
+
+    Route::patch('/transaction/po/item/{id}/update', [PoController::class, 'updateItemQty'])->name('transaction.PoUpdateItemQty')->middleware('permission:cnpo update');
+    Route::patch('/transaction/po/item/{id}/kosong', [PoController::class, 'updateItemKosong'])->name('transaction.updateItemKosong')->middleware('permission:cnpo kosong');
+    Route::patch('/transaction/po/item/{id}/success', [PoController::class, 'success'])->name('transaction.poSuccess')->middleware('permission:cnpo update');
 
     Route::get('/ajax/getCustomer', [AjaxController::class, 'getCostumer'])->name('ajax.getCostumer');
     Route::get('/ajax/getItemSetoran', [AjaxController::class, 'getItemSetoran'])->name('ajax.getItemSetoran');

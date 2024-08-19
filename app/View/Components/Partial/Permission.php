@@ -14,7 +14,7 @@ class Permission extends Component
      */
 
      public $data;
-     public $userList, $settingList,$reportList, $boronganList, $setoranList, $produksiList, $contributorList, $operationList, $assetLancarList,$itemList, $vaccountList, $accountList, $transactionList, $customerList, $supplierList, $resellerList, $warehouseList, $vwarehouseList;
+     public $userList, $settingList,$reportList, $boronganList, $setoranList, $produksiList, $contributorList, $operationList, $assetLancarList,$itemList, $vaccountList, $accountList, $transactionList, $customerList, $supplierList, $resellerList, $warehouseList, $vwarehouseList, $poList, $cnpoList;
     
 
     public function __construct($data = [])
@@ -38,6 +38,8 @@ class Permission extends Component
         $this->reportList = $this->reportPermissionList();
         $this->settingList = $this->settingPermissionList();
         $this->userList = $this->userPermissionList();
+        $this->poList = $this->poPermissionList();
+        $this->cnpoList = $this->cnpoPermissionList();
         
 
     }
@@ -72,6 +74,34 @@ class Permission extends Component
     
 
         return view('components.partial.permission',compact('permissionsArray'));
+    }
+
+    private function poPermissionList(){
+        $data = [
+            ['name' => 'po list', 'label' => 'List'],
+            ['name' => 'po create', 'label' => 'Create'],
+            ['name' => 'po detail', 'label' => 'Detail'],
+            ['name' => 'po delete', 'label' => 'Delete'],
+            ['name' => 'po item', 'label' => 'Item'],
+           
+           
+        ];
+
+        return $data;
+    }
+
+    private function cnpoPermissionList(){
+        $data = [
+            ['name' => 'cnpo list', 'label' => 'List'],
+            ['name' => 'cnpo detail', 'label' => 'Detail'],
+            ['name' => 'cnpo update', 'label' => 'Update Quantity'],
+            ['name' => 'cnpo kosong', 'label' => 'Update Kosong'],
+            ['name' => 'cnpo delete', 'label' => 'Delete'],
+           
+           
+        ];
+
+        return $data;
     }
 
     private function transactionPermissionList(){

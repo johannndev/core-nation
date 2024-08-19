@@ -569,6 +569,74 @@
 
                 
             </div>
+
+            
+        </div>
+
+    </div>
+
+    <div class="mb-8">
+
+        <div>
+            <p class="font-medium mb-2">PO</p>
+        </div>
+        <div>
+            <div class="mb-4">
+                <div class="flex items-center">
+                    <input id="checkbox-all-cnpo" type="checkbox" value="1" class="checkbox-role checkbox-all-cnpo w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="checkbox-role" class="ms-2 text-sm text-gray-900 dark:text-gray-300">Semua</label>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-5 gap-4">
+
+                @foreach ($cnpoList as $item)
+
+                <div>
+                    <div class="flex items-center">
+                        <input @if($permissionsArray) @if(array_key_exists($item['name'],$permissionsArray)) checked @endif @endif   id="checkbox-role" name="permissions[]" type="checkbox" value="{{$item['name']}}" class="checkbox-role checkbox-cnpo w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="checkbox-role" class="ms-2 text-sm text-gray-900 dark:text-gray-300">{{$item['label']}}</label>
+                    </div>
+                </div>
+                    
+                @endforeach
+
+                
+            </div>
+
+            
+        </div>
+
+    </div>
+
+    <div class="mb-8">
+
+        <div>
+            <p class="font-medium mb-2">Web PO</p>
+        </div>
+        <div>
+            <div class="mb-4">
+                <div class="flex items-center">
+                    <input id="checkbox-all-po" type="checkbox" value="1" class="checkbox-role checkbox-all-po w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="checkbox-role" class="ms-2 text-sm text-gray-900 dark:text-gray-300">Semua</label>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-5 gap-4">
+
+                @foreach ($poList as $item)
+
+                <div>
+                    <div class="flex items-center">
+                        <input @if($permissionsArray) @if(array_key_exists($item['name'],$permissionsArray)) checked @endif @endif   id="checkbox-role" name="permissions[]" type="checkbox" value="{{$item['name']}}" class="checkbox-role checkbox-po w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="checkbox-role" class="ms-2 text-sm text-gray-900 dark:text-gray-300">{{$item['label']}}</label>
+                    </div>
+                </div>
+                    
+                @endforeach
+
+                
+            </div>
+
+            
         </div>
 
     </div>
@@ -610,6 +678,11 @@
         var allBorongan = 0;
         var allUserChecked = 0;
         var allUser = 0;
+        var allcnpoChecked = 0;
+        var allcnpo = 0;
+        var allpoChecked = 0;
+        var allpo = 0;
+
 
         function cekChecked(){
             allChecked = $('.checkbox-role').not(':checked').length;
@@ -628,6 +701,49 @@
             }
 
         } 
+
+        function cekcnpo(){
+            allcnpoChecked = $('.checkbox-cnpo').not(':checked').length;
+            allcnpo = $('.checkbox-cnpo').length;
+
+           
+
+            if(allcnpoChecked == 0){
+            $('.checkbox-all-cnpo').prop('indeterminate', false);
+            $('.checkbox-all-cnpo').prop('checked', true);
+            
+
+            }else if(allcnpoChecked < allcnpo && allcnpoChecked > 0){
+                $('.checkbox-all-cnpo').prop('indeterminate', true);
+            }else{
+                $('.checkbox-all-cnpo').prop('indeterminate', false);
+                $('.checkbox-all-cnpo').prop('checked', false);
+
+            }
+
+        } 
+
+        function cekpo(){
+            allpoChecked = $('.checkbox-po').not(':checked').length;
+            allpo = $('.checkbox-po').length;
+
+           
+
+            if(allpoChecked == 0){
+            $('.checkbox-all-po').prop('indeterminate', false);
+            $('.checkbox-all-po').prop('checked', true);
+            
+
+            }else if(allpoChecked < allpo && allpoChecked > 0){
+                $('.checkbox-all-po').prop('indeterminate', true);
+            }else{
+                $('.checkbox-all-po').prop('indeterminate', false);
+                $('.checkbox-all-po').prop('checked', false);
+
+            }
+
+        } 
+
 
         function cekTransaction(){
             allTransactionChecked = $('.checkbox-transaction').not(':checked').length;
@@ -920,6 +1036,8 @@
             cekSetoran();
             cekBorongan();
             cekUser();
+            cekcnpo();
+            cekpo();
 
             $(".checkbox-role").click(function(){cekChecked();})
             
@@ -938,6 +1056,8 @@
             $(".checkbox-role.checkbox-setoran").click(function(){cekSetoran(); })
             $(".checkbox-role.checkbox-borongan").click(function(){cekBorongan(); })
             $(".checkbox-role.checkbox-user").click(function(){cekUser(); })
+            $(".checkbox-role.checkbox-cnpo").click(function(){cekcnpo(); })
+            $(".checkbox-role.checkbox-po").click(function(){cekpo(); })
             
             
 
@@ -951,6 +1071,26 @@
                 }
 
                 
+            })
+
+            $("#checkbox-all-cnpo").click(function(){
+                if((this).checked == true){
+                    $('.checkbox-role.checkbox-cnpo').prop('checked', true);
+                }else{
+                    $('.checkbox-role.checkbox-cnpo').prop('checked', false);
+                }
+
+                cekChecked();
+            })
+
+            $("#checkbox-all-po").click(function(){
+                if((this).checked == true){
+                    $('.checkbox-role.checkbox-po').prop('checked', true);
+                }else{
+                    $('.checkbox-role.checkbox-po').prop('checked', false);
+                }
+
+                cekChecked();
             })
 
             $("#checkbox-all-transaction").click(function(){

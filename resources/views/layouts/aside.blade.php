@@ -25,7 +25,7 @@
         </a>
         </li>
 
-        @if(auth()->user()->can('transactions.list') || auth()->user()->can('transactions.cashIn') || auth()->user()->can('transactions.cashOut') || auth()->user()->can('transactions.adjust') || auth()->user()->can('transactions.transfer') || auth()->user()->can('transactions.return') || auth()->user()->can('transactions.returnSuplier') || auth()->user()->can('transactions.deleteList') )
+        @if(auth()->user()->can('transactions.list') || auth()->user()->can('transactions.cashIn') || auth()->user()->can('transactions.cashOut') || auth()->user()->can('transactions.adjust') || auth()->user()->can('transactions.transfer') || auth()->user()->can('transactions.return') || auth()->user()->can('transactions.returnSuplier') || auth()->user()->can('transactions.deleteList') || auth()->user()->can('cnpo list') )
         <li>
 
            
@@ -133,6 +133,16 @@
                         href="{{route('transaction.returnSupplier')}}"
                         class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                         >Return Supplier</a
+                    >
+                </li>
+                @endcan
+
+                @can('cnpo list')
+                <li>
+                    <a
+                        href="{{route('transaction.Poindex')}}"
+                        class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                        >PO List</a
                     >
                 </li>
                 @endcan
