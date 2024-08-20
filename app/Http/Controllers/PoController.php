@@ -8,6 +8,7 @@ use App\Models\Po;
 use App\Models\PoDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class PoController extends Controller
 {
@@ -20,6 +21,17 @@ class PoController extends Controller
 		if($request->from && $request->to){
 			$dataList = $dataList->whereDate('date','>=',$request->from)->whereDate('date','<=',$request->to);
 		}
+
+        if($request->customer){
+
+            $user = $request->customer;
+
+            $dataList = $dataList->whereHas('user', function (Builder $query) use($user) {
+                $query->where('username', 'like', $user);
+            });
+
+        }
+       
 
 		if($request->invoice){
 			$dataList = $dataList->where('invoice',$request->invoice);
