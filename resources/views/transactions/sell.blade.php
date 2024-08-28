@@ -423,7 +423,7 @@
                     }
                 },
                 decoder: {
-                    readers: ['ean_reader']
+                    readers: ['code_128_reader']
                 },
             }
         
