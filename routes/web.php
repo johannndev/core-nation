@@ -123,6 +123,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/getItemId', [AjaxController::class, 'getItemId'])->name('ajax.getitemId');
     Route::get('/getItemName', [AjaxController::class, 'getItem'])->name('ajax.getitemName');
     Route::get('/getInvoice', [AjaxController::class, 'getInvoice'])->name('ajax.getInvoice');
+    Route::post('/scan-barcode', [AjaxController::class, 'processBarcode']);
+
 
     Route::get('/transaction', [TransactionsController::class, 'index'])->name('transaction.index')->middleware('permission:transactions.list');
     Route::get('/transaction/filter', [FilterQueryController::class, 'transactionFilter'])->name('transaction.filter')->middleware('permission:transactions.list');

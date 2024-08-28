@@ -171,4 +171,15 @@ class AjaxController extends Controller
 
         // dd($dataList);
     }
+
+    public function processBarcode(Request $request)
+    {
+        $barcode = $request->input('barcode');
+
+        // Logika untuk memproses barcode di sini, misalnya mencari produk di database berdasarkan barcode
+        // Contoh:
+        // $product = Product::where('barcode', $barcode)->first();
+
+        return response()->json(['message' => 'Barcode processed successfully: ' . $barcode]);
+    }
 }

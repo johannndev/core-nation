@@ -116,6 +116,12 @@
                             </div>
 
                         </div>
+
+                        <div class="mb-6">
+
+                            <div id="camera" style="width:100%"></div>
+                            <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
+                        </div>
                     
 
                         <div class="mb-6">
@@ -400,6 +406,40 @@
 
 
     @include('layouts.js.jsutama')
+
+    @push('jsBody')
+        <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+
+        <script>
+            const quaggaConf = {
+                inputStream: {
+                    target: document.querySelector("#camera"),
+                    type: "LiveStream",
+                    constraints: {
+                        width: { max: 640 },
+                        height: { max: 480 },
+                        facingMode: "environment",
+                        aspectRatio: { min: 1, max: 2 }
+                    }
+                },
+                decoder: {
+                    readers: ['ean_reader']
+                },
+            }
+        
+            Quagga.init(quaggaConf, function (err) {
+                if (err) {
+                    return console.log(err);
+                }
+                Quagga.start();
+            });
+        
+            Quagga.onDetected(function (result) {
+                alert("Detected barcode: " + result.codeResult.code);
+            });
+        </script>
+        
+    @endpush
    
 
 

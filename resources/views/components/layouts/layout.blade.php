@@ -26,6 +26,15 @@
 		{{-- <link rel="stylesheet" href="{{asset('css/select2Custom.css')}}"> --}}
 
 		<style>
+			#scanner-container {
+				width: 300px;
+				height: 100px;
+				border: 1px solid #ccc;
+				margin: 20px 0;
+			}
+		</style>
+
+		<style>
 			/* Contoh styling */
 			.active, .autocomplete-items div:hover {
 				background-color: #e9e9e9;
