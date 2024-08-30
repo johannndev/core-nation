@@ -17,7 +17,7 @@
             type: "LiveStream",
             constraints: {
                 width:  {min:300},
-                height:  {min:10, max:300} ,
+                height:  {min:10, max:100} ,
                 facingMode: "environment",
                 aspectRatio: { min: 1, max: 2 }
             }
