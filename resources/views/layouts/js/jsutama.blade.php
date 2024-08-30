@@ -16,10 +16,10 @@
             target: document.querySelector("#camera"),
             type: "LiveStream",
             constraints: {
-                width:  240,
-                height:  400 ,
+                width:  {min:300},
+                height:  {min:10, max:300} ,
                 facingMode: "environment",
-               
+                aspectRatio: { min: 1, max: 2 }
             }
         },
         decoder: {
