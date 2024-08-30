@@ -19,7 +19,7 @@
                 width:  240,
                 height:  450 ,
                 facingMode: "environment",
-                aspectRatio: { min: 1, max: 2 }
+               
             }
         },
         decoder: {
