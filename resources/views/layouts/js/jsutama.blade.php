@@ -16,8 +16,8 @@
             target: document.querySelector("#camera"),
             type: "LiveStream",
             constraints: {
-                width:  {min:300},
-                height:  {min:10, max:100} ,
+                width:  {min:200},
+                height:  {min:10, max:150} ,
                 facingMode: "environment",
                 aspectRatio: { min: 1, max: 2 }
             }
