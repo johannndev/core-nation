@@ -5,25 +5,36 @@
 
             <div class="w-full md:w-1/3 ">
                 
-                <div class="">
-                    
-                    <p class="text-center mb-4">Scan barcode kamu di sini</p>
+                <div class="relative">
 
-                    <div id="alert-scan" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-                        
+
+                    <div class="absolute top-2 left-0 right-0">
+
+                        <p class="text-center mb-4">Scan barcode kamu di sini</p>
+
+                        <div id="alert-scan" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                            
+                        </div>
+
                     </div>
+                    
+                   
 
                     <div id="camera" style="width:100%" class="flex"></div>
 
-                    <div class="flex justify-center ">
+                    <div class=" relative bottom-2 left-0 right-0">
 
-                        <button
-                            type="button"
-                            id="closeModalButton"
-                            class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        >
-                            Tutup
-                        </button>
+                        <div class="flex justify-center ">
+
+                            <button
+                                type="button"
+                                id="closeModalButton"
+                                class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            >
+                                Tutup
+                            </button>
+    
+                        </div>
 
                     </div>
                     
