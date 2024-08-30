@@ -1,6 +1,6 @@
 <x-layouts.layout>
 
-   
+    <x:partial.scan-modal/>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
@@ -117,11 +117,7 @@
 
                         </div>
 
-                        <div class="mb-6">
-
-                            <div id="camera" style="width:100%"></div>
-                            <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
-                        </div>
+                        
                     
 
                         <div class="mb-6">
@@ -336,6 +332,16 @@
                             </div>
                         </div>
 
+                        <div class="mb-6">
+                            <button id="openModalButton" type="button" class="focus:outline-none inline-flex items-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                            
+
+                                <svg class="w-3.5 h-3.5 me-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M8,2A1,1,0,0,1,8,4H4V8A1,1,0,0,1,2,8V3A1,1,0,0,1,3,2ZM8,20H4V16a1,1,0,0,0-2,0v5a1,1,0,0,0,1,1H8a1,1,0,0,0,0-2Zm13-5a1,1,0,0,0-1,1v4H16a1,1,0,0,0,0,2h5a1,1,0,0,0,1-1V16A1,1,0,0,0,21,15Zm0-6a1,1,0,0,0,1-1V3a1,1,0,0,0-1-1H16a1,1,0,0,0,0,2h4V8A1,1,0,0,0,21,9Zm1,2H2a1,1,0,0,0,0,2H22a1,1,0,0,0,0-2Z"></path></g></svg>
+
+                                Scan
+                            </button>
+                        </div>
+
                         <div class="grid grid-cols-2 gap-4 mb-6">
 
                             <div class="col-span-2">
@@ -408,36 +414,7 @@
     @include('layouts.js.jsutama')
 
     @push('jsBody')
-        <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
-
-        <script>
-            const quaggaConf = {
-                inputStream: {
-                    target: document.querySelector("#camera"),
-                    type: "LiveStream",
-                    constraints: {
-                        width: { max: 640 },
-                        height: { max: 480 },
-                        facingMode: "environment",
-                        aspectRatio: { min: 1, max: 2 }
-                    }
-                },
-                decoder: {
-                    readers: ['code_128_reader']
-                },
-            }
         
-            Quagga.init(quaggaConf, function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-                Quagga.start();
-            });
-        
-            Quagga.onDetected(function (result) {
-                alert("Detected barcode: " + result.codeResult.code);
-            });
-        </script>
         
     @endpush
    

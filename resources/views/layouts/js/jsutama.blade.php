@@ -2,10 +2,98 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/collect.js/4.36.1/collect.min.js"></script>
 
-<script>
+<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
 
+<script>
+    var lineC = 0;
     var adjustment = 0
     var discAll = 0
+</script>
+
+<script>
+    const quaggaConf = {
+        inputStream: {
+            target: document.querySelector("#camera"),
+            type: "LiveStream",
+            constraints: {
+                width:  {min:300},
+                height:  {min:10, max:300} ,
+                facingMode: "environment",
+                aspectRatio: { min: 1, max: 2 }
+            }
+        },
+        decoder: {
+            readers: ['code_128_reader']
+        },
+    }
+
+    const scanAlert = document.getElementById('alert-scan');
+
+    function startScan(){
+
+        scanAlert.classList.add('hidden');
+
+        Quagga.init(quaggaConf, function (err) {
+        if (err) {
+                return console.log(err);
+            }
+
+            
+            Quagga.start();
+        
+        
+        });
+
+    }
+
+    
+
+    Quagga.onDetected(function (result) {
+
+        
+
+        if ($('#alert-scan').find('#kodebar').length === 0) {
+            $('#alert-scan').append('<span id="kodebar"> barcode '+result.codeResult.code+' berhasil di scan.</span>');
+
+            handleScan(result.codeResult.code);
+        }
+
+        // $('#kodebar').append(result.codeResult.code);
+
+        scanAlert.classList.remove('hidden');
+
+        closeAll();
+
+        document.getElementById("quantity"+lineC).focus();
+
+        
+
+        // alert("Detected barcode: " + result.codeResult.code);
+    });
+
+    function stopScan(){
+
+        Quagga.stop();
+
+    }
+
+    
+
+    function closeAll(){
+        setTimeout(function() {
+            var button = document.getElementById('closeModalButton');
+            if (button) {
+                button.click();
+            }
+        }, 2000); // Klik otomatis setelah 2 detik
+    }
+
+    
+</script>
+
+<script>
+
+   
 
 
     $(document).on("keypress", function(e){
@@ -14,7 +102,7 @@
         if(e.which == 13){e.preventDefault();}
     })
 
-    var lineC = 0;
+    
 
     $(document).ready(function() {
         
@@ -138,6 +226,34 @@
 
         }
 
+        
+    
+        return true; // Memastikan bahwa input lainnya tetap berfungsi normal
+    }
+
+    function handleScan(valCode) {
+
+
+        var wh= $('#warehouse').val();
+        var se = $('#sender').val();
+        var whId = 0;
+
+        if(wh){
+            whId = wh;
+        }else if(se){
+            whId = se;
+        }else{
+           
+        }
+
+        console.log(whId);
+
+        getItem(valCode,lineC,whId)
+
+        
+        document.getElementById("quantity"+lineC).focus();
+
+         
         
     
         return true; // Memastikan bahwa input lainnya tetap berfungsi normal
