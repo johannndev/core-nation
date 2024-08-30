@@ -3,9 +3,9 @@
         <!-- Modal content -->
         <div class="relative rounded-lg bg-white shadow dark:bg-gray-700 h-full w-full ">
 
-            <div class="relative">
+            <div class="">
 
-                <div class="absolute top-0 right-0 z-30">
+                <div class="">
                     <button
                         id="closeModalButton"
                         type="button"
