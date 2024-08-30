@@ -36,7 +36,7 @@
                     
                 </div>
 
-                <div id="camera" style="width:100%"></div>
+                <div id="camera" style="width:100%" class="flex"></div>
 
             </div>
            
