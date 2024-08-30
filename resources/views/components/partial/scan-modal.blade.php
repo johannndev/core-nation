@@ -15,7 +15,7 @@
 
                     <div id="camera" style="width:100%" class="flex"></div>
 
-                    <div class="flex justify-center mt-6 ">
+                    <div class="flex justify-center ">
 
                         <button
                             type="button"
