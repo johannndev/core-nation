@@ -8,7 +8,7 @@
                 <div class="relative">
 
 
-                    <div class="absolute top-2 left-0 right-0">
+                    <div class="absolute md:relative top-2 left-0 right-0">
 
                         <p class="text-center mb-4">Scan barcode kamu di sini</p>
 
@@ -20,9 +20,9 @@
                     
                    
 
-                    <div id="camera" style="width:100%" class="flex"></div>
+                    <div id="camera" style="width:100%" class="flex "></div>
 
-                    <div class=" relative bottom-2 left-0 right-0">
+                    <div class=" absolute md:relative  bottom-2 md:bottom-0 left-0 right-0">
 
                         <div class="flex justify-center ">
 

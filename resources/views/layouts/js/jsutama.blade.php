@@ -8,18 +8,34 @@
     var lineC = 0;
     var adjustment = 0
     var discAll = 0
+
+    var isMobile = Math.min(window.screen.width, window.screen.height) < 768 || navigator.userAgent.indexOf("Mobi") > -1;
+
+    console.log(isMobile);
+
 </script>
 
 <script>
+
+    var heightCS;
+
+    if(isMobile){
+        heightCS = {min:300};
+    }else{
+
+        heightCS =  {min:10, max:300};
+
+    }
+
     const quaggaConf = {
         inputStream: {
             target: document.querySelector("#camera"),
             type: "LiveStream",
             constraints: {
                 width:  {min:300},
-                height:  {min:300} ,
+                height: heightCS ,
                 facingMode: "environment",
-                aspectRatio: { min: 1, max: 3 }
+                aspectRatio: { min: 1, max: 2 }
             }
         },
         decoder: {
@@ -64,7 +80,7 @@
 
         closeAll();
 
-        document.getElementById("quantity"+lineC).focus();
+         document.getElementById("quantity"+lineC).focus();
 
         
 
