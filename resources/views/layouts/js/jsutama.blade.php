@@ -19,7 +19,7 @@
                 width:  {min:300},
                 height:  {min:300} ,
                 facingMode: "environment",
-                aspectRatio: { min: 1, max: 2 }
+                aspectRatio: { min: 1, max: 3 }
             }
         },
         decoder: {
