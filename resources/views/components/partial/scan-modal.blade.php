@@ -45,7 +45,7 @@
                         
                     </div>
 
-                    <div id="camera" style="width:100%; height:300px"></div>
+                    <div id="camera" style="width:100%; height:100px"></div>
 
 
                     <div class="flex justify-center mt-6 ">
