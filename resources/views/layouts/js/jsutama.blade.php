@@ -17,7 +17,7 @@
             type: "LiveStream",
             constraints: {
                 width:  240,
-                height:  350 ,
+                height:  400 ,
                 facingMode: "environment",
                
             }
