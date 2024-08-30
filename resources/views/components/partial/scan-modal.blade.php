@@ -5,7 +5,7 @@
 
             <div class="w-full md:w-1/3 ">
                 
-                <div class="space-y-6 p-6">
+                <div class="">
                     
                     <p class="text-center mb-4">Scan barcode kamu di sini</p>
 
