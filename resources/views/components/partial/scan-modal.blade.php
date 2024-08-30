@@ -5,16 +5,12 @@
 
             <div class="">
 
-          
-
-                <p class="text-center my-4">Scan barcode kamu di sini</p>
-
                 <div id="alert-scan" class="m-4 p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
                 </div>
 
                 <div id="camera" style="width:100%" class="flex"></div>
 
-                <div class="flex justify-center mt-4 ">
+                <div class="flex justify-center">
 
                     <button
                         type="button"
