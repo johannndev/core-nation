@@ -5,38 +5,26 @@
 
             <div class="">
 
-                <div class="">
-                    <button
-                        id="closeModalButton"
-                        type="button"
-                        class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                        <svg
-                            class="h-3 w-3"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 14 14"
-                        >
-                            <path
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                            />
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
+          
 
-                    <div id="alert-scan" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-                        
-                    </div>
+                <p class="text-center my-4">Scan barcode kamu di sini</p>
 
-                    
+                <div id="alert-scan" class="m-4 p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
                 </div>
 
                 <div id="camera" style="width:100%" class="flex"></div>
+
+                <div class="flex justify-center mt-4 ">
+
+                    <button
+                        type="button"
+                        id="closeModalButton"
+                        class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                        Tutup
+                    </button>
+
+                </div>
 
             </div>
            
