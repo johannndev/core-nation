@@ -11,6 +11,7 @@ Alpine.start();
 
 import { Modal } from 'flowbite';
 
+
 // set the modal menu element
 const $targetEl = document.getElementById('modalManual');
 
@@ -28,7 +29,7 @@ const options = {
     onShow: () => {
         
         console.log('modal is shown');
-        startScan();
+        
         // showAlert();
     },
     onToggle: () => {
@@ -47,11 +48,13 @@ const modal = new Modal($targetEl, options, instanceOptions);
 // modal.show();
 
 // Event listener untuk membuka modal
-document.getElementById('openModalButton').addEventListener('click', () => {
-    modal.show();
 
-    
+document.querySelectorAll('#openModalButton').forEach(button => {
+    button.addEventListener('click', function() {
+        modal.show();
+    });
 });
+
 
 // Event listener untuk menutup modal
 document.getElementById('closeModalButton').addEventListener('click', () => {
@@ -63,3 +66,11 @@ document.getElementById('closeModalButton').addEventListener('click', () => {
 window.myAppFunction = function() {
     alert("Hello from app.js!");
 };
+
+function starScanButton(id) {
+    modal.show();
+    startScan(id);
+    
+}
+
+window.starScanButton = starScanButton;

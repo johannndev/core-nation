@@ -223,16 +223,33 @@
                                 
                                     
                                 </div>
-                                
-                                <div class="grid gap-6 mb-6 md:grid-cols-8 items-end addField0 "id="gridItem0">
-                                    <div class="flex items-end w-full">
+                          
+                                <div class="grid gap-6 mb-6 md:grid-cols-9 items-end addField0 "id="gridItem0">
+                                    <div class="flex items-end w-full col-span-9 md:col-span-2">
 
                                         <div class="w-full">
 
                                             <input type="text" name="addMoreInputFields[0][itemId]"  id="id0"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
                                 
                                             <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
-                                            <input type="search" data-input="value" data-name="code" data-id="0" onkeydown="return handleCode(event,0)" name="addMoreInputFields[0][code]"  id="code0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search" />
+
+                                            <div class="flex">
+
+                                                <div class="">
+                                                    <button onclick="starScanButton(0)" id="openModalButton" type="button" class="focus:outline-none inline-flex items-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                                    
+                        
+                                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M8,2A1,1,0,0,1,8,4H4V8A1,1,0,0,1,2,8V3A1,1,0,0,1,3,2ZM8,20H4V16a1,1,0,0,0-2,0v5a1,1,0,0,0,1,1H8a1,1,0,0,0,0-2Zm13-5a1,1,0,0,0-1,1v4H16a1,1,0,0,0,0,2h5a1,1,0,0,0,1-1V16A1,1,0,0,0,21,15Zm0-6a1,1,0,0,0,1-1V3a1,1,0,0,0-1-1H16a1,1,0,0,0,0,2h4V8A1,1,0,0,0,21,9Zm1,2H2a1,1,0,0,0,0,2H22a1,1,0,0,0,0-2Z"></path></g></svg>
+                        
+                                                       
+                                                    </button>
+                                                </div>
+
+                                                <input type="search" data-input="value" data-name="code" data-id="0" onkeydown="return handleCode(event,0)" name="addMoreInputFields[0][code]"  id="code0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search" />
+
+                                            </div>
+
+                                            
 
                                         </div>
 
@@ -240,7 +257,7 @@
 
                                         
                                     </div>
-                                    <div>
+                                    <div class="col-span-9 md:col-span-1">
                                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
                                         
                                         <div class="flex items-end w-full ">
@@ -265,7 +282,7 @@
                                    
                                 
                                     </div>
-                                    <div>
+                                    <div class="col-span-9 md:col-span-1">
                                         <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 ">Quantity </label>
 
                                         <div class="flex items-end w-full">
@@ -278,12 +295,12 @@
                                            
                                         </div>
                                     </div>  
-                                    <div>
+                                    <div class="col-span-9 md:col-span-1">
                                         <label for="wh" class="block mb-2 text-sm font-medium text-gray-900 ">Warehouse</label>
                                         <input  type="text" name="addMoreInputFields[0][wh]"   id="wh0"class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" disabled/>
                                     </div>  
                                 
-                                    <div>
+                                    <div class="col-span-9 md:col-span-1">
                                         <label for="price" class="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
 
                                         <div class="flex items-end w-full">
@@ -296,7 +313,7 @@
                                         
                                     </div> 
                                     
-                                    <div>
+                                    <div class="col-span-9 md:col-span-1">
                                         <label for="discount" class="block mb-2 text-sm font-medium text-gray-900 ">Discount</label>
 
                                         <div class="flex items-end w-full">
@@ -310,12 +327,12 @@
 
                                     </div> 
                                 
-                                    <div>
+                                    <div class="col-span-9 md:col-span-1">
                                         <label for="subtotal" class="block mb-2 text-sm font-medium text-gray-900 ">Subtotal</label>
                                         <input type="text" name="addMoreInputFields[0][subtotal]"  id="subtotal0" class="sto register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" aria-valuetext="0" aria-label="subtotal" />
                                     </div> 
                                 
-                                    <div>
+                                    <div class="col-span-9 md:col-span-1">
                                         <button  onclick="remove('0')" type="button" class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                                 
                                             <svg class="mr-1 -ml-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
@@ -330,16 +347,6 @@
                                 </div>
 
                             </div>
-                        </div>
-
-                        <div class="mb-6">
-                            <button id="openModalButton" type="button" class="focus:outline-none inline-flex items-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                            
-
-                                <svg class="w-3.5 h-3.5 me-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M8,2A1,1,0,0,1,8,4H4V8A1,1,0,0,1,2,8V3A1,1,0,0,1,3,2ZM8,20H4V16a1,1,0,0,0-2,0v5a1,1,0,0,0,1,1H8a1,1,0,0,0,0-2Zm13-5a1,1,0,0,0-1,1v4H16a1,1,0,0,0,0,2h5a1,1,0,0,0,1-1V16A1,1,0,0,0,21,15Zm0-6a1,1,0,0,0,1-1V3a1,1,0,0,0-1-1H16a1,1,0,0,0,0,2h4V8A1,1,0,0,0,21,9Zm1,2H2a1,1,0,0,0,0,2H22a1,1,0,0,0,0-2Z"></path></g></svg>
-
-                                Scan
-                            </button>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4 mb-6">

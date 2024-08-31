@@ -20,7 +20,7 @@
                     
                    
 
-                    <div id="camera" style="width:100%" class="flex "></div>
+                    <div id="camera" style="width:100%" class="flex"></div>
 
                     <div class=" absolute md:relative  bottom-2 md:bottom-0 left-0 right-0">
 

@@ -5,9 +5,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
 
 <script>
+   
+
     var lineC = 0;
     var adjustment = 0
     var discAll = 0
+    var scanId = 0;
 
     var isMobile = Math.min(window.screen.width, window.screen.height) < 768 || navigator.userAgent.indexOf("Mobi") > -1;
 
@@ -45,7 +48,12 @@
 
     const scanAlert = document.getElementById('alert-scan');
 
-    function startScan(){
+    function startScan(id){
+
+        console.log(id);
+        
+        scanId = id;
+     
 
         scanAlert.classList.add('hidden');
 
@@ -71,8 +79,10 @@
         if ($('#alert-scan').find('#kodebar').length === 0) {
             $('#alert-scan').append('<span id="kodebar"> barcode '+result.codeResult.code+' berhasil di scan.</span>');
 
-            handleScan(result.codeResult.code);
+            
         }
+
+        handleScan(scanId,result.codeResult.code);
 
         // $('#kodebar').append(result.codeResult.code);
 
@@ -80,7 +90,7 @@
 
         closeAll();
 
-         document.getElementById("quantity"+lineC).focus();
+        document.getElementById("quantity"+scanId).focus();
 
         
 
@@ -247,8 +257,9 @@
         return true; // Memastikan bahwa input lainnya tetap berfungsi normal
     }
 
-    function handleScan(valCode) {
-
+    function handleScan(scanId,valCode) {
+        console.log('halo');
+        
 
         var wh= $('#warehouse').val();
         var se = $('#sender').val();
@@ -262,12 +273,12 @@
            
         }
 
-        console.log(whId);
+        console.log(valCode+" "+scanId+" "+whId);
 
-        getItem(valCode,lineC,whId)
+        getItem(valCode,scanId,whId)
 
         
-        document.getElementById("quantity"+lineC).focus();
+        document.getElementById("quantity"+scanId).focus();
 
          
         
@@ -704,14 +715,29 @@
                 
             </div>
 
-            <div class="grid gap-6 mb-6 md:grid-cols-8 items-end addField`+i+` "id="gridItem`+i+`">
-                <div>
+            <div class="grid gap-6 mb-6 md:grid-cols-9 items-end addField`+i+` "id="gridItem`+i+`">
+                <div class="col-span-9 md:col-span-2">
                     <input type="text" name="addMoreInputFields[`+i+`][itemId]"  id="id`+i+`"  placeholder=""  aria-valuetext="`+i+`" aria-label="id" hidden/>
 
                     <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
-                    <input  onkeydown="return handleCode(event,`+i+`)" type="search" inputmode="search" name="addMoreInputFields[`+i+`][code]"  id="code`+i+`" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  />
+                    <div class="flex">
+
+                        <div class="">
+                            <button onclick="starScanButton(`+i+`)" id="openModalButton"  type="button" class="focus:outline-none inline-flex items-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                            
+
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M8,2A1,1,0,0,1,8,4H4V8A1,1,0,0,1,2,8V3A1,1,0,0,1,3,2ZM8,20H4V16a1,1,0,0,0-2,0v5a1,1,0,0,0,1,1H8a1,1,0,0,0,0-2Zm13-5a1,1,0,0,0-1,1v4H16a1,1,0,0,0,0,2h5a1,1,0,0,0,1-1V16A1,1,0,0,0,21,15Zm0-6a1,1,0,0,0,1-1V3a1,1,0,0,0-1-1H16a1,1,0,0,0,0,2h4V8A1,1,0,0,0,21,9Zm1,2H2a1,1,0,0,0,0,2H22a1,1,0,0,0,0-2Z"></path></g></svg>
+
+                                
+                            </button>
+                        </div>
+
+                        <input type="search" data-input="value" data-name="code" data-id="`+i+`" onkeydown="return handleCode(event,`+i+`)" name="addMoreInputFields[`+i+`][code]"  id="code`+i+`" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search" />
+
+                    </div>
+                   
                 </div>
-                <div>
+                <div class="col-span-9 md:col-span-1">
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
                     
                     <div class="">
@@ -732,31 +758,31 @@
                 
 
                 </div>
-                <div>
+                <div class="col-span-9 md:col-span-1">
                     <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 ">Quantity </label>
                     <input onkeyup="return handleQty(event,`+i+`)" type="search" inputmode="search" name="addMoreInputFields[`+i+`][quantity]"  id="quantity`+i+`" class="qty register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                 </div>  
-                <div>
+                <div class="col-span-9 md:col-span-1">
                     <label for="wh" class="block mb-2 text-sm font-medium text-gray-900 ">Warehouse</label>
                     <input type="text" name="addMoreInputFields[`+i+`][wh]"   id="wh`+i+`"class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" disabled/>
                 </div>  
 
-                <div>
+                <div class="col-span-9 md:col-span-1">
                     <label for="price" class="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
                     <input onkeyup="return handlePrice(event,`+i+`)" type="search" inputmode="search" name="addMoreInputFields[`+i+`][price]"  id="price`+i+`" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                 </div> 
                 
-                <div class="hidden">
+                <div class="hidden col-span-9 md:col-span-1">
                     <label for="discount" class="block mb-2 text-sm font-medium text-gray-900 ">Discount</label>
                     <input hidden onkeyup="return handleDisc(event,`+i+`)" type="search" inputmode="search" name="addMoreInputFields[`+i+`][discount]"   id="discount`+i+`" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                 </div> 
 
-                <div>
+                <div class="col-span-9 md:col-span-1">
                     <label for="subtotal" class="block mb-2 text-sm font-medium text-gray-900 ">Subtotal</label>
                     <input type="text" name="addMoreInputFields[`+i+`][subtotal]"  id="subtotal`+i+`" class="sto register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" aria-valuetext="0" aria-label="subtotal" />
                 </div> 
 
-                <div>
+                <div class="col-span-9 md:col-span-1">
                     <button  onclick="remove('`+i+`')" type="button" class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
 
                         <svg class="mr-1 -ml-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
@@ -886,15 +912,31 @@
                 </div>
 
             
-            <div class="grid gap-6 mb-6 md:grid-cols-8 items-end addField`+i+` "id="gridItem`+i+`">
-                    <div class="flex items-end w-full">
+                <div class="grid gap-6 mb-6 md:grid-cols-9 items-end addField`+i+` "id="gridItem`+i+`">
+                    <div class="flex items-end w-full col-span-9 md:col-span-2">
 
                         <div class="w-full">
 
                             <input type="text" name="addMoreInputFields[`+i+`][itemId]"  id="id`+i+`"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
                 
                             <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
-                            <input type="search" data-input="value" data-name="code" data-id="`+i+`" onkeydown="return handleCode(event,`+i+`)" name="addMoreInputFields[`+i+`][code]"  id="code`+i+`" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="text" />
+
+
+                            <div class="flex">
+
+                                <div class="">
+                                    <button onclick="starScanButton(`+i+`)" id="openModalButton"  type="button" class="focus:outline-none inline-flex items-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                    
+
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M8,2A1,1,0,0,1,8,4H4V8A1,1,0,0,1,2,8V3A1,1,0,0,1,3,2ZM8,20H4V16a1,1,0,0,0-2,0v5a1,1,0,0,0,1,1H8a1,1,0,0,0,0-2Zm13-5a1,1,0,0,0-1,1v4H16a1,1,0,0,0,0,2h5a1,1,0,0,0,1-1V16A1,1,0,0,0,21,15Zm0-6a1,1,0,0,0,1-1V3a1,1,0,0,0-1-1H16a1,1,0,0,0,0,2h4V8A1,1,0,0,0,21,9Zm1,2H2a1,1,0,0,0,0,2H22a1,1,0,0,0,0-2Z"></path></g></svg>
+
+                                        
+                                    </button>
+                                </div>
+
+                                <input type="search" data-input="value" data-name="code" data-id="`+i+`" onkeydown="return handleCode(event,`+i+`)" name="addMoreInputFields[`+i+`][code]"  id="code`+i+`" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" inputmode="search" />
+
+                            </div>
 
                         </div>
 
@@ -902,7 +944,7 @@
 
                         
                     </div>
-                    <div>
+                    <div class="col-span-9 md:col-span-1">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
                         
                         <div class="flex items-end w-full ">
@@ -926,7 +968,7 @@
                     
                 
                     </div>
-                    <div>
+                    <div class="col-span-9 md:col-span-1">
                         <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 ">Quantity </label>
 
                         <div class="flex items-end w-full">
@@ -939,12 +981,12 @@
                             
                         </div>
                     </div>  
-                    <div>
+                    <div class="col-span-9 md:col-span-1">
                         <label for="wh" class="block mb-2 text-sm font-medium text-gray-900 ">Warehouse</label>
                         <input  type="text" name="addMoreInputFields[`+i+`][wh]"   id="wh`+i+`"class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" disabled/>
                     </div>  
                 
-                    <div>
+                    <div class="col-span-9 md:col-span-1">
                         <label for="price" class="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
 
                         <div class="flex items-end w-full">
@@ -957,7 +999,7 @@
                         
                     </div> 
                     
-                    <div>
+                    <div class="col-span-9 md:col-span-1">
                         <label for="discount" class="block mb-2 text-sm font-medium text-gray-900 ">Discount</label>
 
                         <div class="flex items-end w-full">
@@ -971,12 +1013,12 @@
 
                     </div> 
                 
-                    <div>
+                    <div class="col-span-9 md:col-span-1">
                         <label for="subtotal" class="block mb-2 text-sm font-medium text-gray-900 ">Subtotal</label>
                         <input type="text" name="addMoreInputFields[`+i+`][subtotal]"  id="subtotal`+i+`" class="sto register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" aria-valuetext="0" aria-label="subtotal" />
                     </div> 
                 
-                    <div>
+                    <div class="col-span-9 md:col-span-1">
                         <button  onclick="remove(`+i+`)" type="button" class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                 
                             <svg class="mr-1 -ml-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
