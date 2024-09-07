@@ -7,11 +7,14 @@ use App\Http\Controllers\AsetLancarController;
 use App\Http\Controllers\BoronganController;
 use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DeletedController;
 use App\Http\Controllers\FilterQueryController;
+use App\Http\Controllers\GajihController;
 use App\Http\Controllers\HashController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\OperationController;
 use App\Http\Controllers\PoController;
 use App\Http\Controllers\ProduksiController;
@@ -338,6 +341,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/role/{id}/update', [UserRoleController::class, 'roleUpdate'])->name('role.roleUpdate')->middleware('permission:user edit role');
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
+
+    Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
+    Route::get('/karyawan/create', [KaryawanController::class, 'create'])->name('karyawan.create');
+    Route::post('/karyawan/store', [KaryawanController::class, 'store'])->name('karyawan.store');
+    Route::get('/karyawan/{id}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
+    Route::patch('/karyawan/{id}/update', [KaryawanController::class, 'update'])->name('karyawan.update');
+    Route::get('/karyawan/{id}/detail', [KaryawanController::class, 'detail'])->name('karyawan.detail');
+    Route::delete('/karyawan/{id}/delete', [KaryawanController::class, 'delete'])->name('karyawan.delete');
+
+    Route::get('/karyawan/{id}/cuti/create', [CutiController::class, 'create'])->name('cuti.create');
+    Route::post('/karyawan/{id}/cuti/store', [CutiController::class, 'store'])->name('cuti.store');
+    Route::get('/karyawan/{id}/cuti/list', [CutiController::class, 'cutiList'])->name('cuti.cutiList');
+
+    Route::get('/karyawan/{id}/gajih/create', [GajihController::class, 'create'])->name('gajih.create');
+
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
