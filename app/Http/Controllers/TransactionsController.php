@@ -440,7 +440,7 @@ class TransactionsController extends Controller
 			"id" => "recaiver",
 			"idList" => "datalistRecaiver",
 			"idOption" => "datalistOptionsRecaiver",
-			"type" => Customer::TYPE_WAREHOUSE,
+			"type" => Customer::TYPE_WAREHOUSE,Customer::TYPE_VWAREHOUSE,
 			
 		];
 
@@ -449,7 +449,7 @@ class TransactionsController extends Controller
 			"id" => "sender",
 			"idList" => "datalistSender",
 			"idOption" => "datalistOptionsSender",
-			"type" => Customer::TYPE_WAREHOUSE,
+			"type" => Customer::TYPE_WAREHOUSE,Customer::TYPE_VWAREHOUSE,
 			
 		];
 
@@ -466,7 +466,7 @@ class TransactionsController extends Controller
 			"id" => "recaiver",
 			"idList" => "datalistRecaiver",
 			"idOption" => "datalistOptionsRecaiver",
-			"type" => Customer::TYPE_WAREHOUSE,
+			"type" => Customer::TYPE_WAREHOUSE,Customer::TYPE_VWAREHOUSE,
 			
 		];
 
@@ -475,7 +475,7 @@ class TransactionsController extends Controller
 			"id" => "warehouse",
 			"idList" => "datalistSender",
 			"idOption" => "datalistOptionsSender",
-			"type" => Customer::TYPE_WAREHOUSE,
+			"type" => Customer::TYPE_WAREHOUSE,Customer::TYPE_VWAREHOUSE,
 			
 		];
 
