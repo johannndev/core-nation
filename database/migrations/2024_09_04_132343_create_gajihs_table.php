@@ -26,6 +26,9 @@ return new class extends Migration
             $table->integer('potongan_cuti_bulanan')->default(0);
             $table->integer('potongan_cuti_premi')->default(0);
             $table->integer('total_potongan')->default(0);
+            $table->integer('bonus')->default(0);
+            $table->integer('sanksi')->default(0);
+            $table->integer('total_gajih')->default(0);
             $table->integer('flag')->default(1);
             $table->timestamps();
         });

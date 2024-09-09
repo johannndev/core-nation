@@ -62,6 +62,31 @@
                         </div>
                     </form>
 
+                    <div class="px-4 pb-4">
+                        <div class="flex flex-col md:flex-row md:space-x-3">
+                            <div class="flex items-center space-x-1">
+                                <div>
+                                    <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                                </div>
+                                <p>Cuti Tahunan</p>
+                            </div>
+
+                            <div class="flex items-center space-x-1">
+                                <div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-300"></div>
+                                </div>
+                                <p>Cuti Sakit</p>
+                            </div>
+
+                            <div class="flex items-center space-x-1">
+                                <div>
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                </div>
+                                <p>Cuti Mendadak</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -71,9 +96,9 @@
                                                             
                                         <th scope="col" class="px-4 py-3">No. Telpon</th>
                     
-                                        <th scope="col" class="px-4 py-3">Gajih 09/24</th>
+                                        <th scope="col" class="px-4 py-3">Gajih {{$now->month}}/{{$now->year}}</th>
                                         
-                                        <th scope="col" class="px-4 py-3">Cuti 2024</th>
+                                        <th scope="col" class="px-4 py-3">Cuti {{$now->year}}</th>
 
                                         <th scope="col" class="px-4 py-3">Actions</th>
                                         
@@ -100,21 +125,87 @@
                                         </td>
                     
                                         <td class="px-4 py-3">
-                                           0
+                                            @isset($item->gajihSingle)
+
+                                                {{Number::format($item->gajihSingle->total_gajih,0,0,'id')}}
+
+                                            @endisset
+
+                                            @empty($item->gajihSingle)
+                                                Belum dibuat
+                                            @endempty
                                         </td>
 
                                         <td class="px-4 py-3">
-                                            0/0/0
+                                            {{-- @php
+                                                dd($item->gajih)
+                                            @endphp --}}
+
+                                           
+
+                                            @if (count($item->gajih) > 0)
+                                                
+                                          
+                                                @foreach ($item->gajih as $g)
+
+                                                    <div class="flex space-x-1">
+                                                        <div class="h-7 w-7 bg-blue-500 rounded-full text-sm font-medium text-white flex items-center justify-center">
+                                                            <p>{{$g->total_cuti_tahunan}}</</p>
+                                                        </div>
+
+                                                        <div class="h-7 w-7 bg-yellow-300 rounded-full text-sm font-medium text-white flex items-center justify-center">
+                                                            <p>{{$g->total_cuti_sakit}}</</p>
+                                                        </div>
+
+                                                        <div class="h-7 w-7 bg-red-500 rounded-full text-sm font-medium text-white flex items-center justify-center">
+                                                            <p>{{$g->total_cuti_mendadak}}</</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                @endforeach
+
+                                            @else
+
+                                                <div class="flex space-x-1">
+                                                    <div class="h-7 w-7 bg-blue-500 rounded-full text-sm font-medium text-white flex items-center justify-center">
+                                                        <p>0</p>
+                                                    </div>
+
+                                                    <div class="h-7 w-7 bg-yellow-300 rounded-full text-sm font-medium text-white flex items-center justify-center">
+                                                        <p>0</p>
+                                                    </div>
+
+                                                    <div class="h-7 w-7 bg-red-500 rounded-full text-sm font-medium text-white flex items-center justify-center">
+                                                        <p>0</p>
+                                                    </div>
+                                                </div>
+
+                                            @endif
                                          </td>
 
                                      
                                         <td class="px-4 py-3 flex">
-                                            <a href="" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Detail</button>
+                                            <button id="more-{{$item->id}}" data-dropdown-toggle="more-togle-{{$item->id}}" class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
+                                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                                                </svg>
+                                            </button>
+                                            <div id="more-togle-{{$item->id}}" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+                                                <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="more-{{$item->id}}">
+                                                    <li>
+                                                        <a href="{{route('cuti.create',$item->id)}}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Tambah Cuti</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{route('gajih.create',$item->id)}}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Tambah Gajih</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{route('karyawan.edit',$item->id)}}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
+                                                    </li>
+                                                </ul>
+                                                
+                                            </div>
                     
                     
-                                            <a href="{{route('karyawan.edit',$item->id)}}" class=" items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                                                Edit
-                                            </a>
                                         </td>
                                         
                                         

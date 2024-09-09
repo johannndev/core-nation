@@ -34,6 +34,7 @@
                         let query = {
                             search: params.term,
                             type: '{{$dataProp["type"]}}',
+                            local: '{{$lokalId}}',
                             page: params.page || 1,
                         };
                         return query;

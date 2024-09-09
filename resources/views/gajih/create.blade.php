@@ -52,7 +52,7 @@
 
  
 <div>
-  <form action="{{route('cuti.store',$karyawan->id)}}" method="post" enctype="multipart/form-data">
+  <form action="{{route('gajih.store',$karyawan->id)}}" method="post" enctype="multipart/form-data">
 
       @csrf
 
@@ -63,17 +63,17 @@
 
                   <div class="">
 
-                    <div class="grid grid-cols-3 gap-4 ">
+                    <div class="grid grid-cols-3 gap-4 mb-8">
 
                         <div>
-                          <label for="tm" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bulan</label>
-                          <input type="text" id="disabled-input" aria-label="disabled input" class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{$now->month}}" disabled>
+                          <label for="bulan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bulan</label>
+                          <input type="text" name="bulan" id="disabled-input" aria-label="disabled input" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{$now->month}}" >
 
                         </div>
 
                         <div>
-                          <label for="tm" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun</label>
-                          <input type="text" id="disabled-input" aria-label="disabled input" class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{$now->year}}" disabled>
+                          <label for="tahun" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun</label>
+                          <input type="text" name="tahun" id="disabled-input" aria-label="disabled input" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{$now->year}}" >
 
                         </div>
 
@@ -88,19 +88,19 @@
                             <div>
                                 <div class="mb-4">
                                   <label for="bulanan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bulanan</label>
-                                  <input type="text" name="bulanan" id="bulanan" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('bulanan') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('bulanan',$karyawan->bulanan)}}">
+                                  <input type="text" name="bulanan" id="bulanan" aria-describedby="helper-text-explanation" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('bulanan',$karyawan->bulanan)}}">
     
                                 </div>
 
                                 <div class="mb-4">
                                   <label for="harian" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Harian</label>
-                                  <input type="text" name="harian" id="harian" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('harian') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('harian',$karyawan->harian)}}">
+                                  <input type="text" name="harian" id="harian" aria-describedby="helper-text-explanation" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('harian',$karyawan->harian)}}">
     
                                 </div>
 
                                 <div class="mb-4">
                                   <label for="premi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Premi</label>
-                                  <input type="text" name="premi" id="premi" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('premi') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('premi',$karyawan->premi)}}">
+                                  <input type="text" name="premi" id="premi" aria-describedby="helper-text-explanation" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('premi',$karyawan->premi)}}">
     
                                 </div>
                             </div>
@@ -117,19 +117,19 @@
 
                             <div class="mb-4">
                               <label for="total_cuti_tahunan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahunan</label>
-                              <input type="text" name="total_cuti_tahunan" id="total_cuti_tahunan" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('total_cuti_tahunan') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('total_cuti_tahunan',$totalCuti[0]['total_cuti_tahunan'])}}">
+                              <input type="text" name="total_cuti_tahunan" id="total_cuti_tahunan" aria-describedby="helper-text-explanation" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('total_cuti_tahunan',(int)$totalCuti[0]['total_cuti_tahunan'])}}">
 
                             </div>
 
                             <div class="mb-4">
                               <label for="total_cuti_sakit" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sakit</label>
-                              <input type="text" name="total_cuti_sakit" id="total_cuti_sakit" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('total_cuti_sakit') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('total_cuti_sakit',$totalCuti[0]['total_cuti_sakit'])}}">
+                              <input type="text" name="total_cuti_sakit" id="total_cuti_sakit" aria-describedby="helper-text-explanation" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('total_cuti_sakit',(int)$totalCuti[0]['total_cuti_sakit'])}}">
 
                             </div>
 
                             <div class="mb-4">
                               <label for="total_cuti_mendadak" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mendadak</label>
-                              <input type="text" name="total_cuti_mendadak" id="total_cuti_mendadak" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('total_cuti_mendadak') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('total_cuti_mendadak',$totalCuti[0]['total_cuti_mendadak'])}}">
+                              <input type="text" name="total_cuti_mendadak" id="total_cuti_mendadak" aria-describedby="helper-text-explanation" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('total_cuti_mendadak',(int)$totalCuti[0]['total_cuti_mendadak'])}}">
 
                             </div>
 
@@ -141,19 +141,19 @@
 
                             <div class="mb-4">
                               <label for="batas_cuti_bulanan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahunan</label>
-                              <input type="text" name="batas_cuti_bulanan" id="batas_cuti_bulanan" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('batas_cuti_bulanan') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('batas_cuti_bulanan',$dendaCutiTahunan)}}">
+                              <input type="text" name="batas_cuti_bulanan" id="batas_cuti_bulanan" aria-describedby="helper-text-explanation" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('batas_cuti_bulanan',$dendaCutiTahunan)}}">
 
                             </div>
 
                             <div class="mb-4">
                               <label for="batas_cuti_sakit" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sakit</label>
-                              <input type="text" name="batas_cuti_sakit" id="batas_cuti_sakit" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('batas_cuti_sakit') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('batas_cuti_sakit',$dendaCutiSakit)}}">
+                              <input type="text" name="batas_cuti_sakit" id="batas_cuti_sakit" aria-describedby="helper-text-explanation" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('batas_cuti_sakit',$dendaCutiSakit)}}">
 
                             </div>
 
                             <div class="mb-4">
                               <label for="batas_cuti_mendadak" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mendadak</label>
-                              <input type="text" name="batas_cuti_mendadak" id="batas_cuti_mendadak" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('batas_cuti_mendadak') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('batas_cuti_mendadak',$totalCuti[0]['total_cuti_mendadak'])}}">
+                              <input type="text" name="batas_cuti_mendadak" id="batas_cuti_mendadak" aria-describedby="helper-text-explanation" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('batas_cuti_mendadak',(int)$totalCuti[0]['total_cuti_mendadak'])}}">
 
                             </div>
 
@@ -164,27 +164,41 @@
 
                       <div class="grid md:grid-cols-2 gap-4 mb-8">
 
-                          <div class="mb-4">
+                          <div class="">
                             <label for="potong_premi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Potongan Premi({{$grandTotalCuti}})</label>
-                            <input type="text" name="potong_premi" id="potong_premi" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('potong_premi') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('potong_premi',$potongPremi)}}">
+                            <input type="text" name="potong_premi" id="potong_premi" aria-describedby="helper-text-explanation" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('potong_premi',$potongPremi)}}">
 
                           </div>
 
-                          <div class="mb-4">
+                          <div class="">
                             <label for="potong_bulanan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Potongan Bulanan({{$grandTotalDendaCuti}})</label>
-                            <input type="text" name="potong_bulanan" id="potong_bulanan" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('potong_bulanan') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('potong_bulanan',$grandTotalDendaCutiRupiah)}}">
+                            <input type="text" name="potong_bulanan" id="potong_bulanan" aria-describedby="helper-text-explanation" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('potong_bulanan',$grandTotalDendaCutiRupiah)}}">
 
                           </div>
 
-                          <div class="mb-4">
+                          <div class="">
                             <label for="bonus" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bonus</label>
                             <input type="number" name="bonus" id="bonus" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('bonus') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('bonus',0)}}">
 
                           </div>
-                          <div class="mb-4">
+                          <div class="">
                             <label for="sanksi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sanksi</label>
                             <input type="text" name="sanksi" id="sanksi" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('sanksi') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{old('sanksi',0)}}">
 
+                          </div>
+
+                          <div>
+                            <label for="sanksi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Privasi</label>
+                            <div class="flex space-x-6">
+                              <div class="flex items-center ">
+                                  <input checked id="default-radio-1" type="radio" value="1" name="privasi" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                  <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Public</label>
+                              </div>
+                              <div class="flex items-center">
+                                  <input  id="default-radio-2" type="radio" value="2" name="privasi" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                  <label for="default-radio-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Private</label>
+                              </div>
+                            </div>
                           </div>
                       </div>
 

@@ -69,21 +69,16 @@ Route::get('/role-create', function () {
     
     $perm = [
         
-        'po create',
-        'po list',
-        'po detail',
-        'po delete',
-        'cnpo update',
-        'cnpo kosong',
-        'cnpo delete',
-        'cnpo list',
-        'cnpo detail',
-        'po item',
-        
+        'karyawan list',
+        'karyawan create',
+        'karyawan detail',
+        'karyawan edit',
+        'karyawan delete',
+        'cuti list',
+        'cuti create',
+        'gajih list',
+        'gajih create',
 
-
-       
-        
     ];
 
     foreach($perm as $p){
@@ -342,19 +337,21 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
 
-    Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
-    Route::get('/karyawan/create', [KaryawanController::class, 'create'])->name('karyawan.create');
-    Route::post('/karyawan/store', [KaryawanController::class, 'store'])->name('karyawan.store');
-    Route::get('/karyawan/{id}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
-    Route::patch('/karyawan/{id}/update', [KaryawanController::class, 'update'])->name('karyawan.update');
-    Route::get('/karyawan/{id}/detail', [KaryawanController::class, 'detail'])->name('karyawan.detail');
-    Route::delete('/karyawan/{id}/delete', [KaryawanController::class, 'delete'])->name('karyawan.delete');
+    Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index')->middleware('permission:karyawan list');
+    Route::get('/karyawan/create', [KaryawanController::class, 'create'])->name('karyawan.create')->middleware('permission:karyawan create');
+    Route::post('/karyawan/store', [KaryawanController::class, 'store'])->name('karyawan.store')->middleware('permission:karyawan create');
+    Route::get('/karyawan/{id}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit')->middleware('permission:karyawan edit');
+    Route::patch('/karyawan/{id}/update', [KaryawanController::class, 'update'])->name('karyawan.update')->middleware('permission:karyawan edit');
+    Route::get('/karyawan/{id}/detail', [KaryawanController::class, 'detail'])->name('karyawan.detail')->middleware('permission:karyawan detail');
+    Route::delete('/karyawan/{id}/delete', [KaryawanController::class, 'delete'])->name('karyawan.delete')->middleware('permission:karyawan delete');
 
-    Route::get('/karyawan/{id}/cuti/create', [CutiController::class, 'create'])->name('cuti.create');
-    Route::post('/karyawan/{id}/cuti/store', [CutiController::class, 'store'])->name('cuti.store');
-    Route::get('/karyawan/{id}/cuti/list', [CutiController::class, 'cutiList'])->name('cuti.cutiList');
+    Route::get('/karyawan/{id}/cuti/create', [CutiController::class, 'create'])->name('cuti.create')->middleware('permission:cuti create');
+    Route::post('/karyawan/{id}/cuti/store', [CutiController::class, 'store'])->name('cuti.store')->middleware('permission:cuti create');
+    Route::get('/karyawan/{id}/cuti/list', [CutiController::class, 'cutiList'])->name('cuti.cutiList')->middleware('permission:cuti list');
 
-    Route::get('/karyawan/{id}/gajih/create', [GajihController::class, 'create'])->name('gajih.create');
+    Route::get('/karyawan/{id}/gajih/create', [GajihController::class, 'create'])->name('gajih.create')->middleware('permission:gajih create');
+    Route::post('/karyawan/{id}/gajih/store', [GajihController::class, 'store'])->name('gajih.store')->middleware('permission:gajih create');
+    Route::get('/karyawan/{id}/gajih/list', [GajihController::class, 'list'])->name('gajih.list')->middleware('permission:gajih list');
 
 
 

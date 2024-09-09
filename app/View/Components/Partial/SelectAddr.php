@@ -5,6 +5,7 @@ namespace App\View\Components\Partial;
 use App\Models\Customer;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class SelectAddr extends Component
@@ -21,7 +22,8 @@ class SelectAddr extends Component
         if(isset($this->dataProp['default'])){
             $this->defaultWH = Customer::where('id', $this->dataProp['default'])->first();
         }
-       
+        
+        
     }
 
     /**
@@ -29,6 +31,8 @@ class SelectAddr extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.partial.select-addr');
+        $lokalId = Auth::user()->location_id;
+        
+        return view('components.partial.select-addr',compact('lokalId'));
     }
 }

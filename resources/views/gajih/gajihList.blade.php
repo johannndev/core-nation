@@ -16,12 +16,13 @@
                     <a href="{{route('karyawan.detail',$cid)}}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Detail</a>
                 </li>
                 <li class="me-2">
-                    <a href="{{route('cuti.cutiList',$cid)}}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Cuti</a>
+                    <a href="{{route('cuti.cutiList',$cid)}}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" aria-current="page">Cuti</a>
                 </li>
 
                 <li class="me-2">
-                    <a href="{{route('gajih.list',$cid)}}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Gajih</a>
+                    <a href="{{route('gajih.list',$cid)}}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Gajih</a>
                 </li>
+
                 
             </ul>
         </div>
@@ -34,7 +35,7 @@
             <div class="mx-auto  ">
                 <!-- Start coding here -->
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-                    <form action="{{route('filter.get',['id' => $cid, 'action' =>'cuti.cutiList'])}}" method="post">
+                    <form action="{{route('filter.get',['id' => $cid, 'action' =>'gajih.list'])}}" method="post">
 
                         @csrf
 
@@ -65,7 +66,7 @@
                                         <input type="text" id="tahun" name="tahun" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  value="{{Request('tahun')}}"/>
                                     </div>
 
-                                    <div class="col-span-5 md:col-span-1">
+                                    {{-- <div class="col-span-1">
                                         <label for="tipe" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipe</label>
                                         <select id="tipe" name="tipe" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('tipe') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror">
                                           <option value="">Choose</option>
@@ -75,7 +76,7 @@
                                             <option {{Request('tipe') == 3 ? 'selected' : ''  }} value="3">Mendadak</option>
                                         
                                         </select>
-                                    </div>
+                                    </div> --}}
                                    
                                   
 
@@ -95,7 +96,7 @@
                                     Filter
                                 </button>
 
-                                <a href="{{route('cuti.cutiList',$cid)}}" class="flex items-center justify-center py-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                <a href="{{route('gajih.list',$cid)}}" class="flex items-center justify-center py-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
 
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -109,7 +110,7 @@
                                     Clear
                                 </a>
 
-                                <a href="{{route('cuti.create',$cid)}}" class="flex items-center justify-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+                                <a href="{{route('gajih.create',$cid)}}" class="flex items-center justify-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
 
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 mr-2" >
                                         <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
@@ -124,6 +125,31 @@
                             
                         </div>
                     </form>
+
+                    <div class="px-4 pb-4">
+                        <div class="flex flex-col md:flex-row md:space-x-3">
+                            <div class="flex items-center space-x-1">
+                                <div>
+                                    <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                                </div>
+                                <p>Cuti Tahunan</p>
+                            </div>
+
+                            <div class="flex items-center space-x-1">
+                                <div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-300"></div>
+                                </div>
+                                <p>Cuti Sakit</p>
+                            </div>
+
+                            <div class="flex items-center space-x-1">
+                                <div>
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                </div>
+                                <p>Cuti Mendadak</p>
+                            </div>
+                        </div>
+                    </div>
                    
                     <div>
                       
@@ -131,21 +157,46 @@
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" class="px-4 py-3">Tanggal Mulai</th>
-                                        <th scope="col" class="px-4 py-3">Tanggal Akhir</th>
-                                        <th scope="col" class="px-4 py-3">Tipe</th> 
-                                        <th scope="col" class="px-4 py-3">Jumlah Hari</th>                              
+                                        <th scope="col" class="px-4 py-3">Preiode</th>
+                                        <th scope="col" class="px-4 py-3">Bulanan</th>
+                                        <th scope="col" class="px-4 py-3">Harian </th> 
+                                        <th scope="col" class="px-4 py-3">Premi</th> 
+                                        <th scope="col" class="px-4 py-3">Cuti</th>
+                                        <th scope="col" class="px-4 py-3">Total potongan </th> 
+                                        <th scope="col" class="px-4 py-3">Bonus</th> 
+                                        <th scope="col" class="px-4 py-3">Sanksi</th> 
+                                        <th scope="col" class="px-4 py-3">Total Gajih</th>                                
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ( $cutiList as $item)
+                                    @forelse ( $gajihList as $item)
                     
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                        
-                                        <td class="px-4 py-3 normal-col">{{$item->tgl_mulai}}</td>
-                                        <td class="px-4 py-3 normal-col">{{$item->tgl_akhir}}</td>
-                                        <td class="px-4 py-3 normal-col">{{$item->type_name}}</td>
-                                        <td class="px-4 py-3 normal-col">{{$item->total_cuti}}</td>
+                                        <th class="px-4 py-3 normal-col">{{$item->bulan}}/{{$item->tahun}}</th>
+                                        <td class="px-4 py-3 normal-col">{{Number::format($item->bulanan,0,0,'id')}}</td>
+                                        <td class="px-4 py-3 normal-col">{{Number::format($item->harian,0,0,'id')}}</td>
+                                        <td class="px-4 py-3 normal-col">{{Number::format($item->premi,0,0,'id')}}</td>
+                                        <td class="px-4 py-3 normal-col">
+                                            <div class="flex space-x-1">
+                                                <div class="h-7 w-7 bg-blue-500 rounded-full text-sm font-medium text-white flex items-center justify-center">
+                                                    <p>{{$item->cuti_tahunan}}</</p>
+                                                </div>
+
+                                                <div class="h-7 w-7 bg-yellow-300 rounded-full text-sm font-medium text-white flex items-center justify-center">
+                                                    <p>{{$item->cuti_sakit}}</</p>
+                                                </div>
+
+                                                <div class="h-7 w-7 bg-red-500 rounded-full text-sm font-medium text-white flex items-center justify-center">
+                                                    <p>{{$item->cuti_mendadak}}</</p>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td class="px-4 py-3 normal-col">{{Number::format($item->total_potongan,0,0,'id')}}</td>
+                                        <td class="px-4 py-3 normal-col">{{Number::format($item->bonus,0,0,'id')}}</td>
+                                        <td class="px-4 py-3 normal-col">{{Number::format($item->sanksi,0,0,'id')}}</td>
+                                        <td class="px-4 py-3 normal-col">{{Number::format($item->total_gajih,0,0,'id')}}</td>
                                         
                                         
                                     </tr>
@@ -168,7 +219,7 @@
                             </table>
                         </div>
                     
-                        {{$cutiList->onEachSide(1)->links()}}
+                        {{$gajihList->onEachSide(1)->links()}}
                     </div>
                    
                 </div>

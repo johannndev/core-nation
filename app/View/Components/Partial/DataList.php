@@ -5,6 +5,7 @@ namespace App\View\Components\Partial;
 use App\Models\Customer;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class DataList extends Component
@@ -27,8 +28,6 @@ class DataList extends Component
             $this->defaultWH = Customer::where('id', $this->dataProp['default'])->first();
         }
 
-        
-
     }
 
     /**
@@ -36,6 +35,6 @@ class DataList extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.partial.data-list');
+        return view('components.partial.data-list',compact('user'));
     }
 }

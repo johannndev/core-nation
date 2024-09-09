@@ -545,6 +545,39 @@
     <div class="mb-8">
 
         <div>
+            <p class="font-medium mb-2">Karyawan</p>
+        </div>
+        <div>
+            <div class="mb-4">
+                <div class="flex items-center">
+                    <input id="checkbox-all-karyawan" type="checkbox" value="1" class="checkbox-role checkbox-all-karyawan w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="checkbox-role" class="ms-2 text-sm text-gray-900 dark:text-gray-300">Semua</label>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-5 gap-4">
+
+                @foreach ($karyawanList as $item)
+
+                <div>
+                    <div class="flex items-center">
+                        <input @if($permissionsArray) @if(array_key_exists($item['name'],$permissionsArray)) checked @endif @endif   id="checkbox-role" name="permissions[]" type="checkbox" value="{{$item['name']}}" class="checkbox-role checkbox-karyawan w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="checkbox-role" class="ms-2 text-sm text-gray-900 dark:text-gray-300">{{$item['label']}}</label>
+                    </div>
+                </div>
+                    
+                @endforeach
+
+                
+            </div>
+
+            
+        </div>
+
+    </div>
+
+    <div class="mb-8">
+
+        <div>
             <p class="font-medium mb-2">User</p>
         </div>
         <div>
@@ -682,6 +715,7 @@
         var allcnpo = 0;
         var allpoChecked = 0;
         var allpo = 0;
+        var allKaryawan = 0;
 
 
         function cekChecked(){
@@ -1018,6 +1052,24 @@
 
         }
 
+        function cekKaryawan(){
+            allUserChecked = $('.checkbox-karyawan').not(':checked').length;
+            allUser = $('.checkbox-karyawan').length;
+
+            if(allUserChecked == 0){
+                $('.checkbox-all-karyawan').prop('indeterminate', false);
+                $('.checkbox-all-karyawan').prop('checked', true);
+
+            }else if(allUserChecked < allUser && allUserChecked > 0){
+                $('.checkbox-all-karyawan').prop('indeterminate', true);
+            }else{
+                $('.checkbox-all-karyawan').prop('indeterminate', false);
+                $('.checkbox-all-karyawan').prop('checked', false);
+
+            }
+
+        }
+
         $(function(){
 
             cekChecked()
@@ -1038,6 +1090,7 @@
             cekUser();
             cekcnpo();
             cekpo();
+            cekKaryawan();
 
             $(".checkbox-role").click(function(){cekChecked();})
             
@@ -1058,6 +1111,7 @@
             $(".checkbox-role.checkbox-user").click(function(){cekUser(); })
             $(".checkbox-role.checkbox-cnpo").click(function(){cekcnpo(); })
             $(".checkbox-role.checkbox-po").click(function(){cekpo(); })
+            $(".checkbox-role.checkbox-karyawan").click(function(){cekpo(); })
             
             
 
@@ -1237,6 +1291,16 @@
                     $('.checkbox-role.checkbox-user').prop('checked', true);
                 }else{
                     $('.checkbox-role.checkbox-user').prop('checked', false);
+                }
+
+                cekChecked();
+            })
+
+            $("#checkbox-all-karyawan").click(function(){
+                if((this).checked == true){
+                    $('.checkbox-role.checkbox-karyawan').prop('checked', true);
+                }else{
+                    $('.checkbox-role.checkbox-karyawan').prop('checked', false);
                 }
 
                 cekChecked();

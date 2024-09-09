@@ -14,7 +14,7 @@ class Permission extends Component
      */
 
      public $data;
-     public $userList, $settingList,$reportList, $boronganList, $setoranList, $produksiList, $contributorList, $operationList, $assetLancarList,$itemList, $vaccountList, $accountList, $transactionList, $customerList, $supplierList, $resellerList, $warehouseList, $vwarehouseList, $poList, $cnpoList;
+     public $userList, $settingList,$reportList, $boronganList, $setoranList, $produksiList, $contributorList, $operationList, $assetLancarList,$itemList, $vaccountList, $accountList, $transactionList, $customerList, $supplierList, $resellerList, $warehouseList, $vwarehouseList, $poList, $cnpoList,$karyawanList;
     
 
     public function __construct($data = [])
@@ -40,6 +40,7 @@ class Permission extends Component
         $this->userList = $this->userPermissionList();
         $this->poList = $this->poPermissionList();
         $this->cnpoList = $this->cnpoPermissionList();
+        $this->karyawanList = $this->karyawanPermissionList();
         
 
     }
@@ -407,6 +408,27 @@ class Permission extends Component
             ['name' => 'user role', 'label' =>'Role List'],
             ['name' => 'user create role', 'label' =>'Create Role'],
             ['name' => 'user edit role', 'label' =>'Edit Role'],
+           
+ 
+        ];
+
+        return $data;
+
+        
+    }
+
+    private function karyawanPermissionList(){
+        $data = [
+            ['name' => 'karyawan list', 'label' =>'List'],
+            ['name' => 'karyawan create', 'label' =>'Create'],
+            ['name' => 'karyawan edit', 'label' =>'Edit'],
+            ['name' => 'karyawan detail', 'label' =>'Detail'],
+            ['name' => 'karyawan delete', 'label' =>'Delete'],
+            ['name' => 'cuti list', 'label' =>'Cuti List'],
+            ['name' => 'cuti create', 'label' =>'Create Create'],
+            ['name' => 'gajih list', 'label' =>'Gajih List'],
+            ['name' => 'gajih create', 'label' =>'Gajih Create'],
+           
            
  
         ];

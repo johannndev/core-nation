@@ -64,7 +64,7 @@ class CutiController extends Controller
 
         $karyawan = Karyawan::find($id);
 
-        $cutiList = Cuti::orderBy('tgl_mulai','desc');
+        $cutiList = Cuti::where('karyawan_id',$id)->orderBy('tgl_mulai','desc');
 
         
 		if($request->bulan && $request->tahun){

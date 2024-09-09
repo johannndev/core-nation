@@ -60,9 +60,9 @@
 
                            
 
-                            <x-partial.data-list :dataProp='$dataListPropRecaiver' />
+                            <x-partial.select-addr :dataProp='$dataListPropRecaiver' />
 
-                            <x-partial.data-list :dataProp='$dataListPropResaller' />
+                            <x-partial.select-addr :dataProp='$dataListPropResaller' />
 
                             
                            
@@ -188,13 +188,13 @@
                                 </div>
                                 
                                 <div class="grid gap-6 mb-6 md:grid-cols-9 items-end addField0 "id="gridItem0">
-                                    <div class="col-span-9 md:col-span-2">
+                                    <div class="col-span-9 md:col-span-1">
                                         <input type="text" name="addMoreInputFields[0][itemId]"  id="id0"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
                                 
                                         <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
 
                                         <div class="flex">
-                                            <div class="">
+                                            <div class="block md:hidden">
                                                 <button onclick="starScanButton(0)" id="openModalButton" type="button" class="focus:outline-none inline-flex items-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                                                 
                     
@@ -212,9 +212,17 @@
                                        
                                         <div class="">
                                 
-                                            <input id="name0" list="name-list0" onkeydown="handleName(event,0)" autocomplete="off" type="text" name="addMoreInputFields[0][name]"  class="nameList register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""   />
-
-                                            <datalist id="name-list0"></datalist>
+                                            <div class="relative ">
+                                                <select class="select2-ajax-item" id="name0" name="addMoreInputFields[0][name]" data-customId="0">
+                                                    
+                                                    <option ></option>
+                                                </select>
+                                
+                                                @error('')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                                
+                                            </div>
 
                                         </div>
                                    

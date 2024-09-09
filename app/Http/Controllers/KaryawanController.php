@@ -3,12 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class KaryawanController extends Controller
 {
     public function index(){
-        $dataList = Karyawan::orderBy('nama','asc');;
+
+        $now = Carbon::now();
+
+        $dataList = Karyawan::with(['gajihSingle','gajih' => function($query) use($now) {
+            $query->where('tahun', $now->year)
+                  ->select('karyawan_id', DB::raw('SUM(cuti_sakit) as total_cuti_sakit'), DB::raw('SUM(cuti_tahunan) as total_cuti_tahunan'), DB::raw('SUM(cuti_mendadak) as total_cuti_mendadak'))
+                  ->groupBy('karyawan_id');
+        }])->orderBy('nama','asc');;
 
         if(Request('name')) {
 			$name = str_replace(' ', '%', Request('name'));
@@ -16,8 +26,9 @@ class KaryawanController extends Controller
 		}
 
         $dataList = $dataList->paginate(50)->withQueryString();
+  
 
-        return view('karyawan.index',compact('dataList'));
+        return view('karyawan.index',compact('dataList','now'));
     }
 
     public function create(){

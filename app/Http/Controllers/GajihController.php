@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cuti;
+use App\Models\Gajih;
 use App\Models\Karyawan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class GajihController extends Controller
@@ -16,24 +18,36 @@ class GajihController extends Controller
         $limitSakit = 6;
 
         $now = Carbon::now();
-        $lastmonth = Carbon::now()->subMonth();     
-       
+        $lastmonth = Carbon::now()->subMonth();
+        
 
-        $karyawan = Karyawan::with(['gajih' => function($query) {
-            $query->where('tahun', 2024)
+        $karyawan = Karyawan::with(['gajih' => function($query) use($lastmonth) {
+            $query->where('tahun', $lastmonth->year)
                   ->select('karyawan_id', DB::raw('SUM(cuti_sakit) as total_cuti_sakit'), DB::raw('SUM(cuti_tahunan) as total_cuti_tahunan'))
                  
                   ->groupBy('karyawan_id');
         }])->where('id',$id)->first();
 
         $totalCuti = Cuti::select('karyawan_id', DB::raw('SUM(sakit) as total_cuti_sakit'), DB::raw('SUM(tahunan) as total_cuti_tahunan'),DB::raw('SUM(mendadak) as total_cuti_mendadak'))
-                     ->whereYear('tgl_mulai', 2024)
-                     ->whereMonth('tgl_mulai', 8)
+                     ->whereYear('tgl_mulai', $lastmonth->year)
+                     ->whereMonth('tgl_mulai', $lastmonth->month)
                      ->where('karyawan_id',$id)
                      ->get()
                      ->toArray();
 
-        $gajihArray = $karyawan->gajih->toArray()[0];
+      
+        if(count($karyawan->gajih) > 0){
+            $gajihArray = $karyawan->gajih->toArray()[0];
+        }else{
+            $gajihArray = [
+                'total_cuti_tahunan' => 0,
+                'total_cuti_sakit' => 0,
+                
+
+            ];
+        }
+
+       
 
         // dd($totalCuti->toArray()[0]['total_cuti_sakit']);
 
@@ -92,4 +106,70 @@ class GajihController extends Controller
 
         return view('gajih.create',compact('karyawan','now','totalCuti','gajihArray','dendaCutiTahunan','dendaCutiSakit','grandTotalCuti','potongPremi','grandTotalDendaCuti','grandTotalDendaCutiRupiah'));
     }
+
+    public function store($id, Request $request){
+        
+        $karyawan = Karyawan::where('id',$id)->first();
+
+        $totalCuti = $request->total_cuti_tahunan+$request->total_cuti_mendadak+$request->total_cuti_sakit;
+        $totalPotongan = $request->potong_bulanan+$request->potong_premi;
+
+        $rupiahHarian = $karyawan->harian*26;
+        $totalGajih = $rupiahHarian + $karyawan->bulanan + $karyawan->premi + $request->bonus;
+        $totalSanksi = $request->potong_bulanan + $request->potong_premi + $request->sanksi;
+        $gajih = $totalGajih-$totalSanksi;
+        
+        $data = new Gajih();
+
+        $data->karyawan_id = $id;
+        $data->bulan = $request->bulan;
+        $data->tahun = $request->tahun;
+        $data->bulanan = $karyawan->bulanan;
+        $data->harian = $karyawan->harian;
+        $data->premi = $karyawan->premi;
+        $data->cuti_sakit = $request->total_cuti_sakit;
+        $data->cuti_tahunan = $request->total_cuti_tahunan;
+        $data->cuti_mendadak = $request->total_cuti_mendadak;
+        $data->total_cuti = $totalCuti;
+        $data->potongan_cuti_bulanan = $request->potong_bulanan;
+        $data->potongan_cuti_premi = $request->potong_premi;
+        $data->total_potongan = $totalPotongan;
+        $data->bonus = $request->bonus;
+        $data->sanksi = $request->sanksi;
+        $data->total_gajih = $gajih;
+        $data->flag = $request->privasi;
+
+        $data->save();
+
+        return redirect()->route('gajih.list',$id)->with('success','Gajih '.$karyawan->nama.' created');
+
+    }
+
+    public function list($id, Request $request){
+        $karyawan = Karyawan::find($id);
+
+        $roleName = Auth::user()->getRoleNames()[0];
+
+        $gajihList = Gajih::where('karyawan_id',$id)->orderBy('tahun','desc')->orderBy('bulan','desc');
+
+        if( $roleName != "superadmin"){
+            $gajihList = $$gajihList->where('flag',1);
+        }
+
+         
+		if($request->bulan && $request->tahun){
+			$gajihList = $gajihList->where('bulan',$request->bulan)->where('tahun',$request->tahun);
+		}
+
+        if($request->tipe){
+            $gajihList = $gajihList->where('tipe',$request->tipe);
+        }
+        
+        $gajihList = $gajihList->paginate(20)->withQueryString();
+
+        $cid = $id;
+
+        return view('gajih.gajihList',compact('karyawan','gajihList','cid'));
+    }
 }
+

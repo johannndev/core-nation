@@ -8,6 +8,9 @@ use App\Models\Produksi;
 use App\Models\WarehouseItem;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
+
+
 
 class AjaxController extends Controller
 {
@@ -17,7 +20,21 @@ class AjaxController extends Controller
     public function getCostumer(Request $request)
     {
        
-        $customer = Customer::where('name','like','%'.$request->search.'%')->whereIn('type',explode(",",$request->type))->paginate();
+
+        $customer = Customer::where('name','like','%'.$request->search.'%')->whereIn('type',explode(",",$request->type));
+        
+        if($request->local > 0){
+
+            $localId = $request->local;
+
+            $customer = $customer->whereHas('locations', function (Builder $query) use($localId) {
+                $query->where('location_id', $localId);
+            });
+
+        }
+
+        
+        $customer = $customer->paginate();
 
         // $customer = $customer->get(['id', 'name']);
         return response()->json($customer, 200);
