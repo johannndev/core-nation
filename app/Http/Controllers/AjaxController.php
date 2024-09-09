@@ -19,7 +19,7 @@ class AjaxController extends Controller
 
     public function getCostumer(Request $request)
     {
-       
+     
 
         $customer = Customer::where('name','like','%'.$request->search.'%')->whereIn('type',explode(",",$request->type));
         
