@@ -58,6 +58,8 @@ class CutiController extends Controller
         }
 
         $data->save();
+
+        return redirect()->route('cuti.cutiList',$id)->with('success','Cuti created');
     }
 
     public function cutiList($id, Request $request){
