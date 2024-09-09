@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppSetting;
 use App\Models\Cuti;
 use App\Models\Gajih;
 use App\Models\Karyawan;
@@ -14,8 +15,12 @@ class GajihController extends Controller
 {
     public function create($id){
 
-        $limitTahunan = 6;
-        $limitSakit = 6;
+        $setting = AppSetting::all()->pluck('value','name')->toArray();
+
+     
+
+        $limitTahunan = (int)$setting['batas_cuti_tahunan'];
+        $limitSakit = (int)$setting['batas_cuti_sakit'];
 
         $now = Carbon::now();
         $lastmonth = Carbon::now()->subMonth();

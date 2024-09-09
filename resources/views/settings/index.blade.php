@@ -63,9 +63,9 @@
 
                     <div class="">
 
-                        <div class="grid grid-cols-1 gap-4 mb-8">
+                        <div class="">
 
-                            <div>
+                            <div class="mb-6">
                                         
                                 
                                 <label for="tb" class="block mb-2 text-sm font-medium text-gray-900 ">Tutup Buku</label>
@@ -81,8 +81,24 @@
                                 
                             </div>
 
-                            <x-partial.data-list :dataProp='$dataListSell' />
-                            <x-partial.data-list :dataProp='$dataListOngkir' />
+                            <div class="mb-6">
+                                        
+                                
+                                <label for="batas_tahunan" class="block mb-2 text-sm font-medium text-gray-900 ">Batas cuti tahunan</label>
+                                <input type="text" name="batas_cuti_tahunan" id="batas_tahunan" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{old('batas_tahunan',$setting['batas_cuti_tahunan'])}}">
+                                
+                            </div>
+
+                            <div class="mb-6">
+                                        
+                                
+                              <label for="batas_sakit" class="block mb-2 text-sm font-medium text-gray-900 ">Batas cuti sakit</label>
+                              <input type="text" name="batas_cuti_sakit" id="batas_sakit" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{old('batas_sakit',$setting['batas_cuti_sakit'])}}">
+                              
+                            </div>
+
+                            <x-partial.select-addr :dataProp='$dataListSell' />
+                            <x-partial.select-addr :dataProp='$dataListOngkir' />
 
                             
                         </div>
