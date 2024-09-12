@@ -136,6 +136,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/buy', [TransactionsController::class, 'buy'])->name('transaction.buy')->middleware('permission:transactions.buy');
     Route::post('/transaction/buy/post', [TransactionsController::class, 'postbuy'])->name('transaction.postBuy')->middleware('permission:transactions.buy');
 
+    Route::get('/transaction/buy-batch', [TransactionsController::class, 'buyBatch'])->name('transaction.postBuyBatch')->middleware('permission:transactions.buy');
+    Route::post('/transaction/buy-batch/store', [TransactionsController::class, 'postBuyBatch'])->name('transaction.buyBatchStore')->middleware('permission:transactions.buy');
+
     Route::get('/transaction/move', [TransactionsController::class, 'move'])->name('transaction.move')->middleware('permission:transactions.move');
     Route::post('/transaction/move/post', [TransactionsController::class, 'postmove'])->name('transaction.postMove')->middleware('permission:transactions.move');
     Route::get('/transaction/move-batch', [TransactionsController::class, 'moveBatch'])->name('transaction.postMoveBatch')->middleware('permission:transactions.move');

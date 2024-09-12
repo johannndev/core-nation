@@ -119,6 +119,33 @@ class TransactionsController extends Controller
         return view('transactions.sell-batch',compact('bankList','trType','dataListPropRecaiver','dataListPropSender'));
     }
 
+	public function buyBatch()
+    {
+		$trType = 'buy';
+
+		$dataListPropRecaiver = [
+			"label" => "Warehouse",
+			"id" => "warehouse",
+			"idList" => "datalistWh",
+			"idOption" => "datalistOptionsWh",
+			"type" => Customer::TYPE_WAREHOUSE,
+			
+		];
+
+		$dataListPropSender = [
+			"label" => "Supplier",
+			"id" => "supplier",
+			"idList" => "datalistSender",
+			"idOption" => "datalistOptionsSender",
+			"type" => Customer::TYPE_SUPPLIER,
+			
+		];
+
+		
+		$bankList = Customer::where('type',Customer::TYPE_BANK)->orderBy('name','asc')->get();
+        return view('transactions.buy-batch',compact('bankList','trType','dataListPropRecaiver','dataListPropSender'));
+    }
+
 	public function postSellBatch(Request $request)
  	{
 		try {
@@ -137,7 +164,6 @@ class TransactionsController extends Controller
         $transaction->type = Transaction::TYPE_SELL;
         $transaction->description = ' ';
 		$transaction->detail_ids = ' ';
-		$transaction->receiver_id = ' ';
 		$transaction->due = '0000-00-00';
         $transaction->save();
 
@@ -172,6 +198,86 @@ class TransactionsController extends Controller
 		$cc = new CCManagerHelper;
 		$class['date'] = Carbon::parse($transaction->date)->startOfMonth()->toDateString();
 		$class['type'] = Transaction::TYPE_SELL;
+		$class['total'] = $transaction->total;
+		$class['customer'] = $transaction->receiver;
+		$cc->update($class);
+
+		//commit db transaction
+		DB::commit();
+
+        // $request->session()->flash('success', 'Transaction # ' . $transaction->id. ' created.');
+
+		return redirect()->route('transaction.index',$transaction->id)->with('success', 'Transaction # ' . $transaction->id. ' created.');
+
+		
+		} catch(ModelException $e) {
+			DB::rollBack();
+
+			dd($e);
+
+			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+            // return response()->json($e->getErrors(), 500);
+		} catch(\Exception $e) {
+			DB::rollBack();
+
+			dd($e);
+
+			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+		}
+	}
+
+	public function postBuyBatch(Request $request)
+ 	{
+		try {
+		//start transaction
+		DB::beginTransaction();
+
+		// dd($request);
+
+		$customer = $request->supplier;
+		$warehouse = $request->warehouse;
+
+		
+		$transaction = new Transaction();
+
+		$transaction->date = $request->date;
+        $transaction->type = Transaction::TYPE_BUY;
+        $transaction->description = ' ';
+		$transaction->detail_ids = ' ';
+		$transaction->due = '0000-00-00';
+        $transaction->save();
+
+		$transaction->sender_id = $warehouse;
+		$transaction->receiver_id = $customer;
+		$transaction->init(TRANSACTION::TYPE_BUY);
+
+		//gets the transaction id
+		if(!$transaction->save())
+			throw new ModelException($transaction->getErrors(), __LINE__);
+
+		if(!$details = $transaction->createDetails($request->addMoreInputFields))
+			throw new ModelException($transaction->getErrors(), __LINE__);
+
+		$transaction->checkPPN($transaction->sender, $transaction->receiver);
+
+		//add to customer stat
+		$sm = new StatManagerHelper;
+		$transaction->setAttribute('total',0 - $transaction->total); //make negative
+
+		//deduct balance from receiver(customer)
+		$receiver_balance = $sm->deduct($transaction->receiver_id,$transaction,true);
+		if($receiver_balance === false)
+			throw new ModelException($sm->getErrors());
+
+		$transaction->receiver_balance = $receiver_balance;
+		if(!$transaction->save())
+			throw new ModelException($transaction->getErrors());
+
+		InvoiceTrackerHelpers::flag($transaction);
+		TransactionsManagerHelper::checkSell($transaction, $details);
+		$cc = new CCManagerHelper;
+		$class['date'] = Carbon::parse($transaction->date)->startOfMonth()->toDateString();
+		$class['type'] = Transaction::TYPE_BUY;
 		$class['total'] = $transaction->total;
 		$class['customer'] = $transaction->receiver;
 		$cc->update($class);
