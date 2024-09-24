@@ -52,7 +52,15 @@ Route::get('/', function () {
 
 Route::get('/role-set', function () {
 
-    $role = Role::create(['name' => 'ban']);
+    $user = User::find(1);
+
+    $user->password =  Hash::make('12345678');
+
+    $user->save();
+
+    $user->assignRole('superadmin');
+
+    // $role = Role::create(['name' => 'ban']);
 
     // $permission = Permission::create(['name' => 'superadmin']);
 
