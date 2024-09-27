@@ -345,6 +345,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/role/store', [UserRoleController::class, 'storeRole'])->name('role.storeRole')->middleware('permission:user create role');
     Route::get('/role/{id}/edit', [UserRoleController::class, 'editRole'])->name('role.editRole')->middleware('permission:user edit role');
     Route::post('/role/{id}/update', [UserRoleController::class, 'roleUpdate'])->name('role.roleUpdate')->middleware('permission:user edit role');
+    Route::delete('/role/{id}/delete', [UserRoleController::class, 'deleteRole'])->name('role.deleteRole')->middleware('permission:user edit role');
 
     Route::get('/hash/{id}/transaction', [HashController::class, 'getTransactions'])->name('hash.getTransactions');
 
@@ -360,9 +361,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/karyawan/{id}/cuti/store', [CutiController::class, 'store'])->name('cuti.store')->middleware('permission:cuti create');
     Route::get('/karyawan/{id}/cuti/list', [CutiController::class, 'cutiList'])->name('cuti.cutiList')->middleware('permission:cuti list');
 
-    Route::get('/karyawan/{id}/gajih/create', [GajihController::class, 'create'])->name('gajih.create')->middleware('permission:gajih create');
-    Route::post('/karyawan/{id}/gajih/store', [GajihController::class, 'store'])->name('gajih.store')->middleware('permission:gajih create');
-    Route::get('/karyawan/{id}/gajih/list', [GajihController::class, 'list'])->name('gajih.list')->middleware('permission:gajih list');
+    Route::get('/karyawan/{id}/gaji/create', [GajihController::class, 'create'])->name('gajih.create')->middleware('permission:gajih create');
+    Route::post('/karyawan/{id}/gaji/store', [GajihController::class, 'store'])->name('gajih.store')->middleware('permission:gajih create');
+    Route::get('/karyawan/{id}/gaji/list', [GajihController::class, 'list'])->name('gajih.list')->middleware('permission:gajih list');
+
+    Route::get('/gaji', [GajihController::class, 'index'])->name('gaji.index')->middleware('permission:gajih list');
 
 
 

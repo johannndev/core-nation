@@ -10,14 +10,77 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class GajihController extends Controller
 {
+    public function index(Request $request){
+
+        $now = Carbon::now();
+
+        $bulanSelect = $now->month;
+        $yearSelect = $now->year;
+
+        $roleName = Auth::user()->getRoleNames()[0];
+
+        $gajihList = Gajih::with('karyawan')->orderBy('tahun','desc')->orderBy('bulan','desc');
+
+        if( $roleName != "superadmin"){
+            $gajihList = $gajihList->whereHas('karyawan', function (Builder $query) {
+                $query->where('flag', 1);
+            });
+        }
+
+         
+		if($request->bulan && $request->tahun){
+			$gajihList = $gajihList->where('bulan',$request->bulan)->where('tahun',$request->tahun);
+
+            $bulanSelect = $request->bulan;
+            $yearSelect = $request->tahun;
+		}else{
+
+            $gajihList = $gajihList->where('bulan',$bulanSelect)->where('tahun',$yearSelect);
+
+        }
+
+        if($request->karyawan){
+
+            $kSearch = $request->karyawan;
+
+            $gajihList = $gajihList->whereHas('karyawan', function (Builder $query) use($kSearch) {
+                $query->where('nama', 'like', $kSearch.'%');
+            });
+
+        }
+
+        if($request->tipe){
+            $gajihList = $gajihList->where('tipe',$request->tipe);
+        }
+        
+        $gajihList = $gajihList->paginate(20)->withQueryString();
+
+       
+
+        return view('gaji.index',compact('gajihList','bulanSelect','yearSelect'));
+
+    }
+
     public function create($id){
 
         $setting = AppSetting::all()->pluck('value','name')->toArray();
 
      
+        $role = Auth::user()->getRoleNames()[0];
+
+        if($role != 'superadmin'){
+
+            $cekK = Karyawan::find($id);
+            
+            if($cekK->flag = 2){
+                return abort(404);
+            }
+        }
+
 
         $limitTahunan = (int)$setting['batas_cuti_tahunan'];
         $limitSakit = (int)$setting['batas_cuti_sakit'];
@@ -109,12 +172,19 @@ class GajihController extends Controller
         
 
 
-        return view('gajih.create',compact('karyawan','now','totalCuti','gajihArray','dendaCutiTahunan','dendaCutiSakit','grandTotalCuti','potongPremi','grandTotalDendaCuti','grandTotalDendaCutiRupiah'));
+        return view('gaji.create',compact('karyawan','now','totalCuti','gajihArray','dendaCutiTahunan','dendaCutiSakit','grandTotalCuti','potongPremi','grandTotalDendaCuti','grandTotalDendaCutiRupiah'));
     }
 
     public function store($id, Request $request){
-        
+        $role = Auth::user()->getRoleNames()[0];
         $karyawan = Karyawan::where('id',$id)->first();
+
+        if($role != 'superadmin'){
+            
+            if($karyawan->flag = 2){
+                return abort(404);
+            }
+        }
 
         $totalCuti = $request->total_cuti_tahunan+$request->total_cuti_mendadak+$request->total_cuti_sakit;
         $totalPotongan = $request->potong_bulanan+$request->potong_premi;
@@ -130,7 +200,7 @@ class GajihController extends Controller
         $data->bulan = $request->bulan;
         $data->tahun = $request->tahun;
         $data->bulanan = $karyawan->bulanan;
-        $data->harian = $karyawan->harian;
+        $data->harian = $rupiahHarian;
         $data->premi = $karyawan->premi;
         $data->cuti_sakit = $request->total_cuti_sakit;
         $data->cuti_tahunan = $request->total_cuti_tahunan;
@@ -158,7 +228,11 @@ class GajihController extends Controller
         $gajihList = Gajih::where('karyawan_id',$id)->orderBy('tahun','desc')->orderBy('bulan','desc');
 
         if( $roleName != "superadmin"){
-            $gajihList = $$gajihList->where('flag',1);
+
+            if($karyawan->flag == 2){
+                return abort(404);
+            }
+          
         }
 
          
@@ -174,7 +248,7 @@ class GajihController extends Controller
 
         $cid = $id;
 
-        return view('gajih.gajihList',compact('karyawan','gajihList','cid'));
+        return view('gaji.gajiList',compact('karyawan','gajihList','cid'));
     }
 }
 

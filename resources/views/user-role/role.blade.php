@@ -41,7 +41,7 @@
                                                 Edit
                                             </a>
 
-                                            <form action="{{route('produksi.postDeleteJahit',$item->id)}}" method="post">
+                                            <form action="{{route('role.deleteRole',$item->id)}}" method="post">
 
                                                 @csrf
                                                 @method('DELETE')

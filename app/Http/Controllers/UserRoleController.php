@@ -235,6 +235,18 @@ class UserRoleController extends Controller
 
     }
 
+    public function deleteRole($id){
+
+        $data = Role::findOrFail($id);
+
+
+        $data->delete();
+
+        // dd($data->permissions->pluck('id','name')->toArray());
+
+        return redirect()->route('role.indexRole')->with('success',  'Role '.$data->name.' deleted');
+   }
+
     public function ban($id, Request $request)
 	{
 		$user = User::find($id);

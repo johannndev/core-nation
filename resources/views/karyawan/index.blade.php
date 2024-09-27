@@ -96,7 +96,7 @@
                                                             
                                         <th scope="col" class="px-4 py-3">No. Telpon</th>
                     
-                                        <th scope="col" class="px-4 py-3">Gajih {{$now->month}}/{{$now->year}}</th>
+                                        <th scope="col" class="px-4 py-3">Gaji {{$now->month}}/{{$now->year}}</th>
                                         
                                         <th scope="col" class="px-4 py-3">Cuti {{$now->year}}</th>
 
@@ -196,7 +196,7 @@
                                                         <a href="{{route('cuti.create',$item->id)}}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Tambah Cuti</a>
                                                     </li>
                                                     <li>
-                                                        <a href="{{route('gajih.create',$item->id)}}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Tambah Gajih</a>
+                                                        <a href="{{route('gajih.create',$item->id)}}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Tambah Gaji</a>
                                                     </li>
                                                     <li>
                                                         <a href="{{route('karyawan.edit',$item->id)}}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>

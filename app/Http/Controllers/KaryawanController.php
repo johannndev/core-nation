@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Karyawan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 
@@ -13,6 +14,10 @@ class KaryawanController extends Controller
     public function index(){
 
         $now = Carbon::now();
+
+        $role = Auth::user()->getRoleNames()[0];
+
+     
 
         $dataList = Karyawan::with(['gajihSingle','gajih' => function($query) use($now) {
             $query->where('tahun', $now->year)
@@ -24,6 +29,10 @@ class KaryawanController extends Controller
 			$name = str_replace(' ', '%', Request('name'));
 			$dataList = $dataList->where('nama','LIKE',"%$name%");
 		}
+
+        if($role != 'superadmin'){
+            $dataList = $dataList->where('flag',1);
+        }
 
         $dataList = $dataList->paginate(50)->withQueryString();
   
@@ -65,6 +74,7 @@ class KaryawanController extends Controller
         $data->bulanan =$request->bulanan;
         $data->harian =$request->harian;
         $data->premi =$request->premi;
+        $data->flag =$request->privasi;
 
         $data->save();
 
@@ -74,6 +84,14 @@ class KaryawanController extends Controller
     public function edit($id){
 
         $data = Karyawan::find($id);
+
+        $role = Auth::user()->getRoleNames()[0];
+
+        if($role != 'superadmin'){
+            if($data->flag = 2){
+                return abort(404);
+            }
+        }
 
         return view('karyawan.edit',compact('data'));
     }
@@ -108,6 +126,7 @@ class KaryawanController extends Controller
         $data->bulanan =$request->bulanan;
         $data->harian =$request->harian;
         $data->premi =$request->premi;
+        $data->flag =$request->privasi;
 
         $data->save();
 
