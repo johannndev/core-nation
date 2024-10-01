@@ -97,6 +97,7 @@
                                         <th scope="col" class="px-4 py-3">No. Telpon</th>
                     
                                         <th scope="col" class="px-4 py-3">Gaji {{$now->month}}/{{$now->year}}</th>
+                                        <th scope="col" class="px-4 py-3">GPU {{$now->month}}/{{$now->year}}</th>
                                         
                                         <th scope="col" class="px-4 py-3">Cuti {{$now->year}}</th>
 
@@ -128,6 +129,18 @@
                                             @isset($item->gajihSingle)
 
                                                 {{Number::format($item->gajihSingle->total_gajih,0,0,'id')}}
+
+                                            @endisset
+
+                                            @empty($item->gajihSingle)
+                                                Belum dibuat
+                                            @endempty
+                                        </td>
+
+                                        <td class="px-4 py-3">
+                                            @isset($item->gajihSingle)
+
+                                                {{Number::format($item->gajihSingle->Gpu,0,0,'id')}}
 
                                             @endisset
 

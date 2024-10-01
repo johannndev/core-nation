@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('harian')->nullable();
             $table->integer('premi')->nullable();
             $table->integer('flag')->default(1);
+            $table->integer('bank_id')->nullable();
             $table->timestamps();
         });
     }

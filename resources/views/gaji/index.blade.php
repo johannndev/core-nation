@@ -126,7 +126,8 @@
                                         <th scope="col" class="px-4 py-3">Potongan Cuti</th> 
                                         <th scope="col" class="px-4 py-3">Bonus</th> 
                                         <th scope="col" class="px-4 py-3">Sanksi</th> 
-                                        <th scope="col" class="px-4 py-3">Total Gaji</th>                                
+                                        <th scope="col" class="px-4 py-3">Total Gaji</th>
+                                        <th scope="col" class="px-4 py-3">Account Bank</th>                                
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -154,6 +155,7 @@
                                         <td class="px-4 py-3 normal-col">{{Number::format($item->bonus,0,0,'id')}}</td>
                                         <td class="px-4 py-3 normal-col">{{Number::format($item->sanksi,0,0,'id')}}</td>
                                         <td class="px-4 py-3 normal-col">{{Number::format($item->total_gajih,0,0,'id')}}</td>
+                                        <td class="px-4 py-3 normal-col">{{$item->bankSingle->name}}</td>
                                         
                                         
                                     </tr>
@@ -179,6 +181,23 @@
                         {{$gajihList->onEachSide(1)->links()}}
                     </div>
                    
+                </div>
+
+                <div class="mt-6">
+                    <div class="grid md:grid-cols-5 gap-4">
+
+                        @foreach ($gajiPerBank as $gaji)
+
+                        <div >
+                            <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
+                                <p class="text-sm text-gray-500">{{ $gaji->bank->name }}</p>
+                                <p class="text-lg font-bold">Rp {{ number_format($gaji->total_gaji,0,'','.') }}</p>
+                            </div>
+                        </div>
+                            
+                        @endforeach
+                         
+                    </div>
                 </div>
             </div>
         </section>

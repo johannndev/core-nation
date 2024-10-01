@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Karyawan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -41,7 +42,17 @@ class KaryawanController extends Controller
     }
 
     public function create(){
-        return view('karyawan.create');
+
+        $dataListPropRecaiver = [
+			"label" => "Account Bank",
+			"id" => "bank",
+			"idList" => "datalistBank",
+			"idOption" => "datalistOptionsBank",
+			"type" => Customer::TYPE_BANK,
+			
+		];
+
+        return view('karyawan.create',compact('dataListPropRecaiver'));
     }
 
     public function store(Request $request){
@@ -52,6 +63,7 @@ class KaryawanController extends Controller
             'bulanan'  => ['required'],
             'harian'  => ['required'],
             'premi'  => ['required'],
+            'bank'  => ['required'],
             
 		];
 
@@ -62,6 +74,7 @@ class KaryawanController extends Controller
             'bulanan' => 'Bulanan',
             'harian' => 'Harian',
             'premi' => 'Premi',
+            'bank' => 'Account bank',
         ];
 
         $this->validate($request, $rules, [], $attributes);
@@ -74,6 +87,7 @@ class KaryawanController extends Controller
         $data->bulanan =$request->bulanan;
         $data->harian =$request->harian;
         $data->premi =$request->premi;
+        $data->bank_id =$request->bank;
         $data->flag =$request->privasi;
 
         $data->save();
@@ -93,7 +107,17 @@ class KaryawanController extends Controller
             }
         }
 
-        return view('karyawan.edit',compact('data'));
+        $dataListPropRecaiver = [
+			"label" => "Account Bank",
+			"id" => "bank",
+			"idList" => "datalistBank",
+			"idOption" => "datalistOptionsBank",
+			"type" => Customer::TYPE_BANK,
+            "default" => $data->bank_id,
+			
+		];
+
+        return view('karyawan.edit',compact('data','dataListPropRecaiver'));
     }
 
     public function update(Request $request,$id){
@@ -104,6 +128,7 @@ class KaryawanController extends Controller
             'bulanan'  => ['required'],
             'harian'  => ['required'],
             'premi'  => ['required'],
+            'bank'  => ['required'],
             
 		];
 
@@ -114,6 +139,7 @@ class KaryawanController extends Controller
             'bulanan' => 'Bulanan',
             'harian' => 'Harian',
             'premi' => 'Premi',
+            'bank' => 'Account bank',
         ];
 
         $this->validate($request, $rules, [], $attributes);
@@ -126,6 +152,7 @@ class KaryawanController extends Controller
         $data->bulanan =$request->bulanan;
         $data->harian =$request->harian;
         $data->premi =$request->premi;
+        $data->bank_id =$request->bank;
         $data->flag =$request->privasi;
 
         $data->save();
@@ -137,7 +164,7 @@ class KaryawanController extends Controller
 
         $cid = $id;
 
-        $data = Karyawan::find($id);
+        $data = Karyawan::with('bank')->find($id);
 
         return view('karyawan.detail',compact('data','cid'));
     }

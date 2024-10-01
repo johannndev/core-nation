@@ -23,7 +23,7 @@ class GajihController extends Controller
 
         $roleName = Auth::user()->getRoleNames()[0];
 
-        $gajihList = Gajih::with('karyawan')->orderBy('tahun','desc')->orderBy('bulan','desc');
+        $gajihList = Gajih::with('karyawan','bankSingle')->orderBy('tahun','desc')->orderBy('bulan','desc');
 
         if( $roleName != "superadmin"){
             $gajihList = $gajihList->whereHas('karyawan', function (Builder $query) {
@@ -59,9 +59,29 @@ class GajihController extends Controller
         
         $gajihList = $gajihList->paginate(20)->withQueryString();
 
+      
+
+        $gajiPerBank = Gajih::with('bank');
+
+        if($request->bulan && $request->tahun){
+			$gajiPerBank = $gajiPerBank->where('bulan',$request->bulan)->where('tahun',$request->tahun);
+
+            $bulanSelect = $request->bulan;
+            $yearSelect = $request->tahun;
+		}else{
+
+            $gajiPerBank = $gajiPerBank->where('bulan',$bulanSelect)->where('tahun',$yearSelect);
+
+        }
+
+        $gajiPerBank =  $gajiPerBank->selectRaw('bank_id, SUM(total_gajih) as total_gaji')
+        ->groupBy('bank_id')
+        ->get();
+
+
        
 
-        return view('gaji.index',compact('gajihList','bulanSelect','yearSelect'));
+        return view('gaji.index',compact('gajihList','bulanSelect','yearSelect','gajiPerBank'));
 
     }
 
@@ -212,6 +232,7 @@ class GajihController extends Controller
         $data->bonus = $request->bonus;
         $data->sanksi = $request->sanksi;
         $data->total_gajih = $gajih;
+        $data->bank_id = $karyawan->bank_id;
         $data->flag = $request->privasi;
 
         $data->save();

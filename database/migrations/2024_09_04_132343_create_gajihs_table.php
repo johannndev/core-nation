@@ -30,6 +30,7 @@ return new class extends Migration
             $table->integer('sanksi')->default(0);
             $table->integer('total_gajih')->default(0);
             $table->integer('flag')->default(1);
+            $table->integer('bank_id')->nullable();
             $table->timestamps();
         });
     }

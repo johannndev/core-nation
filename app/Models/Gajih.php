@@ -22,4 +22,21 @@ class Gajih extends Model
 
         return $data;
     }
+
+    public function getGpuAttribute()
+	{
+        $gpuTotal = $this->bulanan+$this->harian+$this->premi;
+
+		return $gpuTotal;
+	}
+
+    public function bank()
+    {
+        return $this->belongsTo(Customer::class,'bank_id','id');
+    }
+
+    public function bankSingle()
+    {
+        return $this->hasOne(Customer::class,'id','bank_id');
+    }
 }

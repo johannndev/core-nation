@@ -102,6 +102,8 @@
 
                         </div>
 
+                        <x-partial.select-addr :dataProp='$dataListPropRecaiver' />
+
                         <div>
                           <label for="sanksi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Privasi</label>
                           <div class="flex space-x-6">

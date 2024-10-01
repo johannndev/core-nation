@@ -78,6 +78,11 @@
                                         <p class="text-medium text-gray-500">Premi</p>
                                         <p class="font-bold ">Rp {{number_format($data->premi,2)}}</p>
                                     </div>
+
+                                    <div class="mt-4">
+                                        <p class="text-medium text-gray-500">Account Bank</p>
+                                        <p class="font-bold "> {{$data->bank->name}}</p>
+                                    </div>
                                 </div>
                                
                     

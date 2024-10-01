@@ -80,6 +80,11 @@ class Customer extends Model
 		return $this->belongsTo('App\Models\Operation','parent_id');
 	}
 
+	public function gajis()
+    {
+        return $this->hasMany(Gajih::class,'bank_id','id');
+    }
+
 	public function getDetailLink() {
 	  return $this->generateLink('detail');
 	}

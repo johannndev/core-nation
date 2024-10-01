@@ -21,4 +21,10 @@ class Karyawan extends Model
 
         return $this->hasOne(Gajih::class,'karyawan_id','id')->where('bulan', $now->month)->where('tahun', $now->year);
     }
+
+    public function bank()
+    {
+
+        return $this->hasOne(Customer::class,'id','bank_id');
+    }
 }
