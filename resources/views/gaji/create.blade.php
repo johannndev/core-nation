@@ -59,7 +59,34 @@
       <section class="bg-gray-50 dark:bg-gray-900 mb-8">
           <div class="mx-auto  ">
               <!-- Start coding here -->
-              <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
+            
+              @if ($gajihData)
+
+                <div class="">
+
+                  <div id="alert-additional-content-3" class="p-4 mb-4 text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800" role="alert">
+                    <div class="flex items-center">
+                      <svg class="flex-shrink-0 w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                      </svg>
+                      <span class="sr-only">Info</span>
+                      <h3 class="text-lg font-medium">Gaji {{$karyawan->nama}} sudah dibuat</h3>
+                    </div>
+                    <div class="mt-2 mb-4 text-sm">
+                      Gaji {{$karyawan->nama}} pada periode {{$now->month}}/{{$now->year}} adalah <span class="font-bold">Rp {{number_format($gajihData->total_gajih,0,'','.')}}</span>
+                    </div>
+                    <div class="flex">
+                      <a href="{{route('karyawan.index')}}" class="text-green-800 bg-transparent border border-green-800 hover:bg-green-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:hover:bg-green-600 dark:border-green-600 dark:text-green-400 dark:hover:text-white dark:focus:ring-green-800">
+                        Kembali
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+                  
+              @else
+
+                <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
 
                   <div class="">
 
@@ -215,7 +242,9 @@
                       <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
 
                   </div>
-              </div>
+                </div>
+
+              @endif
           </div>
       </section>
 

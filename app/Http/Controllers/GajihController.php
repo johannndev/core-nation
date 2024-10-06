@@ -102,11 +102,15 @@ class GajihController extends Controller
         }
 
 
+
+
         $limitTahunan = (int)$setting['batas_cuti_tahunan'];
         $limitSakit = (int)$setting['batas_cuti_sakit'];
 
         $now = Carbon::now();
         $lastmonth = Carbon::now()->subMonth();
+
+        $gajihData = Gajih::where('karyawan_id',$id)->where('bulan',$now->month)->where('tahun',$now->year)->first();
         
 
         $karyawan = Karyawan::with(['gajih' => function($query) use($lastmonth) {
@@ -192,7 +196,7 @@ class GajihController extends Controller
         
 
 
-        return view('gaji.create',compact('karyawan','now','totalCuti','gajihArray','dendaCutiTahunan','dendaCutiSakit','grandTotalCuti','potongPremi','grandTotalDendaCuti','grandTotalDendaCutiRupiah'));
+        return view('gaji.create',compact('karyawan','now','totalCuti','gajihArray','dendaCutiTahunan','dendaCutiSakit','grandTotalCuti','potongPremi','grandTotalDendaCuti','grandTotalDendaCutiRupiah','gajihData'));
     }
 
     public function store($id, Request $request){
@@ -205,6 +209,8 @@ class GajihController extends Controller
                 return abort(404);
             }
         }
+
+       
 
         $totalCuti = $request->total_cuti_tahunan+$request->total_cuti_mendadak+$request->total_cuti_sakit;
         $totalPotongan = $request->potong_bulanan+$request->potong_premi;
