@@ -24,7 +24,7 @@ class ItemsController extends Controller
     public function index(Request $request)
     {
 
-        $dataList = Item::with('group')->where('type',Item::TYPE_ITEM)->orderBy('created_at','desc');
+        $dataList = Item::with('group')->where('type',Item::TYPE_ITEM)->orderBy('id','desc');
 
         if($request->code){
 

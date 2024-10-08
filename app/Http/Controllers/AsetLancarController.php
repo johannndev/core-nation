@@ -19,7 +19,7 @@ class AsetLancarController extends Controller
     public function index(Request $request)
     {
 
-        $dataList = Item::with('group')->where('type',Item::TYPE_ASSET_LANCAR)->orderBy('created_at','desc');
+        $dataList = Item::with('group')->where('type',Item::TYPE_ASSET_LANCAR)->orderBy('id','desc');
 
         if($request->code){
 
