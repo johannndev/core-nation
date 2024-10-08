@@ -47,7 +47,7 @@ class Transaction extends Component
 
         // dd($customer);
 
-        $dataList = ModelsTransaction::with('receiver','sender','receiver.stat','sender.stat')->whereAny(['sender_id','receiver_id'],$this->cid)->orderBy('date','desc');
+        $dataList = ModelsTransaction::with('receiver','sender','receiver.stat','sender.stat')->whereAny(['sender_id','receiver_id'],$this->cid)->orderBy('date','desc')->orderBy('id','desc');
 
 		if(Request('from') && Request('to')){
             $dataList = $dataList->where('date','>=',Request('from'))->where('date','<=',Request('to'));

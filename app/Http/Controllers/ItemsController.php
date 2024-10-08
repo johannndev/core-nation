@@ -185,7 +185,7 @@ class ItemsController extends Controller
 
 	public function transaction($id, Request $request)
 	{
-		$dataList = TransactionDetail::with('transaction','transaction.receiver','transaction.sender')->where('item_id',$id)->orderBy('date','desc');
+		$dataList = TransactionDetail::with('transaction','transaction.receiver','transaction.sender')->where('item_id',$id)->orderBy('date','desc')->orderBy('transaction_id','desc');
 
 		if($request->addr){
 			$default = $request->addr;
