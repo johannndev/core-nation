@@ -366,6 +366,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/karyawan/{id}/gaji/list', [GajihController::class, 'list'])->name('gajih.list')->middleware('permission:gajih list');
 
     Route::get('/gaji', [GajihController::class, 'index'])->name('gaji.index')->middleware('permission:gajih list');
+    Route::delete('/gaji/{id}/delete', [GajihController::class, 'delete'])->name('gaji.delete')->middleware('permission:gajih list');
 
 
 

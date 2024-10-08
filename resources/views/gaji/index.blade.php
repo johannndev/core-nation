@@ -127,7 +127,8 @@
                                         <th scope="col" class="px-4 py-3">Bonus</th> 
                                         <th scope="col" class="px-4 py-3">Sanksi</th> 
                                         <th scope="col" class="px-4 py-3">Total Gaji</th>
-                                        <th scope="col" class="px-4 py-3">Account Bank</th>                                
+                                        <th scope="col" class="px-4 py-3">Account Bank</th> 
+                                        <th scope="col" class="px-4 py-3">Action</th>                                
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -156,6 +157,20 @@
                                         <td class="px-4 py-3 normal-col">{{Number::format($item->sanksi,0,0,'id')}}</td>
                                         <td class="px-4 py-3 normal-col">{{Number::format($item->total_gajih,0,0,'id')}}</td>
                                         <td class="px-4 py-3 normal-col">{{$item->bankSingle->name}}</td>
+                                        <td class="px-4 py-3 normal-col">
+                                            <form action="{{route('gaji.delete',$item->id)}}" method="post">
+
+                                                @csrf
+                                                @method('DELETE')
+                                              
+
+                                                <button type="submit" class=" items-center justify-center text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">
+                                                   Delete
+                                                    
+                                                </button>
+
+                                            </form>
+                                        </td>
                                         
                                         
                                     </tr>

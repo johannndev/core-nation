@@ -243,7 +243,7 @@ class GajihController extends Controller
 
         $data->save();
 
-        return redirect()->route('gajih.list',$id)->with('success','Gajih '.$karyawan->nama.' created');
+        return redirect()->route('gajih.list',$id)->with('success','Gaji '.$karyawan->nama.' created');
 
     }
 
@@ -276,6 +276,14 @@ class GajihController extends Controller
         $cid = $id;
 
         return view('gaji.gajiList',compact('karyawan','gajihList','cid'));
+    }
+
+    public function delete($id){
+        $gajih = Gajih::find($id);
+
+        $gajih->delete();
+
+        return redirect()->route('gaji.index')->with('success','Gaji deleted');
     }
 }
 
