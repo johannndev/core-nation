@@ -347,11 +347,11 @@
                                 </th>
 
                                 <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                    {{$itemTd->item->id}}
+                                  <a href="{{route('item.detail',$itemTd->item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$itemTd->item->id}}</a>
                                 </td>
 
                                 <td class="sku-col hidden px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                    <a href="{{ $itemTd->item->getLink() }}"></a>{{$itemTd->item->code}}</a>
+                                    <a href="{{route('item.detail',$itemTd->item->id)}}">{{$itemTd->item->code}}</a>
                                 </td>
 
 
