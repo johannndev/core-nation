@@ -1111,14 +1111,17 @@ class TransactionsController extends Controller
 
 		//add to receiver
 		$sm = new StatManagerHelper;
-		$receiver_balance = $sm->add($transaction->receiver_id,$transaction);
+		$receiver_balance = $sm->add($transaction->receiver_id,$transaction, true);
 		if($receiver_balance === false)
 			throw new ModelException($sm->getErrors()->first());
 
 		//deduct from sender
-		$sender_balance = $sm->deduct($transaction->sender_id,$transaction);
+		$sender_balance = $sm->deduct($transaction->sender_id,$transaction, true);
 		if($sender_balance === false)
 			throw new ModelException($sm->getErrors()->first());
+
+
+		// dd($receiver_balance, $sender_balance);
 
 		$transaction->sender_balance = $sender_balance;
 		$transaction->receiver_balance = $receiver_balance;
