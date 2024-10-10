@@ -35,6 +35,6 @@ class DataList extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.partial.data-list',compact('user'));
+        return view('components.partial.data-list');
     }
 }
