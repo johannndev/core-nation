@@ -5,6 +5,7 @@ use App\Http\Controllers\AddrbookController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AsetLancarController;
 use App\Http\Controllers\BoronganController;
+use App\Http\Controllers\CompareController;
 use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CutiController;
@@ -110,6 +111,9 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/compare', [CompareController::class, 'index'])->name('compare.index');
+    Route::post('/compare/store', [CompareController::class, 'store'])->name('compare.store');
+    Route::delete('/compare/{id}/delete', [CompareController::class, 'delete'])->name('compare.delete');
 
     Route::get('/transaction/po', [PoController::class, 'index'])->name('transaction.Poindex')->middleware('permission:cnpo list');
     Route::get('/transaction/po/{id}/detail', [PoController::class, 'getDetail'])->name('transaction.Podetail')->middleware('permission:cnpo detail');
