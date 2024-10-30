@@ -67,7 +67,7 @@ class CompareController extends Controller
 
             }
 
-            $products = $products->paginate(50);
+            $products = $products->paginate(200);
 
         } else {
             // Jika tidak ada warehouse yang dipilih, kosongkan hasil

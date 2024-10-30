@@ -62,7 +62,7 @@
                                             <select id="wh" name="wh" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-s-lg border-e-gray-100 dark:border-e-gray-700 border-s-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="">Choose </option>
                                                 @foreach($wherehouseHead  as $warehouse)
-                                                    <option {{Request('wh')== $warehouse->id ? 'selected' : '' }} value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                                    <option {{Request('wh')== $warehouse->id ? 'selected' : '' }} value="{{$warehouse->id}}">{{$warehouse->warehouse->name}}</option>
                                                 @endforeach
                                                
                                             </select>
