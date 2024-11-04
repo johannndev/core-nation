@@ -46,7 +46,7 @@ class CompareController extends Controller
         // Jika ada warehouse yang dipilih, buat query dinamis
         if (!empty($warehouseCompare)) {
             $products = DB::table('items')
-                ->select('items.id as item_id', 'items.name as produk', 'warehouse_item.warehouse_id', DB::raw('SUM(warehouse_item.quantity) as total_quantity'))
+                ->select('items.id as item_id', 'items.name as produk','items.code as sku', 'warehouse_item.warehouse_id', DB::raw('SUM(warehouse_item.quantity) as total_quantity'))
                 ->join('warehouse_item', 'items.id', '=', 'warehouse_item.item_id')
                 ->whereIn('warehouse_item.warehouse_id', $warehouseCompare)
                 ->groupBy('items.id', 'items.name', 'warehouse_item.warehouse_id');
@@ -60,6 +60,15 @@ class CompareController extends Controller
             }else{
                 $products = $products->orderBy('produk','asc');
             }
+
+            // Menambahkan filter pencarian berdasarkan nama produk atau SKU
+            if ($request->cari) {
+                $products = $products->where(function($query) use ($request) {
+                    $query->where('items.name', 'like', '%' . $request->cari . '%')
+                        ->orWhere('items.code', 'like', '%' . $request->cari . '%');
+                });
+            }
+            
 
             if($request->wh){
 

@@ -45,8 +45,15 @@
                             
                                 <div class="grid gap-4 md:grid-cols-5">
                                     <div>
+                                        <div>
+                                            <label for="cari" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cari</label>
+                                            <input type="text" name="cari" id="cari" aria-describedby="helper-text-explanation" class=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('cari') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror" value="{{Request('cari')}}">
+                  
+                                          </div>
+                                    </div>
+                                    <div>
                                         <label for="produk" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sort Product</label>
-                                        <select id="produk" name="produk" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <select id="produk" name="produk" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                             <option {{Request('produk')== 'asc' ? 'selected' : '' }} value="asc" >Ascending</option>
                                             <option  {{Request('produk')== 'desc' ? 'selected' : '' }}  value="desc" >Descending</option>
                                             <option  {{Request('produk')== 'none' ? 'selected' : '' }}  value="none" >None</option>
@@ -114,8 +121,9 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                 <tr >
                                     <th scope="col" class="px-4 py-3">Produk</th>
+                                    <th scope="col" class="px-4 py-3">SKU</th>
                                     @foreach($wherehouseHead  as $wh)
-                                        <th scope="col" class="px-4 py-3">
+                                        <th scope="col" class="px-4 py-3" align="left">
 
                                             <button data-modal-target="popup-modal-{{$wh->id}}" data-modal-toggle="popup-modal-{{$wh->id}}" class="text-blue-500 hover:underline hover:text-blue-600" type="button">
                                                 {{ $wh->warehouse->name }}
@@ -170,6 +178,10 @@
                                             <a class="text-blue-500 hover:underline hover:text-blue-600" href="{{route('item.detail',$product->item_id)}}"> {{ $product->produk }}</a>
                                            
                                         </th>
+                                        <td class="px-4 py-3  ">
+                                            {{ $product->sku }}
+                                            
+                                        </td>
                                         @foreach($warehouseCompare as $warehouseId)
                                            
                                             @if($product->warehouse_id == $warehouseId)

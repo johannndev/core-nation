@@ -169,19 +169,40 @@ class AjaxController extends Controller
 
         $collect = collect($array)->pluck('id');
 
-        $item = Item::whereIn('id',$collect)->orderBy('name','asc')->get();
+        // $item = Item::whereIn('id',$collect)->orderBy('name','asc')->get();
+
+        $items = Item::whereIn('id', $collect)
+                ->with(['warehousesItemAlt' => function ($query) use ($whid) {
+                    $query->where('warehouse_id', $whid);
+                }])
+                ->orderBy('name', 'asc')
+                ->get();
 
         $dataList = [];
 
-        foreach($item as $i){
+        foreach ($items as $i) {
+            $warehouseQuantity = $i->warehousesItemAlt->first()->quantity ?? 0; // Ambil quantity warehouse terkait, atau 0 jika tidak ada
+        
             $dataList[] = [
                 'id' => $i->id,
                 'code' => $i->code,
-                'quantity'=>(float)$qtyPluck[$i->id],
-                'warehouse'=> $i->getQtyWarehouse($i->id,$whid),
-                'price' => (float)$qtyPrice[$i->id] 
+                'quantity' => (float)$qtyPluck[$i->id],
+                'warehouse' => $warehouseQuantity,
+                'price' => (float)$qtyPrice[$i->id]
             ];
         }
+
+        // foreach($item as $i){
+        //     $dataList[] = [
+        //         'id' => $i->id,
+        //         'code' => $i->code,
+        //         'quantity'=>(float)$qtyPluck[$i->id],
+        //         'warehouse'=> $i->getQtyWarehouse($i->id,$whid),
+        //         'price' => (float)$qtyPrice[$i->id] 
+        //     ];
+        // }
+
+
 
 
         return response()->json($dataList);

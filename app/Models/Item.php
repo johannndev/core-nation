@@ -179,6 +179,11 @@ class Item extends Model
         return $this->hasMany(WarehouseItem::class, 'item_id', 'id')->where('warehouse_id',2875);
     }
 
+	public function warehousesItemAlt()
+	{
+		return $this->hasMany(WarehouseItem::class,'item_id', 'id');
+	}
+
 	public function tags()
 	{
 		return $this->belongsToMany('App\Models\Tag','item_tag','item_id');
