@@ -1005,8 +1005,8 @@ class TransactionsController extends Controller
 		if($customerTypes[$sender] == Customer::TYPE_ACCOUNT)
 			$transaction->total = 0 - $transaction->total;
 
-		$sender_balance = $sm->deduct($transaction->sender_id,$transaction);
-		$receiver_balance = $sm->add($transaction->receiver_id,$transaction);
+		$sender_balance = $sm->deduct($transaction->sender_id,$transaction,true);
+		$receiver_balance = $sm->add($transaction->receiver_id,$transaction,true);
 		if($receiver_balance === false || $sender_balance === false)
 			throw new \Exception('error saving statistics');
 
