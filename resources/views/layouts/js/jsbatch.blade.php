@@ -13,7 +13,7 @@
 
         var warehouse = $('#warehouse').val();
 
-        console.log(warehouse);
+        // console.log(warehouse);
 
         if (csvInput.length > 0) {
             $.ajax({
@@ -25,10 +25,14 @@
                 },
                 success: function(response) {
                    
-                    displayData(response);
+                    displayData(response.data);
 
-                    qtySum = sumQty(response);
-                    qtyPrice = sumPrice(response);
+                    qtySum = response.totalQty;
+                    qtyPrice = response.totalPrice;
+
+                    console.log('total Baris: '+response.total);
+                    
+
                     total();
                 },
                 error: function(xhr) {
@@ -40,7 +44,7 @@
         }
 
 
-        console.log(csvInput);
+        // console.log(csvInput);
     }
 
     function displayData(dataList) {
@@ -148,8 +152,8 @@
     });
 
     function total(){
-        console.log(qtySum);
-        console.log(qtyPrice);
+        // console.log(qtySum);
+        // console.log(qtyPrice);
 
         var totalPrice = qtyPrice+ parseFloat(adjs);
 

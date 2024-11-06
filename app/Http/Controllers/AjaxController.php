@@ -192,6 +192,11 @@ class AjaxController extends Controller
             ];
         }
 
+        $dataColl = collect($dataList);
+
+        
+        // dd($dataColl->sum('price'));
+
         // foreach($item as $i){
         //     $dataList[] = [
         //         'id' => $i->id,
@@ -202,10 +207,10 @@ class AjaxController extends Controller
         //     ];
         // }
 
+        
 
 
-
-        return response()->json($dataList);
+        return response()->json(['data' => $dataList, 'totalQty'=> $dataColl->sum('quantity'),'totalPrice' => $dataColl->sum('price'),'total' => $dataColl->count()]);
 
         // dd($dataList);
     }
