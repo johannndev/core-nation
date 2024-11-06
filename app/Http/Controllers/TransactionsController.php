@@ -1063,7 +1063,7 @@ class TransactionsController extends Controller
 	public function transfer()
   {
 		$bankList = Customer::whereIn('type',[Customer::TYPE_BANK,Customer::TYPE_VACCOUNT])->orderBy('name','asc')->get();
-      return view('transactions.transfer',compact('bankList'));
+      	return view('transactions.transfer',compact('bankList'));
   }
 
 	public function postTransfer(Request $request)

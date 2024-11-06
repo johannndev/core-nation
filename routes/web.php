@@ -102,7 +102,7 @@ Route::get('/role-create', function () {
     return 'berhasil';
 });
 
-Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified','exceptRole:ban'])->name('dashboard');
 
 
 Route::get('/cek', [HomeController::class, 'cekData'])->name('');

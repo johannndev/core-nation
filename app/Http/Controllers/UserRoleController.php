@@ -18,10 +18,32 @@ class UserRoleController extends Controller
 {
     
 
-    public function userList(){
-        $dataList = User::with('roles','location')->withoutRole('superadmin')->paginate();
+    public function userList(Request $request){
+        $dataList = User::with('roles','location');
 
-        return view('user-role.user',compact('dataList'));
+        if($request->name){
+			$dataList = $dataList->where('username', 'like', '%'.$request->name.'%');
+		}
+
+		if($request->role){
+			$dataList = $dataList->role($request->role);
+		}
+
+		if($request->status == 'sb'){
+            $dataList = $dataList->withoutRole(['superadmin']);
+        }elseif($request->status == 'bo'){
+			$dataList = $dataList->role(['ban']);
+		}else{
+            $dataList = $dataList->withoutRole(['superadmin','ban']);
+        }
+
+        $allRolesInDatabase = Role::whereNotIn('name', ['superadmin','ban'])->get()->pluck('name');
+
+        $dataList = $dataList->paginate(20)->withQueryString();
+
+        // dd($allRolesInDatabase);
+
+        return view('user-role.user',compact('dataList','allRolesInDatabase'));
     }
 
     public function userCreate(){
@@ -101,17 +123,37 @@ class UserRoleController extends Controller
 
     public function userUpdate(Request $request, $id){
 
+      
 
         try
 		{
             $role = Role::where('name',$request->role)->first();
 
+            
+
             DB::beginTransaction();
 
             $user = User::find($id);
 
+
+            if($user->hasRole('ban')){
+                $idRole = $user->role_id;
+            }else{
+
+                if($role){
+                    $idRole = $role->id;
+
+                    $user->syncRoles($request->role);
+                }else{
+                    $idRole = $user->role_id;
+                }
+
+            }
+
+            
+
             $user->username = $request->name;
-            $user->role_id = $role->id;
+            $user->role_id = $idRole;
             $user->location_id = $request->city;
 
             $password = '';
@@ -129,7 +171,7 @@ class UserRoleController extends Controller
                 throw new \Exception('cannot save user', 1);
 
 
-            $user->syncRoles($request->role);
+           
 
             //create app settings
             foreach(UserSetting::$list as $name => $val)
@@ -149,9 +191,11 @@ class UserRoleController extends Controller
             
 		} catch(ModelException $e) {
 			DB::rollBack();
+            
 			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
 		} catch(\Exception $e) {
 			DB::rollBack();
+            
 			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
 		}
 	
@@ -251,22 +295,38 @@ class UserRoleController extends Controller
 	{
 		$user = User::find($id);
         $role = Role::find($user->role_id);
+        
 
-        if($request->status == 'ban'){
+       
+        if($request->userStatus == 'ban'){
 
-            $roleName = $role->name;
-            $status = 'activated';
+            if($role){
+
+                $status = 'activated';
+                $roleName = $role->name;
+                $user->syncRoles($roleName);
+            }else{
+                $status = 'activated';
+                $user->removeRole('ban');
+
+            }
+
+          
+
+      
           
           
         }else{
 
             $roleName = 'ban';
             $status = 'banned';
+
+            $user->syncRoles($roleName);
            
             
         }
 
-        $user->syncRoles($roleName);
+       
 
         return redirect()->route('user.list')->with('success', $user->username.' '.$status);
         
