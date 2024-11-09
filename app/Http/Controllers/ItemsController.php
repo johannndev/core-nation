@@ -108,6 +108,8 @@ class ItemsController extends Controller
 
 		$urlImage = $data->getImageUrl();
 
+		// dd($urlImage);
+
 		$whList = WarehouseItem::with('warehouse')->whereHas('warehouse', function (Builder $query) {
 			$query->where('customers.type','=',Customer::TYPE_WAREHOUSE);
 		})->where('item_id',$id)->get();

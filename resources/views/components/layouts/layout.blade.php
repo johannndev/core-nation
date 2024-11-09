@@ -78,7 +78,19 @@
 
 		@endif
 
-    @stack('jsBody')
+    	@stack('jsBody')
+
+		<script>
+			document.getElementById("myForm").addEventListener("submit", function(event){
+                var submitBtn = document.getElementById("submit-btn");
+                var spinner = document.getElementById("loading-btn");
+                spinner.classList.remove('hidden');
+
+                submitBtn.classList.add('hidden');
+
+                // submitBtn.disabled = true;
+            });
+		</script>
 
     
 	  </div>
