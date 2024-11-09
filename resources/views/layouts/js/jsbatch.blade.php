@@ -6,6 +6,44 @@
     var qtyPrice = 0;
     var adjs = 0;
 
+    document.getElementById('csvFile').addEventListener('change', function() {
+        let formData = new FormData();
+        formData.append('csv_file', this.files[0]);
+        formData.append('_token', document.querySelector('input[name="_token"]').value);
+        formData.append('whId', $('#warehouse').val()); // Menambahkan whid ke FormData
+
+        fetch('{{ route("ajax.sellBatch") }}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+
+            console.log(data.length);
+            
+            console.log(data.data)
+            
+           
+            displayData(data.data);
+
+            qtySum = data.totalQty;
+            qtyPrice = data.totalPrice;
+
+            console.log('total Baris: '+data.total);
+
+
+            total();
+           
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // document.getElementById('uploadResult').innerText = 'Terjadi kesalahan saat meng-upload CSV.';
+        });
+    });
+
     function fetchSell() {
 
        

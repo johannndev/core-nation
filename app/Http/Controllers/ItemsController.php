@@ -229,11 +229,6 @@ class ItemsController extends Controller
 			$to = Carbon::now()->endOfMonth()->toDateString();
 		}
 
-
-		
-
-
-		
 		$data = TransactionDetail::select(array(
 			"transaction_type",
 			DB::raw("DATE_FORMAT(date,'%M %Y') AS showdate"),
@@ -369,11 +364,7 @@ class ItemsController extends Controller
         $dataTotal = $dataTotal->orderBy("date", 'DESC')->get();
 
 		// dd($dataTotal);
-
 		
-		
-
-
 		$dataListPropCustomer = [
 			"label" => "Addr Book",
 			"id" => "addr",

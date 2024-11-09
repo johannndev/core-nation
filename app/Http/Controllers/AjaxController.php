@@ -9,6 +9,7 @@ use App\Models\WarehouseItem;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 
 
@@ -141,26 +142,98 @@ class AjaxController extends Controller
 		
 	}
 
-    public function sellBatch(Request $request){
+    // public function sellBatch(Request $request){
+    //     $whid = $request->whId;
+
+    //     $data = $request->csvInput;
+
+    //     $rows = preg_split('/[\/n\s]+/', trim($data));
+
+    //     $array = array();
+
+    //     foreach ($rows as $row) {
+    //         // Memecah setiap baris menjadi elemen array
+    //         $elements = explode(',', $row);
+            
+    //         // Menambah elemen ke dalam array
+    //         $array[] = array(
+    //             'id' => $elements[0],
+    //             'qty' => $elements[1],
+    //             'price' => $elements[2]
+    //         );
+    //     }
+
+    //     $qtyPluck = collect($array)->pluck('qty','id')->toArray();
+    //     $qtyPrice = collect($array)->pluck('price','id')->toArray();
+
+        
+
+    //     $collect = collect($array)->pluck('id');
+
+    //     // $item = Item::whereIn('id',$collect)->orderBy('name','asc')->get();
+
+    //     $items = Item::whereIn('id', $collect)
+    //             ->with(['warehousesItemAlt' => function ($query) use ($whid) {
+    //                 $query->where('warehouse_id', $whid);
+    //             }])
+    //             ->orderBy('name', 'asc')
+    //             ->get();
+
+    //     $dataList = [];
+
+    //     foreach ($items as $i) {
+    //         $warehouseQuantity = $i->warehousesItemAlt->first()->quantity ?? 0; // Ambil quantity warehouse terkait, atau 0 jika tidak ada
+        
+    //         $dataList[] = [
+    //             'id' => $i->id,
+    //             'code' => $i->code,
+    //             'quantity' => (float)$qtyPluck[$i->id],
+    //             'warehouse' => $warehouseQuantity,
+    //             'price' => (float)$qtyPrice[$i->id]
+    //         ];
+    //     }
+
+    //     $dataColl = collect($dataList);
+
+        
+    //     // dd($dataColl->sum('price'));
+
+    //     // foreach($item as $i){
+    //     //     $dataList[] = [
+    //     //         'id' => $i->id,
+    //     //         'code' => $i->code,
+    //     //         'quantity'=>(float)$qtyPluck[$i->id],
+    //     //         'warehouse'=> $i->getQtyWarehouse($i->id,$whid),
+    //     //         'price' => (float)$qtyPrice[$i->id] 
+    //     //     ];
+    //     // }
+
+        
+
+
+    //     return response()->json(['data' => $dataList, 'totalQty'=> $dataColl->sum('quantity'),'totalPrice' => $dataColl->sum('price'),'total' => $dataColl->count()]);
+
+    //     // dd($dataList);
+    // }
+
+    public function sellBatch(Request $request)
+    {
         $whid = $request->whId;
 
-        $data = $request->csvInput;
+        // dd($request);
 
-        $rows = preg_split('/[\/n\s]+/', trim($data));
+        // Validate and store the uploaded file
+        $request->validate([
+            'csv_file' => 'required|mimes:csv,txt|max:2048'
+        ]);
 
-        $array = array();
+        $file = $request->file('csv_file');
+        $filePath = $file->getRealPath();
 
-        foreach ($rows as $row) {
-            // Memecah setiap baris menjadi elemen array
-            $elements = explode(',', $row);
-            
-            // Menambah elemen ke dalam array
-            $array[] = array(
-                'id' => $elements[0],
-                'qty' => $elements[1],
-                'price' => $elements[2]
-            );
-        }
+        // Parse the CSV file to an array
+        $array = $this->parseCsvToArray($filePath); // Use the parsing function from earlier
+
+        
 
         $qtyPluck = collect($array)->pluck('qty','id')->toArray();
         $qtyPrice = collect($array)->pluck('price','id')->toArray();
@@ -171,24 +244,40 @@ class AjaxController extends Controller
 
         // $item = Item::whereIn('id',$collect)->orderBy('name','asc')->get();
 
-        $items = Item::whereIn('id', $collect)
-                ->with(['warehousesItemAlt' => function ($query) use ($whid) {
-                    $query->where('warehouse_id', $whid);
-                }])
-                ->orderBy('name', 'asc')
-                ->get();
+        // $items = Item::whereIn('id', $collect)
+        //         ->with(['warehousesItemAlt' => function ($query) use ($whid) {
+        //             $query->where('warehouse_id', $whid);
+        //         }])
+        //         ->orderBy('name', 'asc')
+        //         ->get();
+
+        $items = Item::where(function ($query) use ($collect) {
+            $query->whereIn('id', $collect)
+                    ->orWhereIn('pcode', $collect);
+            })
+            ->with(['warehousesItemAlt' => function ($query) use ($whid) {
+                $query->where('warehouse_id', $whid);
+            }])
+            ->orderBy('name', 'asc')
+            ->get();
+
+        // dd(count($items), count($array), $qtyPluck);
 
         $dataList = [];
 
         foreach ($items as $i) {
             $warehouseQuantity = $i->warehousesItemAlt->first()->quantity ?? 0; // Ambil quantity warehouse terkait, atau 0 jika tidak ada
         
+            // Use array indexing to get values, or default to 0
+            $qty = isset($qtyPluck[$i->pcode]) ? (float) $qtyPluck[$i->pcode] : 0;
+            $price = isset($qtyPrice[$i->pcode]) ? (float) $qtyPrice[$i->pcode] : 0;
+
             $dataList[] = [
                 'id' => $i->id,
                 'code' => $i->code,
-                'quantity' => (float)$qtyPluck[$i->id],
+                'quantity' => $qty,
                 'warehouse' => $warehouseQuantity,
-                'price' => (float)$qtyPrice[$i->id]
+                'price' => (int)Str::replace('.', '', $price),
             ];
         }
 
@@ -211,8 +300,26 @@ class AjaxController extends Controller
 
 
         return response()->json(['data' => $dataList, 'totalQty'=> $dataColl->sum('quantity'),'totalPrice' => $dataColl->sum('price'),'total' => $dataColl->count()]);
+    }
 
-        // dd($dataList);
+    private function parseCsvToArray($filePath)
+    {
+        $dataArray = [];
+
+        if (($handle = fopen($filePath, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, ';')) !== false) {
+                $dataArray[] = [
+                    'id' => $row[0],
+                    'qty' => $row[1],
+                    'price' => $row[2]
+                ];
+            }
+            fclose($handle);
+        }
+
+   
+
+        return $dataArray;
     }
 
     public function processBarcode(Request $request)

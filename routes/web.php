@@ -128,7 +128,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/ajax/getItemSetoran', [AjaxController::class, 'getItemSetoran'])->name('ajax.getItemSetoran');
     Route::get('/ajax/getCustomerCash', [AjaxController::class, 'getCostumerCash'])->name('ajax.getCostumerCash');
     Route::get('/ajax/getCustomerSingle', [AjaxController::class, 'getCostumerSingle'])->name('ajax.getCostumerSingle');
-    Route::get('/ajax/sellBatch', [AjaxController::class, 'sellBatch'])->name('ajax.sellBatch');
+    Route::post('/ajax/sellBatch', [AjaxController::class, 'sellBatch'])->name('ajax.sellBatch');
     Route::get('/getItem', [AjaxController::class, 'getItemAjax'])->name('ajax.getitem');
     Route::get('/getItemId', [AjaxController::class, 'getItemId'])->name('ajax.getitemId');
     Route::get('/getItemName', [AjaxController::class, 'getItem'])->name('ajax.getitemName');
