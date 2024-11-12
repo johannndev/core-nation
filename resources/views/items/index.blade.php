@@ -114,6 +114,8 @@
 
                                 <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                     <th scope="row" id="" class="image-col hidden  px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+
+                                        
                                         <div class="h-20 w-20 mr-3">
                                             {{-- {{$item->getImageUrl()}} --}}
                                             <x-partial.image type="h-20 w-20" :url="$url" />
@@ -121,7 +123,6 @@
     
                                     </th>
                                     <th scope="row" class="px-4 py-3  whitespace-nowrap ">
-                                        
                                         <a href="{{route('item.detail',$item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->id}}</a>
 
                                     </th>

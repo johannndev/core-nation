@@ -56,6 +56,8 @@ class ItemsController extends Controller
 
         $dataList = $dataList->paginate(20)->withQueryString();
 
+		// dd($dataList);
+
         return view('items.index',compact('dataList'));
     }
 

@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\File;
 
 class AsetLancarController extends Controller
 {
@@ -50,6 +53,8 @@ class AsetLancarController extends Controller
 
 
         $dataList = $dataList->paginate(20)->withQueryString();
+
+		// dd($dataList);
 
         return view('asset-lancar.index',compact('dataList'));
     }
@@ -200,10 +205,46 @@ class AsetLancarController extends Controller
 		$file = $request->file;
 		if(!empty($file))
 		{
-			$file = $file->move($item->getUploadPath(), $item->id.'.jpg');
-			Image::read($file)->resize(300, null, function($constraint) {
-				$constraint->aspectRatio();
-			});
+			$manager = new ImageManager(new Driver()); // atau 'imagick' jika diinginkan
+
+			// Ambil file gambar yang diunggah
+			$image = $file;
+
+			$folder = "";
+			$pathFile = $item->id.'.jpg';
+
+			$filename =  $pathFile;
+			
+			// Buat instance gambar dari file yang diunggah
+			// $img = $manager->make($image->getRealPath());
+			$img = $manager->read($image->getRealPath());
+	
+			
+			// Tentukan kualitas awal dan path tujuan
+			$quality = 85; // Mulai dengan kualitas 85%
+			$path = env('CDN_PATH', '/laragon/www/core-nation/public/asset/');
+			$filePath = $path . $filename;
+
+			// Buat direktori jika belum ada
+			if (!File::exists($path.$folder)) {
+				File::makeDirectory($path.$folder, 0755, true); // Membuat direktori dengan izin 755
+			}
+
+			// dd($filePath);
+			// Simpan gambar dan kompresi hingga ukurannya di bawah 100KB
+			do {
+				// Simpan gambar ke path dengan kualitas yang ditentukan
+				$img->save($filePath, $quality);
+				
+				// Hitung ukuran file
+				$size = filesize($filePath);
+				$quality -= 5; // Kurangi kualitas jika ukuran file masih lebih dari 100KB
+			} while ($size > 100 * 1024 && $quality > 10); // Teruskan hingga ukuran file di bawah 100KB
+
+			// $file = $file->move($item->getUploadPath(), $item->id.'.jpg');
+			// Image::read($file)->resize(300, null, function($constraint) {
+			// 	$constraint->aspectRatio();
+			// });
 		}
 
 		DB::commit();

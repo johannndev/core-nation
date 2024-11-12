@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Arr;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\File;
+
 class ItemsManagerHelper
 {
 
@@ -85,19 +89,70 @@ class ItemsManagerHelper
 		if(empty($file))
 			return;
 
-		//save image using group id
-		$path = $group->getUploadPath();
-		$filename = $group->id.'.jpg';
-		//check for file exist
-		if(file_exists($path.'/'.$filename)) {
-			chmod($path.'/'.$filename,0755);
-			unlink($path.'/'.$filename);
-		}
-		$file = $file->move($path, $filename);
+		$manager = new ImageManager(new Driver()); // atau 'imagick' jika diinginkan
 
-		Image::read($file->getPathName())->resize(588, null, function($constraint) {
-			$constraint->aspectRatio();
-		})->save();
+		// Ambil file gambar yang diunggah
+		$image = $file;
+
+		if($group){
+			$folder = str_pad(substr($group->id, -2), 2, '0', STR_PAD_LEFT);
+			$pathFile = $folder."/".$group->id.".jpg";
+			
+		}else{
+			$folder = "";
+			$pathFile = $group->id.'.jpg';
+		}
+
+		$filename =  $pathFile;
+		
+		// Buat instance gambar dari file yang diunggah
+		// $img = $manager->make($image->getRealPath());
+		$img = $manager->read($image->getRealPath());
+		
+		// // Tetapkan batas maksimal dimensi tanpa mengubah rasio asli
+		// $maxWidth = 1000;
+		// $maxHeight = 1000;
+		// if ($img->width() > $maxWidth || $img->height() > $maxHeight) {
+		// 	$img->resize($maxWidth, $maxHeight, function ($constraint) {
+		// 		$constraint->aspectRatio(); // Menjaga rasio asli
+		// 		$constraint->upsize();      // Mencegah gambar menjadi lebih besar dari ukuran aslinya
+		// 	});
+		// }
+		
+		// Tentukan kualitas awal dan path tujuan
+		$quality = 85; // Mulai dengan kualitas 85%
+		$path = env('CDN_PATH', '/laragon/www/core-nation/public/asset/');
+		$filePath = $path . $filename;
+
+		// Buat direktori jika belum ada
+		if (!File::exists($path.$folder)) {
+			File::makeDirectory($path.$folder, 0755, true); // Membuat direktori dengan izin 755
+		}
+
+		// dd($filePath);
+		// Simpan gambar dan kompresi hingga ukurannya di bawah 100KB
+		do {
+			// Simpan gambar ke path dengan kualitas yang ditentukan
+			$img->save($filePath, $quality);
+			
+			// Hitung ukuran file
+			$size = filesize($filePath);
+			$quality -= 5; // Kurangi kualitas jika ukuran file masih lebih dari 100KB
+		} while ($size > 100 * 1024 && $quality > 10); // Teruskan hingga ukuran file di bawah 100KB
+
+		// //save image using group id
+		// $path = $group->getUploadPath();
+		// $filename = $group->id.'.jpg';
+		// //check for file exist
+		// if(file_exists($path.'/'.$filename)) {
+		// 	chmod($path.'/'.$filename,0755);
+		// 	unlink($path.'/'.$filename);
+		// }
+		// $file = $file->move($path, $filename);
+
+		// Image::read($file->getPathName())->resize(588, null, function($constraint) {
+		// 	$constraint->aspectRatio();
+		// })->save();
 	}
 
 	//to avoid accidental creation
