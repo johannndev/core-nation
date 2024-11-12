@@ -117,7 +117,7 @@
 
                                         
                                         <div class="h-20 w-20 mr-3">
-                                            {{-- {{$item->getImageUrl()}} --}}
+                                            {{$item->item_image_path}}
                                             <x-partial.image type="h-20 w-20" :url="$url" />
                                         </div>
     
