@@ -108,7 +108,7 @@
                                 @forelse ( $dataList as $item)
                                     
                                 @php
-                                    $url = $item->getImageUrl();
+                                    $url = $item->item_image_path;
                                     
                                 @endphp
 

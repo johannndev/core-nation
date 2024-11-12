@@ -241,6 +241,19 @@ class Item extends Model
 
 		return 'https://cdn.corenationactive.com'.LocalHelper::$var['item_image_url'].$folder.'/'.$id.'.jpg';
 	}
+	
+
+	public function getItemImagePathAttribute()
+    {
+
+		$idg = $this->group_id;
+
+		$folder = str_pad(substr($idg, -2), 2, '0', STR_PAD_LEFT);
+
+		return env('CDN_PATH', '/laragon/www/core-nation/public/asset/').$folder.'/'.$idg.'.jpg';
+ 
+    }
+
 
 	public function printDescription2()
 	{
