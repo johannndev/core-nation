@@ -108,7 +108,7 @@ class ItemsController extends Controller
 	{
 		$data = Item::with('group','tags')->where('id',$id)->first();
 
-		$urlImage = $data->getImageUrl();
+		$urlImage = $data->item_image_path;
 
 		// dd($urlImage);
 
