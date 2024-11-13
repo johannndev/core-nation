@@ -254,6 +254,13 @@ class Item extends Model
  
     }
 
+	public function getLancarImagePathAttribute()
+    {
+
+		return env('CDN_URL', '/laragon/www/core-nation/public/asset/').$this->id.'.jpg';
+ 
+    }
+
 
 	public function printDescription2()
 	{
