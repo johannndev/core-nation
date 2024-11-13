@@ -116,9 +116,9 @@
                                     <th scope="row" id="" class="image-col hidden  px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
 
                                         
-                                        <div class="mr-3">
+                                        <div class="mr-3  h-20">
 
-                                            <img src=" {{$item->item_image_path}}" class="w-auto h-20" alt="" srcset="">
+                                            <img src=" {{$item->item_image_path}}" class="w-auto h-auto" alt="" srcset="">
                                           
                                             {{-- <x-partial.image type="h-10" :url="$url" /> --}}
                                         </div>
