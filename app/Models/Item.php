@@ -254,14 +254,18 @@ class Item extends Model
 		$imageUrl = env('CDN_URL', '/laragon/www/core-nation/public/asset/').$folder.'/'.$idg.'.jpg';
 		$imagePath = env('CDN_PATH', '/laragon/www/core-nation/public/asset/').$folder.'/'.$idg.'.jpg';
 
-		 // Check if the file exists using Laravel's Storage
-		if (Storage::exists($imagePath)) {
-			// If it exists, construct the CDN URL or storage URL
-			return $imageUrl;
-		}
+		return file_exists($imagePath)
+		? $imageUrl
+		: asset('img/noimg.jpg');
+
+		//  // Check if the file exists using Laravel's Storage
+		// if (Storage::exists($imagePath)) {
+		// 	// If it exists, construct the CDN URL or storage URL
+		// 	return $imageUrl;
+		// }
 	
-		// If the file does not exist, return the default image URL
-		return asset('img/noimg.jpg');
+		// // If the file does not exist, return the default image URL
+		// return asset('img/noimg.jpg');
 
  
     }
