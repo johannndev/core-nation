@@ -273,8 +273,12 @@ class Item extends Model
 	public function getLancarImagePathAttribute()
     {
 
-		return env('CDN_URL', '/laragon/www/core-nation/public/asset/').$this->id.'.jpg';
- 
+		$imageUrl = env('CDN_URL', '/laragon/www/core-nation/public/asset/').$this->id.'.jpg';
+		$imagePath = env('CDN_PATH', '/laragon/www/core-nation/public/asset/').$this->id.'.jpg';
+
+		return file_exists($imagePath)
+		? $imageUrl
+		: asset('img/noimg.jpg');
     }
 
 

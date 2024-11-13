@@ -32,7 +32,7 @@
         <div class="grid md:grid-cols-2 gap-4">
 
             <div>
-                <x-partial.image type="w-full" :url="$urlImage" />
+                <img src=" {{$item->lancar_image_path}}" class="w-full" alt="" srcset="">
             </div>
 
             <div>

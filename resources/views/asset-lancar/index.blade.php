@@ -113,9 +113,11 @@
 
                                 <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                     <th scope="row" id="" class="image-col hidden  px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="h-20 w-20 mr-3">
+                                        <div class="mr-3  w-20">
+
+                                            <img src=" {{$item->lancar_image_path}}" class="h-full" alt="" srcset="">
                                           
-                                            <x-partial.image type="h-20 w-20" :url="$url" />
+                                            {{-- <x-partial.image type="h-10" :url="$url" /> --}}
                                         </div>
     
                                     </th>
