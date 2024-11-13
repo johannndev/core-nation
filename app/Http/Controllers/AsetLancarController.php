@@ -63,7 +63,7 @@ class AsetLancarController extends Controller
 	{
 		$data = Item::with('group','tags')->where('id',$id)->first();
 
-		$urlImage = $data->getImageUrl();
+		$urlImage = $data->lancar_image_path;
 
 		$whList = WarehouseItem::with('warehouse')->whereHas('warehouse', function (Builder $query) {
 			$query->where('customers.type','=',Customer::TYPE_WAREHOUSE);
