@@ -250,7 +250,12 @@ class Item extends Model
 
 		$folder = str_pad(substr($idg, -2), 2, '0', STR_PAD_LEFT);
 
-		return env('CDN_URL', '/laragon/www/core-nation/public/asset/').$folder.'/'.$idg.'.jpg';
+		$imagePath = env('CDN_URL', '/laragon/www/core-nation/public/asset/').$folder.'/'.$idg.'.jpg';
+
+
+		return file_exists($imagePath) 
+		? $imagePath 
+		: asset('img/noimg.jpg');
  
     }
 
