@@ -117,15 +117,17 @@
 
                                         
                                         <div class="mr-3">
+
+                                            <img src=" {{$item->item_image_path}}" class="w-auto h-20" alt="" srcset="">
                                           
-                                            <x-partial.image type="h-10" :url="$url" />
+                                            {{-- <x-partial.image type="h-10" :url="$url" /> --}}
                                         </div>
     
                                     </th>
                                     <th scope="row" class="px-4 py-3  whitespace-nowrap ">
                                   
 
-                                        {{$item->item_image_path}}
+                                       
                                         <a href="{{route('item.detail',$item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->id}}</a>
 
                                     </th>
