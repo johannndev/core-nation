@@ -32,7 +32,7 @@
         <div class="grid md:grid-cols-2 gap-4">
 
             <div>
-                <img src=" {{$item->item_image_path}}" class="w-full" alt="" srcset="">
+                <img src=" {{$data->item_image_path}}" class="w-full" alt="" srcset="">
            
             </div>
 
