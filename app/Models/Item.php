@@ -263,8 +263,6 @@ class Item extends Model
 		// If the file does not exist, return the default image URL
 		return asset('img/noimg.jpg');
 
-
-		return $imagePath ?: asset('img/noimg.jpg');
  
     }
 
