@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Item extends Model
 {
@@ -250,7 +251,18 @@ class Item extends Model
 
 		$folder = str_pad(substr($idg, -2), 2, '0', STR_PAD_LEFT);
 
-		$imagePath = env('CDN_URL', '/laragon/www/core-nation/public/asset/').$folder.'/'.$idg.'.jpg';
+		$imageUrl = env('CDN_URL', '/laragon/www/core-nation/public/asset/').$folder.'/'.$idg.'.jpg';
+		$imagePath = env('CDN_PATH', '/laragon/www/core-nation/public/asset/').$folder.'/'.$idg.'.jpg';
+
+		 // Check if the file exists using Laravel's Storage
+		if (Storage::exists($imagePath)) {
+			// If it exists, construct the CDN URL or storage URL
+			return $imageUrl;
+		}
+	
+		// If the file does not exist, return the default image URL
+		return asset('img/noimg.jpg');
+
 
 		return $imagePath ?: asset('img/noimg.jpg');
  
