@@ -252,10 +252,7 @@ class Item extends Model
 
 		$imagePath = env('CDN_URL', '/laragon/www/core-nation/public/asset/').$folder.'/'.$idg.'.jpg';
 
-
-		return file_exists($imagePath) 
-		? $imagePath 
-		: asset('img/noimg.jpg');
+		return $imagePath ?: asset('img/noimg.jpg');
  
     }
 
