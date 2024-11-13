@@ -1,6 +1,6 @@
-<div class="{{$type}}">
-    <object data="{{$url}}" type="image/jpeg"  class="w-full">
-        <img src={{asset('img/noimg.jpg')}} class="w-full ">
+<div class="">
+    <object data="{{$url}}" type="image/jpeg"  class="w-auto">
+        <img src={{asset('img/noimg.jpg')}} class="w-auto {{$type}}">
     </object>
     
     

@@ -116,7 +116,7 @@
                                     <th scope="row" id="" class="image-col hidden  px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
 
                                         
-                                        <div class="h-10 mr-3">
+                                        <div class="mr-3">
                                           
                                             <x-partial.image type="h-10" :url="$url" />
                                         </div>
