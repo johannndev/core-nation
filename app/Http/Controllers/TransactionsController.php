@@ -359,9 +359,22 @@ class TransactionsController extends Controller
 		$transaction = new Transaction();
         $transaction->date = $request->date;
         $transaction->type = $type;
+
+		if($request->note){
+			$transaction->description = $request->note;
+		}else{
+			$transaction->description = "";
+		}
+
+		if($request->due){
+			$transaction->due = $request->due;
+		}else{
+			$transaction->due = '0000-00-00';
+		}
+
         $transaction->description = ' ';
 		$transaction->detail_ids = ' ';
-		$transaction->due = '0000-00-00';
+		
         $transaction->save();
 		switch($type)
 		{
@@ -522,6 +535,8 @@ class TransactionsController extends Controller
 
 		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
 
+		
+
 		$nameWh = StockManagerHelpers::$names;
 
 		if($request->receipt == 1){
@@ -603,7 +618,13 @@ class TransactionsController extends Controller
 		$transaction = new Transaction();
         $transaction->date = $request->date;
         $transaction->type = Transaction::TYPE_MOVE;
-        $transaction->description = ' ';
+     
+		if($request->note){
+			$transaction->description = $request->note;
+		}else{
+			$transaction->description = "";
+		}
+
 		$transaction->detail_ids = ' ';
 		$transaction->due = '0000-00-00';
         $transaction->save();
@@ -989,7 +1010,13 @@ class TransactionsController extends Controller
 		$transaction = new Transaction();
 		$transaction->date = $request->date;
 		$transaction->type = Transaction::TYPE_ADJUST;
-		$transaction->description = ' ';
+		
+		if($request->description){
+			$transaction->description = $request->description;
+		}else{
+			$transaction->description = "";
+		}
+
 		$transaction->detail_ids = ' ';
 		
 		$transaction->sender_id = $sender;
@@ -1085,7 +1112,11 @@ class TransactionsController extends Controller
 		$transaction = new Transaction();
 		$transaction->date = $request->date;
 		$transaction->type = Transaction::TYPE_TRANSFER;
-		$transaction->description = ' ';
+		if($request->description){
+			$transaction->description = $request->description;
+		}else{
+			$transaction->description = '';
+		}
 		$transaction->detail_ids = ' ';
 		
 		$transaction->sender_id = $sender;

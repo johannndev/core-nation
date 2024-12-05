@@ -109,15 +109,32 @@ class ItemsManagerHelper
 		// $img = $manager->make($image->getRealPath());
 		$img = $manager->read($image->getRealPath());
 		
-		// // Tetapkan batas maksimal dimensi tanpa mengubah rasio asli
-		// $maxWidth = 1000;
-		// $maxHeight = 1000;
-		// if ($img->width() > $maxWidth || $img->height() > $maxHeight) {
-		// 	$img->resize($maxWidth, $maxHeight, function ($constraint) {
-		// 		$constraint->aspectRatio(); // Menjaga rasio asli
-		// 		$constraint->upsize();      // Mencegah gambar menjadi lebih besar dari ukuran aslinya
-		// 	});
-		// }
+		// Tetapkan batas maksimal dimensi tanpa mengubah rasio asli
+	// Dapatkan ukuran asli
+
+		$maxSize = 1000;
+		$originalWidth = $img->width();
+		$originalHeight = $img->height();
+
+		if ($originalWidth > $originalHeight) {
+			$scale = $maxSize / $originalWidth; // Skala berdasarkan lebar
+		} else {
+			$scale = $maxSize / $originalHeight; // Skala berdasarkan tinggi
+		}
+		
+		// Hitung dimensi baru
+		$maxWidth = round($originalWidth * $scale);
+		$maxHeight = round($originalHeight * $scale);
+
+		// Hitung ukuran baru (50% lebih kecil)
+		// $maxWidth = $originalWidth * 0.5;
+		// $maxHeight = $originalHeight * 0.5;
+		if ($img->width() > $maxWidth || $img->height() > $maxHeight) {
+			$img->resize($maxWidth, $maxHeight, function ($constraint) {
+				$constraint->aspectRatio(); // Menjaga rasio asli
+				$constraint->upsize();      // Mencegah gambar menjadi lebih besar dari ukuran aslinya
+			});
+		}
 		
 		// Tentukan kualitas awal dan path tujuan
 		$quality = 85; // Mulai dengan kualitas 85%
