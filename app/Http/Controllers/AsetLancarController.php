@@ -190,8 +190,8 @@ class AsetLancarController extends Controller
 		$item->pcode = strtoupper($item->code); 
 		$item->price = $request->price;
 		$item->cost = $request->cost;
-		$item->description = $request->description;
-		$item->description2 = $request->description2;
+		$item->description = $request->description ?? "";
+		$item->description2 = $request->description2 ?? "";
 		$item->group_id = 0;
 		
 
@@ -218,6 +218,31 @@ class AsetLancarController extends Controller
 			// Buat instance gambar dari file yang diunggah
 			// $img = $manager->make($image->getRealPath());
 			$img = $manager->read($image->getRealPath());
+
+			$maxSize = 1000;
+			$originalWidth = $img->width();
+			$originalHeight = $img->height();
+
+			if ($originalWidth > $originalHeight) {
+				$scale = $maxSize / $originalWidth; // Skala berdasarkan lebar
+			} else {
+				$scale = $maxSize / $originalHeight; // Skala berdasarkan tinggi
+			}
+			
+			// Hitung dimensi baru
+			$maxWidth = round($originalWidth * $scale);
+			$maxHeight = round($originalHeight * $scale);
+
+			// Hitung ukuran baru (50% lebih kecil)
+			// $maxWidth = $originalWidth * 0.5;
+			// $maxHeight = $originalHeight * 0.5;
+			if ($img->width() > $maxWidth || $img->height() > $maxHeight) {
+				$img->resize($maxWidth, $maxHeight, function ($constraint) {
+					$constraint->aspectRatio(); // Menjaga rasio asli
+					$constraint->upsize();      // Mencegah gambar menjadi lebih besar dari ukuran aslinya
+				});
+			}
+		
 	
 			
 			// Tentukan kualitas awal dan path tujuan
