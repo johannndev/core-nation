@@ -102,6 +102,8 @@ Route::get('/role-create', function () {
 
     return 'berhasil';
 });
+Route::get('/statsell/generete', [StatSellController::class, 'generet'])->name('statsale.generate');
+
 
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified','exceptRole:ban'])->name('dashboard');
 
@@ -117,7 +119,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/compare/{id}/delete', [CompareController::class, 'delete'])->name('compare.delete');
 
     Route::get('/report/itemsale', [StatSellController::class, 'index'])->name('statsale.index');
-    Route::get('/statsell/generete', [StatSellController::class, 'generet'])->name('statsale.generate');
 
     Route::get('/transaction/po', [PoController::class, 'index'])->name('transaction.Poindex')->middleware('permission:cnpo list');
     Route::get('/transaction/po/{id}/detail', [PoController::class, 'getDetail'])->name('transaction.Podetail')->middleware('permission:cnpo detail');
