@@ -246,6 +246,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/warehouse/{id}/detail', [WarehouseController::class, 'detail'])->name('warehouse.detail')->middleware('permission:warehouse detail');
     Route::get('/warehouse/{id}/item', [WarehouseController::class, 'items'])->name('warehouse.items')->middleware('permission:warehouse item');
     Route::get('/warehouse/{id}/stat', [WarehouseController::class, 'stat'])->name('warehouse.stat')->middleware('permission:warehouse stat');
+    Route::get('/warehouse/{id}/itemsale', [WarehouseController::class, 'itemsale'])->name('warehouse.itemsale')->middleware('permission:warehouse stat')->middleware('permission:warehouse stat');
 
     Route::get('/vwarehouse', [VWarehouseController::class, 'index'])->name('vwarehouse.index')->middleware('permission:vwarehouse list');
     Route::get('/vwarehouse/create', [VWarehouseController::class, 'create'])->name('vwarehouse.create')->middleware('permission:vwarehouse create');
@@ -254,6 +255,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/vwarehouse/{id}/detail', [VWarehouseController::class, 'detail'])->name('vwarehouse.detail')->middleware('permission:vwarehouse detail');
     Route::get('/vwarehouse/{id}/item', [VWarehouseController::class, 'items'])->name('vwarehouse.items')->middleware('permission:vwarehouse item');
     Route::get('/vwarehouse/{id}/stat', [VWarehouseController::class, 'stat'])->name('vwarehouse.stat')->middleware('permission:vwarehouse stat');
+    Route::get('/vwarehouse/{id}/itemsale', [VWarehouseController::class, 'itemsale'])->name('vwarehouse.itemsale')->middleware('permission:vwarehouse stat')->middleware('permission:vwarehouse stat');
+
 
     Route::get('/account', [AccountController::class, 'index'])->name('account.index')->middleware('permission:account list');
     Route::get('/account/create', [AccountController::class, 'create'])->name('account.create')->middleware('permission:account create');
@@ -262,6 +265,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/account/{id}/detail', [AccountController::class, 'detail'])->name('account.detail')->middleware('permission:account detail');
     Route::get('/account/{id}/item', [AccountController::class, 'items'])->name('account.items')->middleware('permission:account item');
     Route::get('/account/{id}/stat', [AccountController::class, 'stat'])->name('account.stat')->middleware('permission:account stat');
+    Route::get('/account/{id}/itemsale', [AccountController::class, 'itemsale'])->name('account.itemsale')->middleware('permission:account stat')->middleware('permission:account stat');
+
 
     Route::get('/vaccount', [VAccountController::class, 'index'])->name('vaccount.index')->middleware('permission:vaccount list');
     Route::get('/vaccount/create', [VAccountController::class, 'create'])->name('vaccount.create')->middleware('permission:vaccount create');
@@ -270,6 +275,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/vaccount/{id}/detail', [VAccountController::class, 'detail'])->name('vaccount.detail')->middleware('permission:vaccount detail');
     Route::get('/vaccount/{id}/item', [VAccountController::class, 'items'])->name('vaccount.items')->middleware('permission:vaccount item');
     Route::get('/vaccount/{id}/stat', [VAccountController::class, 'stat'])->name('vaccount.stat')->middleware('permission:vaccount stat');
+    Route::get('/vaccount/{id}/itemsale', [VAccountController::class, 'itemsale'])->name('vaccount.itemsale')->middleware('permission:vaccount stat')->middleware('permission:vaccount stat');
+
 
     Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller.index')->middleware('permission:reseller list');
     Route::get('/reseller/create', [ResellerController::class, 'create'])->name('reseller.create')->middleware('permission:reseller create');
@@ -278,6 +285,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reseller/{id}/detail', [ResellerController::class, 'detail'])->name('reseller.detail')->middleware('permission:reseller detail');
     Route::get('/reseller/{id}/item', [ResellerController::class, 'items'])->name('reseller.items')->middleware('permission:reseller item');
     Route::get('/reseller/{id}/stat', [ResellerController::class, 'stat'])->name('reseller.stat')->middleware('permission:reseller stat');
+    Route::get('/reseller/{id}/itemsale', [ResellerController::class, 'itemsale'])->name('reseller.itemsale')->middleware('permission:reseller stat')->middleware('permission:reseller stat');
 
     Route::post('/addrbook/store', [AddrbookController::class, 'postCreate'])->name('addrbook.store')->middleware('permission:customer create|supplier create|reseller create|warehouse create|vwarehouse create|account create|vaccount create');
     Route::post('/addrbook/{id}/update', [AddrbookController::class, 'postEdit'])->name('addrbook.update')->middleware('permission:customer edit|supplier edit|reseller edit|warehouse edit|vwarehouse edit|account edit|vaccount edit');

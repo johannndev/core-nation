@@ -91,4 +91,14 @@ class ResellerController extends Controller
 
         return view('reseller.stat',compact('cid','start','nameCustomer'));
     }
+
+    public function itemsale($id)
+    {
+        $cid = $id;
+        $nameCustomer = $this->customer($id);
+
+        $start = date('Y');
+
+        return view('reseller.itemsale',compact('cid','start','nameCustomer'));
+    }
 }

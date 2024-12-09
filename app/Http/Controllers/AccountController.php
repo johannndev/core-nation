@@ -91,4 +91,14 @@ class AccountController extends Controller
 
         return view('account.stat',compact('cid','start','nameCustomer'));
     }
+
+    public function itemsale($id)
+    {
+        $cid = $id;
+        $nameCustomer = $this->customer($id);
+
+        $start = date('Y');
+
+        return view('account.itemsale',compact('cid','start','nameCustomer'));
+    }
 }

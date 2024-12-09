@@ -91,4 +91,14 @@ class VWarehouseController extends Controller
 
         return view('vwarehouse.stat',compact('cid','start','nameCustomer'));
     }
+
+    public function itemsale($id)
+    {
+        $cid = $id;
+        $nameCustomer = $this->customer($id);
+
+        $start = date('Y');
+
+        return view('vwarehouse.itemsale',compact('cid','start','nameCustomer'));
+    }
 }

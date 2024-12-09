@@ -87,4 +87,14 @@ class SupplierController extends Controller
         return view('supplier.stat',compact('cid','start','nameCustomer'));
     }
 
+    public function itemsale($id)
+    {
+        $cid = $id;
+        $nameCustomer = $this->customer($id);
+
+        $start = date('Y');
+
+        return view('supplier.itemsale',compact('cid','start','nameCustomer'));
+    }
+
 }
