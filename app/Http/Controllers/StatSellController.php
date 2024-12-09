@@ -57,9 +57,12 @@ class StatSellController extends Controller
             ];
         }
     
-        // Simpan data dalam satu query
-        if (!empty($insertData)) {
-            StatSell::insert($insertData);
+        // Batch insert
+        $chunkSize = 1000; // Jumlah data per batch
+        $chunks = array_chunk($insertData, $chunkSize);
+
+        foreach ($chunks as $chunk) {
+            StatSell::insert($chunk);
         }
 
 
