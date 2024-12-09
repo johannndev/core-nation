@@ -24,6 +24,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ResellerController;
 use App\Http\Controllers\SetoranController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StatSellController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\UserRoleController;
@@ -114,6 +115,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/compare', [CompareController::class, 'index'])->name('compare.index');
     Route::post('/compare/store', [CompareController::class, 'store'])->name('compare.store');
     Route::delete('/compare/{id}/delete', [CompareController::class, 'delete'])->name('compare.delete');
+
+    Route::get('/report/itemsale', [StatSellController::class, 'index'])->name('statsale.index');
+    Route::get('/statsell/generete', [StatSellController::class, 'generet'])->name('statsale.generate');
 
     Route::get('/transaction/po', [PoController::class, 'index'])->name('transaction.Poindex')->middleware('permission:cnpo list');
     Route::get('/transaction/po/{id}/detail', [PoController::class, 'getDetail'])->name('transaction.Podetail')->middleware('permission:cnpo detail');
@@ -224,6 +228,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/customer/{id}/detail', [CustomerController::class, 'detail'])->name('customer.detail')->middleware('permission:customer detail')->middleware('permission:customer detail');
     Route::get('/customer/{id}/item', [CustomerController::class, 'items'])->name('customer.items')->middleware('permission:customer item')->middleware('permission:customer item');
     Route::get('/customer/{id}/stat', [CustomerController::class, 'stat'])->name('customer.stat')->middleware('permission:customer stat')->middleware('permission:customer stat');
+    Route::get('/customer/{id}/itemsale', [CustomerController::class, 'itemsale'])->name('customer.itemsale')->middleware('permission:customer stat')->middleware('permission:customer stat');
 
     Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index')->middleware('permission:supplier list');
     Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create')->middleware('permission:supplier create');

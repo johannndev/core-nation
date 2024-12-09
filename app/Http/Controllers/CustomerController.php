@@ -95,6 +95,18 @@ class CustomerController extends Controller
         return view('customer.stat',compact('cid','start','nameCustomer'));
     }
 
+    public function itemsale($id)
+    {
+        $cid = $id;
+        $nameCustomer = $this->customer($id);
+
+        $start = date('Y');
+
+        return view('customer.itemsale',compact('cid','start','nameCustomer'));
+    }
+
+    
+
    
 
 }

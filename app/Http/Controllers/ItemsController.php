@@ -119,6 +119,7 @@ class ItemsController extends Controller
 		// dd($whList);
 
 		$tid=$id;
+		
 
 		return view('items.detail',compact('data','urlImage','whList','tid'));
 	}
@@ -278,6 +279,7 @@ class ItemsController extends Controller
 
 		
 	}
+	
 
 	public function group(Request $request)
 	{

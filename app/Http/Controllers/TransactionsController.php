@@ -20,6 +20,7 @@ use App\Libraries\StatManager;
 use App\Libraries\TransactionsManager;
 use App\Models\Customer;
 use App\Models\Item;
+use App\Models\StatSell;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Contracts\Session\Session;
@@ -499,6 +500,49 @@ class TransactionsController extends Controller
 				break;
 		}
 
+		if($type == 2 || $type == 15){
+
+		
+
+			// Query
+			$result = DB::table('transaction_details')
+			->where('transaction_details.transaction_id',$transaction->id)
+			->join('items', 'transaction_details.item_id', '=', 'items.id')
+			->whereIn('transaction_details.transaction_type', [2, 15]) // Filter transaction_type 2 dan 15
+			->selectRaw('
+				items.group_id,
+				MONTH(transaction_details.date) as bulan,
+				YEAR(transaction_details.date) as tahun,
+				transaction_details.sender_id,
+				transaction_details.transaction_type,
+				SUM(transaction_details.quantity) as sum_qty,
+				SUM(transaction_details.total) as sum_total
+			')
+			->groupBy('items.group_id', DB::raw('MONTH(transaction_details.date)'), DB::raw('YEAR(transaction_details.date)'), 'transaction_details.sender_id', 'transaction_details.transaction_type')
+			->orderBy('items.group_id') // Optional: Untuk urutan hasil
+			->get();
+	
+			$insertData = [];
+			foreach ($result as $row) {
+				$insertData[] = [
+					'group_id' => $row->group_id,
+					'bulan' => $row->bulan,
+					'tahun' => $row->tahun,
+					'sender_id' => $row->sender_id,
+					'type' => $row->transaction_type,
+					'sum_qty' => (int)$row->sum_qty,
+					'sum_total' => (int)$row->sum_total,
+					'created_at' => now(),
+					'updated_at' => now(),
+				];
+			}
+
+			// dd($insertData);
+
+			$this->updateOrCreateStatsalesOptimized($insertData);
+
+		}
+
 		//commit db transaction
 		DB::commit();
 
@@ -528,6 +572,43 @@ class TransactionsController extends Controller
             // return response()->json($e->getMessage(), 500);
 			
 		}
+	}
+
+	public function updateOrCreateStatsalesOptimized(array $data)
+	{
+		foreach ($data as $entry) {
+			$existing = DB::table('stat_sells')
+				->where('group_id', $entry['group_id'])
+				->where('bulan', $entry['bulan'])
+				->where('tahun', $entry['tahun'])
+				->where('sender_id', $entry['sender_id'])
+				->first();
+
+			if ($existing) {
+				// Jika data ditemukan, update sum_qty dan sum_total
+				DB::table('stat_sells')
+					->where('id', $existing->id)
+					->incrementEach([
+						'sum_qty' => $entry['sum_qty'],
+						'sum_total' => $entry['sum_total']
+					]);
+			} else {
+				// Jika tidak ditemukan, insert data baru
+				DB::table('stat_sells')->insert([
+					'group_id' => $entry['group_id'],
+					'bulan' => $entry['bulan'],
+					'tahun' => $entry['tahun'],
+					'sender_id' => $entry['sender_id'],
+					'type' => $entry['type'],
+					'sum_qty' => $entry['sum_qty'],
+					'sum_total' => $entry['sum_total'],
+					'created_at' => now(),
+					'updated_at' => now(),
+				]);
+			}
+		}
+
+		return response()->json(['message' => 'Data processed successfully'], 200);
 	}
 
     public function getDetail($id, Request $request)
@@ -1259,18 +1340,86 @@ class TransactionsController extends Controller
 
 	public function postDelete($id)
 	{
-		if(!$t = Transaction::where('id','=',$id)->first())
-			return App::abort(404);
+		$t = Transaction::where('id','=',$id)->first();
 
-			DB::beginTransaction();
+		if(!$t){
+			return App::abort(404);
+		}
+		
+		DB::beginTransaction();
+
+		// Query
+		$result = DB::table('transaction_details')
+		->where('transaction_details.transaction_id',$id)
+		->join('items', 'transaction_details.item_id', '=', 'items.id')
+		->whereIn('transaction_details.transaction_type', [2, 15]) // Filter transaction_type 2 dan 15
+		->selectRaw('
+			items.group_id,
+			MONTH(transaction_details.date) as bulan,
+			YEAR(transaction_details.date) as tahun,
+			transaction_details.sender_id,
+			transaction_details.transaction_type,
+			SUM(transaction_details.quantity) as sum_qty,
+			SUM(transaction_details.total) as sum_total
+		')
+		->groupBy('items.group_id', DB::raw('MONTH(transaction_details.date)'), DB::raw('YEAR(transaction_details.date)'), 'transaction_details.sender_id', 'transaction_details.transaction_type')
+		->orderBy('items.group_id') // Optional: Untuk urutan hasil
+		->get();
+
+		$insertData = [];
+		foreach ($result as $row) {
+			$insertData[] = [
+				'group_id' => $row->group_id,
+				'bulan' => $row->bulan,
+				'tahun' => $row->tahun,
+				'sender_id' => $row->sender_id,
+				'type' => $row->transaction_type,
+				'sum_qty' => (int)$row->sum_qty,
+				'sum_total' => (int)$row->sum_total,
+				'created_at' => now(),
+				'updated_at' => now(),
+			];
+		}
+
+		// dd($insertData);
+
+		$this->deleteStatSales($insertData);
+
 
 		$deleter = new DeleterHelper;
 		$deleted = $deleter->delete($t);
 		InvoiceTrackerHelpers::flag($t);
 		HashManagerHelper::delete($t);
 
+		
 		DB::commit();
 
 		return redirect()->route('transaction.getDetailDelete',$id)->with('success', 'Transaction # ' . $deleted->id. ' deleted.');
 	}
+
+	public function deleteStatSales(array $data)
+	{
+		foreach ($data as $entry) {
+			$existing = DB::table('stat_sells')
+				->where('group_id', $entry['group_id'])
+				->where('bulan', $entry['bulan'])
+				->where('tahun', $entry['tahun'])
+				->where('sender_id', $entry['sender_id'])
+				->first();
+
+			if ($existing) {
+				// Jika data ditemukan, update sum_qty dan sum_total
+				DB::table('stat_sells')
+					->where('id', $existing->id)
+					->decrementEach([
+						'sum_qty' => $entry['sum_qty'],
+						'sum_total' => $entry['sum_total']
+					]);
+			}
+		}
+
+		return response()->json(['message' => 'Data processed successfully'], 200);
+	}
+
+	
 }
