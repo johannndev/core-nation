@@ -20,9 +20,9 @@ class AjaxController extends Controller
 
     public function getCostumer(Request $request)
     {
-     
+        $search = str_replace(' ', '%', $request->search);
 
-        $customer = Customer::where('name','like','%'.$request->search.'%')->whereIn('type',explode(",",$request->type));
+        $customer = Customer::where('name','like','%'.$search.'%')->whereIn('type',explode(",",$request->type));
         
         if($request->local > 0){
 
@@ -43,8 +43,9 @@ class AjaxController extends Controller
 
     public function getCostumerCash(Request $request)
     {
+        $search = str_replace(' ', '%', $request->search);
        
-        $customer = Customer::with('stat')->where('name','like','%'.$request->search.'%')->whereNotIn('type',[Customer::TYPE_BANK,Customer::TYPE_VWAREHOUSE,Customer::TYPE_WAREHOUSE,Customer::TYPE_VACCOUNT])->paginate();
+        $customer = Customer::with('stat')->where('name','like','%'.$search.'%')->whereNotIn('type',[Customer::TYPE_BANK,Customer::TYPE_VWAREHOUSE,Customer::TYPE_WAREHOUSE,Customer::TYPE_VACCOUNT])->paginate();
 
         // $customer = $customer->get(['id', 'name']);
         return response()->json($customer, 200);
@@ -61,8 +62,9 @@ class AjaxController extends Controller
 
     public function getItem(Request $request)
     {
+        $search = str_replace(' ', '%', $request->search);
        
-        $item = Item::where('name','like','%'.$request->search.'%')->orderBy('name','asc')->paginate();
+        $item = Item::where('name','like','%'.$search.'%')->orderBy('name','asc')->paginate();
 
         // dd($item);
         
@@ -71,24 +73,27 @@ class AjaxController extends Controller
 
     public function getItemId(Request $request)
     {
+        $search = str_replace(' ', '%', $request->search);
        
-        $item = Item::where('id','like','%'.$request->search.'%')->orderBy('name','asc')->skip(0)->take(10)->get();
+        $item = Item::where('id','like','%'.$search.'%')->orderBy('name','asc')->skip(0)->take(10)->get();
         
         return response()->json($item, 200);
     }
 
     public function getItemSetoran(Request $request)
     {
-       
-        $item = Item::where('name','like','%'.$request->search.'%')->orWhere('id','like','%'.$request->search.'%')->orderBy('name','asc')->paginate();
+        $search = str_replace(' ', '%', $request->search);
+
+        $item = Item::where('name','like','%'.$search.'%')->orWhere('id','like','%'.$search.'%')->orderBy('name','asc')->paginate();
         
         return response()->json($item, 200);
     }
 
     public function getInvoice(Request $request)
     {
-      
-        $setoran = Produksi::where('invoice','like','%'.$request->search.'%')->where('id',$request->id)->get();
+        $search = str_replace(' ', '%', $request->search);
+
+        $setoran = Produksi::where('invoice','like','%'.$search.'%')->where('id',$request->id)->get();
         
         return response()->json($setoran, 200);
     }
