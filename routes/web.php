@@ -54,15 +54,15 @@ Route::get('/', function () {
 
 Route::get('/role-set', function () {
 
-    $user = User::find(1);
+    // $user = User::find(1);
 
-    $user->password =  Hash::make('12345678');
+    // $user->password =  Hash::make('12345678');
 
-    $user->save();
+    // $user->save();
 
-    $user->assignRole('superadmin');
+    // $user->assignRole('superadmin');
 
-    // $role = Role::create(['name' => 'ban']);
+    $role = Role::create(['name' => 'ban']);
 
     // $permission = Permission::create(['name' => 'superadmin']);
 
@@ -79,15 +79,11 @@ Route::get('/role-create', function () {
     
     $perm = [
         
-        'karyawan list',
-        'karyawan create',
-        'karyawan detail',
-        'karyawan edit',
-        'karyawan delete',
-        'cuti list',
-        'cuti create',
-        'gajih list',
-        'gajih create',
+        'report.compare',
+        'report.itemsale',
+        'transactions.sellbatch',
+        'transactions.movebatch',
+        'ban',
 
     ];
 
@@ -114,11 +110,11 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/compare', [CompareController::class, 'index'])->name('compare.index');
-    Route::post('/compare/store', [CompareController::class, 'store'])->name('compare.store');
-    Route::delete('/compare/{id}/delete', [CompareController::class, 'delete'])->name('compare.delete');
+    Route::get('/compare', [CompareController::class, 'index'])->name('compare.index')->middleware('permission:report.compare');
+    Route::post('/compare/store', [CompareController::class, 'store'])->name('compare.store')->middleware('permission:report.compare');
+    Route::delete('/compare/{id}/delete', [CompareController::class, 'delete'])->name('compare.delete')->middleware('permission:report.compare');
 
-    Route::get('/report/itemsale', [StatSellController::class, 'index'])->name('statsale.index');
+    Route::get('/report/itemsale', [StatSellController::class, 'index'])->name('statsale.index')->middleware('permission:report.itemsale');
 
     Route::get('/transaction/po', [PoController::class, 'index'])->name('transaction.Poindex')->middleware('permission:cnpo list');
     Route::get('/transaction/po/{id}/detail', [PoController::class, 'getDetail'])->name('transaction.Podetail')->middleware('permission:cnpo detail');
@@ -147,8 +143,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/sell', [TransactionsController::class, 'sell'])->name('transaction.sell')->middleware('permission:transactions.sell');
     Route::post('/transaction/sell/post', [TransactionsController::class, 'postSell'])->name('transaction.postSell')->middleware('permission:transactions.sell');
 
-    Route::get('/transaction/sell-batch', [TransactionsController::class, 'sellBatch'])->name('transaction.postSellBatch')->middleware('permission:transactions.sell');
-    Route::post('/transaction/sell-batch/store', [TransactionsController::class, 'postSellBatch'])->name('transaction.sellBatchStore')->middleware('permission:transactions.sell');
+    Route::get('/transaction/sell-batch', [TransactionsController::class, 'sellBatch'])->name('transaction.postSellBatch')->middleware('permission:transactions.sellbatch');
+    Route::post('/transaction/sell-batch/store', [TransactionsController::class, 'postSellBatch'])->name('transaction.sellBatchStore')->middleware('permissiontransactions.sellbatch');
 
     Route::get('/transaction/buy', [TransactionsController::class, 'buy'])->name('transaction.buy')->middleware('permission:transactions.buy');
     Route::post('/transaction/buy/post', [TransactionsController::class, 'postbuy'])->name('transaction.postBuy')->middleware('permission:transactions.buy');
@@ -158,8 +154,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/transaction/move', [TransactionsController::class, 'move'])->name('transaction.move')->middleware('permission:transactions.move');
     Route::post('/transaction/move/post', [TransactionsController::class, 'postmove'])->name('transaction.postMove')->middleware('permission:transactions.move');
-    Route::get('/transaction/move-batch', [TransactionsController::class, 'moveBatch'])->name('transaction.postMoveBatch')->middleware('permission:transactions.move');
-    Route::post('/transaction/move-batch/store', [TransactionsController::class, 'postMoveBatch'])->name('transaction.moveBatchStore')->middleware('permission:transactions.sell');
+    Route::get('/transaction/move-batch', [TransactionsController::class, 'moveBatch'])->name('transaction.postMoveBatch')->middleware('permission:transactions.movebatch');
+    Route::post('/transaction/move-batch/store', [TransactionsController::class, 'postMoveBatch'])->name('transaction.moveBatchStore')->middleware('permission:transactions.movebatch');
 
     Route::get('/transaction/use', [TransactionsController::class, 'use'])->name('transaction.use')->middleware('permission:transactions.use');
     Route::post('/transaction/use/post', [TransactionsController::class, 'postuse'])->name('transaction.postUse')->middleware('permission:transactions.use');

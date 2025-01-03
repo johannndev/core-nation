@@ -121,6 +121,8 @@ class Permission extends Component
             ['name' => 'transactions.returnSuplier', 'label' => 'Return Suplier'],
             ['name' => 'transactions.deleteList', 'label' => 'Delete List'],
             ['name' => 'transactions.delete', 'label' => 'Delete Transaction'],
+            ['name' => 'transactions.sellbatch', 'label' => 'Sell Batch'],
+            ['name' => 'transactions.movebatch', 'label' => 'Move Batch'],
         ];
 
         return $data;
@@ -380,6 +382,8 @@ class Permission extends Component
     private function reportPermissionList(){
         $data = [
             ['name' => 'report nett cash', 'label' =>'View Nett Cash'],
+            ['name' => 'report.compare', 'label' =>'Compare'],
+            ['name' => 'report.itemsale', 'label' =>'Item Sale'],
  
         ];
 
