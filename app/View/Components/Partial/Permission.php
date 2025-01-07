@@ -395,6 +395,7 @@ class Permission extends Component
     private function settingPermissionList(){
         $data = [
             ['name' => 'setting edit', 'label' =>'Edit Setting'],
+            ['name' => 'location', 'label' =>'Location'],
  
         ];
 

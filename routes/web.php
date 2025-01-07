@@ -16,6 +16,7 @@ use App\Http\Controllers\HashController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\OperationController;
 use App\Http\Controllers\PoController;
 use App\Http\Controllers\ProduksiController;
@@ -78,13 +79,7 @@ Route::get('/role-set', function () {
 Route::get('/role-create', function () {
     
     $perm = [
-        
-        'report.compare',
-        'report.itemsale',
-        'transactions.sellbatch',
-        'transactions.movebatch',
-        'ban',
-
+        'location',
     ];
 
     foreach($perm as $p){
@@ -109,6 +104,16 @@ Route::get('/cek', [HomeController::class, 'cekData'])->name('');
 Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filter.get');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/location', [LocationController::class, 'index'])->name('location.index')->middleware('permission:location');
+    Route::get('/location/create', [LocationController::class, 'create'])->name('location.create')->middleware('permission:location');
+    Route::post('/location/store', [LocationController::class, 'store'])->name('location.store')->middleware('permission:location');
+    Route::get('/location/{id}/detail', [LocationController::class, 'locationDetail'])->name('location.detail')->middleware('permission:location');
+    Route::get('/location/{id}/edit', [LocationController::class, 'edit'])->name('location.edit')->middleware('permission:location');
+    Route::patch('/location/{id}/update', [LocationController::class, 'update'])->name('location.update')->middleware('permission:location');
+
+
+
 
     Route::get('/compare', [CompareController::class, 'index'])->name('compare.index')->middleware('permission:report.compare');
     Route::post('/compare/store', [CompareController::class, 'store'])->name('compare.store')->middleware('permission:report.compare');

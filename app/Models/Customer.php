@@ -108,4 +108,9 @@ class Customer extends Model
 		}
 		return \URL::route($action, ['id' => $this->id]);
 	}
+
+	public function getTypeLabel()
+    {
+        return self::$types[$this->type] ?? '';
+    }
 }
