@@ -298,6 +298,13 @@ class AsetLancarController extends Controller
 		return view('asset-lancar.edit',compact('item'));
 	}
 
+	public function duplicate($id)
+	{
+		$item = Item::find($id);
+
+		return view('asset-lancar.duplicate',compact('item'));
+	}
+
 	public function postEdit(Request $request, $id)
 	{
 		try {
