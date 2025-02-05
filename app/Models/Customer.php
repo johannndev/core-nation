@@ -37,6 +37,9 @@ class Customer extends Model
 		self::TYPE_RESELLER => 'Reseller',
 	);
 
+	
+
+
 	public static $typesJSON = array(
 		array('id' => self::TYPE_CUSTOMER, 'name' => 'Customer'),
 		array('id' => self::TYPE_WAREHOUSE, 'name' => 'Warehouse'),

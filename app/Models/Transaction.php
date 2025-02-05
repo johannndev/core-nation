@@ -78,6 +78,17 @@ class Transaction extends Model
 		self::STATUS_DUE => 'Due',
 	);
 
+	public static $typesCustomer = array(
+		1 => 'Customer',
+		2 => 'Warehouse',
+		3 => 'Banks',
+		4 => 'Supplier',
+		5 => 'V. Warehouse',
+		6 => 'V. Account',
+		7 => 'Reseller',
+		8 => 'Account',
+	);
+
 	public static $rules = array(
 		'date' => 'required|cdate',
 		'sender_id' => 'required',
@@ -96,6 +107,16 @@ class Transaction extends Model
 	public function getTypeNameAttribute()
 	{
 		return self::$types[$this->type];
+	}
+
+	public function getTypeSenderNameAttribute()
+	{
+		return self::$typesCustomer[$this->sender_type];
+	}
+
+	public function getTypeRecaiverNameAttribute()
+	{
+		return self::$typesCustomer[$this->receiver_type];
 	}
 
 	public function receiver()

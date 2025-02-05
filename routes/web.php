@@ -5,6 +5,7 @@ use App\Http\Controllers\AddrbookController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AsetLancarController;
 use App\Http\Controllers\BoronganController;
+use App\Http\Controllers\CashFlowController;
 use App\Http\Controllers\CompareController;
 use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\CustomerController;
@@ -104,6 +105,8 @@ Route::get('/cek', [HomeController::class, 'cekData'])->name('');
 Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filter.get');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/cash-flow', [CashFlowController::class, 'index'])->name('cashflow.index');
 
     Route::get('/location', [LocationController::class, 'index'])->name('location.index')->middleware('permission:location');
     Route::get('/location/create', [LocationController::class, 'create'])->name('location.create')->middleware('permission:location');
@@ -231,7 +234,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/customer/{id}/detail', [CustomerController::class, 'detail'])->name('customer.detail')->middleware('permission:customer detail')->middleware('permission:customer detail');
     Route::get('/customer/{id}/item', [CustomerController::class, 'items'])->name('customer.items')->middleware('permission:customer item')->middleware('permission:customer item');
     Route::get('/customer/{id}/stat', [CustomerController::class, 'stat'])->name('customer.stat')->middleware('permission:customer stat')->middleware('permission:customer stat');
-    Route::get('/customer/{id}/itemsale', [CustomerController::class, 'itemsale'])->name('customer.itemsale')->middleware('permission:customer stat')->middleware('permission:customer stat');
+    Route::get('/customer/{id}/itemsale', [CustomerController::class, 'itemsale'])->name('customer.itemsale')->middleware('permission:customer stat');
 
     Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index')->middleware('permission:supplier list');
     Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create')->middleware('permission:supplier create');
@@ -240,6 +243,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/supplier/{id}/detail', [SupplierController::class, 'detail'])->name('supplier.detail')->middleware('permission:supplier detail');
     Route::get('/supplier/{id}/item', [SupplierController::class, 'items'])->name('supplier.items')->middleware('permission:supplier item');
     Route::get('/supplier/{id}/stat', [SupplierController::class, 'stat'])->name('supplier.stat')->middleware('permission:supplier stat');
+    Route::get('/warehouse/{id}/itemsale', [SupplierController::class, 'itemsale'])->name('supplier.itemsale')->middleware('permission:supplier stat');
 
     Route::get('/warehouse', [WarehouseController::class, 'index'])->name('warehouse.index')->middleware('permission:warehouse list');
     Route::get('/warehouse/create', [WarehouseController::class, 'create'])->name('warehouse.create')->middleware('permission:warehouse create');
@@ -248,7 +252,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/warehouse/{id}/detail', [WarehouseController::class, 'detail'])->name('warehouse.detail')->middleware('permission:warehouse detail');
     Route::get('/warehouse/{id}/item', [WarehouseController::class, 'items'])->name('warehouse.items')->middleware('permission:warehouse item');
     Route::get('/warehouse/{id}/stat', [WarehouseController::class, 'stat'])->name('warehouse.stat')->middleware('permission:warehouse stat');
-    Route::get('/warehouse/{id}/itemsale', [WarehouseController::class, 'itemsale'])->name('warehouse.itemsale')->middleware('permission:warehouse stat')->middleware('permission:warehouse stat');
+    Route::get('/warehouse/{id}/itemsale', [WarehouseController::class, 'itemsale'])->name('warehouse.itemsale')->middleware('permission:warehouse stat');
 
     Route::get('/vwarehouse', [VWarehouseController::class, 'index'])->name('vwarehouse.index')->middleware('permission:vwarehouse list');
     Route::get('/vwarehouse/create', [VWarehouseController::class, 'create'])->name('vwarehouse.create')->middleware('permission:vwarehouse create');
@@ -257,7 +261,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/vwarehouse/{id}/detail', [VWarehouseController::class, 'detail'])->name('vwarehouse.detail')->middleware('permission:vwarehouse detail');
     Route::get('/vwarehouse/{id}/item', [VWarehouseController::class, 'items'])->name('vwarehouse.items')->middleware('permission:vwarehouse item');
     Route::get('/vwarehouse/{id}/stat', [VWarehouseController::class, 'stat'])->name('vwarehouse.stat')->middleware('permission:vwarehouse stat');
-    Route::get('/vwarehouse/{id}/itemsale', [VWarehouseController::class, 'itemsale'])->name('vwarehouse.itemsale')->middleware('permission:vwarehouse stat')->middleware('permission:vwarehouse stat');
+    Route::get('/vwarehouse/{id}/itemsale', [VWarehouseController::class, 'itemsale'])->name('vwarehouse.itemsale')->middleware('permission:vwarehouse stat');
 
 
     Route::get('/account', [AccountController::class, 'index'])->name('account.index')->middleware('permission:account list');
@@ -277,7 +281,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/vaccount/{id}/detail', [VAccountController::class, 'detail'])->name('vaccount.detail')->middleware('permission:vaccount detail');
     Route::get('/vaccount/{id}/item', [VAccountController::class, 'items'])->name('vaccount.items')->middleware('permission:vaccount item');
     Route::get('/vaccount/{id}/stat', [VAccountController::class, 'stat'])->name('vaccount.stat')->middleware('permission:vaccount stat');
-    Route::get('/vaccount/{id}/itemsale', [VAccountController::class, 'itemsale'])->name('vaccount.itemsale')->middleware('permission:vaccount stat')->middleware('permission:vaccount stat');
+    Route::get('/vaccount/{id}/itemsale', [VAccountController::class, 'itemsale'])->name('vaccount.itemsale')->middleware('permission:vaccount stat');
 
 
     Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller.index')->middleware('permission:reseller list');
@@ -287,7 +291,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reseller/{id}/detail', [ResellerController::class, 'detail'])->name('reseller.detail')->middleware('permission:reseller detail');
     Route::get('/reseller/{id}/item', [ResellerController::class, 'items'])->name('reseller.items')->middleware('permission:reseller item');
     Route::get('/reseller/{id}/stat', [ResellerController::class, 'stat'])->name('reseller.stat')->middleware('permission:reseller stat');
-    Route::get('/reseller/{id}/itemsale', [ResellerController::class, 'itemsale'])->name('reseller.itemsale')->middleware('permission:reseller stat')->middleware('permission:reseller stat');
+    Route::get('/reseller/{id}/itemsale', [ResellerController::class, 'itemsale'])->name('reseller.itemsale')->middleware('permission:reseller stat');
 
     Route::post('/addrbook/store', [AddrbookController::class, 'postCreate'])->name('addrbook.store')->middleware('permission:customer create|supplier create|reseller create|warehouse create|vwarehouse create|account create|vaccount create');
     Route::post('/addrbook/{id}/update', [AddrbookController::class, 'postEdit'])->name('addrbook.update')->middleware('permission:customer edit|supplier edit|reseller edit|warehouse edit|vwarehouse edit|account edit|vaccount edit');
