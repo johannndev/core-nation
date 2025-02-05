@@ -243,7 +243,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/supplier/{id}/detail', [SupplierController::class, 'detail'])->name('supplier.detail')->middleware('permission:supplier detail');
     Route::get('/supplier/{id}/item', [SupplierController::class, 'items'])->name('supplier.items')->middleware('permission:supplier item');
     Route::get('/supplier/{id}/stat', [SupplierController::class, 'stat'])->name('supplier.stat')->middleware('permission:supplier stat');
-    Route::get('/warehouse/{id}/itemsale', [SupplierController::class, 'itemsale'])->name('supplier.itemsale')->middleware('permission:supplier stat');
+    Route::get('/supplier/{id}/itemsale', [SupplierController::class, 'itemsale'])->name('supplier.itemsale')->middleware('permission:supplier stat');
 
     Route::get('/warehouse', [WarehouseController::class, 'index'])->name('warehouse.index')->middleware('permission:warehouse list');
     Route::get('/warehouse/create', [WarehouseController::class, 'create'])->name('warehouse.create')->middleware('permission:warehouse create');
