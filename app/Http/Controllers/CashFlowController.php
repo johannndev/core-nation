@@ -9,69 +9,160 @@ use Illuminate\Support\Facades\DB;
 
 class CashFlowController extends Controller
 {
-    public function index(){
-        $currentYear = 2024;
-
-        $transactions = DB::table('transactions')
-            ->select(
-                DB::raw("CASE 
-                    WHEN sender_type IN ('1', '7', '3','8') THEN sender_type
-                    WHEN receiver_type IN ('1', '7', '3','8') THEN receiver_type
-                END as type"),
-                DB::raw("SUM(CASE WHEN type = '9' THEN total ELSE 0 END) as total_cash_in"),
-                DB::raw("SUM(CASE WHEN type = '7' THEN total ELSE 0 END) as total_cas_out"),
-                DB::raw("SUM(CASE WHEN type = '2' THEN total ELSE 0 END) as total_sell"),
-                DB::raw("SUM(CASE WHEN type = '15' THEN total ELSE 0 END) as total_return"),
-                DB::raw("SUM(CASE WHEN type = '1' THEN total ELSE 0 END) as total_buy"),
-                DB::raw("SUM(CASE WHEN type = '17' THEN total ELSE 0 END) as total_return_supplier"),
-            )
-        ->groupBy('type')
-        ->get();
-
-        dd($transactions);
-
-        $groupByReceiver = Transaction::select('type', 'receiver_type', DB::raw('SUM(total) as total_sum'))
-            ->whereYear('created_at', $currentYear) // Filter hanya tahun ini
-            ->whereIn('type', [1, 2, 7, 9, 15, 17]) // Filter type 1,2,3,4
-            ->where(function($query) {
-                $query->where(function($q) {
-                    $q->whereIn('type', [2, 15])
-                    ->whereIn('receiver_type', [1,7]);
-                })->orWhere(function($q) {
-                    $q->whereIn('type', [1, 17])
-                    ->whereIn('receiver_type', [4]);
-                })->orWhere(function($q) {
-                    $q->whereIn('type', [7, 9])
-                    ->whereIn('receiver_type', [1,4,7,8,3]);
-                });
-            })
-            ->groupBy('type', 'receiver_type')
-             ->orderByDesc('total_sum') // Urutkan dari total terbesar
-            ->get();
+    public function index(Request $request){
 
 
-        $groupBySender = Transaction::select('type', 'sender_type', DB::raw('SUM(total) as total_sum'))
-            ->whereYear('created_at', $currentYear) // Filter hanya tahun ini
-            ->whereIn('type', [1, 2, 7, 9, 15, 17]) // Filter type 1,2,3,4
-            ->where(function($query) {
-                $query->where(function($q) {
-                    $q->whereIn('type', [2, 15])
-                    ->whereIn('sender_type', [1,7]);
-                })->orWhere(function($q) {
-                    $q->whereIn('type', [1, 17])
-                    ->whereIn('sender_type', [4]);
-                })->orWhere(function($q) {
-                    $q->whereIn('type', [7, 9])
-                    ->whereIn('sender_type', [1,4,7,8,3]);
-                });
-            })
-            ->groupBy('type', 'sender_type')
-            ->orderByDesc('total_sum') // Urutkan dari total terbesar
-            ->get();
+
+        $groupBySender = Transaction::whereIn('type', [1, 2, 7, 9, 15, 17]);
+
+        if($request->tahun){
+            $groupBySender = $groupBySender->whereYear('created_at', $request->tahun);
+            $currentYear = $request->tahun;
+        }else{
+
+            $currentYear = carbon::now()->year;;
+            $groupBySender = $groupBySender->whereYear('created_at', $currentYear);
+        }
+
+        if($request->bulan){
+            $groupBySender = $groupBySender->whereMonth('created_at', $request->bulan);
+        }
+
+
+        $groupBySender = $groupBySender->whereIn('sender_type', [1, 7, 3, 8])
+        ->select(
+            'sender_type',
+            DB::raw('SUM(CASE WHEN type = "9" THEN total ELSE 0 END) AS cash_in_total'),
+            DB::raw('SUM(CASE WHEN type = "7" THEN total ELSE 0 END) AS cash_out_total'),
+            DB::raw('SUM(CASE WHEN type = "2" THEN total ELSE 0 END) AS sell_total'),
+            DB::raw('SUM(CASE WHEN type = "15" THEN total ELSE 0 END) AS return_total'),
+            DB::raw('SUM(CASE WHEN type = "1" THEN total ELSE 0 END) AS buy_total'),
+            DB::raw('SUM(CASE WHEN type = "17" THEN total ELSE 0 END) AS return_suplier'),
+        )
+        ->groupBy('sender_type');
+
+        if($request->type && $request->sort){
+            $groupBySender = $groupBySender->orderBy($request->type,$request->sort);
+        }
+
+        $groupBySender = $groupBySender->get();
+
+        $groupByReceiver = Transaction::whereIn('type', [1, 2, 7, 9, 15, 17]);
+
+        if($request->tahun){
+            $groupByReceiver = $groupByReceiver->whereYear('created_at', $request->tahun);
+            $currentYear = $request->tahun;
+        }else{
+
+            $currentYear = carbon::now()->year;;
+            $groupByReceiver = $groupByReceiver->whereYear('created_at', $currentYear);
+        }
+
+        if($request->bulan){
+            $groupByReceiver = $groupByReceiver->whereMonth('created_at', $request->bulan);
+        }
+
+
+        $groupByReceiver = $groupByReceiver->whereIn('receiver_type', [1, 7, 3, 8])
+        ->select(
+            'receiver_type',
+            DB::raw('SUM(CASE WHEN type = "9" THEN total ELSE 0 END) AS cash_in_total'),
+            DB::raw('SUM(CASE WHEN type = "7" THEN total ELSE 0 END) AS cash_out_total'),
+            DB::raw('SUM(CASE WHEN type = "2" THEN total ELSE 0 END) AS sell_total'),
+            DB::raw('SUM(CASE WHEN type = "15" THEN total ELSE 0 END) AS return_total'),
+            DB::raw('SUM(CASE WHEN type = "1" THEN total ELSE 0 END) AS buy_total'),
+            DB::raw('SUM(CASE WHEN type = "17" THEN total ELSE 0 END) AS return_suplier'),
+        )
+        ->groupBy('receiver_type');
+        if($request->type && $request->sort){
+            $groupByReceiver = $groupByReceiver->orderBy($request->type,$request->sort);
+        }
+
+        $groupByReceiver = $groupByReceiver->get();
+
+        // dd($groupByReceiver);
+
+
+    
 
        
-        return view('cashflow.index',compact('groupByReceiver','groupBySender'));
+        return view('cashflow.index',compact('groupByReceiver','groupBySender','currentYear'));
 
         
+    }
+
+    public function book(Request $request){
+
+
+        $transactions = Transaction::whereIn('type', [1, 2, 7, 9, 15, 17]);
+        
+        if ($request->type == 'sender') {
+
+            $transactions == $transactions->select(
+                'sender_id',
+                
+    
+                DB::raw('SUM(CASE WHEN type = "9" THEN total ELSE 0 END) AS cash_in_total'),
+                DB::raw('SUM(CASE WHEN type = "7" THEN total ELSE 0 END) AS cash_out_total'),
+                DB::raw('SUM(CASE WHEN type = "2" THEN total ELSE 0 END) AS sell_total'),
+                DB::raw('SUM(CASE WHEN type = "15" THEN total ELSE 0 END) AS return_total'),
+                DB::raw('SUM(CASE WHEN type = "1" THEN total ELSE 0 END) AS buy_total'),
+                DB::raw('SUM(CASE WHEN type = "17" THEN total ELSE 0 END) AS return_suplier'),
+            );
+
+            $transactions = $transactions->where('sender_type',$request->book)
+            ->groupBy('sender_id')
+            ->with('sender');
+    
+        } else if($request->type == 'receiver'){
+
+            $transactions == $transactions->select(
+                'receiver_id',
+                
+    
+                DB::raw('SUM(CASE WHEN type = "9" THEN total ELSE 0 END) AS cash_in_total'),
+                DB::raw('SUM(CASE WHEN type = "7" THEN total ELSE 0 END) AS cash_out_total'),
+                DB::raw('SUM(CASE WHEN type = "2" THEN total ELSE 0 END) AS sell_total'),
+                DB::raw('SUM(CASE WHEN type = "15" THEN total ELSE 0 END) AS return_total'),
+                DB::raw('SUM(CASE WHEN type = "1" THEN total ELSE 0 END) AS buy_total'),
+                DB::raw('SUM(CASE WHEN type = "17" THEN total ELSE 0 END) AS return_suplier'),
+            );
+
+            $transactions = $transactions->where('receiver_type',$request->book)
+            ->groupBy('receiver_id')
+            ->with('receiver');
+
+        } else {
+            # code...
+        }
+        
+
+        
+
+        if($request->tahun){
+            $transactions = $transactions->whereYear('created_at', $request->tahun);
+            $currentYear = $request->tahun;
+        }else{
+
+            $currentYear = carbon::now()->year;;
+            $transactions = $transactions->whereYear('created_at', $currentYear);
+        }
+
+        if($request->bulan > 0){
+            $transactions = $transactions->whereMonth('created_at', $request->bulan);
+        }
+
+        if($request->sort_type && $request->sort){
+            $transactions = $transactions->orderBy($request->sort_type,$request->sort);
+        }
+
+    
+        // ->get()->toArray(); // Eager Load Sender
+        $transactions = $transactions->paginate(100)->withQueryString();
+
+        // dd($transactions);
+
+        return view('cashflow.book-grub',compact('currentYear','transactions'));
+
     }
 }

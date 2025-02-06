@@ -80,7 +80,7 @@ Route::get('/role-set', function () {
 Route::get('/role-create', function () {
     
     $perm = [
-        'location',
+        'cash-flow',
     ];
 
     foreach($perm as $p){
@@ -107,6 +107,7 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 Route::middleware('auth')->group(function () {
 
     Route::get('/cash-flow', [CashFlowController::class, 'index'])->name('cashflow.index');
+    Route::get('/cash-flow/book-addrs', [CashFlowController::class, 'book'])->name('cashflow.book');
 
     Route::get('/location', [LocationController::class, 'index'])->name('location.index')->middleware('permission:location');
     Route::get('/location/create', [LocationController::class, 'create'])->name('location.create')->middleware('permission:location');

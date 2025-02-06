@@ -77,6 +77,7 @@ class Transaction extends Model
 		self::STATUS_PAID => 'Paid',
 		self::STATUS_DUE => 'Due',
 	);
+	
 
 	public static $typesCustomer = array(
 		1 => 'Customer',
@@ -102,6 +103,16 @@ class Transaction extends Model
 		return 'transactions';
 	}
 
+	public function getPriceColor($price)
+	{
+		if ($price < 0) {
+			return 'text-red-500 font-bold';
+		} elseif ($price > 0) {
+			return 'text-green-500 font-bold';
+		}
+		return 'text-gray-500';
+	}
+
 
 
 	public function getTypeNameAttribute()
@@ -114,7 +125,7 @@ class Transaction extends Model
 		return self::$typesCustomer[$this->sender_type];
 	}
 
-	public function getTypeRecaiverNameAttribute()
+	public function getTypeReceiverNameAttribute()
 	{
 		return self::$typesCustomer[$this->receiver_type];
 	}

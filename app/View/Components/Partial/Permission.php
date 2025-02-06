@@ -384,6 +384,7 @@ class Permission extends Component
             ['name' => 'report nett cash', 'label' =>'View Nett Cash'],
             ['name' => 'report.compare', 'label' =>'Compare'],
             ['name' => 'report.itemsale', 'label' =>'Item Sale'],
+            ['name' => 'cash-flow', 'label' =>'Cash Flow'],
  
         ];
 
