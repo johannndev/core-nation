@@ -55,9 +55,7 @@ class TransactionsController extends Controller
 		if($request->type){
 			$dataList = $dataList->where('type',$request->type);
 		}
-
 		
-
 		if(Auth::user()->location_id > 0){
 
 			$dataList = $dataList->where(function ($query) {
