@@ -55,8 +55,10 @@ class TransactionsController extends Controller
 		if($request->type){
 			$dataList = $dataList->where('type',$request->type);
 		}
-		
+
 		if(Auth::user()->location_id > 0){
+
+			$dataLis = $dataList->wherIn('sender_type',[Customer::TYPE_CUSTOMER, Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER]);
 
 			$dataList = $dataList->where(function ($query) {
 				$query->whereHas('sender', function ($q) {
