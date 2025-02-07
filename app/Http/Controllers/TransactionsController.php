@@ -28,12 +28,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-
+use Illuminate\Support\Facades\Auth;
 
 class TransactionsController extends Controller
 {
 	public function index(Request $request)
 	{
+
+		
 		$allType = Transaction::$typesJSON;
 
 		$dataList = Transaction::with('receiver','sender')->orderBy('date','desc')->orderBy('id','desc');
@@ -53,6 +55,30 @@ class TransactionsController extends Controller
 		if($request->type){
 			$dataList = $dataList->where('type',$request->type);
 		}
+
+		if(Auth::user()->location_id > 0){
+
+			$dataList = $dataList->where(function ($query) {
+				$query->whereHas('sender', function ($q) {
+					$q->where(function ($q2) {
+						$q2->whereIn('type', [2,3,7])
+						   ->whereHas('locations', function ($q3) {
+							   $q3->where('location_id', Auth::user()->location_id);
+						   });
+					});
+				})->orWhereHas('receiver', function ($q) {
+					$q->where(function ($q2) {
+						$q2->whereIn('type', [2,3,7])
+						   ->whereHas('locations', function ($q3) {
+							   $q3->where('location_id', Auth::user()->location_id);
+						   });
+					});
+				});
+			});
+		
+			
+
+			}
 
 		$dataList = $dataList->paginate(20)->withQueryString();
 

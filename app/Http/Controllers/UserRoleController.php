@@ -64,7 +64,7 @@ class UserRoleController extends Controller
 
             $user = new User;
             $user->username = $request->name;
-            $user->location_id = $request->city;
+            $user->location_id = $request->city ?? 0;
             $user->role_id = $role->id;
     
             $password = User::generatePassword();
@@ -218,6 +218,7 @@ class UserRoleController extends Controller
 
     public function storeRole(Request $request){
 
+    
         try{
             DB::beginTransaction();
 
