@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Exceptions\ModelException;
 use App\Helpers\CCManagerHelper;
+use App\Helpers\LocationHelper;
 use App\Helpers\StatManagerHelper;
 use Carbon\Carbon;
 use Illuminate\Support\MessageBag;
@@ -554,6 +555,53 @@ class Transaction extends Model
 			throw new ModelException($transaction->getErrors()->first());
 
 		return $transaction;
+	}
+
+	public function scopeFilterLocation($query, $or = false)
+	{
+		
+		$lm = new LocationHelper;
+
+		
+		$lids = $lm->get_location();
+		$query = $query->where(function($query) use($lids, $or)
+		{
+			//EDIT:: removed Customer::TYPE_ACCOUNT
+			$query = $query->where(function($query) use($lids, $or)
+			{
+				$query->whereIn('sender_type',array(Customer::TYPE_CUSTOMER))->OrWhereIn('sender_id',$lids);
+			});
+			if($or)
+			{
+				$query = $query->orWhere(function($query) use($lids)
+				{
+					$query->whereIn('receiver_type',array(Customer::TYPE_CUSTOMER,Customer::TYPE_ACCOUNT, 0))->OrWhereIn('receiver_id',$lids);
+				});
+			}
+			else
+			{
+				$query = $query->where(function($query) use($lids)
+				{
+					$query->whereIn('receiver_type',array(Customer::TYPE_CUSTOMER,Customer::TYPE_ACCOUNT, 0))->OrWhereIn('receiver_id',$lids);
+				});
+			}
+		});
+/*
+		$query = $query->where(function($query) use($lids)
+		{
+			$query->where(function($query) use($lids) {
+				$query->where('sender_type','=',Customer::TYPE_CUSTOMER)->orWhereIn('sender_id', $lids);
+			})->orWhere(function($query) use($lids) {
+				$query->whereIn('receiver_type',array(Customer::TYPE_CUSTOMER,0))->orWhereIn('receiver_id',$lids);
+			})->orWhere(function($query) {
+				$query->whereIn('location_id', \Auth::user()->location->viewables());
+			});
+		});
+*/
+		
+
+
+		return $query;
 	}
 
 

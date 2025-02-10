@@ -28,7 +28,8 @@
     "autoload": {
         "files": [
             "app/Helpers/StatManagerHelper.php",
-            "app/Helpers/LocalHelper.php"
+            "app/Helpers/LocalHelper.php",
+            "app/Helpers/LocationHelper.php"
         ],
         "psr-4": {
             "App\\": "app/",

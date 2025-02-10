@@ -58,29 +58,32 @@ class TransactionsController extends Controller
 
 		if(Auth::user()->location_id > 0){
 
-			$dataLis = $dataList->whereIn('sender_type',[Customer::TYPE_CUSTOMER, Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])->orWhereIn('receiver_type', [Customer::TYPE_CUSTOMER, Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER]);
+			$datList = $dataList->filterLocation();
 
-			$dataList = $dataList->where(function ($query) {
-				$query->whereHas('sender', function ($q) {
-					$q->where(function ($q2) {
-						$q2->whereIn('type', [Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])
-						   ->whereHas('locations', function ($q3) {
-							   $q3->where('location_id', Auth::user()->location_id);
-						   });
-					});
-				})->orWhereHas('receiver', function ($q) {
-					$q->where(function ($q2) {
-						$q2->whereIn('type', [Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])
-						   ->whereHas('locations', function ($q3) {
-							   $q3->where('location_id', Auth::user()->location_id);
-						   });
-					});
-				});
-			});
+			// $dataList = $dataList->whereIn('sender_type',[Customer::TYPE_CUSTOMER, Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])->orWhereIn('receiver_type', [Customer::TYPE_CUSTOMER, Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER]);
+
+			// $dataList = $dataList->where(function ($query) {
+			// 	$query->whereHas('sender', function ($q) {
+			// 		$q->where(function ($q2) {
+			// 			$q2->whereIn('type', [Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])
+			// 			   ->whereHas('locations', function ($q3) {
+			// 				   $q3->where('location_id', Auth::user()->location_id);
+			// 			   });
+			// 		});
+			// 	})->orWhereHas('receiver', function ($q) {
+			// 		$q->where(function ($q2) {
+			// 			$q2->whereIn('type', [Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])
+			// 			   ->whereHas('locations', function ($q3) {
+			// 				   $q3->where('location_id', Auth::user()->location_id);
+			// 			   });
+			// 		});
+			// 	});
+			// });
+			
 		
 			
 
-			}
+		}
 
 		$dataList = $dataList->paginate(20)->withQueryString();
 
