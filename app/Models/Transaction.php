@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
+
 
 
 
@@ -24,6 +26,30 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     protected $guarded = [];
+
+	protected $appends = ['show'];
+
+	public function getShowAttribute(): string
+    {
+		if(Auth::user()->location_id > 0){
+
+			$show = 'no';
+			
+		}else{
+			$show = 'yes';
+		}
+
+        return $show;
+    }
+
+	// public function scopeShow(Builder $query, string $jabatan): Builder
+    // {
+    //     if ($jabatan === 'guru') {
+    //         return $query->where('type', 1);
+    //     } else {
+    //         return $query->where('type', '!=', 1);
+    //     }
+    // }
 
     const TYPE_BUY = 1;
 	const TYPE_SELL = 2;
@@ -556,6 +582,8 @@ class Transaction extends Model
 
 		return $transaction;
 	}
+
+
 
 	public function scopeFilterLocation($query, $or = false)
 	{
