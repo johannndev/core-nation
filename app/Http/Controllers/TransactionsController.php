@@ -58,25 +58,33 @@ class TransactionsController extends Controller
 
 		if(Auth::user()->location_id > 0){
 
-			$userLocationId = Auth::user()->location_id;
+			$customers = Customer::whereHas('locations', function ($query) {
+				$query->where('location_id', Auth::user()->location_id);
+			})->pluck('id');
 
-			$dataList = $dataList->where(function ($query) use ($userLocationId) {
-				// Jika sender_type atau recaiver_type = 1, tampilkan semua data
-				$query->where('sender_type', Customer::TYPE_CUSTOMER)
-					->orWhere('receiver_type', Customer::TYPE_CUSTOMER);
-			})
-			->orWhere(function ($query) use ($userLocationId) {
-				// Jika sender_type atau receiver_type adalah [2,3,4], cek lokasi sender/receiver
-				$query->whereIn('sender_type', [Customer::TYPE_BANK, Customer::TYPE_WAREHOUSE, Customer::TYPE_RESELLER])
-					->orWhereIn('receiver_type', [Customer::TYPE_BANK, Customer::TYPE_WAREHOUSE, Customer::TYPE_RESELLER])
-					->where(function ($q) use ($userLocationId) {
-						$q->whereHas('sender.locations', function ($subQuery) use ($userLocationId) {
-							$subQuery->whereIn('locations.id', [$userLocationId]);
-						})->orWhereHas('receiver.locations', function ($subQuery) use ($userLocationId) {
-							$subQuery->whereIn('locations.id', [$userLocationId]);
-						});
-					});
-			});
+			$dataList = $dataList->whereIn('sender_id', $customers)->whereIn('receiver_id', $customers);
+
+			// dd($customers);
+
+			// $userLocationId = Auth::user()->location_id;
+
+			// $dataList = $dataList->where(function ($query) use ($userLocationId) {
+			// 	// Jika sender_type atau recaiver_type = 1, tampilkan semua data
+			// 	$query->where('sender_type', Customer::TYPE_CUSTOMER)
+			// 		->orWhere('receiver_type', Customer::TYPE_CUSTOMER);
+			// })
+			// ->orWhere(function ($query) use ($userLocationId) {
+			// 	// Jika sender_type atau receiver_type adalah [2,3,4], cek lokasi sender/receiver
+			// 	$query->whereIn('sender_type', [Customer::TYPE_BANK, Customer::TYPE_WAREHOUSE, Customer::TYPE_RESELLER])
+			// 		->orWhereIn('receiver_type', [Customer::TYPE_BANK, Customer::TYPE_WAREHOUSE, Customer::TYPE_RESELLER])
+			// 		->where(function ($q) use ($userLocationId) {
+			// 			$q->whereHas('sender.locations', function ($subQuery) use ($userLocationId) {
+			// 				$subQuery->whereIn('locations.id', [$userLocationId]);
+			// 			})->orWhereHas('receiver.locations', function ($subQuery) use ($userLocationId) {
+			// 				$subQuery->whereIn('locations.id', [$userLocationId]);
+			// 			});
+			// 		});
+			// });
 
 			
 				
