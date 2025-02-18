@@ -15,10 +15,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 
-
-
-
-
 class Transaction extends Model
 {
     use HasFactory;
@@ -122,6 +118,34 @@ class Transaction extends Model
 		'sender_id' => 'required',
 		'receiver_id' => 'required|different:sender_id',
 	);
+
+	public function getSenderBalanceFilterAttribute()
+    {
+		
+
+        if (Auth::user()->location_id > 0 && $this->sender_type == Customer::TYPE_BANK ) {
+          	$balance = 0;
+        }else{
+			$balance = $this->sender_balance;
+		}
+
+		return $balance;
+ 
+    }
+
+	public function getReceiverBalanceFilterAttribute()
+    {
+		
+
+        if (Auth::user()->location_id > 0 && $this->receiver_type == Customer::TYPE_BANK ) {
+          	$balance = 0;
+        }else{
+			$balance = $this->receiver_balance;
+		}
+
+		return $balance;
+ 
+    }
 
 	
 
