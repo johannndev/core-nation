@@ -56,6 +56,22 @@ class Transaction extends Component
         if(Request('type')){
             $dataList = $dataList->where('type',Request('type'));
         }
+
+        if(Auth::user()->location_id > 0){
+
+			$customers = Customer::whereHas('locations', function ($query) {
+				$query->where('location_id', Auth::user()->location_id);
+			})->pluck('id');
+
+			$dataList = $dataList->whereIn('sender_id', $customers)->whereIn('receiver_id', $customers);
+
+		
+			
+		
+			
+
+		}
+
       
 		
 

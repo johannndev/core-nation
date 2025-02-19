@@ -47,7 +47,7 @@
                     </td>
                     <td class="px-4 py-3">
                         @isset($item->sender)
-                            {{Number::format($item->sender_balance,2)}}
+                            {{Number::format($item->sender_balance_filter,2)}}
                         @endisset
                     </td>
                     <td class="px-4 py-3">
@@ -57,7 +57,7 @@
                     </td>
                     <td class="px-4 py-3">
                         @isset($item->receiver)
-                            {{Number::format($item->receiver_balance,2)}}
+                            {{Number::format($item->receiver_balance_filter,2)}}
                         @endisset
                     </td>
                   
