@@ -121,18 +121,15 @@ class Transaction extends Model
 
 	public function getSenderBalanceFilterAttribute()
     {
+		$balance = $this->receiver_balance;
 
-		if(Auth::user()->can('account hide balance')){
+		if(Auth::user()-getRoleNames()['superadmin'] && Auth::user()->can('account hide balance')){
 		
 
 			if ( $this->sender_type == Customer::TYPE_BANK ) {
 				$balance = 0;
-			}else{
-				$balance = $this->sender_balance;
 			}
 
-		}else{
-			$balance = $this->receiver_balance;
 		}
 
 		return $balance;
@@ -142,17 +139,16 @@ class Transaction extends Model
 	public function getReceiverBalanceFilterAttribute()
     {
 		
+		$balance = $this->receiver_balance;
 
-		if(Auth::user()->can('account hide balance')){
+		
+
+		if(Auth::user()-getRoleNames()['superadmin'] && Auth::user()->can('account hide balance')){
 
 			if ( $this->receiver_type == Customer::TYPE_BANK ) {
 				$balance = 0;
-			}else{
-				$balance = $this->receiver_balance;
 			}
 
-		}else{
-			$balance = $this->receiver_balance;
 		}
 
       
