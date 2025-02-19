@@ -123,7 +123,7 @@ class Transaction extends Model
     {
 		$balance = $this->receiver_balance;
 
-		if(Auth::user()-getRoleNames()['superadmin'] && Auth::user()->can('account hide balance')){
+		if(!Auth::user()-getRoleNames()['superadmin'] && Auth::user()->can('account hide balance')){
 		
 
 			if ( $this->sender_type == Customer::TYPE_BANK ) {
@@ -143,7 +143,7 @@ class Transaction extends Model
 
 		
 
-		if(Auth::user()-getRoleNames()['superadmin'] && Auth::user()->can('account hide balance')){
+		if(!Auth::user()-getRoleNames()['superadmin'] && Auth::user()->can('account hide balance')){
 
 			if ( $this->receiver_type == Customer::TYPE_BANK ) {
 				$balance = 0;
