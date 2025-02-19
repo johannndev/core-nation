@@ -35,6 +35,7 @@ class TransactionsController extends Controller
 	public function index(Request $request)
 	{
 
+	
 		
 		$allType = Transaction::$typesJSON;
 
