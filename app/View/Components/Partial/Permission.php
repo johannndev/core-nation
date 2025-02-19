@@ -398,7 +398,7 @@ class Permission extends Component
     private function settingPermissionList(){
         $data = [
             ['name' => 'setting edit', 'label' =>'Edit Setting'],
-            ['name' => 'location', 'label' =>'Location'],
+            
  
         ];
 
@@ -416,6 +416,7 @@ class Permission extends Component
             ['name' => 'user role', 'label' =>'Role List'],
             ['name' => 'user create role', 'label' =>'Create Role'],
             ['name' => 'user edit role', 'label' =>'Edit Role'],
+            ['name' => 'location', 'label' =>'Location'],
            
  
         ];
