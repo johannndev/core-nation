@@ -135,7 +135,7 @@ class Transaction extends Model
 			$balance = $this->receiver_balance;
 		}
 
-		return $balance;
+		return $this->receiver_balance;
  
     }
 
@@ -157,7 +157,7 @@ class Transaction extends Model
 
       
 
-		return $balance;
+		return  $this->receiver_balance;
  
     }
 
