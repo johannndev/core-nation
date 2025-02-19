@@ -125,7 +125,7 @@ class Transaction extends Model
 		if(Auth::user()->can('account hide balance')){
 		
 
-			if ($this->sender_type == Customer::TYPE_BANK ) {
+			if ( $this->sender_type == Customer::TYPE_BANK ) {
 				$balance = 0;
 			}else{
 				$balance = $this->sender_balance;
@@ -135,7 +135,7 @@ class Transaction extends Model
 			$balance = $this->receiver_balance;
 		}
 
-		return $this->receiver_balance;
+		return $balance;
  
     }
 
@@ -145,7 +145,7 @@ class Transaction extends Model
 
 		if(Auth::user()->can('account hide balance')){
 
-			if ($this->receiver_type == Customer::TYPE_BANK ) {
+			if ( $this->receiver_type == Customer::TYPE_BANK ) {
 				$balance = 0;
 			}else{
 				$balance = $this->receiver_balance;
@@ -157,7 +157,7 @@ class Transaction extends Model
 
       
 
-		return  $this->receiver_balance;
+		return $balance;
  
     }
 
