@@ -121,7 +121,7 @@ class Transaction extends Model
 
 	public function getSenderBalanceFilterAttribute()
     {
-		$balance = $this->receiver_balance;
+		$balance = $this->sender_balance;
 
 		if(Auth::user()->getRoleNames()[0] != 'superadmin'){
 		
