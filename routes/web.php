@@ -80,7 +80,7 @@ Route::get('/role-set', function () {
 Route::get('/role-create', function () {
     
     $perm = [
-        'cash-flow',
+        'account hide balance',
     ];
 
     foreach($perm as $p){

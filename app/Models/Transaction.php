@@ -121,12 +121,18 @@ class Transaction extends Model
 
 	public function getSenderBalanceFilterAttribute()
     {
+
+		if(Auth::user()->can('edit articles')){
 		
 
-        if (Auth::user()->location_id > 0 && $this->sender_type == Customer::TYPE_BANK ) {
-          	$balance = 0;
-        }else{
-			$balance = $this->sender_balance;
+			if (Auth::user()->location_id > 0 && $this->sender_type == Customer::TYPE_BANK ) {
+				$balance = 0;
+			}else{
+				$balance = $this->sender_balance;
+			}
+			
+		}else{
+			$balance = $this->receiver_balance;
 		}
 
 		return $balance;
@@ -137,11 +143,19 @@ class Transaction extends Model
     {
 		
 
-        if (Auth::user()->location_id > 0 && $this->receiver_type == Customer::TYPE_BANK ) {
-          	$balance = 0;
-        }else{
+		if(Auth::user()->can('edit articles')){
+
+			if (Auth::user()->location_id > 0 && $this->receiver_type == Customer::TYPE_BANK ) {
+				$balance = 0;
+			}else{
+				$balance = $this->receiver_balance;
+			}
+
+		}else{
 			$balance = $this->receiver_balance;
 		}
+
+      
 
 		return $balance;
  

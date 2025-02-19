@@ -123,6 +123,7 @@ class Permission extends Component
             ['name' => 'transactions.delete', 'label' => 'Delete Transaction'],
             ['name' => 'transactions.sellbatch', 'label' => 'Sell Batch'],
             ['name' => 'transactions.movebatch', 'label' => 'Move Batch'],
+            
         ];
 
         return $data;
@@ -225,6 +226,7 @@ class Permission extends Component
             ['name' => 'account search', 'label' =>'Search'],
             ['name' => 'account delete', 'label' =>'Delete'],
             ['name' => 'account restore', 'label' =>'Restore'],
+            ['name' => 'account hide balance', 'label' =>'Hide Balance'],
         ];
 
         return $data;
