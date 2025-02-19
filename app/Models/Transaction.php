@@ -126,7 +126,7 @@ class Transaction extends Model
 		if(Auth::user()->getRoleNames()[0] != 'superadmin'){
 		
 
-			if ( Auth::user()->can('account hide balance') && $this->sender_type == Customer::TYPE_BANK ) {
+			if ( !Auth::user()->can('account hide balance') && $this->sender_type == Customer::TYPE_BANK ) {
 				$balance = 0;
 			}
 
@@ -145,7 +145,7 @@ class Transaction extends Model
 
 		if(Auth::user()->getRoleNames()[0] != 'superadmin'){
 
-			if ( Auth::user()->can('account hide balance') && $this->receiver_type == Customer::TYPE_BANK ) {
+			if ( !Auth::user()->can('account hide balance') && $this->receiver_type == Customer::TYPE_BANK ) {
 				$balance = 0;
 			}
 
