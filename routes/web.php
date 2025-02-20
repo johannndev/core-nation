@@ -113,6 +113,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/location/create', [LocationController::class, 'create'])->name('location.create')->middleware('permission:location');
     Route::post('/location/store', [LocationController::class, 'store'])->name('location.store')->middleware('permission:location');
     Route::get('/location/{id}/detail', [LocationController::class, 'locationDetail'])->name('location.detail')->middleware('permission:location');
+    Route::post('/location/{id}/storeLocation', [LocationController::class, 'storeLocation'])->name('location.storeLocation')->middleware('permission:location');
+
     Route::get('/location/{id}/edit', [LocationController::class, 'edit'])->name('location.edit')->middleware('permission:location');
     Route::patch('/location/{id}/update', [LocationController::class, 'update'])->name('location.update')->middleware('permission:location');
 

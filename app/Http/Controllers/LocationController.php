@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\LC;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,12 +23,16 @@ class LocationController extends Controller
 			$dataList = $dataList->where('memberId','=', $id);
 		}
 
+      
+
 		
         
         $dataList = $dataList->orderBy('name','asc')->paginate(50)->withQueryString();
 
         return view('location.index',compact('dataList'));
     }
+
+   
 
     public function create(){
         return view('location.create');
@@ -116,7 +121,48 @@ class LocationController extends Controller
 
         $dataList = $dataList->orderBy('name','asc')->paginate(50)->withQueryString();
 
-        return view('location.detail',compact('dataList','location'));
+        $dataListPropSender = [
+			"label" => "Addr Book",
+			"id" => "customer",
+			"idList" => "datalistSender",
+			"idOption" => "datalistOptionsSender",
+			"type" => Customer::TYPE_CUSTOMER.",".Customer::TYPE_RESELLER.",".Customer::TYPE_WAREHOUSE.",".Customer::TYPE_BANK.",".Customer::TYPE_SUPPLIER.",".Customer::TYPE_VWAREHOUSE.",".Customer::TYPE_VACCOUNT.",".Customer::TYPE_ACCOUNT
+			
+		];
+
+        return view('location.detail',compact('dataList','location','dataListPropSender','uid'));
+
+    }
+
+    public function storeLocation($id, Request $request){
+
+        $rules = [
+        
+            'customer'  => 'required',
+          
+           
+            
+		];
+
+        $attributes = [
+        
+            'name'  => 'Customer',
+            
+            
+        ];
+
+        $this->validate($request, $rules, [], $attributes);
+
+        $data = new LC();
+        
+        $data->location_id = $id;
+        $data->customer_id = $request->customer;
+
+        $data->save();
+
+        return redirect()->route('location.detail',$id)->with('success', 'Location customer created.');
+        
+
 
     }
 }
