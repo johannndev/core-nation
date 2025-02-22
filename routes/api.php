@@ -19,6 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/order', [ApiJubelioController::class, 'order']);
-Route::post('/retur', [ApiJubelioController::class, 'retur']);
+Route::get('/order', [ApiJubelioController::class, 'order']);
+Route::get('/retur', [ApiJubelioController::class, 'retur']);
 

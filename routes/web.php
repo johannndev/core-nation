@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddrbookController;
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\ApiJubelioController;
 use App\Http\Controllers\AsetLancarController;
 use App\Http\Controllers\BoronganController;
 use App\Http\Controllers\CashFlowController;
@@ -50,6 +51,9 @@ use Illuminate\Support\Facades\Hash;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('jub/order', [ApiJubelioController::class, 'order']);
+Route::get('jub/retur', [ApiJubelioController::class, 'retur']);
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
