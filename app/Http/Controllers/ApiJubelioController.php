@@ -13,11 +13,11 @@ class ApiJubelioController extends Controller
 
         $sign = hash_hmac('sha256',$content . $secret, $secret, false);
 
-        $data = new Logjubelio();
+        // $data = new Logjubelio();
 
-        $data->log = $request->items;
+        // $data->log = $request->items;
 
-        $data->save();
+        // $data->save();
 
         return $sign;
     }
@@ -28,11 +28,11 @@ class ApiJubelioController extends Controller
 
         $sign = hash_hmac('sha256',$content . $secret, $secret, false);
 
-        $data = new Logjubelio();
+        // $data = new Logjubelio();
 
-        $data->log = $request->items;
+        // $data->log = $request->items;
 
-        $data->save();
+        // $data->save();
 
         return $sign;
     }
