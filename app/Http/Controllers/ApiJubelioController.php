@@ -19,7 +19,9 @@ class ApiJubelioController extends Controller
 
         // $data->save();
 
-        return $sign;
+        return response()->json([
+            'status' => 'ok',
+        ], 200);
     }
 
     public function retur(Request $request){
@@ -34,6 +36,8 @@ class ApiJubelioController extends Controller
 
         // $data->save();
 
-        return $sign;
+        return response()->json([
+            'status' => 'ok',
+        ], 200);
     }
 }
