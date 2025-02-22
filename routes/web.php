@@ -18,6 +18,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LogJubelioController;
 use App\Http\Controllers\OperationController;
 use App\Http\Controllers\PoController;
 use App\Http\Controllers\ProduksiController;
@@ -75,6 +76,10 @@ Route::get('/role-set', function () {
 
     return 'berhasil';
 });
+
+
+Route::get('/logjubelio', [LogJubelioController::class, 'index']);
+Route::get('/logjubelio/{id}/detail', [LogJubelioController::class, 'detail']);
 
 
 Route::get('/role-create', function () {
@@ -238,6 +243,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/customer/{id}/item', [CustomerController::class, 'items'])->name('customer.items')->middleware('permission:customer item')->middleware('permission:customer item');
     Route::get('/customer/{id}/stat', [CustomerController::class, 'stat'])->name('customer.stat')->middleware('permission:customer stat')->middleware('permission:customer stat');
     Route::get('/customer/{id}/itemsale', [CustomerController::class, 'itemsale'])->name('customer.itemsale')->middleware('permission:customer stat');
+    Route::get('/customer/{id}/sync', [CustomerController::class, 'syncJubelio'])->name('customer.jubelio')->middleware('permission:customer detail');
+    Route::patch('/customer/{id}/syncStore', [CustomerController::class, 'syncJubelioStore'])->name('customer.syncJubelioStore')->middleware('permission:customer detail');
 
     Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index')->middleware('permission:supplier list');
     Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create')->middleware('permission:supplier create');
@@ -256,6 +263,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/warehouse/{id}/item', [WarehouseController::class, 'items'])->name('warehouse.items')->middleware('permission:warehouse item');
     Route::get('/warehouse/{id}/stat', [WarehouseController::class, 'stat'])->name('warehouse.stat')->middleware('permission:warehouse stat');
     Route::get('/warehouse/{id}/itemsale', [WarehouseController::class, 'itemsale'])->name('warehouse.itemsale')->middleware('permission:warehouse stat');
+    Route::get('/warehouse/{id}/sync', [WarehouseController::class, 'syncJubelio'])->name('warehouse.jubelio')->middleware('permission:warehouse detail');
+    Route::patch('/warehouse/{id}/syncStore', [WarehouseController::class, 'syncJubelioStore'])->name('warehouse.syncJubelioStore')->middleware('permission:warehouse detail');
 
     Route::get('/vwarehouse', [VWarehouseController::class, 'index'])->name('vwarehouse.index')->middleware('permission:vwarehouse list');
     Route::get('/vwarehouse/create', [VWarehouseController::class, 'create'])->name('vwarehouse.create')->middleware('permission:vwarehouse create');
@@ -265,6 +274,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/vwarehouse/{id}/item', [VWarehouseController::class, 'items'])->name('vwarehouse.items')->middleware('permission:vwarehouse item');
     Route::get('/vwarehouse/{id}/stat', [VWarehouseController::class, 'stat'])->name('vwarehouse.stat')->middleware('permission:vwarehouse stat');
     Route::get('/vwarehouse/{id}/itemsale', [VWarehouseController::class, 'itemsale'])->name('vwarehouse.itemsale')->middleware('permission:vwarehouse stat');
+    
 
 
     Route::get('/account', [AccountController::class, 'index'])->name('account.index')->middleware('permission:account list');
