@@ -52,8 +52,8 @@ use Illuminate\Support\Facades\Hash;
 |
 */
 
-Route::get('jub/order', [ApiJubelioController::class, 'order']);
-Route::get('jub/retur', [ApiJubelioController::class, 'retur']);
+Route::post('jub/order', [ApiJubelioController::class, 'order']);
+Route::post('jub/retur', [ApiJubelioController::class, 'retur']);
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
