@@ -15,11 +15,11 @@ class ApiJubelioController extends Controller
 
         $data = new Logjubelio();
 
-        $data->log = $sign;
+        $data->log = $request->items;
 
         $data->save();
 
-        return '200';
+        return $sign;
     }
 
     public function retur(Request $request){
@@ -30,10 +30,10 @@ class ApiJubelioController extends Controller
 
         $data = new Logjubelio();
 
-        $data->log = $sign;
+        $data->log = $request->items;
 
         $data->save();
 
-        return '200';
+        return $sign;
     }
 }
