@@ -107,7 +107,7 @@ class LocationController extends Controller
 
         $location = Location::findOrFail($id);
 
-        $dataList = Customer::whereIn('type',[2,3,7]);
+        $dataList = Customer::query();
 
         
         if(Request('name')) {
