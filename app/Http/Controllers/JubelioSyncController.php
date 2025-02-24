@@ -49,7 +49,7 @@ class JubelioSyncController extends Controller
 
         $dataList = $response->json();
 
-        dd($dataList);
+        // dd($dataList);
         
 
         $dataListPropWarehouse = [
