@@ -38,7 +38,7 @@ class JubelioSyncController extends Controller
 
         $dataApi = JubelioHelper::checkOrUpdateData('jub', 'new_value');
 
-        dd($dataApi);
+        
 
         $response = Http::withHeaders([
             'Authorization' => $dataApi->sk
@@ -48,6 +48,8 @@ class JubelioSyncController extends Controller
         ]);
 
         $dataList = $response->json();
+
+        dd($dataList);
         
 
         $dataListPropWarehouse = [
