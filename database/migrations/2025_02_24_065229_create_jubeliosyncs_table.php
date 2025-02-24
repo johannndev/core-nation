@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('logjubelios', function (Blueprint $table) {
+        Schema::create('jubeliosyncs', function (Blueprint $table) {
             $table->id();
-            $table->string('type')->nullable();
-            $table->string('transaction_id')->nullable();
+            $table->integer('jubelio_location_id');
+            $table->string('jubelio_location_name');
+            $table->integer('warehouse_id');
+            $table->integer('customer_id');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('logjubelios');
+        Schema::dropIfExists('jubeliosyncs');
     }
 };

@@ -76,44 +76,7 @@ class WarehouseController extends Controller
         return view('warehouse.detail',compact('cid','nameCustomer','nameType','customerType'));
     }
 
-    public function syncJubelio($id)
-    {
-        $customer = Customer::find($id);
-
-        $dataApi = JubelioHelper::checkOrUpdateData('jub', 'new_value');
-
-        $cid = $id;
-
-        $response = Http::withHeaders([
-            'Authorization' => $dataApi->sk
-        ])->get('https://api2.jubelio.com/locations/', [
-            'page' => 1,
-            'pageSize' => 200
-        ]);
-
-        $dataList = $response->json();
-        
-
-       
- 
-
-        return view('warehouse.sync',compact('cid','dataList','customer'));
-    }
-
-    public function syncJubelioStore($id, Request $request){
-
-        if($request->location_id){
-            $data = Customer::find($id);
-
-            $data->jubelio_location_id = $request->location_id;
-    
-            $data->save();
-        }
-
-        return redirect()->route('warehouse.detail',$id)->with('success', 'Warehouse edited.');
-      
-
-    }
+  
 
     public function items($id)
     {

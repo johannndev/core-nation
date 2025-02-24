@@ -17,6 +17,7 @@ use App\Http\Controllers\GajihController;
 use App\Http\Controllers\HashController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\JubelioSyncController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LogJubelioController;
@@ -114,6 +115,12 @@ Route::get('/cek', [HomeController::class, 'cekData'])->name('');
 Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filter.get');
 
 Route::middleware('auth')->group(function () {
+
+
+    Route::get('/jubelio/sync', [JubelioSyncController::class, 'index'])->name('jubelio.sync.index');
+    Route::delete('/jubelio/sync/{id}/delete', [JubelioSyncController::class, 'delete'])->name('jubelio.sync.delete');
+    Route::get('/jubelio/sync/create', [JubelioSyncController::class, 'create'])->name('jubelio.sync.create');
+    Route::post('/jubelio/sync/store', [JubelioSyncController::class, 'store'])->name('jubelio.sync.store');
 
     Route::get('/cash-flow', [CashFlowController::class, 'index'])->name('cashflow.index');
     Route::get('/cash-flow/book-addrs', [CashFlowController::class, 'book'])->name('cashflow.book');
@@ -247,8 +254,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/customer/{id}/item', [CustomerController::class, 'items'])->name('customer.items')->middleware('permission:customer item')->middleware('permission:customer item');
     Route::get('/customer/{id}/stat', [CustomerController::class, 'stat'])->name('customer.stat')->middleware('permission:customer stat')->middleware('permission:customer stat');
     Route::get('/customer/{id}/itemsale', [CustomerController::class, 'itemsale'])->name('customer.itemsale')->middleware('permission:customer stat');
-    Route::get('/customer/{id}/sync', [CustomerController::class, 'syncJubelio'])->name('customer.jubelio')->middleware('permission:customer detail');
-    Route::patch('/customer/{id}/syncStore', [CustomerController::class, 'syncJubelioStore'])->name('customer.syncJubelioStore')->middleware('permission:customer detail');
+
 
     Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index')->middleware('permission:supplier list');
     Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create')->middleware('permission:supplier create');
