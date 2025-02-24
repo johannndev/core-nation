@@ -61,7 +61,7 @@ class JubelioHelper
             DB::table('ams')
                 ->where('name', $slug)
                 ->update([
-                    'key' => $jubelioApi['token'] ?? $data->key,
+                    'sk' => $jubelioApi['token'] ?? $data->key,
                     'expDate' => Carbon::now()->addHours(10),
                     'updated_at' => now(),
                 ]);
