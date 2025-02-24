@@ -38,6 +38,8 @@ class JubelioSyncController extends Controller
 
         $dataApi = JubelioHelper::checkOrUpdateData('jub', 'new_value');
 
+        dd($dataApi);
+
         $response = Http::withHeaders([
             'Authorization' => $dataApi->sk
         ])->get('https://api2.jubelio.com/locations/', [
