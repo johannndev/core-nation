@@ -79,6 +79,8 @@
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
+                                        <th scope="col" class="px-4 py-3">Store name</th>
+
                                         <th scope="col" class="px-4 py-3">Location</th>
 
                                         <th scope="col" class="px-4 py-3">Warehouse</th>
@@ -96,23 +98,29 @@
                     
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                        
-                                        <th scope="row" class="px-4 py-3  whitespace-nowrap ">
+                                        <td scope="row" class="px-4 py-3  whitespace-nowrap ">
                                             
-                                            <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->jubelio_location_name}}</a>
+                                            {{$item->jubelio_store_name}}
                     
-                                        </th>
+                                        </td>
 
-                                        <th scope="row" class="px-4 py-3  whitespace-nowrap ">
+                                        <td scope="row" class="px-4 py-3  whitespace-nowrap ">
+                                            
+                                            {{$item->jubelio_location_name}}
+                    
+                                        </td>
+
+                                        <td scope="row" class="px-4 py-3  whitespace-nowrap ">
                                             
                                             <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->warehouse->name}}</a>
                     
-                                        </th>
+                                        </td>
 
-                                        <th scope="row" class="px-4 py-3  whitespace-nowrap ">
+                                        <td scope="row" class="px-4 py-3  whitespace-nowrap ">
                                             
                                             <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->customer->name}}</a>
                     
-                                        </th>
+                                        </td>
 
                                         
                                       

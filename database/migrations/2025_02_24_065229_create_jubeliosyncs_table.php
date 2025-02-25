@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('jubeliosyncs', function (Blueprint $table) {
             $table->id();
+            $table->integer('jubelio_store_id');
+            $table->string('jubelio_store_name');
             $table->integer('jubelio_location_id');
             $table->string('jubelio_location_name');
             $table->integer('warehouse_id');

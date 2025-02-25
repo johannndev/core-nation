@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Helpers\JubelioHelper;
 use App\Models\Customer;
 use App\Models\Jubeliosync;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class JubelioSyncController extends Controller
@@ -94,15 +96,51 @@ class JubelioSyncController extends Controller
 
         $this->validate($request, $rules, [], $attributes);
 
+
+        $dataApi = JubelioHelper::checkOrUpdateData('jub', 'new_value');
+
+        $response = Http::withHeaders([
+            'Authorization' => $dataApi->sk
+        ])->get('https://api2.jubelio.com/locations/'.$request->location_id);
+
+        $dataList = $response->json();
+
+        // dd($dataList);
+
+        if($dataList['warehouse']){
+            $dataRow = $dataList['warehouse'];
+        }else{
+            $dataRow = $dataList['stores'];
+        }
+
+        $syncArray = [];
+
+        foreach ($dataRow as $data) {
+            $syncArray[] = [
+                'jubelio_store_id' => $data['store_id'],
+                'jubelio_store_name' => $data['store_name'],
+                'jubelio_location_id' => $request->location_id,
+                'jubelio_location_name' => $request->locationName,
+                'warehouse_id' => $request->warehouse,
+                'customer_id' => $request->customer,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+        }
+
+        DB::table('jubeliosyncs')->insert($syncArray);
+
+        // dd($syncArray);
+
      
-        $data = new Jubeliosync();
+        // $data = new Jubeliosync();
 
-        $data->jubelio_location_id = $request->location_id;
-        $data->jubelio_location_name = $request->locationName;
-        $data->warehouse_id = $request->warehouse;
-        $data->customer_id = $request->customer;
+        // $data->jubelio_location_id = $request->location_id;
+        // $data->jubelio_location_name = $request->locationName;
+        // $data->warehouse_id = $request->warehouse;
+        // $data->customer_id = $request->customer;
 
-        $data->save();
+        // $data->save();
 
         return redirect()->route('jubelio.sync.index')->with('success', 'Jubelio sync created.');
       
