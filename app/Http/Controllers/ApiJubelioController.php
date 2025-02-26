@@ -19,10 +19,15 @@ class ApiJubelioController extends Controller
 
         // $data->save();
 
+        $signature = $request->header('Sign');
+        
+
+        $data = $request->all(); 
+
         return response()->json([
             'status' => 'ok',
-            'transaction_status' =>$request->status,
-            'item' =>$request->items,
+            'signature' => $signature,
+            'received_data' => $data
         ], 200);
     }
 
