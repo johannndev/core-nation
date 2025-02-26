@@ -38,10 +38,11 @@ class ApiJubelioController extends Controller
 
         // $data->save();
 
+        $data = $request->all(); 
+
         return response()->json([
             'status' => 'ok',
-            'transaction_status' =>$request->status,
-            'item' =>$request->items,
+            'received_data' => $data
         ], 200);
     }
 }
