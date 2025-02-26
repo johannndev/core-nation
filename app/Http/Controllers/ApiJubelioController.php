@@ -32,6 +32,8 @@ class ApiJubelioController extends Controller
 
         $sign = hash_hmac('sha256',$content . $secret, $secret, false);
 
+        $signature = $request->header('Sign');
+
         // $data = new Logjubelio();
 
         // $data->log = $request->items;
@@ -42,6 +44,7 @@ class ApiJubelioController extends Controller
 
         return response()->json([
             'status' => 'ok',
+            'signature' => $signature,
             'received_data' => $data
         ], 200);
     }
