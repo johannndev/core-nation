@@ -21,6 +21,8 @@ class ApiJubelioController extends Controller
 
         return response()->json([
             'status' => 'ok',
+            'transaction_status' =>$request->status,
+            'item' =>$request->items,
         ], 200);
     }
 
@@ -38,6 +40,8 @@ class ApiJubelioController extends Controller
 
         return response()->json([
             'status' => 'ok',
+            'transaction_status' =>$request->status,
+            'item' =>$request->items,
         ], 200);
     }
 }
