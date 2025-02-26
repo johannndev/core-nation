@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('jubelio_location_id');
             $table->string('jubelio_location_name');
             $table->integer('warehouse_id');
-            $table->integer('customer_id');
+            $table->integer('customer_id')->nullable();
             $table->timestamps();
         });
     }

@@ -82,7 +82,6 @@ class JubelioSyncController extends Controller
         $rules = [
             'location_id'  => 'required',
             'warehouse'  => 'required',
-            'customer' => 'required',
            
             
 		];
@@ -122,7 +121,6 @@ class JubelioSyncController extends Controller
                 'jubelio_location_id' => $request->location_id,
                 'jubelio_location_name' => $request->locationName,
                 'warehouse_id' => $request->warehouse,
-                'customer_id' => $request->customer,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
@@ -142,6 +140,60 @@ class JubelioSyncController extends Controller
 
         // $data->save();
 
+        return redirect()->route('jubelio.sync.index')->with('success', 'Jubelio sync created.');
+      
+
+    }
+
+    public function edit($id)
+    {
+
+        $data = Jubeliosync::find($id);
+
+        $dataListPropWarehouse = [
+			"label" => "Warehouse",
+			"id" => "warehouse",
+			"idList" => "datalistWh",
+			"idOption" => "datalistOptionsWh",
+			"type" => Customer::TYPE_WAREHOUSE,
+            "default" => $data->warehouse_id,
+			
+		];
+
+        $dataListPropCustomer = [
+			"label" => "Customer",
+			"id" => "customer",
+			"idList" => "datalistCs",
+			"idOption" => "datalistOptionsCs",
+			"type" => Customer::TYPE_CUSTOMER,
+            "default" => $data->customer_id,
+			
+		];
+       
+ 
+
+        return view('jubelio.sync.edit',compact('data','dataListPropCustomer','dataListPropWarehouse'));
+    }
+
+    public function update(Request $request,$id){
+
+        $rules = [
+            'customer'  => 'required',
+            'warehouse'  => 'required',
+            
+		];
+
+        $attributes = [
+            'location_id'  => 'Jubelio location',
+            'warehouse'  => 'Warehouse',
+            'customer' => 'Customer',
+            
+        ];
+
+        $this->validate($request, $rules, [], $attributes);
+
+        $data = Jubeliosync::where('id',$id)->update(['warehouse_id'=>$request->warehouse,'customer_id'=>$request->customer]);
+        
         return redirect()->route('jubelio.sync.index')->with('success', 'Jubelio sync created.');
       
 

@@ -118,8 +118,11 @@
 
                                         <td scope="row" class="px-4 py-3  whitespace-nowrap ">
                                             
-                                            <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->customer->name}}</a>
+                                            @isset($item->customer)
+                                                <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->customer->name}}</a>
                     
+                                            @endisset
+                                          
                                         </td>
 
                                         
@@ -127,6 +130,11 @@
                                         
                                      
                                         <td class="px-4 py-3 flex">
+
+                                            <a href="{{route('jubelio.sync.edit',$item->id)}}" class=" items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-primary-800">
+                                                Edit
+                                            </a>
+
                                             <form action="{{route('jubelio.sync.delete',$item->id)}}" method="post">
 
                                                 @csrf

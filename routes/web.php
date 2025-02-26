@@ -118,6 +118,9 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/jubelio/sync', [JubelioSyncController::class, 'index'])->name('jubelio.sync.index');
+    Route::get('/jubelio/sync/{id}/edit', [JubelioSyncController::class, 'edit'])->name('jubelio.sync.edit');
+    Route::patch('/jubelio/sync/{id}/update', [JubelioSyncController::class, 'update'])->name('jubelio.sync.update');
+
     Route::delete('/jubelio/sync/{id}/delete', [JubelioSyncController::class, 'delete'])->name('jubelio.sync.delete');
     Route::get('/jubelio/sync/create', [JubelioSyncController::class, 'create'])->name('jubelio.sync.create');
     Route::post('/jubelio/sync/store', [JubelioSyncController::class, 'store'])->name('jubelio.sync.store');

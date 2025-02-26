@@ -52,9 +52,10 @@
 
  
 <div>
-  <form id="myForm" action="{{route('jubelio.sync.store')}}" method="post" enctype="multipart/form-data">
+  <form id="myForm" action="{{route('jubelio.sync.update',$data->id)}}" method="post" enctype="multipart/form-data">
 
       @csrf
+      @method('PATCH')
   
       <section class="bg-gray-50 dark:bg-gray-900 mb-8">
           <div class="mx-auto  ">
@@ -66,27 +67,27 @@
                       <div class="grid grid-cols-2 gap-4 mb-4">
 
                           <div class="col-span-2">
-                              <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jubelio Location</label>
-                              <select id="locationSelect" name="location_id" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('location_id') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror">
-                                <option value="">Choose a location</option>
-
-                                @foreach ($dataList['data'] as $item)
-                                  <option {{old('location_id') == $item['location_id'] ? 'selected' : '' }} data-name="{{$item['location_name']}}" value="{{$item['location_id']}}">{{$item['location_name']}}</option>
-                                @endforeach
-                            
-                             
-                              </select>
+                              <label for="jubelio_store_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Store Name</label>
+                              <input type="text" name="jubelio_store_name" id="jubelio_store_name" aria-describedby="helper-text-explanation" class="  bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('jubelio_store_name',$data->jubelio_store_name)}}">
 
                           </div>
 
-                          <input type="text" id="locationName" name="locationName" placeholder="Nama Produk" hidden>
+                          <div class="col-span-2">
+                            <label for="jubelio_location_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Location Name</label>
+                            <input type="text" name="jubelio_location_name" id="jubelio_location_name" aria-describedby="helper-text-explanation" class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly value="{{old('jubelio_location_name',$data->jubelio_location_name)}}">
 
-                         
+                        </div>
 
-                        
                       </div>
 
+                
                       <x-partial.select-addr :dataProp='$dataListPropWarehouse' />
+                      <x-partial.select-addr :dataProp='$dataListPropCustomer' />
+
+                     
+                   
+                  
+
 
                       
                       <button id="loading-btn" disabled type="button" class="hidden py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center">
