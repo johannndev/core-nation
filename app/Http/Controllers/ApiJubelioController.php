@@ -76,7 +76,7 @@ class ApiJubelioController extends Controller
 
                 if($matched->count() > 0){
 
-                    $cekTransaksi = Transaction::where('invoice')->first();
+                    $cekTransaksi = Transaction::where('invoice',$dataApi['salesorder_no'])->first();
 
                     if($cekTransaksi){
 
