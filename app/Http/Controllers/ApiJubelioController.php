@@ -102,7 +102,7 @@ class ApiJubelioController extends Controller
                             "ongkir" => "0"
                         ];
 
-                        $dataCollect = collect($dataJubelio);
+                        $dataCollect =  (object) $dataJubelio;
 
                         $createData =  $this->createTransaction(Transaction::TYPE_SELL, $dataCollect);
 
