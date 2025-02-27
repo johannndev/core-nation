@@ -172,7 +172,7 @@ class ApiJubelioController extends Controller
 
             return response()->json([
                 'status' => 'ok',
-                'pesan' => 'Transaksi berhasil dikirim ke aria',
+                'pesan' => $dataApi['status'],
             ], 200);
 
         }
@@ -186,6 +186,7 @@ class ApiJubelioController extends Controller
         return response()->json([
             'status' => 'ok',
             'status_jubelio' => $dataApi['status'],
+            'pesan' => 'Transaksi berhasil dikirim ke aria',
             'total_matched' => $matched,
             'total_not_matched' => $notMatched,
             
