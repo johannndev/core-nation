@@ -413,7 +413,7 @@ class ApiJubelioController extends Controller
                    'sum_total' => (int)$row->sum_total,
                    'created_at' => now(),
                    'updated_at' => now(),
-               ]
+               ];
            }
 
            // dd($insertData);
