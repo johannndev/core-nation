@@ -28,6 +28,9 @@ class ApiJubelioController extends Controller
 
         $matched = 0;
         $notMatched = 0;
+        $store = [];
+        $location = [];
+
 
         if($dataApi['status'] == "SHIPPED"){
 
@@ -107,7 +110,8 @@ class ApiJubelioController extends Controller
             'status_jubelio' => $dataApi['status'],
             'total_matched' => $matched,
             'total_not_matched' => $notMatched,
-            'signature' => $signature,
+            'store' => $dataApi['store_id'],
+            'location' => $dataApi['location_id'],
             'data' => $dataJubelio
         ], 200);
     }
