@@ -413,7 +413,7 @@ class ApiJubelioController extends Controller
                    'sum_total' => (int)$row->sum_total,
                    'created_at' => now(),
                    'updated_at' => now(),
-               ];
+               ]
            }
 
            // dd($insertData);
@@ -465,5 +465,42 @@ class ApiJubelioController extends Controller
            // return response()->json($e->getMessage(), 500);
            
        }
-   }
+     }
+
+   public function updateOrCreateStatsalesOptimized(array $data)
+	{
+		foreach ($data as $entry) {
+			$existing = DB::table('stat_sells')
+				->where('group_id', $entry['group_id'])
+				->where('bulan', $entry['bulan'])
+				->where('tahun', $entry['tahun'])
+				->where('sender_id', $entry['sender_id'])
+				->first();
+
+			if ($existing) {
+				// Jika data ditemukan, update sum_qty dan sum_total
+				DB::table('stat_sells')
+					->where('id', $existing->id)
+					->incrementEach([
+						'sum_qty' => $entry['sum_qty'],
+						'sum_total' => $entry['sum_total']
+					]);
+			} else {
+				// Jika tidak ditemukan, insert data baru
+				DB::table('stat_sells')->insert([
+					'group_id' => $entry['group_id'],
+					'bulan' => $entry['bulan'],
+					'tahun' => $entry['tahun'],
+					'sender_id' => $entry['sender_id'],
+					'type' => $entry['type'],
+					'sum_qty' => $entry['sum_qty'],
+					'sum_total' => $entry['sum_total'],
+					'created_at' => now(),
+					'updated_at' => now(),
+				]);
+			}
+		}
+
+		return response()->json(['message' => 'Data processed successfully'], 200);
+	}
 }
