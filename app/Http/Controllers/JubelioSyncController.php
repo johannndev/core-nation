@@ -159,7 +159,7 @@ class JubelioSyncController extends Controller
         
 		];
 
-        if($data->customer_id){
+        if($data->warehouse_id){
             $dataListPropWarehouse["default"] = $data->warehouse_id;
         }
 
@@ -170,9 +170,10 @@ class JubelioSyncController extends Controller
 			"idList" => "datalistCs",
 			"idOption" => "datalistOptionsCs",
 			"type" => Customer::TYPE_CUSTOMER,
-            "default" => $data->customer_id ?? 0,
+          
 			
 		];
+       
 
         if($data->customer_id){
             $dataListPropCustomer["default"] = $data->customer_id;
