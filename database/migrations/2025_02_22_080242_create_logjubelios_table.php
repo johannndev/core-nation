@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('type')->nullable();
             $table->string('transaction_id')->nullable();
+            $table->string('invoice_id')->nullable();
+            $table->integer('total_matched_item')->nullable();
+            $table->integer('total_not_matched')->nullable();
+            $table->longText('desc')->nullable();
             $table->timestamps();
         });
     }
