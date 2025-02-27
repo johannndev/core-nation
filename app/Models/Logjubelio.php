@@ -11,6 +11,8 @@ class Logjubelio extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['url'];
+
     public function getUrlAttribute()
     {
         return route('transaction.getDetail',$this->transaction_id);
