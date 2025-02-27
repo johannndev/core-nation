@@ -156,7 +156,7 @@ class JubelioSyncController extends Controller
 			"idList" => "datalistWh",
 			"idOption" => "datalistOptionsWh",
 			"type" => Customer::TYPE_WAREHOUSE,
-            "default" => $data->warehouse_id,
+            // "default" => $data->warehouse_id,
 			
 		];
 
