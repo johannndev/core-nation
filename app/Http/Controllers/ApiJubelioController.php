@@ -187,7 +187,7 @@ class ApiJubelioController extends Controller
 
         return response()->json([
             'status' => 'ok',
-            'data' => $createData,
+            'data' => $dataCollect ?? [],
             'status_jubelio' => $dataApi['status'],
             'pesan' => 'Transaksi berhasil dikirim ke aria',
             'total_matched' => $matched,
