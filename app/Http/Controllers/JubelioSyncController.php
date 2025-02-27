@@ -166,7 +166,7 @@ class JubelioSyncController extends Controller
 			"idList" => "datalistCs",
 			"idOption" => "datalistOptionsCs",
 			"type" => Customer::TYPE_CUSTOMER,
-            // "default" => $data->customer_id,
+            "default" => $data->customer_id ?? 0,
 			
 		];
        
