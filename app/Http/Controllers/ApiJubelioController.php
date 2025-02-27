@@ -102,7 +102,9 @@ class ApiJubelioController extends Controller
                             "ongkir" => "0"
                         ];
 
-                        $createData =  $this->createTransaction(Transaction::TYPE_SELL, $dataJubelio);
+                        $dataCollect = collect($dataJubelio);
+
+                        $createData =  $this->createTransaction(Transaction::TYPE_SELL, $dataCollect);
 
                         // if($createData['status'] == "200" ){
 
@@ -227,24 +229,24 @@ class ApiJubelioController extends Controller
        //start transaction
        DB::beginTransaction();
 
-       $customer = Customer::find($dataJubelio['customer']);
-       $warehouse = Customer::find($dataJubelio['warehouse']);
+       $customer = Customer::find($dataJubelio->customer);
+       $warehouse = Customer::find($dataJubelio->warehouse);
 
        // dd($customer,$warehouse);
 
-       // $input = $request;
+       // $input = $dataJubelio;
        $transaction = new Transaction();
-       $transaction->date = $dataJubelio['date'];
+       $transaction->date = $dataJubelio->date;
        $transaction->type = $type;
 
-       if($dataJubelio['note']){
-           $transaction->description = $dataJubelio['note'];
+       if($dataJubelio->note){
+           $transaction->description = $dataJubelio->note;
        }else{
            $transaction->description = "";
        }
 
-       if($dataJubelio['due']){
-           $transaction->due = $dataJubelio['due'];
+       if($dataJubelio->due){
+           $transaction->due = $dataJubelio->due;
        }else{
            $transaction->due = '0000-00-00';
        }
@@ -271,16 +273,14 @@ class ApiJubelioController extends Controller
        
        $transaction->init($type);
 
-       // dd($request->addMoreInputFields);
+       // dd($dataJubelio->addMoreInputFields);
        //gets the transaction id
        if(!$transaction->save())
 
            
            throw new ModelException($transaction->getErrors(), __LINE__);
 
-       $collecData = collect($dataJubelio['addMoreInputFields']);
-
-       if(!$details = $transaction->createDetails($collecData))
+       if(!$details = $transaction->createDetails($dataJubelio->addMoreInputFields))
            throw new ModelException($transaction->getErrors(), __LINE__);
        
 
@@ -329,20 +329,20 @@ class ApiJubelioController extends Controller
        if(!$transaction->save())
            throw new $transaction->getErrors();
 
-       $paid = $dataJubelio['paid'];
+       $paid = $dataJubelio->paid;
        //special case: paid is checked
        if($type == Transaction::TYPE_SELL && isset($paid) && $paid)
        {
            //calculate total
-           $amount = isset($dataJubelio['amount']) ? $dataJubelio['amount'] : 0;
+           $amount = isset($dataJubelio->amount) ? $dataJubelio->amount : 0;
            if($amount <= 0) $amount = abs($transaction->total);
 
-           $payment = $transaction->attachIncome($transaction->date, $transaction->receiver_id, $dataJubelio['account'],$amount);
+           $payment = $transaction->attachIncome($transaction->date, $transaction->receiver_id, $dataJubelio->account,$amount);
            $class['income'] = $payment->total;
 
            //another special case, ongkir is filled, create journal
            $settingApp = new AppSettingsHelper;
-           $ongkir = isset($dataJubelio['ongkir']) ? $dataJubelio['ongkir'] : null;
+           $ongkir = isset($dataJubelio->ongkir) ? $dataJubelio->ongkir : null;
            if(!empty($ongkir))
                $transaction->attachOngkir($transaction->date, $payment->receiver_id, abs($ongkir), $settingApp->getAppSettings('ongkir') );
        }
@@ -424,7 +424,7 @@ class ApiJubelioController extends Controller
        //commit db transaction
        DB::commit();
 
-       // $request->session()->flash('success', 'Transaction # ' . $transaction->id. ' created.');
+       // $dataJubelio->session()->flash('success', 'Transaction # ' . $transaction->id. ' created.');
 
         return $data = [
             'status' => '200',
