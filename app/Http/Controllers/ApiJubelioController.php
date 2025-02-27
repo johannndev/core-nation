@@ -104,43 +104,43 @@ class ApiJubelioController extends Controller
 
                         $createData =  $this->createTransaction(Transaction::TYPE_SELL, $dataJubelio);
 
-                        if($createData['status'] == "200" ){
+                        // if($createData['status'] == "200" ){
 
-                            $dataLog = new Logjubelio();
+                        //     $dataLog = new Logjubelio();
                             
-                            $dataLog->transaction_id = $createData['transaction_id'];
-                            $dataLog->invoice_id = $dataApi['salesorder_no'];
-                            $dataLog->total_matched_item = $matched->count();
-                            $dataLog->total_not_matched = $notMatched->count();
-                            $dataLog->desc =  $createData['message'];
+                        //     $dataLog->transaction_id = $createData['transaction_id'];
+                        //     $dataLog->invoice_id = $dataApi['salesorder_no'];
+                        //     $dataLog->total_matched_item = $matched->count();
+                        //     $dataLog->total_not_matched = $notMatched->count();
+                        //     $dataLog->desc =  $createData['message'];
         
-                            $dataLog->save();
+                        //     $dataLog->save();
         
-                            if($notMatched->count() > 0){
+                        //     if($notMatched->count() > 0){
         
-                                $notMactheArray = [];
+                        //         $notMactheArray = [];
         
-                                foreach ($notMatched as $data) {
-                                    $notMactheArray[] = [
-                                        'transaction_list' => $createData['transaction_id'],
-                                        'item_code' => $data['item_code'],
-                                        'item_name' =>  $data['item_name'],
-                                        'channel' =>  $data['item_code'],
-                                        'loc_name' =>  $dataApi['source_name'],
-                                        'thumbnail' =>  $data['thumbnail'],
-                                        'created_at' => Carbon::now(),
-                                        'updated_at' => Carbon::now(),
-                                    ];
-                                }
+                        //         foreach ($notMatched as $data) {
+                        //             $notMactheArray[] = [
+                        //                 'transaction_list' => $createData['transaction_id'],
+                        //                 'item_code' => $data['item_code'],
+                        //                 'item_name' =>  $data['item_name'],
+                        //                 'channel' =>  $data['item_code'],
+                        //                 'loc_name' =>  $dataApi['source_name'],
+                        //                 'thumbnail' =>  $data['thumbnail'],
+                        //                 'created_at' => Carbon::now(),
+                        //                 'updated_at' => Carbon::now(),
+                        //             ];
+                        //         }
         
-                                DB::table('notmatcheditems')->insert($notMactheArray);
+                        //         DB::table('notmatcheditems')->insert($notMactheArray);
         
                              
         
         
-                            }
+                        //     }
         
-                        }
+                        // }
 
                     }
 
@@ -185,6 +185,7 @@ class ApiJubelioController extends Controller
 
         return response()->json([
             'status' => 'ok',
+            'data' =>$createData,
             'status_jubelio' => $dataApi['status'],
             'pesan' => 'Transaksi berhasil dikirim ke aria',
             'total_matched' => $matched,
