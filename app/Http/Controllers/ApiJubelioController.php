@@ -34,7 +34,7 @@ class ApiJubelioController extends Controller
 
         if($dataApi['status'] == "SHIPPED"){
 
-            $jubelioSync = Jubeliosync::where('jubelio_store_id',$dataApi['store_id'])->where('jubelio_store_id',$dataApi['location_id'])->first();
+            $jubelioSync = Jubeliosync::where('jubelio_store_id',$dataApi['store_id'])->where('jubelio_location_id',$dataApi['location_id'])->first();
 
             if($jubelioSync){
 
