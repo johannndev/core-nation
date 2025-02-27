@@ -153,7 +153,7 @@ class TransactionsController extends Controller
 
     public function postSell(Request $request)
 	{
-		// dd($request);
+		dd($request);
 
 		return $this->createTransaction(Transaction::TYPE_SELL, $request);
 	}
