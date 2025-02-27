@@ -185,7 +185,7 @@ class ApiJubelioController extends Controller
 
         return response()->json([
             'status' => 'ok',
-            'data' =>$createData->getContent(),
+            'data' => $createData,
             'status_jubelio' => $dataApi['status'],
             'pesan' => 'Transaksi berhasil dikirim ke aria',
             'total_matched' => $matched,
@@ -424,11 +424,11 @@ class ApiJubelioController extends Controller
 
        // $request->session()->flash('success', 'Transaction # ' . $transaction->id. ' created.');
 
-        return response()->json([
+        return $data = [
             'status' => '200',
             'message' => 'ok',
             'transaction_id' => $transaction->id,
-        ], 200);
+        ];
 
        return redirect()->route('transaction.getDetail',$transaction->id)->with('success', 'Transaction # ' . $transaction->id. ' created.');
        
@@ -441,10 +441,10 @@ class ApiJubelioController extends Controller
            
            DB::rollBack();
 
-             return response()->json([
+             return $data = [
                 'status' => '422',
                 'message' => $e->getErrors()['error'][0],
-            ], 200);
+            ];
 
           
            // return response()->json($e->getErrors(), 500);
@@ -452,10 +452,10 @@ class ApiJubelioController extends Controller
        } catch(\Exception $e) {
            DB::rollBack();
 
-           return response()->json([
+           return $data = [
                 'status' => '422',
                 'message' => $e->getMessage(),
-            ], 200);
+            ];
 
         //    return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
 
