@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Logjubelio extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function getUrlAttribute()
+    {
+        return route('transaction.getDetail',$this->transaction_id);
+
+        
+    }
 }

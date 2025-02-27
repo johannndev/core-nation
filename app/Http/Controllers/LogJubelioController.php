@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class LogJubelioController extends Controller
 {
     public function index(){
-        $data = Logjubelio::all();
+        $data = Logjubelio::paginate(100);
 
         dd($data->toArray());
     }
