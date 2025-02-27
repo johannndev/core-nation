@@ -188,9 +188,7 @@ class ApiJubelioController extends Controller
             'status_jubelio' => $dataApi['status'],
             'total_matched' => $matched,
             'total_not_matched' => $notMatched,
-            'store' => $dataApi['store_id'],
-            'location' => $dataApi['location_id'],
-            'data' => $dataJubelio
+            
         ], 200);
     }
 
