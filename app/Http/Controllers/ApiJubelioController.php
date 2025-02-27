@@ -26,6 +26,9 @@ class ApiJubelioController extends Controller
 
         $dataJubelio = [];
 
+        $matched = 0;
+        $notMatched = 0;
+
         if($dataApi['status'] == "SHIPPED"){
 
             $jubelioSync = Jubeliosync::where('jubelio_store_id',$dataApi['store_id'])->where('jubelio_store_id',$dataApi['location_id'])->first();
@@ -72,6 +75,9 @@ class ApiJubelioController extends Controller
                         "ongkir" => "0"
                     ];
 
+                    $matched = $matched->count();
+                    $notMatched =   $notMatched->count();
+
                 }
 
                
@@ -98,8 +104,9 @@ class ApiJubelioController extends Controller
 
         return response()->json([
             'status' => 'ok',
-            'total_matched' => $matched->count(),
-            'total_not_matched' => $notMatched->count(),
+            'status_jubelio' => $dataApi['status'],
+            'total_matched' => $matched,
+            'total_not_matched' => $notMatched,
             'signature' => $signature,
             'data' => $dataJubelio
         ], 200);
