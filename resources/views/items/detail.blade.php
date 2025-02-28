@@ -2,7 +2,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">Detail Item #{{$data->invoice}}</p>
+        <p class="text-2xl font-bold">Detail Item #{{$data->code}}</p>
 
        
     </div>

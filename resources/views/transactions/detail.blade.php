@@ -16,7 +16,7 @@
                     <img src="{{ asset('img/logo.png') }}" alt="" srcset="">
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm text-gray-500">Invoice #{{$data->id}}</p>
+                    <p class="text-sm text-gray-500">Invoice #{{$data->invoice}}</p>
                     <p class="font-bold">
                     @isset($data->receiver)
                       <a href="{{$data->receiver->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$data->receiver->name}}</a>
