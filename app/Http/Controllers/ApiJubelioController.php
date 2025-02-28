@@ -99,7 +99,7 @@ class ApiJubelioController extends Controller
                             "paid" => null,
                             "addMoreInputFields" => $matched,
                             "disc" => "0",
-                            "adjustment" =>  -$dataApi['total_disc'],
+                            "adjustment" =>  $dataApi['total_disc'],
                             "ongkir" => "0"
                         ];
 
