@@ -137,7 +137,7 @@
                                     @if ($item->type == \App\Models\Item::TYPE_ITEM)
 
                                     <td class="px-4 py-3">{{$item->group->alias ?? ''}}</td>
-                                    <td class="px-4 py-3">{{$item->group->description}}</td>
+                                    <td class="px-4 py-3">{{$item->group->description ?? ''}}</td>
                                     <td class="px-4 py-3">{{number_format($item->price,2)}}</td>
                                     <td class="px-4 py-3">{{$item->group->description2}}</td>
                                     

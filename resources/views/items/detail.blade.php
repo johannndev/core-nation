@@ -103,7 +103,7 @@
                                     <p class="font-bold">Description</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p>{{ $data->description }}</p>
+                                    <p>{{ $data->description ?? '' }}</p>
                                 </div>
                             </div>
                         </div>
