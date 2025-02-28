@@ -445,7 +445,6 @@ class ApiJubelioController extends Controller
             'status' => '200',
             'message' => 'ok',
             'transaction_id' => $transaction->id,
-            'invoice' => $dataJubelio->invoice
         ];
 
     //    return redirect()->route('transaction.getDetail',$transaction->id)->with('success', 'Transaction # ' . $transaction->id. ' created.');
