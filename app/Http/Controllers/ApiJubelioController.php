@@ -87,6 +87,10 @@ class ApiJubelioController extends Controller
 
                     }else{
 
+                        $ongkir = $dataApi['shipping_cost']-$dataApi['shipping_cost_discount'];
+
+                        $adjust = $dataApi['total_disc']+$dataApi['add_disc']+$ongkir+$dataApi['total_tax']+$dataApi['service_fee']+$dataApi['insurance_cost'];
+
                         $dataJubelio = [
                             "date" => Carbon::now()->toDateString(),
                             "due" => null,
@@ -99,7 +103,7 @@ class ApiJubelioController extends Controller
                             "paid" => null,
                             "addMoreInputFields" => $matched,
                             "disc" => "0",
-                            "adjustment" =>  -$dataApi['total_disc'],
+                            "adjustment" =>  -$adjust,
                             "ongkir" => "0"
                         ];
 
