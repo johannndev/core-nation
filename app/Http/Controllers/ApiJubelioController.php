@@ -66,8 +66,8 @@ class ApiJubelioController extends Controller
                     'name'     => $existingProducts[$item['item_code']]->name,
                     'quantity' => $item['qty'],
                     'price'    => $item['price'],
-                    'discount' => $item['disc_amount'],
-                    'subtotal' => $item['amount'],
+                    'discount' => 0,
+                    'subtotal' => $item['qty']*$item['price'],
                 ])->values(); // Reset indeks array
                 
                 $notMatched = $groupedData[1]->values(); // Reset indeks array
@@ -99,7 +99,7 @@ class ApiJubelioController extends Controller
                             "paid" => null,
                             "addMoreInputFields" => $matched,
                             "disc" => "0",
-                            "adjustment" => "0",
+                            "adjustment" =>  -$dataApi['total_disc'],
                             "ongkir" => "0"
                         ];
 
@@ -188,7 +188,7 @@ class ApiJubelioController extends Controller
 
         return response()->json([
             'status' => 'ok',
-            'data' => $createData,
+            'url' => route('transaction.getDetail',$createData['transaction_id']),
             'status_jubelio' => $dataApi['status'],
             'pesan' => 'Transaksi berhasil dikirim ke aria',
             'total_matched' => $matched,
