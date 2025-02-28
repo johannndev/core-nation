@@ -105,7 +105,7 @@ class ApiJubelioController extends Controller
                             "paid" => null,
                             "addMoreInputFields" => $matched,
                             "disc" => "0",
-                            "adjustment" =>  -$adjust,
+                            "adjustment" =>  $this->toggleSign($adjust),
                             "ongkir" => "0"
                         ];
 
@@ -224,6 +224,10 @@ class ApiJubelioController extends Controller
             'signature' => $signature,
             'received_data' => $data
         ], 200);
+    }
+
+    protected function toggleSign($value) {
+        return -$value;
     }
 
     protected function createTransaction($type = null, $dataJubelio)
