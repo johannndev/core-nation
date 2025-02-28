@@ -109,15 +109,15 @@ class ApiJubelioController extends Controller
 
                         if($createData['status'] == "200" ){
 
-                            $dataLog = new Logjubelio();
+                            // $dataLog = new Logjubelio();
                             
-                            $dataLog->transaction_id = $createData['transaction_id'];
-                            $dataLog->invoice_id = $dataApi['salesorder_no'];
-                            $dataLog->total_matched_item = $matched->count();
-                            $dataLog->total_not_matched = $notMatched->count();
-                            $dataLog->desc =  $createData['message'];
+                            // $dataLog->transaction_id = $createData['transaction_id'];
+                            // $dataLog->invoice_id = $dataApi['salesorder_no'];
+                            // $dataLog->total_matched_item = $matched->count();
+                            // $dataLog->total_not_matched = $notMatched->count();
+                            // $dataLog->desc =  $createData['message'];
         
-                            $dataLog->save();
+                            // $dataLog->save();
         
                             if($notMatched->count() > 0){
         
