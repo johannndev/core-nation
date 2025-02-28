@@ -194,6 +194,7 @@ class ApiJubelioController extends Controller
 
         return response()->json([
             'status' => 'ok',
+            'transaction_detail' =>$createData, 
             'url' => route('transaction.getDetail',$createData['transaction_id']),
             'status_jubelio' => $dataApi['status'],
             'pesan' => 'Transaksi berhasil dikirim ke aria',
