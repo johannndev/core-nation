@@ -239,6 +239,7 @@ class ApiJubelioController extends Controller
        $transaction = new Transaction();
        $transaction->date = $dataJubelio->date;
        $transaction->type = $type;
+       $transaction->adjustment	 = $dataJubelio->adjustment;
 
     //    if($dataJubelio->note){
     //        $transaction->description = $dataJubelio->note;
