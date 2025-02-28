@@ -92,7 +92,7 @@
                                     <p class="font-bold">Alias</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p>{{$data->alias}}</p>
+                                    <p>{{$data->alias ?? ''}}</p>
                                 </div>
                             </div>
                         </div>
