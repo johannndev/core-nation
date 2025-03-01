@@ -72,6 +72,13 @@ class Transaction extends Component
 
 		}
 
+        if(Request('order_date')){
+			$dataList = $dataList->orderBy(Request('order_date'),'desc');
+		}else{
+			$dataList = $dataList->orderBy('date','desc');
+		}
+
+
       
 		
 
