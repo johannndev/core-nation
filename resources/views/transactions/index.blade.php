@@ -81,7 +81,7 @@
                                     <div>
                                         <label for="order_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order</label>
                                         <select id="order_date" name="order_date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                            <option selected>Choose a type</option>
+                                            <option value ="">Choose a type</option>
                                             <option  {{Request('order_date') == 'date' ? 'selected' : 'null'}} value="date">Date</option>
 
                                             <option  {{Request('order_date') == 'created_at' ? 'selected' : 'null'}} value="created_at">Created At</option>
