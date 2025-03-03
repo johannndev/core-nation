@@ -108,7 +108,7 @@
                        
                         <div>
                             <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
-                                <div class="col-span-3">
+                                <div class="col-span-2">
                                     <p class="font-bold">Due</p>
                                 </div>
                                 <div class="col-span-3">
@@ -191,6 +191,30 @@
                                 </div>
                             </div>
                         </div>
+
+                        @if ($data->jubelio_return > 0)
+
+                        <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
+                                    <p class="font-bold">Return from jubelio</p>
+                                </div>
+                                <div class="col-span-3">
+                                    @if ($data->jubelio_return == 1)
+                                        <a href="{{route('transaction.jubelioReturn',$data->id)}}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium     rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Return Detail</a>
+
+                                    @elseif ($data->jubelio_return == 2)
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300">Returned</span>
+
+                                    @else
+
+                                    @endif
+
+                                </div>
+                            </div>
+                        </div>
+
+                        @endif
 
                      
                         

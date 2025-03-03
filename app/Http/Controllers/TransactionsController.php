@@ -22,6 +22,7 @@ use App\Models\Customer;
 use App\Models\Item;
 use App\Models\StatSell;
 use App\Models\Transaction;
+use App\Models\TransactionDetail;
 use Carbon\Carbon;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
@@ -437,13 +438,18 @@ class TransactionsController extends Controller
 			$transaction->description = "";
 		}
 
+		if($request->invoice){
+			$transaction->invoice = $request->invoice;
+		}else{
+			$transaction->invoice = "";
+		}
+
 		if($request->due){
 			$transaction->due = $request->due;
 		}else{
 			$transaction->due = '0000-00-00';
 		}
 
-        $transaction->description = ' ';
 		$transaction->detail_ids = ' ';
 		
         $transaction->save();
@@ -1489,6 +1495,73 @@ class TransactionsController extends Controller
 		}
 
 		return response()->json(['message' => 'Data processed successfully'], 200);
+	}
+
+	public function jubelioReturn($id){
+
+		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+
+		return view('transactions.jubelio_return',compact('data'));
+	}
+
+	public function jubelioReturnPost($id, Request $request){
+
+		$transactionData = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+
+		
+		$item = TransactionDetail::with('item')->where('transaction_id',$id)->whereIn('item_id', $request->return_item)->get();
+
+	
+
+
+		$moreItem = [];
+		
+
+		foreach ($item as $data) {
+			$moreItem[] = [
+				'itemId'   => $data->item_id,
+				'code'     => $data->item->code,
+				'name'     => $data->item->name,
+				'quantity' => $data->quantity,
+				'price'    => $data->price,
+				'discount' => 0,
+				'subtotal' => $data->quantity*$data->price,
+			];
+		}
+
+		$dataJubelio = [
+			"date" => Carbon::now()->toDateString(),
+			"due" => null,
+			"warehouse" => $transactionData->sender_id,
+			"customer" => $transactionData->receiver_id,
+			"invoice" => $transactionData->invoice,
+			"note" => " ",
+			"account" => "7204",
+			"amount" => null,
+			"paid" => null,
+			"addMoreInputFields" => $moreItem,
+			"disc" => "0",
+			"adjustment" =>  $request->adjustment,
+			"ongkir" => "0"
+		];
+
+		$dataCollect =  (object) $dataJubelio;
+
+		
+
+		$transactionData->jubelio_return = 2;
+
+		$transactionData->save();
+		
+		$this->createTransaction(Transaction::TYPE_RETURN, $dataCollect);
+
+		return redirect()->route('transaction.index')->with('success', 'Return created.');
+
+		
+
+		
+		
+
 	}
 
 	

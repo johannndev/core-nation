@@ -208,6 +208,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/return-supplier', [TransactionsController::class, 'returnSupplier'])->name('transaction.returnSupplier')->middleware('permission:transactions transactions.returnSuplier');
     Route::post('/transaction/return-supplier/post', [TransactionsController::class, 'postReturnSupplier'])->name('transaction.postReturnSupplier')->middleware('permission:transactions.returnSuplier');
 
+    Route::get('/transaction/{id}/return/jubelio', [TransactionsController::class, 'jubelioReturn'])->name('transaction.jubelioReturn')->middleware('permission:transactions.deleteList');
+
+    Route::post('/transaction/{id}/return/jubelio/store', [TransactionsController::class, 'jubelioReturnPost'])->name('transaction.jubelioReturnPost')->middleware('permission:transactions.deleteList');
+
+
     Route::get('/transaction/{id}/detail', [TransactionsController::class, 'getDetail'])->name('transaction.getDetail')->middleware('permission:transactions.detail');
 
     Route::get('/transaction/delete', [DeletedController::class, 'index'])->name('transaction.delete')->middleware('permission:transactions.deleteList');
@@ -215,6 +220,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/{id}/delete/detail', [DeletedController::class, 'getDetailDelete'])->name('transaction.getDetailDelete')->middleware('permission:transactions.deleteList');
     Route::delete('/transaction/{id}/destroy', [TransactionsController::class, 'postDelete'])->name('transaction.destroy')->middleware('permission:transactions.deleteList');
 
+  
     Route::get('/item', [ItemsController::class, 'index'])->name('item.index')->middleware('permission:item list');
     Route::get('/item/create', [ItemsController::class, 'create'])->name('item.create')->middleware('permission:item create');
     Route::post('/item/store', [ItemsController::class, 'postCreate'])->name('item.post')->middleware('permission:item create');
