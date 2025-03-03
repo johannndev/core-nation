@@ -42,6 +42,8 @@ class ApiJubelioController extends Controller
         $store = [];
         $location = [];
 
+        $urlDetail = "Url tidak ada";
+
 
         if($dataApi['status'] == "SHIPPED"){
 
@@ -113,7 +115,10 @@ class ApiJubelioController extends Controller
 
                         $createData =  $this->createTransaction(Transaction::TYPE_SELL, $dataCollect);
 
+                       
                         if($createData['status'] == "200" ){
+
+                            $urlDetail = route('transaction.getDetail',$createData['transaction_id']);
 
                             // $dataLog = new Logjubelio();
                             
@@ -195,7 +200,7 @@ class ApiJubelioController extends Controller
         return response()->json([
             'status' => 'ok',
             'transaction_detail' =>$createData, 
-            'url' => route('transaction.getDetail',$createData['transaction_id']),
+            'url' => $urlDetail,
             'status_jubelio' => $dataApi['status'],
             'pesan' => 'Transaksi berhasil dikirim ke aria',
             'total_matched' => $matched,
