@@ -40,7 +40,9 @@ class ApiJubelioController extends Controller
 
 
 
-        return $dataStore;
+        // return $dataStore;
+
+        return 'dev';
     }
 
     public function order(Request $request){
