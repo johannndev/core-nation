@@ -23,26 +23,38 @@ class ApiJubelioController extends Controller
 {
     private function logJubelio($type,$storeName,$locationName,$invoice,$store,$location,$pesan){
 
-        // $dataDetail = [
-        //     'store_name' => $storeName,
-        //     'store_id' => $store,
-        //     'location_name' => $locationName,
-        //     'location_id' => $location,
-        //     'pesan' => $pesan
-        // ];
+        $dataDetail = [
+            'store_name' => $storeName,
+            'store_id' => $store,
+            'location_name' => $locationName,
+            'location_id' => $location,
+            'pesan' => $pesan
+        ];
 
-        // $dataStore = new Logjubelio();
+        try {
+            $dataStore = new Logjubelio();
 
-        // $dataStore->type = $type;
-        // $dataStore->invoice = $invoice;
-        // $dataStore->data = $dataDetail;
-        // $dataStore->save();
+            $dataStore->type = $type;
+            $dataStore->invoice = $invoice;
+            $dataStore->data = $dataDetail;
+            $dataStore->save();
 
+            return $data = [
+                'status' => 'oke',
+                'pesan' => 'success',
+            ];
+        } catch (\Exception $e) {
+            // Log error agar bisa ditelusuri nanti
 
+            return $data = [
+                'status' => 'error',
+                'pesan' => $e->getMessage(),
+            ];
 
-        // return $dataStore;
+            
+        }
 
-        return 'dev';
+        
     }
 
     public function order(Request $request){
@@ -69,6 +81,8 @@ class ApiJubelioController extends Controller
         $urlDetail = "Url tidak ada";
 
         $logJubelio = [];
+
+        $logStore = [];
 
 
         if($dataApi['status'] == "SHIPPED"){
@@ -108,11 +122,15 @@ class ApiJubelioController extends Controller
 
                     if($cekTransaksi){
 
-                        $this->logJubelio('RETURN',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Invoice transaksi sudah ada');
+                        
+
+                       $logStore =  $this->logJubelio('RETURN',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Invoice transaksi sudah ada');
+
 
                         return response()->json([
                             'status' => 'ok',
                             'pesan' => 'Invoice transaksi sudah ada',
+                            'logStore' => $logStore
                         ], 200);
 
                     }else{
@@ -179,19 +197,20 @@ class ApiJubelioController extends Controller
         
                                 $skuNotmatche = $notMatched->count()." SKU tidak ditemukan";
                              
-                                $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$skuNotmatche);
+                                $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$skuNotmatche);
         
                             }
         
                         }else{
 
-                            $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$createData['message']);
+                            $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$createData['message']);
 
 
                             return response()->json([
                                 'status' => 'ok',
                                 'pesan' => 'Gagal membuat data transaksi',
                                 'pesan_detail' => $createData['message'],
+                                'logStore' => $logStore
                             ], 200);
 
                         }
@@ -215,11 +234,12 @@ class ApiJubelioController extends Controller
 
             }else{
 
-                $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Data sync dengan aria tidak ditemukan');
+                $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Data sync dengan aria tidak ditemukan');
                 
                 return response()->json([
                     'status' => 'ok',
                     'pesan' => 'Data sync dengan aria tidak ditemukan',
+                    'logStore' => $logStore
                 ], 200);
             }
 
