@@ -21,6 +21,28 @@ use Illuminate\Support\Facades\DB;
 
 class ApiJubelioController extends Controller
 {
+    private function logJubelio($type,$storeName,$locationName,$invoice,$store,$location,$pesan){
+
+        $dataDetail = [
+            'store_name' => $storeName,
+            'store_id' => $store,
+            'location_name' => $locationName,
+            'location_id' => $location,
+            'pesan' => $pesan
+        ];
+
+        $dataStore = new Logjubelio();
+
+        $dataStore->type = $type;
+        $dataStore->invoice = $invoice;
+        $dataStore->data = $dataStoreDetail;
+        $dataStore->save();
+
+
+
+        return $dataStore;
+    }
+
     public function order(Request $request){
         $secret = 'corenation2025';
         $content = trim($request->getContent());
@@ -43,6 +65,8 @@ class ApiJubelioController extends Controller
         $location = [];
 
         $urlDetail = "Url tidak ada";
+
+        $logJubelio = [];
 
 
         if($dataApi['status'] == "SHIPPED"){
@@ -81,6 +105,8 @@ class ApiJubelioController extends Controller
                     $cekTransaksi = Transaction::where('invoice',$dataApi['salesorder_no'])->first();
 
                     if($cekTransaksi){
+
+                        $this->logJubelio('RETURN',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Invoice transaksi sudah ada');
 
                         return response()->json([
                             'status' => 'ok',
@@ -149,11 +175,23 @@ class ApiJubelioController extends Controller
         
                                 DB::table('notmatcheditems')->insert($notMactheArray);
         
+                                $skuNotmatche = $notMatched->count()." SKU tidak ditemukan";
                              
-        
+                                $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$skuNotmatche);
         
                             }
         
+                        }else{
+
+                            $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$createData['message']);
+
+
+                            return response()->json([
+                                'status' => 'ok',
+                                'pesan' => 'Gagal membuat data transaksi',
+                                'pesan_detail' => $createData['message'],
+                            ], 200);
+
                         }
 
                     }
@@ -174,6 +212,9 @@ class ApiJubelioController extends Controller
                
 
             }else{
+
+                $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Data sync dengan aria tidak ditemukan');
+                
                 return response()->json([
                     'status' => 'ok',
                     'pesan' => 'Data sync dengan aria tidak ditemukan',
@@ -206,6 +247,9 @@ class ApiJubelioController extends Controller
                 }
 
             }else{
+
+                $this->logJubelio('RETURN',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Transaksi tidak ditemukan');
+
                 return response()->json([
                     'status' => 'ok',
                     'detail' => 'Transaksi tidak ditemukan',

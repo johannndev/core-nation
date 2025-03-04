@@ -11,6 +11,10 @@ class Logjubelio extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'data' => 'array', // Casting agar data otomatis dikonversi menjadi array
+    ];
+
     protected $appends = ['url'];
 
     public function getUrlAttribute()
