@@ -35,7 +35,7 @@ class ApiJubelioController extends Controller
 
         $dataStore->type = $type;
         $dataStore->invoice = $invoice;
-        $dataStore->data = $dataStoreDetail;
+        $dataStore->data = $dataDetail;
         $dataStore->save();
 
 
