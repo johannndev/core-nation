@@ -23,20 +23,20 @@ class ApiJubelioController extends Controller
 {
     private function logJubelio($type,$storeName,$locationName,$invoice,$store,$location,$pesan){
 
-        $dataDetail = [
-            'store_name' => $storeName,
-            'store_id' => $store,
-            'location_name' => $locationName,
-            'location_id' => $location,
-            'pesan' => $pesan
-        ];
+        // $dataDetail = [
+        //     'store_name' => $storeName,
+        //     'store_id' => $store,
+        //     'location_name' => $locationName,
+        //     'location_id' => $location,
+        //     'pesan' => $pesan
+        // ];
 
-        $dataStore = new Logjubelio();
+        // $dataStore = new Logjubelio();
 
-        $dataStore->type = $type;
-        $dataStore->invoice = $invoice;
-        $dataStore->data = $dataDetail;
-        $dataStore->save();
+        // $dataStore->type = $type;
+        // $dataStore->invoice = $invoice;
+        // $dataStore->data = $dataDetail;
+        // $dataStore->save();
 
 
 
