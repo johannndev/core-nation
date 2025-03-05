@@ -87,160 +87,175 @@ class ApiJubelioController extends Controller
 
         if($dataApi['status'] == "SHIPPED"){
 
-            $jubelioSync = Jubeliosync::where('jubelio_store_id',$dataApi['store_id'])->where('jubelio_location_id',$dataApi['location_id'])->first();
+            $tanggal = Carbon::parse($dataApi['transaction_date']);
+            $threshold = Carbon::parse('2025-03-03');
 
-            if($jubelioSync){
+            $limitTime = $tanggal->lessThan($threshold) ? 0 : 1;
 
-                // $produkIds = collect($dataApi['items'])->pluck('item_code')->unique(); // Hilangkan duplikasi ID
-                $itemCodes = collect($dataApi['items'])->pluck('item_code')->unique();
+            if($limitTime == 1){
 
-                // Ambil hanya kolom yang diperlukan
-                $existingProducts = Item::whereIn('code', $itemCodes)
-                    ->get(['id', 'code', 'name'])
-                    ->keyBy('code'); // Index berdasarkan 'code' agar pencarian lebih cepat
-                
-                // Proses matching dengan map agar lebih efisien
-                $groupedData = collect($dataApi['items'])->partition(fn($item) => isset($existingProducts[$item['item_code']]));
-                
-                $matched = $groupedData[0]->map(fn($item) => [
-                    'itemId'   => $existingProducts[$item['item_code']]->id,
-                    'code'     => $existingProducts[$item['item_code']]->code,
-                    'name'     => $existingProducts[$item['item_code']]->name,
-                    'quantity' => $item['qty'],
-                    'price'    => $item['price'],
-                    'discount' => 0,
-                    'subtotal' => $item['qty']*$item['price'],
-                ])->values(); // Reset indeks array
-                
-                $notMatched = $groupedData[1]->values(); // Reset indeks array
+                $jubelioSync = Jubeliosync::where('jubelio_store_id',$dataApi['store_id'])->where('jubelio_location_id',$dataApi['location_id'])->first();
 
-                $createData = [];
+                if($jubelioSync){
 
-                if($matched->count() > 0){
+                    // $produkIds = collect($dataApi['items'])->pluck('item_code')->unique(); // Hilangkan duplikasi ID
+                    $itemCodes = collect($dataApi['items'])->pluck('item_code')->unique();
 
-                    $cekTransaksi = Transaction::where('invoice',$dataApi['salesorder_no'])->first();
+                    // Ambil hanya kolom yang diperlukan
+                    $existingProducts = Item::whereIn('code', $itemCodes)
+                        ->get(['id', 'code', 'name'])
+                        ->keyBy('code'); // Index berdasarkan 'code' agar pencarian lebih cepat
+                    
+                    // Proses matching dengan map agar lebih efisien
+                    $groupedData = collect($dataApi['items'])->partition(fn($item) => isset($existingProducts[$item['item_code']]));
+                    
+                    $matched = $groupedData[0]->map(fn($item) => [
+                        'itemId'   => $existingProducts[$item['item_code']]->id,
+                        'code'     => $existingProducts[$item['item_code']]->code,
+                        'name'     => $existingProducts[$item['item_code']]->name,
+                        'quantity' => $item['qty'],
+                        'price'    => $item['price'],
+                        'discount' => 0,
+                        'subtotal' => $item['qty']*$item['price'],
+                    ])->values(); // Reset indeks array
+                    
+                    $notMatched = $groupedData[1]->values(); // Reset indeks array
 
-                    if($cekTransaksi){
+                    $createData = [];
 
-                        
+                    if($matched->count() > 0){
 
-                       $logStore =  $this->logJubelio('RETURN',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Invoice transaksi sudah ada');
+                        $cekTransaksi = Transaction::where('invoice',$dataApi['salesorder_no'])->first();
 
+                        if($cekTransaksi){
 
-                        return response()->json([
-                            'status' => 'ok',
-                            'pesan' => 'Invoice transaksi sudah ada',
-                            'logStore' => $logStore
-                        ], 200);
-
-                    }else{
-
-                        // $ongkir = $dataApi['shipping_cost']-$dataApi['shipping_cost_discount'];
-
-                        // $adjust = $dataApi['total_disc']+$dataApi['add_disc']+$ongkir+$dataApi['total_tax']+$dataApi['service_fee']+$dataApi['insurance_cost'];
-
-                        $adjust = $dataApi['sub_total'] - $dataApi['grand_total'];
-
-                        $dataJubelio = [
-                            "date" => Carbon::now()->toDateString(),
-                            "due" => null,
-                            "warehouse" => $jubelioSync->warehouse_id,
-                            "customer" => $jubelioSync->customer_id,
-                            "invoice" => $dataApi['salesorder_no'],
-                            "note" => "generated by jubelio",
-                            "account" => "7204",
-                            "amount" => null,
-                            "paid" => null,
-                            "addMoreInputFields" => $matched,
-                            "disc" => "0",
-                            "adjustment" =>  $this->toggleSign($adjust),
-                            "ongkir" => "0"
-                        ];
-
-                        $dataCollect =  (object) $dataJubelio;
-
-                        $createData =  $this->createTransaction(Transaction::TYPE_SELL, $dataCollect);
-
-                       
-                        if($createData['status'] == "200" ){
-
-                            $urlDetail = route('transaction.getDetail',$createData['transaction_id']);
-
-                            // $dataLog = new Logjubelio();
                             
-                            // $dataLog->transaction_id = $createData['transaction_id'];
-                            // $dataLog->invoice_id = $dataApi['salesorder_no'];
-                            // $dataLog->total_matched_item = $matched->count();
-                            // $dataLog->total_not_matched = $notMatched->count();
-                            // $dataLog->desc =  $createData['message'];
-        
-                            // $dataLog->save();
-        
-                            if($notMatched->count() > 0){
-        
-                                $notMactheArray = [];
-        
-                                foreach ($notMatched as $data) {
-                                    $notMactheArray[] = [
-                                        'transaction_list' => $createData['transaction_id'],
-                                        'item_code' => $data['item_code'],
-                                        'item_name' =>  $data['item_name'],
-                                        'channel' =>  $data['item_code'],
-                                        'loc_name' =>  $dataApi['source_name'],
-                                        'thumbnail' =>  $data['thumbnail'],
-                                        'created_at' => Carbon::now(),
-                                        'updated_at' => Carbon::now(),
-                                    ];
-                                }
-        
-                                DB::table('notmatcheditems')->insert($notMactheArray);
-        
-                                $skuNotmatche = $notMatched->count()." SKU tidak ditemukan";
-                             
-                                $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$skuNotmatche);
-        
-                            }
-        
-                        }else{
 
-                            $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$createData['message']);
+                        $logStore =  $this->logJubelio('RETURN',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Invoice transaksi sudah ada');
 
 
                             return response()->json([
                                 'status' => 'ok',
-                                'pesan' => 'Gagal membuat data transaksi',
-                                'pesan_detail' => $createData['message'],
+                                'pesan' => 'Invoice transaksi sudah ada',
                                 'logStore' => $logStore
                             ], 200);
 
+                        }else{
+
+                            // $ongkir = $dataApi['shipping_cost']-$dataApi['shipping_cost_discount'];
+
+                            // $adjust = $dataApi['total_disc']+$dataApi['add_disc']+$ongkir+$dataApi['total_tax']+$dataApi['service_fee']+$dataApi['insurance_cost'];
+
+                            $adjust = $dataApi['sub_total'] - $dataApi['grand_total'];
+
+                            $dataJubelio = [
+                                "date" => Carbon::now()->toDateString(),
+                                "due" => null,
+                                "warehouse" => $jubelioSync->warehouse_id,
+                                "customer" => $jubelioSync->customer_id,
+                                "invoice" => $dataApi['salesorder_no'],
+                                "note" => "generated by jubelio",
+                                "account" => "7204",
+                                "amount" => null,
+                                "paid" => null,
+                                "addMoreInputFields" => $matched,
+                                "disc" => "0",
+                                "adjustment" =>  $this->toggleSign($adjust),
+                                "ongkir" => "0"
+                            ];
+
+                            $dataCollect =  (object) $dataJubelio;
+
+                            $createData =  $this->createTransaction(Transaction::TYPE_SELL, $dataCollect);
+
+                        
+                            if($createData['status'] == "200" ){
+
+                                $urlDetail = route('transaction.getDetail',$createData['transaction_id']);
+
+                                // $dataLog = new Logjubelio();
+                                
+                                // $dataLog->transaction_id = $createData['transaction_id'];
+                                // $dataLog->invoice_id = $dataApi['salesorder_no'];
+                                // $dataLog->total_matched_item = $matched->count();
+                                // $dataLog->total_not_matched = $notMatched->count();
+                                // $dataLog->desc =  $createData['message'];
+            
+                                // $dataLog->save();
+            
+                                if($notMatched->count() > 0){
+            
+                                    $notMactheArray = [];
+            
+                                    foreach ($notMatched as $data) {
+                                        $notMactheArray[] = [
+                                            'transaction_list' => $createData['transaction_id'],
+                                            'item_code' => $data['item_code'],
+                                            'item_name' =>  $data['item_name'],
+                                            'channel' =>  $data['item_code'],
+                                            'loc_name' =>  $dataApi['source_name'],
+                                            'thumbnail' =>  $data['thumbnail'],
+                                            'created_at' => Carbon::now(),
+                                            'updated_at' => Carbon::now(),
+                                        ];
+                                    }
+            
+                                    DB::table('notmatcheditems')->insert($notMactheArray);
+            
+                                    $skuNotmatche = $notMatched->count()." SKU tidak ditemukan";
+                                
+                                    $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$skuNotmatche);
+            
+                                }
+            
+                            }else{
+
+                                $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$createData['message']);
+
+
+                                return response()->json([
+                                    'status' => 'ok',
+                                    'pesan' => 'Gagal membuat data transaksi',
+                                    'pesan_detail' => $createData['message'],
+                                    'logStore' => $logStore
+                                ], 200);
+
+                            }
+
                         }
+
+                        
+
+                    
+                    
 
                     }
 
+                
+
+                    $matched = $matched->count();
+                    $notMatched = $notMatched->count();
+
+
+                
+
+                }else{
+
+                    $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Data sync dengan aria tidak ditemukan');
                     
-
-                   
-                   
-
+                    return response()->json([
+                        'status' => 'ok',
+                        'pesan' => 'Data sync dengan aria tidak ditemukan',
+                        'logStore' => $logStore
+                    ], 200);
                 }
-
-               
-
-                $matched = $matched->count();
-                $notMatched = $notMatched->count();
-
-
-               
-
             }else{
 
-                $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Data sync dengan aria tidak ditemukan');
-                
                 return response()->json([
                     'status' => 'ok',
-                    'pesan' => 'Data sync dengan aria tidak ditemukan',
-                    'logStore' => $logStore
+                    'pesan' => 'transaksi sebelum tanggal 03/03/25 tidak dibuat, tangggal transaksi '.$dataApi['transaction_date'],
                 ], 200);
+
             }
 
         

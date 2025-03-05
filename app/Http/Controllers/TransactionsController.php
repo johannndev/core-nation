@@ -40,7 +40,7 @@ class TransactionsController extends Controller
 		
 		$allType = Transaction::$typesJSON;
 
-		$dataList = Transaction::with('receiver','sender')->orderBy('id','desc');
+		$dataList = Transaction::with('receiver','sender');
 
 		if($request->from && $request->to){
 			$dataList = $dataList->whereDate('date','>=',$request->from)->whereDate('date','<=',$request->to);
@@ -63,6 +63,8 @@ class TransactionsController extends Controller
 		}else{
 			$dataList = $dataList->orderBy('date','desc');
 		}
+
+		$datalist = $dataList->orderBy('id','desc');
 
 		if(Auth::user()->location_id > 0){
 
