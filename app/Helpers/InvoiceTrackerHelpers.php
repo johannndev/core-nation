@@ -186,7 +186,7 @@ class InvoiceTrackerHelpers
 		->where('warehouse_id','=',$warehouse->id)->where('quantity','>',0)
 		->join("$i as item_table", 'wi.item_id','=', DB::raw("item_table.id AND item_table.type != ".Item::TYPE_ASSET_TETAP))->first();
 
-		$cs = CustomerStat::find($warehouse->id);
+		$cs = CustomerStat::lockForUpdate()->find($warehouse->id);
 		$cs->balance = $asset->total_asset;
 		if(!$cs->save())
 			throw new \Exception('Error Saving Warehouse Balance', 1);

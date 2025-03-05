@@ -18,6 +18,7 @@ use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ApiJubelioController extends Controller
 {
@@ -350,253 +351,270 @@ class ApiJubelioController extends Controller
 
     protected function createTransaction($type = null, $dataJubelio)
     {
-       try {
+    
+        $maxRetries = 5; // Jumlah maksimal percobaan
+        $attempts = 0;
 
-       $class = array();
+        while ($attempts < $maxRetries) {
+            try {
 
-       
-       //start transaction
-       DB::beginTransaction();
+                $class = array();
 
-       $customer = Customer::find($dataJubelio->customer);
-       $warehouse = Customer::find($dataJubelio->warehouse);
+                
+                //start transaction
+                DB::beginTransaction();
 
-       // dd($customer,$warehouse);
+                $customer = Customer::find($dataJubelio->customer);
+                $warehouse = Customer::find($dataJubelio->warehouse);
 
-       // $input = $dataJubelio;
-       $transaction = new Transaction();
-       $transaction->date = $dataJubelio->date;
-       $transaction->type = $type;
-       $transaction->adjustment	 = $dataJubelio->adjustment;
+                // dd($customer,$warehouse);
 
-    //    if($dataJubelio->note){
-    //        $transaction->description = $dataJubelio->note;
-    //    }else{
-           
-    //    }
+                // $input = $dataJubelio;
+                $transaction = new Transaction();
+                $transaction->date = $dataJubelio->date;
+                $transaction->type = $type;
+                $transaction->adjustment	 = $dataJubelio->adjustment;
 
-       $transaction->description = " ";
-       $transaction->invoice = $dataJubelio->invoice;
+                //    if($dataJubelio->note){
+                //        $transaction->description = $dataJubelio->note;
+                //    }else{
+                    
+                //    }
 
-       if($dataJubelio->due){
-           $transaction->due = $dataJubelio->due;
-       }else{
-           $transaction->due = '0000-00-00';
-       }
+                $transaction->description = " ";
+                $transaction->invoice = $dataJubelio->invoice;
 
-       $transaction->detail_ids = ' ';
-       
-       $transaction->save();
-       switch($type)
-       {
-           case Transaction::TYPE_BUY:
-           case Transaction::TYPE_RETURN:
-               $transaction->sender_id = $customer->id;
-               $transaction->receiver_id = $warehouse->id;
-               break;
-           case Transaction::TYPE_SELL:
-           case Transaction::TYPE_RETURN_SUPPLIER:
-               $transaction->sender_id = $warehouse->id;
-               $transaction->receiver_id = $customer->id;
-               break;
-           default: //don't update stats for move, production
-               break;
-       }
-       
-       $transaction->init($type);
+                if($dataJubelio->due){
+                    $transaction->due = $dataJubelio->due;
+                }else{
+                    $transaction->due = '0000-00-00';
+                }
 
-       // dd($dataJubelio->addMoreInputFields);
-       //gets the transaction id
-       if(!$transaction->save())
+                $transaction->detail_ids = ' ';
+                
+                $transaction->save();
+                switch($type)
+                {
+                    case Transaction::TYPE_BUY:
+                    case Transaction::TYPE_RETURN:
+                        $transaction->sender_id = $customer->id;
+                        $transaction->receiver_id = $warehouse->id;
+                        break;
+                    case Transaction::TYPE_SELL:
+                    case Transaction::TYPE_RETURN_SUPPLIER:
+                        $transaction->sender_id = $warehouse->id;
+                        $transaction->receiver_id = $customer->id;
+                        break;
+                    default: //don't update stats for move, production
+                        break;
+                }
+                
+                $transaction->init($type);
 
-           
-           throw new ModelException($transaction->getErrors(), __LINE__);
+                // dd($dataJubelio->addMoreInputFields);
+                //gets the transaction id
+                if(!$transaction->save())
 
-       if(!$details = $transaction->createDetails($dataJubelio->addMoreInputFields))
-           throw new ModelException($transaction->getErrors(), __LINE__);
-       
+                    
+                    throw new ModelException($transaction->getErrors(), __LINE__);
 
-       //check ppn first
-       $transaction->checkPPN($transaction->sender, $transaction->receiver);
+                if(!$details = $transaction->createDetails($dataJubelio->addMoreInputFields))
+                    throw new ModelException($transaction->getErrors(), __LINE__);
+                
 
-   
+                //check ppn first
+                $transaction->checkPPN($transaction->sender, $transaction->receiver);
 
-
-       //add to customer stat
-       // $sm = new StatManager;
-
-       $sm = new StatManagerHelper();
-       switch($type)
-       {
-           case Transaction::TYPE_BUY:
-           case Transaction::TYPE_RETURN:
-               //add balance to sender(supplier)
-               $sender_balance = $sm->add($transaction->sender_id,$transaction,true); //skip 1 because the transaction is already created?
-               if($sender_balance === false)
-                   throw new ModelException($sm->getErrors());
-
-               $transaction->sender_balance = $sender_balance;
-               break;
-           case Transaction::TYPE_SELL:
-           case Transaction::TYPE_RETURN_SUPPLIER:
-               $transaction->setAttribute('total',0 - $transaction->total); //make negative
-
-               //deduct balance from receiver(customer)
-               $receiver_balance = $sm->deduct($transaction->receiver_id,$transaction,true);
-               if($receiver_balance === false)
-                   throw new ModelException($sm->getErrors());
-
-               $transaction->receiver_balance = $receiver_balance;
-
-               // $transaction->save();
-
-               // dd($receiver_balance,$transaction, $transaction->receiver_balance);
-               break;
-           default: //don't update stats for move, production
-               break;
-       }
-
-       
-
-       if(!$transaction->save())
-           throw new $transaction->getErrors();
-
-       $paid = $dataJubelio->paid;
-       //special case: paid is checked
-       if($type == Transaction::TYPE_SELL && isset($paid) && $paid)
-       {
-           //calculate total
-           $amount = isset($dataJubelio->amount) ? $dataJubelio->amount : 0;
-           if($amount <= 0) $amount = abs($transaction->total);
-
-           $payment = $transaction->attachIncome($transaction->date, $transaction->receiver_id, $dataJubelio->account,$amount);
-           $class['income'] = $payment->total;
-
-           //another special case, ongkir is filled, create journal
-           $settingApp = new AppSettingsHelper;
-           $ongkir = isset($dataJubelio->ongkir) ? $dataJubelio->ongkir : null;
-           if(!empty($ongkir))
-               $transaction->attachOngkir($transaction->date, $payment->receiver_id, abs($ongkir), $settingApp->getAppSettings('ongkir') );
-       }
-
-       
+            
 
 
-       InvoiceTrackerHelpers::flag($transaction);
+                //add to customer stat
+                // $sm = new StatManager;
 
-       // dd($details);
-       
-       TransactionsManagerHelper::checkSell($transaction, $details);
+                $sm = new StatManagerHelper();
+                switch($type)
+                {
+                    case Transaction::TYPE_BUY:
+                    case Transaction::TYPE_RETURN:
+                        //add balance to sender(supplier)
+                        $sender_balance = $sm->add($transaction->sender_id,$transaction,true); //skip 1 because the transaction is already created?
+                        if($sender_balance === false)
+                            throw new ModelException($sm->getErrors());
 
-       
-       HashManagerHelper::save($transaction);
-       $cc = new CCManagerHelper;
-       $class['date'] = Carbon::createFromFormat('Y-m-d',$transaction->date)->startOfMonth()->toDateString();
-       //update customer class
-       switch ($transaction->type) {
-           case Transaction::TYPE_SELL:
-               $class['type'] = Transaction::TYPE_SELL;
-               $class['total'] = $transaction->total;
-               $class['customer'] = $transaction->receiver;
-               $cc->update($class);
-               break;
-           case Transaction::TYPE_RETURN:
-               $class['type'] = Transaction::TYPE_RETURN;
-               $class['total'] = $transaction->total;
-               $class['customer'] = $transaction->sender;
-               $cc->update($class);
-               break;
-           default:
-               break;
-       }
+                        $transaction->sender_balance = $sender_balance;
+                        break;
+                    case Transaction::TYPE_SELL:
+                    case Transaction::TYPE_RETURN_SUPPLIER:
+                        $transaction->setAttribute('total',0 - $transaction->total); //make negative
 
-       if($type == 2 || $type == 15){
+                        //deduct balance from receiver(customer)
+                        $receiver_balance = $sm->deduct($transaction->receiver_id,$transaction,true);
+                        if($receiver_balance === false)
+                            throw new ModelException($sm->getErrors());
 
-       
+                        $transaction->receiver_balance = $receiver_balance;
 
-           // Query
-           $result = DB::table('transaction_details')
-           ->where('transaction_details.transaction_id',$transaction->id)
-           ->join('items', 'transaction_details.item_id', '=', 'items.id')
-           ->whereIn('transaction_details.transaction_type', [2, 15]) // Filter transaction_type 2 dan 15
-           ->selectRaw('
-               items.group_id,
-               MONTH(transaction_details.date) as bulan,
-               YEAR(transaction_details.date) as tahun,
-               transaction_details.sender_id,
-               transaction_details.transaction_type,
-               SUM(transaction_details.quantity) as sum_qty,
-               SUM(transaction_details.total) as sum_total
-           ')
-           ->groupBy('items.group_id', DB::raw('MONTH(transaction_details.date)'), DB::raw('YEAR(transaction_details.date)'), 'transaction_details.sender_id', 'transaction_details.transaction_type')
-           ->orderBy('items.group_id') // Optional: Untuk urutan hasil
-           ->get();
-   
-           $insertData = [];
-           foreach ($result as $row) {
-               $insertData[] = [
-                   'group_id' => $row->group_id,
-                   'bulan' => $row->bulan,
-                   'tahun' => $row->tahun,
-                   'sender_id' => $row->sender_id,
-                   'type' => $row->transaction_type,
-                   'sum_qty' => (int)$row->sum_qty,
-                   'sum_total' => (int)$row->sum_total,
-                   'created_at' => now(),
-                   'updated_at' => now(),
-               ];
-           }
+                        // $transaction->save();
 
-           // dd($insertData);
+                        // dd($receiver_balance,$transaction, $transaction->receiver_balance);
+                        break;
+                    default: //don't update stats for move, production
+                        break;
+                }
 
-           $this->updateOrCreateStatsalesOptimized($insertData);
+                
 
-       }
+                if(!$transaction->save())
+                    throw new $transaction->getErrors();
 
-       //commit db transaction
-       DB::commit();
+                $paid = $dataJubelio->paid;
+                //special case: paid is checked
+                if($type == Transaction::TYPE_SELL && isset($paid) && $paid)
+                {
+                    //calculate total
+                    $amount = isset($dataJubelio->amount) ? $dataJubelio->amount : 0;
+                    if($amount <= 0) $amount = abs($transaction->total);
 
-       // $dataJubelio->session()->flash('success', 'Transaction # ' . $transaction->id. ' created.');
+                    $payment = $transaction->attachIncome($transaction->date, $transaction->receiver_id, $dataJubelio->account,$amount);
+                    $class['income'] = $payment->total;
 
-        return $data = [
-            'status' => '200',
-            'message' => 'ok',
-            'transaction_id' => $transaction->id,
-        ];
+                    //another special case, ongkir is filled, create journal
+                    $settingApp = new AppSettingsHelper;
+                    $ongkir = isset($dataJubelio->ongkir) ? $dataJubelio->ongkir : null;
+                    if(!empty($ongkir))
+                        $transaction->attachOngkir($transaction->date, $payment->receiver_id, abs($ongkir), $settingApp->getAppSettings('ongkir') );
+                }
 
-    //    return redirect()->route('transaction.getDetail',$transaction->id)->with('success', 'Transaction # ' . $transaction->id. ' created.');
-       
-       // return response()->json([
-       //     'url' => route('transaction.getDetail',$transaction->id,$transaction->date),
-       // ]);
+                
 
 
-       } catch(ModelException $e) {
-           
-           DB::rollBack();
+                InvoiceTrackerHelpers::flag($transaction);
 
-             return $data = [
-                'status' => '422',
-                'message' => $e->getErrors()['error'][0],
-            ];
+                // dd($details);
+                
+                TransactionsManagerHelper::checkSell($transaction, $details);
 
-          
-           // return response()->json($e->getErrors(), 500);
-       
-       } catch(\Exception $e) {
-           DB::rollBack();
+                
+                HashManagerHelper::save($transaction);
+                $cc = new CCManagerHelper;
+                $class['date'] = Carbon::createFromFormat('Y-m-d',$transaction->date)->startOfMonth()->toDateString();
+                //update customer class
+                switch ($transaction->type) {
+                    case Transaction::TYPE_SELL:
+                        $class['type'] = Transaction::TYPE_SELL;
+                        $class['total'] = $transaction->total;
+                        $class['customer'] = $transaction->receiver;
+                        $cc->update($class);
+                        break;
+                    case Transaction::TYPE_RETURN:
+                        $class['type'] = Transaction::TYPE_RETURN;
+                        $class['total'] = $transaction->total;
+                        $class['customer'] = $transaction->sender;
+                        $cc->update($class);
+                        break;
+                    default:
+                        break;
+                }
 
-           return $data = [
-                'status' => '422',
-                'message' => $e->getMessage(),
-            ];
+                if($type == 2 || $type == 15){
 
-        //    return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+                
 
-           // return response()->json($e->getMessage(), 500);
-           
-       }
-     }
+                    // Query
+                    $result = DB::table('transaction_details')
+                    ->where('transaction_details.transaction_id',$transaction->id)
+                    ->join('items', 'transaction_details.item_id', '=', 'items.id')
+                    ->whereIn('transaction_details.transaction_type', [2, 15]) // Filter transaction_type 2 dan 15
+                    ->selectRaw('
+                        items.group_id,
+                        MONTH(transaction_details.date) as bulan,
+                        YEAR(transaction_details.date) as tahun,
+                        transaction_details.sender_id,
+                        transaction_details.transaction_type,
+                        SUM(transaction_details.quantity) as sum_qty,
+                        SUM(transaction_details.total) as sum_total
+                    ')
+                    ->groupBy('items.group_id', DB::raw('MONTH(transaction_details.date)'), DB::raw('YEAR(transaction_details.date)'), 'transaction_details.sender_id', 'transaction_details.transaction_type')
+                    ->orderBy('items.group_id') // Optional: Untuk urutan hasil
+                    ->lockForUpdate()
+                    ->get();
+            
+                    $insertData = [];
+                    foreach ($result as $row) {
+                        $insertData[] = [
+                            'group_id' => $row->group_id,
+                            'bulan' => $row->bulan,
+                            'tahun' => $row->tahun,
+                            'sender_id' => $row->sender_id,
+                            'type' => $row->transaction_type,
+                            'sum_qty' => (int)$row->sum_qty,
+                            'sum_total' => (int)$row->sum_total,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+
+                    // dd($insertData);
+
+                    $this->updateOrCreateStatsalesOptimized($insertData);
+
+                }
+
+                //commit db transaction
+                DB::commit();
+
+                // $dataJubelio->session()->flash('success', 'Transaction # ' . $transaction->id. ' created.');
+
+                    return $data = [
+                        'status' => '200',
+                        'message' => 'ok',
+                        'transaction_id' => $transaction->id,
+                    ];
+
+                //    return redirect()->route('transaction.getDetail',$transaction->id)->with('success', 'Transaction # ' . $transaction->id. ' created.');
+                
+                // return response()->json([
+                //     'url' => route('transaction.getDetail',$transaction->id,$transaction->date),
+                // ]);
+
+
+            } catch(ModelException $e) {
+                
+                DB::rollBack();
+
+                if ($e->getCode() == 1213) {
+                    $attempts++;
+                    Log::warning("Deadlock terdeteksi, mencoba ulang ($attempts/$maxRetries)...");
+    
+                    // Tunggu sebentar sebelum retry (misalnya 100ms)
+                    usleep(100000);
+                } else {
+                    return response()->json(['error' => $e->getMessage()], 500);
+                }
+
+                    return $data = [
+                        'status' => '422',
+                        'message' => $e->getErrors()['error'][0],
+                    ];
+
+                
+                // return response()->json($e->getErrors(), 500);
+            
+            } catch(\Exception $e) {
+                DB::rollBack();
+
+                return $data = [
+                        'status' => '422',
+                        'message' => $e->getMessage(),
+                    ];
+
+                //    return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+
+                // return response()->json($e->getMessage(), 500);
+                
+            }
+        }
+    }
 
    public function updateOrCreateStatsalesOptimized(array $data)
 	{
@@ -606,6 +624,7 @@ class ApiJubelioController extends Controller
 				->where('bulan', $entry['bulan'])
 				->where('tahun', $entry['tahun'])
 				->where('sender_id', $entry['sender_id'])
+                ->lockForUpdate()
 				->first();
 
 			if ($existing) {

@@ -152,7 +152,7 @@ class CCManagerHelper
 			return $this->error('cannot save');
 
 		//save the latest rating to customer stat
-		if(!$cs = CustomerStat::find($customer->id))
+		if(!$cs = CustomerStat::lockForUpdate()->find($customer->id))
 		{
 			$cs = new CustomerStat;
 			$cs->customer_id = $customer->id;

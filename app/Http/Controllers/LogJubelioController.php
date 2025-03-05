@@ -7,10 +7,22 @@ use Illuminate\Http\Request;
 
 class LogJubelioController extends Controller
 {
-    public function index(){
-        $data = Logjubelio::paginate(100);
+    public function index(Request $request){
+        $dataList = Logjubelio::orderBy('created_at','desc');
+        
+        if($request->from && $request->to){
+			$dataList = $dataList->whereDate('created_at','>=',$request->from)->whereDate('created_at','<=',$request->to);
+		}
 
-        dd($data->toArray());
+		if($request->invoice){
+			$dataList = $dataList->where('invoice',$request->invoice);
+		}
+        
+        $dataList = $dataList->paginate(20)->withQueryString();
+
+        // dd($dataList);
+
+        return view('log.index',compact('dataList'));
     }
 
     public function detail($id){
