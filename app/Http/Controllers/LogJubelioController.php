@@ -18,7 +18,7 @@ class LogJubelioController extends Controller
 			$dataList = $dataList->where('invoice',$request->invoice);
 		}
         
-        $dataList = $dataList->paginate(20)->withQueryString();
+        $dataList = $dataList->paginate(50)->withQueryString();
 
         // dd($dataList);
 
