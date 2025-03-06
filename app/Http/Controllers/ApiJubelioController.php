@@ -209,13 +209,13 @@ class ApiJubelioController extends Controller
             
                                     $skuNotmatche = $notMatched->count()." SKU tidak ditemukan";
                                 
-                                    $logStore = $this->logJubelio($dataApi['salesorder_id'],'TRANSACTION','SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$skuNotmatche);
+                                    $logStore = $this->logJubelio($dataApi['salesorder_id'],'TRANSACTION','SALE',$dataApi['source_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$skuNotmatche);
             
                                 }
             
                             }else{
 
-                                $logStore = $this->logJubelio($dataApi['salesorder_id'],'SYSTEM','SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$createData['message']);
+                                $logStore = $this->logJubelio($dataApi['salesorder_id'],'SYSTEM','SALE',$dataApi['source_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$createData['message']);
 
 
                                 return response()->json([
@@ -246,7 +246,7 @@ class ApiJubelioController extends Controller
 
                 }else{
 
-                    $logStore = $this->logJubelio($dataApi['salesorder_id'],'TRANSACTION','SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Data sync dengan aria tidak ditemukan');
+                    $logStore = $this->logJubelio($dataApi['salesorder_id'],'TRANSACTION','SALE',$dataApi['source_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Data sync dengan aria tidak ditemukan');
                     
                     return response()->json([
                         'status' => 'ok',
@@ -290,7 +290,7 @@ class ApiJubelioController extends Controller
 
             }else{
 
-                $this->logJubelio($dataApi['salesorder_id'],'TRANSACTION','RETURN',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Transaksi tidak ditemukan');
+                $this->logJubelio($dataApi['salesorder_id'],'TRANSACTION','RETURN',$dataApi['source_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Transaksi tidak ditemukan');
 
                 return response()->json([
                     'status' => 'ok',
@@ -592,7 +592,7 @@ class ApiJubelioController extends Controller
                     Log::warning("Deadlock terdeteksi, mencoba ulang ($attempts/$maxRetries)...");
     
                     // Tunggu sebentar sebelum retry (misalnya 100ms)
-                    usleep(100000);
+                    usleep(200000);
                 } else {
                     return $data = [
                         'status' => '500',

@@ -115,57 +115,121 @@
                         <div class="block py-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100">
                             
                             <div class="px-4">
-                                <div class="flex flex-col md:flex-row items-start md:items-center">
+
+                              
+                                <div class="flex justify-start md:justify-between flex-col md:flex-row">
+
+                                    <div>
+                                        <div>
+                                            <span class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-sm me-2  border border-gray-300 ">
+                                                <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"/>
+                                                </svg>
+                                                
+                                                {{$item->created_at}}
+                                            </span>
+                                        </div>
+
+                                        <div class="flex flex-col md:flex-row items-start md:items-center">
 
                                   
 
-                                    <div>
-                                      
-
-                                        <button id="dropdownDefaultButton-{{$item->id}}" data-dropdown-toggle="dropdown-{{$item->id}}" class="text-blue-500 font-bold me-2 hover:underline focus:text-blue-700 focus:underline" type="button"> #{{$item->invoice}}
-                                            </button>
-                                            
-                                            <!-- Dropdown menu -->
-                                            <div id="dropdown-{{$item->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
-                                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton-{{$item->id}}">
-                                                  <li>
-                                                    <a href="{{route('jubelio.log.viewJson',$item->order_id)}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View Json</a>
-                                                  </li>
-                                                  <li>
-                                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Data</a>
-                                                  </li>
-                                                  <li>
-                                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update</a>
-                                                  </li>
-                                                  {{-- <li>
-                                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-                                                  </li> --}}
-                                                </ul>
+                                           
+                                            <div>
+                                                <p class="font-bold me-2">#{{$item->invoice}}</p>
+                                                    </button>
+                                                    
+                                                    <!-- Dropdown menu -->
+                                                    <div id="dropdown-{{$item->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
+                                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton-{{$item->id}}">
+                                                          <li>
+                                                            <a href="{{route('jubelio.log.viewJson',$item->order_id)}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View Json</a>
+                                                          </li>
+                                                          <li>
+                                                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Data</a>
+                                                          </li>
+                                                          <li>
+                                                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update</a>
+                                                          </li>
+                                                          {{-- <li>
+                                                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+                                                          </li> --}}
+                                                        </ul>
+                                                    </div>
+                                                    
                                             </div>
-                                            
+        
+                                            <div class="flex mt-1 md:mt-0">
+                                                <div>
+                                                    @if ($item->type == 'SALE')
+                                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-blue-900 dark:text-blue-300">{{$item->type }}</span>
+            
+                                                    @else
+                                                        <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300">{{$item->type }}</span>
+            
+                                                    @endif
+                                                </div>
+            
+                                                <div>
+                                                    @if ($item->error == 'SYSTEM')
+                                                        <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-red-300">ERROR {{$item->error }}</span>
+                                                    @else
+                                                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">ERROR {{$item->error }}</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+        
+                                        </div>
+
                                     </div>
 
-                                    <div class="flex ">
-                                        <div>
-                                            @if ($item->type == 'SALE')
-                                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-blue-900 dark:text-blue-300">{{$item->type }}</span>
-    
-                                            @else
-                                                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300">{{$item->type }}</span>
-    
-                                            @endif
-                                        </div>
-    
-                                        <div>
-                                            @if ($item->error == 'SYSTEM')
-                                                <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-red-300">ERROR {{$item->error }}</span>
-                                            @else
-                                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">ERROR {{$item->error }}</span>
-                                            @endif
+                                
+
+                                    <div>
+                                        <div class="flex mt-2 md:mt-0">
+
+                                            <div>
+                                                <button type="button" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg px-3 py-2 text-xs me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Solved</button>
+
+                                            </div>
+
+                                            <div>
+
+                                                <button type="button" class="capitalize text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-3 py-2 text-xs me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Manual Create</button>
+
+                                            </div>
+
+
+                                            <div>
+                                                <button id="dropdownMore-{{$item->id}}" data-dropdown-toggle="dropdownM-{{$item->id}}" class=" inline-flex items-center  text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg px-3 py-2 text-xs me-2  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">More <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                                    </svg>
+                                                </button>
+                                                    
+                                                <!-- Dropdown menu -->
+                                                <div id="dropdownM-{{$item->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
+                                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMore-{{$item->id}}">
+                                                        <li>
+                                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+                                                        </li>
+                                                        <li>
+                                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                                                        </li>
+                                                        <li>
+                                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+                                                        </li>
+                                                        <li>
+                                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>                                                   
+                                            </div>
+
                                         </div>
                                     </div>
 
                                 </div>
+                                    
                                   
 
                                     
