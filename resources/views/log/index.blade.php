@@ -106,38 +106,72 @@
                    
                 </div>
 
+                
+
+
                 <div class="grid grid-cols-1 gap-4 mt-6">
 
                     @forelse ($dataList as $item)
                         <div class="block py-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100">
                             
-                            <div class="px-4 font-bold">
-                                <div class="flex items-center space-x-2">
+                            <div class="px-4">
+                                <div class="flex flex-col md:flex-row items-start md:items-center">
+
+                                  
 
                                     <div>
-                                        #{{$item->invoice}}
+                                      
+
+                                        <button id="dropdownDefaultButton-{{$item->id}}" data-dropdown-toggle="dropdown-{{$item->id}}" class="text-blue-500 font-bold me-2 hover:underline focus:text-blue-700 focus:underline" type="button"> #{{$item->invoice}}
+                                            </button>
+                                            
+                                            <!-- Dropdown menu -->
+                                            <div id="dropdown-{{$item->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
+                                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton-{{$item->id}}">
+                                                  <li>
+                                                    <a href="{{route('jubelio.log.viewJson',$item->order_id)}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View Json</a>
+                                                  </li>
+                                                  <li>
+                                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Data</a>
+                                                  </li>
+                                                  <li>
+                                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update</a>
+                                                  </li>
+                                                  {{-- <li>
+                                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+                                                  </li> --}}
+                                                </ul>
+                                            </div>
+                                            
                                     </div>
 
-                                    <div>
-                                        @if ($item->type == 'SALE')
-                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-blue-900 dark:text-blue-300">{{$item->type }}</span>
-
-                                        @else
-                                            <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300">{{$item->type }}</span>
-
-                                        @endif
+                                    <div class="flex ">
+                                        <div>
+                                            @if ($item->type == 'SALE')
+                                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-blue-900 dark:text-blue-300">{{$item->type }}</span>
+    
+                                            @else
+                                                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300">{{$item->type }}</span>
+    
+                                            @endif
+                                        </div>
+    
+                                        <div>
+                                            @if ($item->error == 'SYSTEM')
+                                                <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-red-300">ERROR {{$item->error }}</span>
+                                            @else
+                                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">ERROR {{$item->error }}</span>
+                                            @endif
+                                        </div>
                                     </div>
-
-                                    <div>
-                                        @if ($item->error == 'SYSTEM')
-                                            <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-red-300">{{$item->error }}</span>
-                                        @else
-                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">{{$item->error }}</span>
-                                        @endif
-                                    </div>
-
 
                                 </div>
+                                  
+
+                                    
+
+
+                                
                                
                             </div>
 

@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Jubeliosync;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -38,12 +39,12 @@ class JubelioSyncController extends Controller
     public function create()
     {
 
-        $dataApi = JubelioHelper::checkOrUpdateData('jub', 'new_value');
+        // $dataApi = JubelioHelper::checkOrUpdateData('jub', 'new_value');
 
         
 
         $response = Http::withHeaders([
-            'Authorization' => $dataApi->sk
+            'Authorization' => Cache::get('jubelio_data')['token']
         ])->get('https://api2.jubelio.com/locations/', [
             'page' => 1,
             'pageSize' => 200
@@ -96,10 +97,10 @@ class JubelioSyncController extends Controller
         $this->validate($request, $rules, [], $attributes);
 
 
-        $dataApi = JubelioHelper::checkOrUpdateData('jub', 'new_value');
+        // $dataApi = JubelioHelper::checkOrUpdateData('jub', 'new_value');
 
         $response = Http::withHeaders([
-            'Authorization' => $dataApi->sk
+            'Authorization' => Cache::get('jubelio_data')['token']
         ])->get('https://api2.jubelio.com/locations/'.$request->location_id);
 
         $dataList = $response->json();

@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -31,6 +32,25 @@ class JubelioHelper
 
         return null;
 
+    }
+
+    public static function getJubelioCache()
+    {
+        $cacheKey = 'jubelio_data';
+
+        return Cache::remember($cacheKey, now()->addHours(10), function () {
+            $jubelioApi = self::jubelioAuth();
+
+            if (!$jubelioApi || !isset($jubelioApi['token'])) {
+                return null; // Jika gagal autentikasi, return null
+            }
+    
+            return [
+                'token' => $jubelioApi['token'],
+            ];
+
+            return $jubelio; // Sesuaikan dengan query yang dibutuhkan
+        });
     }
 
     public static function checkOrUpdateData(string $slug, $newKeyValue = null)
