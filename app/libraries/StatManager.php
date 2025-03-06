@@ -56,7 +56,10 @@ class StatManager extends BaseManager
 		elseif($total > 0)
 			$total = 0 - $total;
 
-		$this->stat = CustomerStat::lockforUpdate()->find($id);
+		$this->stat =  DB::table('customerstat')
+					->where('id', $id)
+					->sharedLock()
+					->first();
 		if(!$this->stat)
 			return $this->error('customer stat doesnt exist');
 
@@ -71,11 +74,11 @@ class StatManager extends BaseManager
 
 		//update the balances in the transaction table
 		Transaction::where('sender_id','=',$id)
-			->where('date','>',$transaction->date)->lockforUpdate()
+			->where('date','>',$transaction->date)->sharedLock()
 			->update(array('sender_balance' => DB::raw('sender_balance + '.$total)));
 
 		Transaction::where('receiver_id','=',$id)
-			->where('date','>',$transaction->date)->lockforUpdate()
+			->where('date','>',$transaction->date)->sharedLock()
 			->update(array('receiver_balance' => DB::raw('receiver_balance + '.$total)));
 
 		if(!$this->stat->save())

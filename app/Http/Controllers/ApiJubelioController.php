@@ -22,22 +22,26 @@ use Illuminate\Support\Facades\Log;
 
 class ApiJubelioController extends Controller
 {
-    private function logJubelio($type,$storeName,$locationName,$invoice,$store,$location,$pesan){
+    private function logJubelio($orderId,$error,$type,$storeName,$locationName,$invoice,$store,$location,$pesan){
 
-        $dataDetail = [
-            'store_name' => $storeName,
-            'store_id' => $store,
-            'location_name' => $locationName,
-            'location_id' => $location,
-            'pesan' => $pesan
-        ];
+        // $dataDetail = [
+        //     'store_name' => $storeName,
+        //     'store_id' => $store,
+        //     'location_name' => $locationName,
+        //     'location_id' => $location,
+        //     'pesan' => $pesan
+        // ];
 
         try {
             $dataStore = new Logjubelio();
 
+            $dataStore->order_id = $orderId;
+            $dataStore->error = $error;
             $dataStore->type = $type;
             $dataStore->invoice = $invoice;
-            $dataStore->data = $dataDetail;
+            $dataStore->pesan = $pesan;
+            $dataStore->location_name = $locationName;
+            $dataStore->store_name = $storeName;
             $dataStore->save();
 
             return $data = [
@@ -205,13 +209,13 @@ class ApiJubelioController extends Controller
             
                                     $skuNotmatche = $notMatched->count()." SKU tidak ditemukan";
                                 
-                                    $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$skuNotmatche);
+                                    $logStore = $this->logJubelio($dataApi['salesorder_id'],'TRANSACTION','SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$skuNotmatche);
             
                                 }
             
                             }else{
 
-                                $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$createData['message']);
+                                $logStore = $this->logJubelio($dataApi['salesorder_id'],'SYSTEM','SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],$createData['message']);
 
 
                                 return response()->json([
@@ -242,7 +246,7 @@ class ApiJubelioController extends Controller
 
                 }else{
 
-                    $logStore = $this->logJubelio('SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Data sync dengan aria tidak ditemukan');
+                    $logStore = $this->logJubelio($dataApi['salesorder_id'],'TRANSACTION','SALE',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Data sync dengan aria tidak ditemukan');
                     
                     return response()->json([
                         'status' => 'ok',
@@ -286,7 +290,7 @@ class ApiJubelioController extends Controller
 
             }else{
 
-                $this->logJubelio('RETURN',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Transaksi tidak ditemukan');
+                $this->logJubelio($dataApi['salesorder_id'],'TRANSACTION','RETURN',$dataApi['store_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Transaksi tidak ditemukan');
 
                 return response()->json([
                     'status' => 'ok',
@@ -360,6 +364,7 @@ class ApiJubelioController extends Controller
 
                 $class = array();
 
+                DB::statement('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
                 
                 //start transaction
                 DB::beginTransaction();
@@ -536,7 +541,7 @@ class ApiJubelioController extends Controller
                     ')
                     ->groupBy('items.group_id', DB::raw('MONTH(transaction_details.date)'), DB::raw('YEAR(transaction_details.date)'), 'transaction_details.sender_id', 'transaction_details.transaction_type')
                     ->orderBy('items.group_id') // Optional: Untuk urutan hasil
-                    ->lockForUpdate()
+                    ->sharedLock()
                     ->get();
             
                     $insertData = [];
@@ -577,7 +582,7 @@ class ApiJubelioController extends Controller
                 //     'url' => route('transaction.getDetail',$transaction->id,$transaction->date),
                 // ]);
 
-
+                break;
             } catch(ModelException $e) {
                 
                 DB::rollBack();
@@ -624,7 +629,7 @@ class ApiJubelioController extends Controller
 				->where('bulan', $entry['bulan'])
 				->where('tahun', $entry['tahun'])
 				->where('sender_id', $entry['sender_id'])
-                ->lockForUpdate()
+                ->sharedLock()
 				->first();
 
 			if ($existing) {

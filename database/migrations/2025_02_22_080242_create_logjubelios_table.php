@@ -13,9 +13,14 @@ return new class extends Migration
     {
         Schema::create('logjubelios', function (Blueprint $table) {
             $table->id();
+            $table->string('order_id')->nullable();
+            $table->string('error')->nullable();
             $table->string('type')->nullable();
             $table->string('invoice')->nullable();
-            $table->json('data')->nullable(); // Kolom untuk menyimpan array dalam bentuk JSON
+            $table->longText('pesan')->nullable();
+            $table->string('location_name')->nullable();
+            $table->string('store_name')->nullable();
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
