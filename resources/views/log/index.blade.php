@@ -128,13 +128,22 @@
                                         @endif
                                     </div>
 
+                                    <div>
+                                        @if ($item->error == 'SYSTEM')
+                                            <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-red-300">{{$item->error }}</span>
+                                        @else
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">{{$item->error }}</span>
+                                        @endif
+                                    </div>
+
+
                                 </div>
                                
                             </div>
 
                             <hr class="my-4">
 
-                            <div class="px-4 text-sm text-gray-500"> {{$item->data['pesan']}}</div>
+                            <div class="px-4 text-sm text-gray-500"> {{$item->pesan}}</div>
 
                             <hr class="my-4 px-4">
 
@@ -152,7 +161,7 @@
                                         </div>
 
                                         <div class="font-bold text-sm">
-                                            {{$item->data['store_name']}}
+                                            {{$item->store_name}}
                                         </div>
 
                                     </div>
@@ -168,7 +177,7 @@
                                         </div>
 
                                         <div class="font-bold text-sm">
-                                            {{$item->data['location_name']}}
+                                            {{$item->location_name}}
                                         </div>
 
                                     </div>

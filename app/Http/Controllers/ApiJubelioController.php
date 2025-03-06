@@ -594,7 +594,12 @@ class ApiJubelioController extends Controller
                     // Tunggu sebentar sebelum retry (misalnya 100ms)
                     usleep(100000);
                 } else {
-                    return response()->json(['error' => $e->getMessage()], 500);
+                    return $data = [
+                        'status' => '500',
+                        'message' => $e->getMessage(),
+                    ];
+
+                  
                 }
 
                     return $data = [
