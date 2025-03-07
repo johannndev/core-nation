@@ -430,12 +430,6 @@ class ApiJubelioController extends Controller
                 //check ppn first
                 $transaction->checkPPN($transaction->sender, $transaction->receiver);
 
-            
-
-
-                //add to customer stat
-                // $sm = new StatManager;
-
                 $sm = new StatManagerHelper();
                 switch($type)
                 {
@@ -466,41 +460,9 @@ class ApiJubelioController extends Controller
                     default: //don't update stats for move, production
                         break;
                 }
-
-                
-
                 if(!$transaction->save())
                     throw new $transaction->getErrors();
 
-                $paid = $dataJubelio->paid;
-                //special case: paid is checked
-                if($type == Transaction::TYPE_SELL && isset($paid) && $paid)
-                {
-                    //calculate total
-                    $amount = isset($dataJubelio->amount) ? $dataJubelio->amount : 0;
-                    if($amount <= 0) $amount = abs($transaction->total);
-
-                    $payment = $transaction->attachIncome($transaction->date, $transaction->receiver_id, $dataJubelio->account,$amount);
-                    $class['income'] = $payment->total;
-
-                    //another special case, ongkir is filled, create journal
-                    $settingApp = new AppSettingsHelper;
-                    $ongkir = isset($dataJubelio->ongkir) ? $dataJubelio->ongkir : null;
-                    if(!empty($ongkir))
-                        $transaction->attachOngkir($transaction->date, $payment->receiver_id, abs($ongkir), $settingApp->getAppSettings('ongkir') );
-                }
-
-                
-
-
-                InvoiceTrackerHelpers::flag($transaction);
-
-                // dd($details);
-                
-                TransactionsManagerHelper::checkSell($transaction, $details);
-
-                
-                HashManagerHelper::save($transaction);
                 $cc = new CCManagerHelper;
                 $class['date'] = Carbon::createFromFormat('Y-m-d',$transaction->date)->startOfMonth()->toDateString();
                 //update customer class
@@ -522,9 +484,6 @@ class ApiJubelioController extends Controller
                 }
 
                 if($type == 2 || $type == 15){
-
-                
-
                     // Query
                     $result = DB::table('transaction_details')
                     ->where('transaction_details.transaction_id',$transaction->id)
