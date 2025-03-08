@@ -441,6 +441,25 @@ class LogJubelioController extends Controller
                         'quantity' => DB::raw("CASE " . implode(' ', $updateCases) . " END")
                     ]);
 
+                     // Update balance dengan lock
+                $adjustmentFee = $dataApi['sub_total'] - $dataApi['grand_total'];
+                $grandTotal = $sumTotal - $adjustmentFee;
+                $ppnTotal = 0;
+
+                if($receiver->ppn == 1){
+                    $ppnTotal = abs(round(bcdiv(bcmul($grandTotal,0.11,5),1.11,5),2));
+                }
+
+                $hitung = $sumTotal -$grandTotal + $ppnTotal;
+                $totalTransaction = ($logjubelio->type === 'SALE') ? -$hitung : $hitung;
+
+                $senderBalance = CustomerStat::where('customer_id', $jubelioSync->warehouse_id)->lockForUpdate()->first();
+                $receiverBalance = CustomerStat::where('customer_id', $jubelioSync->customer_id)->lockForUpdate()->first();
+
+                $senderBalance->update(['balance' => $senderBalance->balance + $hitung]);
+                $receiverBalance->update(['balance' => $receiverBalance->balance - $hitung]);
+
+
                 // Buat transaksi
                 $transactionData = [
                     'date' => now()->toDateString(),
@@ -449,10 +468,15 @@ class LogJubelioController extends Controller
                     'receiver_id' => $receiver->id,
                     'sender_type' => $sender->type,
                     'receiver_type' => $receiver->type,
-                    'adjustment' => $dataApi['sub_total'] - $dataApi['grand_total'],
+                    'adjustment' => $adjustmentFee,
                     'invoice' => $dataApi['salesorder_no'],
                     'total' => $sumTotal,
                     'total_items' => $sumQty,
+
+                    'sender_balance' => $senderBalance->balance,
+                    'receiver_balance' => $receiverBalance->balance,
+                    'real_total' => $sumTotal,
+
                     'created_at' => now(),
                     'updated_at' => now()
                 ];
@@ -467,16 +491,7 @@ class LogJubelioController extends Controller
 
                 DB::table('transaction_details')->insert($transactionDetails->toArray());
 
-                // Update balance dengan lock
-                $adjustment = $transactionData['adjustment'];
-                $grandTotal = $sumTotal - $adjustment;
-                $ppnTotal = 0;
-
-                if($receiver->ppn == 1){
-                    $ppnTotal = abs(round(bcdiv(bcmul($grandTotal,0.11,5),1.11,5),2));
-                }
-
-                $totalTransaction = ($logjubelio->type === 'SALE' ? -1 : 1) * ($grandTotal +  $ppnTotal);
+               
 
                 CustomerStat::where('customer_id', $sender->id)
                     ->lockForUpdate()
