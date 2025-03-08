@@ -478,8 +478,8 @@ class LogJubelioController extends Controller
                     'total' => $grandTotalConvert,
                     'total_items' => $sumQty,
 
-                    'sender_balance' => $senderBalance,
-                    'receiver_balance' => $receiverBalance,
+                    'sender_balance' => $newSenderBalance,
+                    'receiver_balance' => $newRecaiverBalance,
                     'real_total' => $sumTotal,
 
                     'created_at' => now(),
