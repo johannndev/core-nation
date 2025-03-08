@@ -120,7 +120,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/logjubelio/{id}/json', [LogJubelioController::class, 'viewJson'])->name('jubelio.log.viewJson');
 
     Route::get('/jubelio/manual/{id}/create', [LogJubelioController::class, 'createManual'])->name('jubelio.manual.create');
-    Route::post('/jubelio/manual/{id}/store', [LogJubelioController::class, 'postManual'])->name('jubelio.manual.store');
+    Route::post('/jubelio/manual/{id}/store', [LogJubelioController::class, 'postManualseek'])->name('jubelio.manual.store');
     Route::get('/jubelio/sync', [JubelioSyncController::class, 'index'])->name('jubelio.sync.index');
     Route::get('/jubelio/sync/{id}/edit', [JubelioSyncController::class, 'edit'])->name('jubelio.sync.edit');
     Route::patch('/jubelio/sync/{id}/update', [JubelioSyncController::class, 'update'])->name('jubelio.sync.update');

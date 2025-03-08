@@ -93,7 +93,7 @@ class ApiJubelioController extends Controller
         if($dataApi['status'] == "SHIPPED"){
 
             $tanggal = Carbon::parse($dataApi['transaction_date']);
-            $threshold = Carbon::parse('2025-03-03');
+            $threshold = Carbon::parse('2025-03-06');
 
             $limitTime = $tanggal->lessThan($threshold) ? 0 : 1;
 
