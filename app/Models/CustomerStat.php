@@ -11,6 +11,8 @@ class CustomerStat extends Model
 
     protected $table = 'customerstat';
 	protected $primaryKey = 'customer_id';
+	protected $guarded = [];
+
 	public $timestamps = true;
 
 	public static function table()
