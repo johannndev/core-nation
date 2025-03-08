@@ -458,8 +458,8 @@ class LogJubelioController extends Controller
                 $senderBalance = CustomerStat::where('customer_id', $jubelioSync->warehouse_id)->lockForUpdate()->first();
                 $receiverBalance = CustomerStat::where('customer_id', $jubelioSync->customer_id)->lockForUpdate()->first();
 
-                $newSenderBalance = $senderBalance->balance + $grandTotal;
-                $newRecaiverBalance = $receiverBalance->balance - $grandTotal;
+                $newSenderBalance = $senderBalance->balance + $grandTotalConvert;
+                $newRecaiverBalance = $receiverBalance->balance - $grandTotalConvert;
 
                 $senderBalance->update(['balance' => $newSenderBalance]);
                 $receiverBalance->update(['balance' => $newRecaiverBalance]);
@@ -475,7 +475,7 @@ class LogJubelioController extends Controller
                     'receiver_type' => $receiver->type,
                     'adjustment' => $adjustmentFee,
                     'invoice' => $dataApi['salesorder_no'],
-                    'total' => $grandTotal,
+                    'total' => $grandTotalConvert,
                     'total_items' => $sumQty,
 
                     'sender_balance' => $senderBalance,
