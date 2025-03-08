@@ -500,17 +500,17 @@ class LogJubelioController extends Controller
 
                 CustomerStat::where('customer_id', $sender->id)
                     ->lockForUpdate()
-                    ->increment('balance', $totalTransaction);
+                    ->increment('balance', $grandTotalConvert);
 
                 CustomerStat::where('customer_id', $receiver->id)
                     ->lockForUpdate()
-                    ->decrement('balance', $totalTransaction);
+                    ->decrement('balance', $grandTotalConvert);
 
                 // Update transaksi terkait dengan lock
                 Transaction::where('receiver_id', $receiver->id)
                     ->where('date', '>', $transactionData['date'])
                     ->lockForUpdate()
-                    ->increment('receiver_balance', $totalTransaction);
+                    ->increment('receiver_balance', $grandTotalConvert);
 
                 DB::commit();
 
