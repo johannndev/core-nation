@@ -121,6 +121,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/jubelio/manual/{id}/create', [LogJubelioController::class, 'createManual'])->name('jubelio.manual.create');
     Route::post('/jubelio/manual/{id}/store', [LogJubelioController::class, 'postManualSeek'])->name('jubelio.manual.store');
+    Route::get('/jubelio/solved/{id}/create', [LogJubelioController::class, 'createSolved'])->name('jubelio.solved.create');
+    Route::post('/jubelio/solved/{id}/store', [LogJubelioController::class, 'storeSolved'])->name('jubelio.solved.store');
     Route::get('/jubelio/sync', [JubelioSyncController::class, 'index'])->name('jubelio.sync.index');
     Route::get('/jubelio/sync/{id}/edit', [JubelioSyncController::class, 'edit'])->name('jubelio.sync.edit');
     Route::patch('/jubelio/sync/{id}/update', [JubelioSyncController::class, 'update'])->name('jubelio.sync.update');

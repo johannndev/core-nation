@@ -86,6 +86,37 @@ class LogJubelioController extends Controller
         return view('log.manual',compact('jubelioSync','data','adjust','sid'));
     }
 
+    public function createSolved($id){
+
+        $logjubelio = Logjubelio::findOrFail($id);
+
+        $response = Http::withHeaders([ 
+            'Content-Type'=> 'application/json', 
+            'authorization'=> Cache::get('jubelio_data')['token'], 
+        ]) 
+        ->get('https://api2.jubelio.com/sales/orders/'.$logjubelio->order_id); 
+
+        $data = json_decode($response->body(), true);
+
+        $adjust = $data['sub_total'] - $data['grand_total'];
+
+        $jubelioSync = Jubeliosync::where('jubelio_store_id', $data['store_id'])->where('jubelio_location_id',$data['location_id'])->first();
+        
+        $sid = $id;
+
+        return view('log.solved',compact('jubelioSync','data','adjust','sid'));
+    }
+
+    public function storeSolved($id){
+        $logjubelio = Logjubelio::findOrFail($id);
+        $logjubelio ->status = 1;
+
+        $logjubelio->save();
+
+        return redirect()->route('jubelio.log.index')->with('success','Jubelio Log Solved');
+    }
+
+
 
     // public function postManualgpt($id)
     // {
