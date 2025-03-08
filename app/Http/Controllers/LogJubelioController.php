@@ -415,7 +415,7 @@ class LogJubelioController extends Controller
                 //     ->increment('receiver_balance', $grandTotalConvert);
 
 
-                $logjubelio->staus = 1;
+                $logjubelio->status = 1;
                 
                 $logjubelio->save();
 
