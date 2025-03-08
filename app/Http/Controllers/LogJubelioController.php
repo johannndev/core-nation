@@ -305,7 +305,7 @@ class LogJubelioController extends Controller
 
                 DB::table('transactions')->where('id', $transactionId)->update([
                     'sender_balance' => $senderBalance->balance,
-                    'F' => $receiverBalance->balance,
+                    'receiver_balance' => $receiverBalance->balance,
                     'total' => $totalTransaction,
                     'total_items' => $sumQty,
                     'real_total' => $sumTotal,
