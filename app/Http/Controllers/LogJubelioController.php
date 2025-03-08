@@ -496,15 +496,6 @@ class LogJubelioController extends Controller
 
                 DB::table('transaction_details')->insert($transactionDetails->toArray());
 
-               
-
-                CustomerStat::where('customer_id', $sender->id)
-                    ->lockForUpdate()
-                    ->increment('balance', $grandTotalConvert);
-
-                CustomerStat::where('customer_id', $receiver->id)
-                    ->lockForUpdate()
-                    ->decrement('balance', $grandTotalConvert);
 
                 // Update transaksi terkait dengan lock
                 Transaction::where('receiver_id', $receiver->id)
