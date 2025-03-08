@@ -185,10 +185,12 @@ class LogJubelioController extends Controller
             try {
                 DB::beginTransaction(); // Mulai transaksi
 
+                $logjubelio = Logjubelio::findOrFail($id);
+
                 $response = Http::withHeaders([
                     'Content-Type' => 'application/json',
                     'authorization' => Cache::get('jubelio_data')['token'],
-                ])->get("https://api2.jubelio.com/sales/orders/{$id}");
+                ])->get("https://api2.jubelio.com/sales/orders/{$logjubelio->order_id}");
 
                 $dataApi = json_decode($response->body(), true);
 
@@ -281,8 +283,19 @@ class LogJubelioController extends Controller
                 }
                 DB::table('transaction_details')->insert($matched->toArray());
 
-                $hitung = $sumTotal - $adjust + ($sumTotal * 0.12);
-                $totalTransaction = ($dataApi['status'] === "SHIPPED") ? -$hitung : $hitung;
+                 // Update balance dengan lock
+               
+                 $grandTotal = $sumTotal - $adjust;
+                 $ppnTotal = 0;
+ 
+                 if($receiver->ppn == 1){
+                     $ppnTotal = abs(round(bcdiv(bcmul($grandTotal,0.11,5),1.11,5),2));
+                 }
+ 
+                
+
+                $hitung = $sumTotal -$grandTotal + $ppnTotal;
+                $totalTransaction = ($logjubelio->type === 'SALE') ? -$hitung : $hitung;
 
                 $senderBalance = CustomerStat::where('customer_id', $jubelioSync->warehouse_id)->lockForUpdate()->first();
                 $receiverBalance = CustomerStat::where('customer_id', $jubelioSync->customer_id)->lockForUpdate()->first();
@@ -292,7 +305,7 @@ class LogJubelioController extends Controller
 
                 DB::table('transactions')->where('id', $transactionId)->update([
                     'sender_balance' => $senderBalance->balance,
-                    'receiver_balance' => $receiverBalance->balance,
+                    'F' => $receiverBalance->balance,
                     'total' => $totalTransaction,
                     'total_items' => $sumQty,
                     'real_total' => $sumTotal,
@@ -306,7 +319,7 @@ class LogJubelioController extends Controller
 
                 DB::commit();
 
-                return redirect()->route('jubelio.log.index');
+                return redirect()->route('transaction.getDetail',$transactionId);
 
             } catch (QueryException $e) {
                 
