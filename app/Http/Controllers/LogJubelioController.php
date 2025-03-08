@@ -509,7 +509,7 @@ class LogJubelioController extends Controller
 
                 DB::commit();
 
-                return redirect()->route('jubelio.log.index');
+                return redirect()->route('transaction.getDetail',$transactionId);
 
             } catch (QueryException $e) {
                 DB::rollBack();
