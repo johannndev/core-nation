@@ -443,21 +443,26 @@ class LogJubelioController extends Controller
 
                      // Update balance dengan lock
                 $adjustmentFee = $dataApi['sub_total'] - $dataApi['grand_total'];
-                $grandTotal = $sumTotal - $adjustmentFee;
+
+                $grandTotal = $dataApi['grand_total'];
                 $ppnTotal = 0;
 
-                if($receiver->ppn == 1){
-                    $ppnTotal = abs(round(bcdiv(bcmul($grandTotal,0.11,5),1.11,5),2));
-                }
+                // if($receiver->ppn == 1){
+                //     $ppnTotal = abs(round(bcdiv(bcmul($grandTotal,0.11,5),1.11,5),2));
+                // }
 
-                $hitung = $sumTotal -$grandTotal + $ppnTotal;
-                $totalTransaction = ($logjubelio->type === 'SALE') ? -$hitung : $hitung;
+                // $hitung = $grandTotal + $ppnTotal;
+
+                $grandTotalConvert = ($logjubelio->type === 'SALE') ? -$grandTotal : $grandTotal;
 
                 $senderBalance = CustomerStat::where('customer_id', $jubelioSync->warehouse_id)->lockForUpdate()->first();
                 $receiverBalance = CustomerStat::where('customer_id', $jubelioSync->customer_id)->lockForUpdate()->first();
 
-                $senderBalance->update(['balance' => $senderBalance->balance + $hitung]);
-                $receiverBalance->update(['balance' => $receiverBalance->balance - $hitung]);
+                $newSenderBalance = $senderBalance->balance + $grandTotal;
+                $newRecaiverBalance = $receiverBalance->balance - $grandTotal;
+
+                $senderBalance->update(['balance' => $newSenderBalance]);
+                $receiverBalance->update(['balance' => $newRecaiverBalance]);
 
 
                 // Buat transaksi
@@ -470,11 +475,11 @@ class LogJubelioController extends Controller
                     'receiver_type' => $receiver->type,
                     'adjustment' => $adjustmentFee,
                     'invoice' => $dataApi['salesorder_no'],
-                    'total' => $sumTotal,
+                    'total' => $grandTotal,
                     'total_items' => $sumQty,
 
-                    'sender_balance' => $senderBalance->balance,
-                    'receiver_balance' => $receiverBalance->balance,
+                    'sender_balance' => $senderBalance,
+                    'receiver_balance' => $receiverBalance,
                     'real_total' => $sumTotal,
 
                     'created_at' => now(),
