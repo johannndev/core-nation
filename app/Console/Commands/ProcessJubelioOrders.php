@@ -108,6 +108,7 @@ class ProcessJubelioOrders extends Command
 
                         
                         $adjust = $dataApi['sub_total'] - $dataApi['grand_total'];
+                        
 
                         $dataJubelio = [
                             "date" => Carbon::now()->toDateString(),
@@ -158,6 +159,10 @@ class ProcessJubelioOrders extends Command
 
         }
        
+    }
+
+    protected function toggleSign($value) {
+        return -$value;
     }
 
     protected function createTransaction($type = null, $dataJubelio)
