@@ -137,7 +137,7 @@
                                                 <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"/>
                                                 </svg>
                                                 
-                                                {{$item->created_at}}
+                                                {{$item->updated_at}}
                                             </span>
                                         </div>
 
@@ -170,6 +170,20 @@
                                                         <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">ERROR {{$item->error }}</span>
                                                     @endif
                                                 </div>
+
+                                                @if ($item->status == 2)
+                                                <div>
+                                                    <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300">CRON SOLVED</span>
+                                                </div>
+
+                                                @endif
+
+                                                @if ($item->cron_run == 1)
+                                                <div>
+                                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">CRON PENDING</span>
+                                                </div>
+
+                                                @endif
                                             </div>
         
                                         </div>
@@ -234,7 +248,18 @@
 
                             <hr class="my-4">
 
-                            <div class="px-4 text-sm text-gray-500"> {{$item->pesan}}</div>
+                            <div class="px-4 text-sm text-gray-500">
+                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                    <span class="font-medium">Api failed!</span> {{$item->pesan}}
+                                  </div>
+                               
+
+                                @if ($item->cron_failed)
+                                    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                        <span class="font-medium">Cron failed!</span> {{$item->cron_failed}}
+                                    </div>
+                                @endif
+                            </div>
 
                             <hr class="my-4 px-4">
 

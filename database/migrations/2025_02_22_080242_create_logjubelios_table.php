@@ -20,7 +20,10 @@ return new class extends Migration
             $table->longText('pesan')->nullable();
             $table->string('location_name')->nullable();
             $table->string('store_name')->nullable();
+            $table->longText('cron_failed')->nullable();
+            $table->integer('cron_run')->default(0);
             $table->integer('status')->default(0);
+            
             $table->timestamps();
         });
     }

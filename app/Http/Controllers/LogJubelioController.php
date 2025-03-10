@@ -27,17 +27,17 @@ class LogJubelioController extends Controller
     public function index(Request $request){
 
         
-        $dataList = Logjubelio::orderBy('created_at','desc');
+        $dataList = Logjubelio::orderBy('updated_at','desc');
 
         if($request->status == "SOLVED"){
-            $dataList = $dataList->where('status',1);
+            $dataList = $dataList->whereIn('status',[1,2]);
         }else{
             $dataList = $dataList->where('status',0);
         }
        
         
         if($request->from && $request->to){
-			$dataList = $dataList->whereDate('created_at','>=',$request->from)->whereDate('created_at','<=',$request->to);
+			$dataList = $dataList->whereDate('updated_at','>=',$request->from)->whereDate('updated_at','<=',$request->to);
 		}
 
 		if($request->invoice){
@@ -297,7 +297,7 @@ class LogJubelioController extends Controller
 
             try {
 
-                $logjubelio = Logjubelio::findOrFail($id);
+                $logjubelio = Logjubelio::lockForUpdate()->findOrFail($id);
 
                 // Ambil data dari API
                 $response = Http::withHeaders([
