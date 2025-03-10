@@ -42,7 +42,7 @@ class ProcessJubelioOrders extends Command
       
         $logjubelio = Logjubelio::where('status',0)->where('cron_run',1)->orderBy('updated_at','asc')->first();
 
-        if(count($logjubelio) > 0){
+        if($logjubelio){
 
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
