@@ -880,7 +880,7 @@ class ApiJubelioController extends Controller
                     return $data = [
                         'status' => '422',
                         'message' => $e->getMessage(),
-                        'deadLock' => 1
+                        'deadLock' => 0
                     ];
 
                   
