@@ -40,7 +40,7 @@ class ProcessJubelioOrders extends Command
     {
         Log::info('Task dijalankan pada: ' . now());
       
-        $logjubelio = Logjubelio::where('status',0)->where('cron_run',0)->orderBy('updated_at','asc')->first();
+        $logjubelio = Logjubelio::where('type','SALE')('status',0)->where('cron_run',0)->orderBy('updated_at','asc')->first();
 
         if($logjubelio){
 
