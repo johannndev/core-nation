@@ -68,7 +68,7 @@
                                     <p class="font-bold">Alias</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p>{{$data->group->alias}}</p>
+                                    <p>{{$data->group->alias ?? ''}}</p>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                                     <p class="font-bold">Description</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p>{{ $data->group->description }}</p>
+                                    <p>{{ $data->group->description ?? '' }}</p>
                                 </div>
                             </div>
                         </div>
