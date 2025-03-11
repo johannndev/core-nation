@@ -285,8 +285,8 @@ class Item extends Model
 	public function printDescription2()
 	{
 		if($this->type == Item::TYPE_ITEM)
-			return $this->group->description2;
-		return $this->description2;
+			return $this->group->description2 ?? '';
+		return $this->description2 ?? '';
 	}
 
 	public static function getDetailUrl($id,$type)

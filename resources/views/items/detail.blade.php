@@ -119,10 +119,7 @@
                                     <p class="font-bold">NB</p>
                                 </div>
                                 <div class="col-span-3">
-                                    @isset($data->printDescription2())
-                                        <p>{{ $data->printDescription2() }}</p>
-                                    @endisset
-                                    
+                                    <p>{{ $data->printDescription2() }}</p>
                                 </div>
                             </div>
                         </div>
