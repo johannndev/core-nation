@@ -180,6 +180,13 @@
 
                                                 @if ($item->cron_run == 1)
                                                 <div>
+                                                    <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-red-300">CRON FAILED</span>
+                                                </div>
+
+                                                @endif
+
+                                                @if ($item->cron_run == 0)
+                                                <div>
                                                     <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">CRON PENDING</span>
                                                 </div>
 
