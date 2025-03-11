@@ -40,7 +40,7 @@ class ProcessJubelioOrders extends Command
     {
         Log::info('Task dijalankan pada: ' . now());
       
-        $logjubelio = Logjubelio::where('status',0)->where('cron_run',1)->orderBy('updated_at','asc')->first();
+        $logjubelio = Logjubelio::where('status',0)->where('cron_run',0)->orderBy('updated_at','asc')->first();
 
         if($logjubelio){
 
@@ -91,7 +91,7 @@ class ProcessJubelioOrders extends Command
                     // Ubah menjadi string dengan koma sebagai pemisah
                     $notMatchedString = implode(", ", $item_codes);
 
-                    $logjubelio->update(['cron_failed' => 'SKU tidak di temukan: '.$notMatchedString ]);
+                    $logjubelio->update(['cron_run' => 1, 'cron_failed' => 'SKU tidak di temukan: '.$notMatchedString ]);
                 }
 
                 if($matched->count() > 0){
@@ -100,7 +100,7 @@ class ProcessJubelioOrders extends Command
 
                     if($cekTransaksi){
 
-                        $logjubelio->update(['cron_failed' => 'Invoice transaksi sudah ada']);
+                        $logjubelio->update(['cron_run' => 1,'cron_failed' => 'Invoice transaksi sudah ada']);
 
                     
 
@@ -138,7 +138,7 @@ class ProcessJubelioOrders extends Command
         
                         }else{
 
-                            $logjubelio->update(['cron_failed' => $createData['message']]);
+                            $logjubelio->update(['cron_run' => 1,'cron_failed' => $createData['message']]);
 
                         }
 
@@ -152,7 +152,7 @@ class ProcessJubelioOrders extends Command
 
             }else{
 
-                $logjubelio->update(['cron_failed' => 'Data sync dengan aria tidak ditemukan']);
+                $logjubelio->update(['cron_run' => 1, 'cron_failed' => 'Data sync dengan aria tidak ditemukan']);
 
                
             }
