@@ -162,8 +162,6 @@ class TransactionsController extends Controller
 
     public function postSell(Request $request)
 	{
-		dd($request);
-
 		return $this->createTransaction(Transaction::TYPE_SELL, $request);
 	}
 
@@ -551,35 +549,12 @@ class TransactionsController extends Controller
 		
 
 
-		InvoiceTrackerHelpers::flag($transaction);
-
-		// dd($details);
 		
-		TransactionsManagerHelper::checkSell($transaction, $details);
 
 		
-		HashManagerHelper::save($transaction);
-		$cc = new CCManagerHelper;
-		$class['date'] = Carbon::createFromFormat('Y-m-d',$transaction->date)->startOfMonth()->toDateString();
-		//update customer class
-		switch ($transaction->type) {
-			case Transaction::TYPE_SELL:
-				$class['type'] = Transaction::TYPE_SELL;
-				$class['total'] = $transaction->total;
-				$class['customer'] = $transaction->receiver;
-				$cc->update($class);
-				break;
-			case Transaction::TYPE_RETURN:
-				$class['type'] = Transaction::TYPE_RETURN;
-				$class['total'] = $transaction->total;
-				$class['customer'] = $transaction->sender;
-				$cc->update($class);
-				break;
-			default:
-				break;
-		}
+		
 
-		if($type == 2 || $type == 15){
+		if($type == Transaction::TYPE_SELL || $type == Transaction::TYPE_RETURN){
 
 		
 
@@ -587,7 +562,7 @@ class TransactionsController extends Controller
 			$result = DB::table('transaction_details')
 			->where('transaction_details.transaction_id',$transaction->id)
 			->join('items', 'transaction_details.item_id', '=', 'items.id')
-			->whereIn('transaction_details.transaction_type', [2, 15]) // Filter transaction_type 2 dan 15
+			->whereIn('transaction_details.transaction_type', [Transaction::TYPE_SELL, Transaction::TYPE_RETURN]) // Filter transaction_type 2 dan 15
 			->selectRaw('
 				items.group_id,
 				MONTH(transaction_details.date) as bulan,
