@@ -118,6 +118,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/logjubelio', [LogJubelioController::class, 'index'])->name('jubelio.log.index');
     Route::get('/logjubelio/{id}/json', [LogJubelioController::class, 'viewJson'])->name('jubelio.log.viewJson');
+    Route::get('/logjubelio/{id}/transaction/detail', [LogJubelioController::class, 'gotoTransaction'])->name('jubelio.transaction.detail');
 
     Route::get('/jubelio/manual/{id}/create', [LogJubelioController::class, 'createManual'])->name('jubelio.manual.create');
     Route::post('/jubelio/manual/{id}/store', [LogJubelioController::class, 'postManualSeek'])->name('jubelio.manual.store');

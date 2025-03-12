@@ -147,7 +147,19 @@
 
                                            
                                             <div>
-                                                <p class="font-bold me-2">#{{$item->invoice}}</p>
+                                               
+                                                @if ($item->status == 0)
+                                                    <p class="font-bold me-2">#{{$item->invoice}}</p>
+                                                   
+                                                @else
+
+                                                    <p class="font-bold me-2">
+                                                        <a href={{ route('jubelio.transaction.detail',$item->invoice) }} class="text-blue-500 hover:text-blue-600 hover:underline">#{{$item->invoice}}</a>
+                                                    </p>
+                                                    
+                                                @endif
+
+                                                
                                             
                                                     
                                             </div>
@@ -178,6 +190,13 @@
 
                                                 @endif
 
+                                                @if ($item->status == 1)
+                                                <div>
+                                                    <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300 uppercase">SOLVED {{$item->user ? 'By '.$item->user->username : ""}}</span>
+                                                </div>
+
+                                                @endif
+
                                                 @if ($item->cron_run == 1)
                                                 <div>
                                                     <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-red-300">CRON FAILED</span>
@@ -202,6 +221,8 @@
                                     <div>
                                         <div class="flex items-center mt-2 md:mt-0">
 
+                                            @if ($item->status == 0)
+                                           
                                             <div>
                                                 <a href="{{ route('jubelio.solved.create',$item->id) }}" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg px-3 py-2 text-xs me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Solved</a>
 
@@ -212,6 +233,8 @@
                                                 <a href="{{route('jubelio.manual.create',$item->id)}}" type="button" class="capitalize text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-3 py-2 text-xs me-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Manual Create</a>
 
                                             </div>
+
+                                            @endif
 
 
                                             <div>

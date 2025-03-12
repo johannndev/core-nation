@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\QueryException;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class LogJubelioController extends Controller
@@ -23,11 +24,23 @@ class LogJubelioController extends Controller
     protected function toggleSign($value) {
         return -$value;
     }
+
+    public function gotoTransaction($id){
+
+        $data = Transaction::where('invoice',$id)->first();
+
+        if($data){
+            return redirect()->route('transaction.getDetail',$id);
+        }else{
+            return redirect()->route('jubelio.log.index')->with('errorMessage', 'Transaksi tidak ada');
+        }
+
+    }
     
     public function index(Request $request){
 
         
-        $dataList = Logjubelio::orderBy('updated_at','desc');
+        $dataList = Logjubelio::with('user')->orderBy('updated_at','desc');
 
         if($request->status == "SOLVED"){
             $dataList = $dataList->whereIn('status',[1,2]);
@@ -110,6 +123,8 @@ class LogJubelioController extends Controller
     public function storeSolved($id){
         $logjubelio = Logjubelio::findOrFail($id);
         $logjubelio ->status = 1;
+        $logjubelio->user_solved_by = Auth::user()->id;
+        $logjubelio->cron_run = 10;
 
         $logjubelio->save();
 
@@ -513,7 +528,8 @@ class LogJubelioController extends Controller
                 }
 
                 $logjubelio->status = 1;
-                
+                $logjubelio->user_solved_by = Auth::user()->id;
+                $logjubelio->cron_run = 10;
                 $logjubelio->save();
 
                 DB::commit();
