@@ -100,7 +100,7 @@ class ProcessJubelioOrders extends Command
 
                     if($cekTransaksi){
 
-                        $logjubelio->update(['cron_run' => 1,'cron_failed' => 'Invoice transaksi sudah ada']);
+                        $logjubelio->update(['cron_run' => 2,'status' => 2]);
 
                     
 
