@@ -147,17 +147,8 @@
 
                                            
                                             <div>
-                                               
-                                                @if ($item->status == 0)
-                                                    <p class="font-bold me-2">#{{$item->invoice}}</p>
-                                                   
-                                                @else
-
-                                                    <p class="font-bold me-2">
-                                                        <a href={{ route('jubelio.transaction.detail',$item->invoice) }} class="text-blue-500 hover:text-blue-600 hover:underline">#{{$item->invoice}}</a>
-                                                    </p>
-                                                    
-                                                @endif
+                                                <p class="font-bold me-2">{{$item->invoice}}</p>
+                                                
 
                                                 
                                             
