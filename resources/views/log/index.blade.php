@@ -147,17 +147,9 @@
 
                                            
                                             <div>
+                                                <a href={{ route('transaction.index',['invoice' => $item->invoice, 'type' => 0]) }} class="text-blue-500 hover:text-blue-600 hover:underline">{{$item->invoice}}</a>
                                                
-                                                @if ($item->status == 0)
-                                                    <p class="font-bold me-2">{{$item->invoice}}</p>
-                                                   
-                                                @else
-
-                                                    <p class="font-bold me-2">
-                                                        <a href={{ route('transaction.index',['invoice' => $item->invoice, 'type' => 0]) }} class="text-blue-500 hover:text-blue-600 hover:underline">{{$item->invoice}}</a>
-                                                    </p>
-                                                    
-                                                @endif
+                                                
 
                                                 
                                             
