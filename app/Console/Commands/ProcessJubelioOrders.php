@@ -96,7 +96,7 @@ class ProcessJubelioOrders extends Command
 
                 if($matched->count() > 0){
 
-                    $cekTransaksi = Transaction::where('invoice',$dataApi['salesorder_no'])->first();
+                    $cekTransaksi = Transaction::where('type',Transaction::TYPE_SELL)->where('invoice',$dataApi['salesorder_no'])->first();
 
                     if($cekTransaksi){
 
