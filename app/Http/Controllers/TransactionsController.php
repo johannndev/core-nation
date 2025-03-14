@@ -417,6 +417,8 @@ class TransactionsController extends Controller
  	{
 		try {
 
+			dd($request);
+
 		$class = array();
 
 		
@@ -432,25 +434,11 @@ class TransactionsController extends Controller
 		$transaction = new Transaction();
         $transaction->date = $request->date;
         $transaction->type = $type;
-
-		if($request->note){
-			$transaction->description = $request->note;
-		}else{
-			$transaction->description = "";
-		}
-
-		if($request->invoice){
-			$transaction->invoice = $request->invoice;
-		}else{
-			$transaction->invoice = "";
-		}
-
-		if($request->due){
-			$transaction->due = $request->due;
-		}else{
-			$transaction->due = '0000-00-00';
-		}
-
+		$transaction->due = $request->due ?? '0000-00-00';
+		$transaction->description = $request->note ?? ' ';
+		$transaction->invoice = $request->invoice ?? ' ';
+		$transaction->adjustment = $request->adjustment ?? 0;
+		$transaction->discount = $request->disc ?? 0;
 		$transaction->detail_ids = ' ';
 		
         $transaction->save();
