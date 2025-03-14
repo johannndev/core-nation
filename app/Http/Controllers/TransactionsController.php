@@ -417,8 +417,7 @@ class TransactionsController extends Controller
  	{
 		try {
 
-			dd($request);
-
+	
 		$class = array();
 
 		
