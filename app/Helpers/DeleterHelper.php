@@ -182,7 +182,7 @@ class DeleterHelper
 
 		//get the old details
 		$details = array_filter(explode(',',$this->t->detail_ids));
-		$details = TransactionDetail::with('item')->whereIn('id',array_filter(explode(',',$this->t->detail_ids)))->get();
+		$details = TransactionDetail::with('item')->where('transaction_id',$this->t->id)->get();
 
 		//copy to deleted table
 		foreach($details as $detail)
@@ -212,7 +212,8 @@ class DeleterHelper
 	{
 		//get the old details
 		$details = array_filter(explode(',',$this->t->detail_ids));
-		$details = TransactionDetail::with('item')->whereIn('id',array_filter(explode(',',$this->t->detail_ids)))->get();
+		$details = TransactionDetail::with('item')->where('transaction_id',$this->t->id)->get();
+		
 
 		$transactionModel = new Transaction;
 		$can_minus = $transactionModel->can_minus($this->t->receiver);

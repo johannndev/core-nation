@@ -1429,8 +1429,7 @@ class TransactionsController extends Controller
 
 		$deleter = new DeleterHelper;
 		$deleted = $deleter->delete($t);
-		InvoiceTrackerHelpers::flag($t);
-		HashManagerHelper::delete($t);
+		
 
 		
 		DB::commit();

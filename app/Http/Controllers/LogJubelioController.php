@@ -332,6 +332,12 @@ class LogJubelioController extends Controller
                     throw new Exception('Data sync dengan aria tidak ditemukan.');
                 }
 
+                $cekTransaksi = Transaction::where('type',Transaction::TYPE_SELL)->where('invoice',$dataApi['salesorder_no'])->first();
+
+                if ($cekTransaksi) {
+                    throw new Exception('Invoice sudah ada.');
+                }
+
                 $sender = Customer::findOrFail($jubelioSync->warehouse_id);
                 $receiver = Customer::findOrFail($jubelioSync->customer_id);
 
