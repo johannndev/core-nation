@@ -191,6 +191,7 @@ class ProcessJubelioOrders extends Command
                 $transaction->date = $dataJubelio->date;
                 $transaction->type = $type;
                 $transaction->adjustment	 = $dataJubelio->adjustment;
+                $transaction->user_id =-100;
 
                 //    if($dataJubelio->note){
                 //        $transaction->description = $dataJubelio->note;

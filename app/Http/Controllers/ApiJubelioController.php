@@ -11,6 +11,7 @@ use App\Helpers\StatManagerHelper;
 use App\Helpers\TransactionsManagerHelper;
 use App\Models\Customer;
 use App\Models\Item;
+use App\Models\Jubelioreturn;
 use App\Models\Jubeliosync;
 use App\Models\Logjubelio;
 use App\Models\Notmatcheditem;
@@ -587,8 +588,18 @@ class ApiJubelioController extends Controller
                     ], 200);
 
                 }else{
-                    $dataTransaksi->jubelio_return = 1;
-                    $dataTransaksi->save();
+
+                    $returnData = new Jubelioreturn();
+                    
+                    $returnData->order_id = $dataApi['salesorder_id'];
+                    $returnData->transaction_id = $dataTransaksi->id;
+                    $returnData->method_pay = $dataApi['payment_method'];
+                    $returnData->invoice = $dataApi['salesorder_no'];
+                    $returnData->pesan = $dataApi['cancel_reason_detail'];
+                    $returnData->location_name = $dataApi['location_name'];
+                    $returnData->store_name = $dataApi['source_name'];
+
+                    $returnData->save();
 
                     return response()->json([
                         'status' => 'ok',
@@ -599,7 +610,17 @@ class ApiJubelioController extends Controller
 
             }else{
 
-                $this->logJubelio($dataApi['salesorder_id'],'TRANSACTION','RETURN',$dataApi['source_name'],$dataApi['location_name'],$dataApi['salesorder_no'],$dataApi['store_id'],$dataApi['location_id'],'Transaksi tidak ditemukan');
+                $returnData = new Jubelioreturn();
+                    
+                $returnData->order_id = $dataApi['salesorder_id'];
+                $returnData->transaction_id = $dataTransaksi->id;
+                $returnData->method_pay = $dataApi['payment_method'];
+                $returnData->invoice = $dataApi['salesorder_no'];
+                $returnData->pesan = 'Transaksi tidak ditemukan';
+                $returnData->location_name = $dataApi['location_name'];
+                $returnData->store_name = $dataApi['source_name'];
+
+                $returnData->save();
 
                 return response()->json([
                     'status' => 'ok',
@@ -661,12 +682,9 @@ class ApiJubelioController extends Controller
                 $transaction->date = $dataJubelio->date;
                 $transaction->type = $type;
                 $transaction->adjustment	 = $dataJubelio->adjustment;
+                $transaction->user_id =-100;
 
-                //    if($dataJubelio->note){
-                //        $transaction->description = $dataJubelio->note;
-                //    }else{
-                    
-                //    }
+
 
                 $transaction->description = " ";
                 $transaction->invoice = $dataJubelio->invoice;
