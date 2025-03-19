@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jubelioreturn;
+use App\Models\Jubeliosync;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class JubelioReturnController extends Controller
 {
@@ -103,15 +107,43 @@ class JubelioReturnController extends Controller
 		$this->createTransaction(Transaction::TYPE_RETURN, $dataCollect);
 
         $returnData->status = 1;
+        $returnData->confirmed_by = Auth::user()->id;
 
         $returnData->save();
 
 		return redirect()->route('transaction.index')->with('success', 'Return created.');
 
-		
-
-		
-		
-
 	}
+
+    public function createSolved($id){
+
+        $logjubelio = Jubelioreturn::findOrFail($id);
+
+        $response = Http::withHeaders([ 
+            'Content-Type'=> 'application/json', 
+            'authorization'=> Cache::get('jubelio_data')['token'], 
+        ]) 
+        ->get('https://api2.jubelio.com/sales/orders/'.$logjubelio->order_id); 
+
+        $data = json_decode($response->body(), true);
+
+        $adjust = $data['sub_total'] - $data['grand_total'];
+
+        $jubelioSync = Jubeliosync::where('jubelio_store_id', $data['store_id'])->where('jubelio_location_id',$data['location_id'])->first();
+        
+        $sid = $id;
+
+        return view('jubelio.return.solved',compact('jubelioSync','data','adjust','sid'));
+    }
+
+    public function storeSolved($id){
+        $logjubelio = Jubelioreturn::findOrFail($id);
+        $logjubelio ->status = 1;
+        $logjubelio->confirmed_by = Auth::user()->id;
+    
+        $logjubelio->save();
+
+        return redirect()->route('transaction.index')->with('success', 'Return finished.');
+    }
+
 }
