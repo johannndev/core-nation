@@ -17,6 +17,7 @@ use App\Http\Controllers\GajihController;
 use App\Http\Controllers\HashController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\JubelioReturnController;
 use App\Http\Controllers\JubelioSyncController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\LocationController;
@@ -127,6 +128,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/jubelio/sync', [JubelioSyncController::class, 'index'])->name('jubelio.sync.index');
     Route::get('/jubelio/sync/{id}/edit', [JubelioSyncController::class, 'edit'])->name('jubelio.sync.edit');
     Route::patch('/jubelio/sync/{id}/update', [JubelioSyncController::class, 'update'])->name('jubelio.sync.update');
+
+    Route::get('/jubelio/return', [JubelioReturnController::class, 'index'])->name('jubelio.return.index');
+
 
     Route::delete('/jubelio/sync/{id}/delete', [JubelioSyncController::class, 'delete'])->name('jubelio.sync.delete');
     Route::get('/jubelio/sync/create', [JubelioSyncController::class, 'create'])->name('jubelio.sync.create');
