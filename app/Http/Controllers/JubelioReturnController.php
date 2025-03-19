@@ -42,7 +42,7 @@ class JubelioReturnController extends Controller
 
         $returnData = Jubelioreturn::find($id);
 
-		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$returnData->order_id)->first();
+		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$returnData->transaction_id	)->first();
 
         $rid = $id;
 
@@ -53,7 +53,7 @@ class JubelioReturnController extends Controller
 
         $returnData = Jubelioreturn::find($id);
 
-		$transactionData = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$returnData->order_id)->first();
+		$transactionData = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$returnData->transaction_id	)->first();
 
 		
 		$item = TransactionDetail::with('item')->where('transaction_id',$id)->whereIn('item_id', $request->return_item)->get();
