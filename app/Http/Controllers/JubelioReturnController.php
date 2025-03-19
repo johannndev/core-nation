@@ -10,7 +10,7 @@ class JubelioReturnController extends Controller
     public function index(Request $request){
 
         
-        $dataList = Jubelioreturn::with('user')->orderBy('updated_at','created_at');
+        $dataList = Jubelioreturn::with('user')->orderBy('updated_at','asc');
 
         if($request->status == "SOLVED"){
             $dataList = $dataList->whereIn('status',[1,2]);
