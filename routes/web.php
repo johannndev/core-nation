@@ -131,6 +131,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/jubelio/return', [JubelioReturnController::class, 'index'])->name('jubelio.return.index');
     Route::get('/jubelio/return/{id}/detail', [JubelioReturnController::class, 'jubelioReturn'])->name('jubelio.return.detail');
+    Route::post('/jubelio/return/{id}/store', [TransactionsController::class, 'jubelioReturnPost'])->name('jubelio.return.store');
 
 
     Route::delete('/jubelio/sync/{id}/delete', [JubelioSyncController::class, 'delete'])->name('jubelio.sync.delete');
