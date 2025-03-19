@@ -35,7 +35,7 @@
    
 
 
-    <form id="myForm" action="{{route('jubelio.return.store',$data->rid)}}" method="post" >
+    <form id="myForm" action="{{route('jubelio.return.store',$rid)}}" method="post" >
 
         @csrf
 
