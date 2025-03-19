@@ -41,7 +41,7 @@
             <div class="mx-auto  ">
                 <!-- Start coding here -->
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-                    <form action="{{route('filter.get',['action' =>'jubelio.log.index'])}}" method="post" >
+                    <form action="{{route('filter.get',['action' =>'jubelio.return.index'])}}" method="post" >
 
                         @csrf
 
