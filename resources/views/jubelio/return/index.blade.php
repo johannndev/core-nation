@@ -187,13 +187,13 @@
                                             @if ($item->status == 0)
                                            
                                             <div>
-                                                <a href="{{ route('jubelio.solved.create',$item->id) }}" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg px-3 py-2 text-xs me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Solved</a>
+                                                <a href="{{ route('jubelio.solved.create',$item->id) }}" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg px-3 py-2 text-xs me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Finished</a>
 
                                             </div>
 
                                             <div>
 
-                                                <a href="{{route('jubelio.manual.create',$item->id)}}" type="button" class="capitalize text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-3 py-2 text-xs me-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Manual Create</a>
+                                                <a href="{{route('jubelio.return.detail',$item->order_id)}}" type="button" class="capitalize text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-3 py-2 text-xs me-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Confirmation </a>
 
                                             </div>
 
@@ -241,12 +241,22 @@
 
                             <hr class="my-4">
 
+                            @isset($item->pesan)
+
                             <div class="px-4 text-sm text-gray-500">
                                 <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
                                     <span class="font-medium">Api failed!</span> {{$item->pesan}}
                                   </div>
                                
                             </div>
+                                
+                            @endisset
+
+                            @empty($item->pesan)
+                                <p>Pesan tidak tersedia</p>
+                            @endempty
+
+                           
 
                             <hr class="my-4 px-4">
 

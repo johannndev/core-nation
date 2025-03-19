@@ -130,6 +130,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/jubelio/sync/{id}/update', [JubelioSyncController::class, 'update'])->name('jubelio.sync.update');
 
     Route::get('/jubelio/return', [JubelioReturnController::class, 'index'])->name('jubelio.return.index');
+    Route::get('/jubelio/return/{id}/detail', [JubelioReturnController::class, 'jubelioReturn'])->name('jubelio.return.detail');
 
 
     Route::delete('/jubelio/sync/{id}/delete', [JubelioSyncController::class, 'delete'])->name('jubelio.sync.delete');
@@ -148,6 +149,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/location/{id}/edit', [LocationController::class, 'edit'])->name('location.edit')->middleware('permission:location');
     Route::patch('/location/{id}/update', [LocationController::class, 'update'])->name('location.update')->middleware('permission:location');
 
+    
 
 
 

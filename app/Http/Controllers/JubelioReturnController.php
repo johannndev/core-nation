@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jubelioreturn;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class JubelioReturnController extends Controller
@@ -33,4 +34,12 @@ class JubelioReturnController extends Controller
 
         return view('jubelio.return.index',compact('dataList'));
     }
+
+    
+	public function jubelioReturn($id){
+
+		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+
+		return view('jubelio.return.detail',compact('data'));
+	}
 }
