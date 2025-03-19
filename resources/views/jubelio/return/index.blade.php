@@ -244,16 +244,16 @@
                             @isset($item->pesan)
 
                             <div class="px-4 text-sm text-gray-500">
-                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                                    <span class="font-medium">Api failed!</span> {{$item->pesan}}
-                                  </div>
+                                <div class="p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                    {{$item->pesan}}
+                                </div>
                                
                             </div>
                                 
                             @endisset
 
                             @empty($item->pesan)
-                                <p>Pesan tidak tersedia</p>
+                                <p class="p-4">Pesan tidak tersedia</p>
                             @endempty
 
                            
