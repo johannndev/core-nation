@@ -574,7 +574,7 @@ class ApiJubelioController extends Controller
             }
 
         
-        }elseif ($dataApi['status'] == "RETURNED") {
+        }elseif ($dataApi['status'] == "CANCELED") {
 
             $dataTransaksi = Transaction::where('invoice',$dataApi['salesorder_no'])->first();
 
