@@ -59,10 +59,11 @@ class JubelioReturnController extends Controller
 
 		$transactionData = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$returnData->transaction_id	)->first();
 
-		dd($returnData,$request->return_item);
+		
 		
 		$item = TransactionDetail::with('item')->where('transaction_id',$id)->whereIn('item_id', $request->return_item)->get();
 
+		dd($returnData,$request->return_item, $item);
 		
 
 
