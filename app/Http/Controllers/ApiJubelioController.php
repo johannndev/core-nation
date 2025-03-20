@@ -610,17 +610,17 @@ class ApiJubelioController extends Controller
 
             }else{
 
-                $returnData = new Jubelioreturn();
+                // $returnData = new Jubelioreturn();
                     
-                $returnData->order_id = $dataApi['salesorder_id'];
-                $returnData->transaction_id = $dataTransaksi->id;
-                $returnData->method_pay = $dataApi['payment_method'];
-                $returnData->invoice = $dataApi['salesorder_no'];
-                $returnData->pesan = 'Transaksi tidak ditemukan';
-                $returnData->location_name = $dataApi['location_name'];
-                $returnData->store_name = $dataApi['source_name'];
+                // $returnData->order_id = $dataApi['salesorder_id'];
+                // $returnData->transaction_id = $dataTransaksi->id;
+                // $returnData->method_pay = $dataApi['payment_method'];
+                // $returnData->invoice = $dataApi['salesorder_no'];
+                // $returnData->pesan = 'Transaksi tidak ditemukan';
+                // $returnData->location_name = $dataApi['location_name'];
+                // $returnData->store_name = $dataApi['source_name'];
 
-                $returnData->save();
+                // $returnData->save();
 
                 return response()->json([
                     'status' => 'ok',
