@@ -418,7 +418,7 @@ class ApiJubelioController extends Controller
             ->keyBy('code'); // Index berdasarkan 'code' agar pencarian lebih cepat
         
         // Proses matching dengan map agar lebih efisien
-        $groupedData = collect($dataApi['items'])->partition(fn($item) => isset($existingProducts[$item['item_code']]));
+        $groupedData = collect($data['items'])->partition(fn($item) => isset($existingProducts[$item['item_code']]));
         
         $matched = $groupedData[0]->map(fn($item) => [
             'itemId'   => $existingProducts[$item['item_code']]->id,
@@ -454,7 +454,7 @@ class ApiJubelioController extends Controller
 
                 // $adjust = $dataApi['total_disc']+$dataApi['add_disc']+$ongkir+$dataApi['total_tax']+$dataApi['service_fee']+$dataApi['insurance_cost'];
 
-                $adjust = $dataApi['sub_total'] - $dataApi['grand_total'];
+                $adjust = $data['sub_total'] - $data['grand_total'];
 
                 $dataJubelio = [
                     "date" => Carbon::now()->toDateString(),
