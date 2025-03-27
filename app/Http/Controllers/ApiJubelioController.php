@@ -492,8 +492,8 @@ class ApiJubelioController extends Controller
                                 'item_code' => $dataRow['item_code'],
                                 'item_name' =>  $dataRow['item_name'],
                                 'channel' =>  $dataRow['item_code'],
-                                'loc_name' =>  $data['source_name'],
-                                'thumbnail' =>  $dataRow['thumbnail'],
+                                'loc_name' =>  $data['customer_name'],
+                                'thumbnail' =>  '',
                                 'created_at' => Carbon::now(),
                                 'updated_at' => Carbon::now(),
                             ];
@@ -503,13 +503,13 @@ class ApiJubelioController extends Controller
 
                         $skuNotmatche = $notMatched->count()." SKU tidak ditemukan";
                     
-                        $logStore = $this->logJubelio($data['salesorder_id'],'TRANSACTION','RETURN-SR',$data['source_name'],$data['location_name'],$data['salesorder_no'],$data['store_id'],$data['location_id'],$skuNotmatche);
+                        $logStore = $this->logJubelio($data['salesorder_id'],'TRANSACTION','RETURN-SR',$data['customer_name'],$data['location_name'],$data['salesorder_no'],$data['store_id'],$data['location_id'],$skuNotmatche);
 
                     }
 
                 }else{
 
-                    $logStore = $this->logJubelio($data['salesorder_id'],'SYSTEM','RETURN-SR',$data['source_name'],$data['location_name'],$data['salesorder_no'],$data['store_id'],$data['location_id'],$createData['message'],$createData['deadLock']);
+                    $logStore = $this->logJubelio($data['salesorder_id'],'SYSTEM','RETURN-SR',$data['customer_name'],$data['location_name'],$data['salesorder_no'],$data['store_id'],$data['location_id'],$createData['message'],$createData['deadLock']);
 
 
                     return response()->json([
