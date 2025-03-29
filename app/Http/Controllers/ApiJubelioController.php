@@ -505,13 +505,13 @@ class ApiJubelioController extends Controller
 
                         $skuNotmatche = $notMatched->count()." SKU tidak ditemukan";
                     
-                        $logStore = $this->logJubelio($dataApi['return_id'],'TRANSACTION','RETURN-SR',$data['customer_name'],$data['location_name'],$dataInvoice,$data['store_id'],$data['location_id'],$skuNotmatche);
+                        $logStore = $this->logJubelio($dataApi['return_id'],'TRANSACTION','RETURN-SR',$data['customer_name'],$data['location_name'],$dataInvoice,$data['store_id'],$data['location_id'],$skuNotmatche,10);
 
                     }
 
                 }else{
 
-                    $logStore = $this->logJubelio($dataApi['return_id'],'SYSTEM','RETURN-SR',$data['customer_name'],$data['location_name'],$dataInvoice,$data['store_id'],$data['location_id'],$createData['message'],$createData['deadLock']);
+                    $logStore = $this->logJubelio($dataApi['return_id'],'SYSTEM','RETURN-SR',$data['customer_name'],$data['location_name'],$dataInvoice,$data['store_id'],$data['location_id'],$createData['message'],10);
 
 
                     return response()->json([
