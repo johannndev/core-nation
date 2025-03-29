@@ -424,10 +424,10 @@ class ApiJubelioController extends Controller
             'itemId'   => $existingProducts[$item['item_code']]->id,
             'code'     => $existingProducts[$item['item_code']]->code,
             'name'     => $existingProducts[$item['item_code']]->name,
-            'quantity' => $item['qty'],
+            'quantity' => $item['qty_in_base'],
             'price'    => $item['price'],
             'discount' => 0,
-            'subtotal' => $item['qty']*$item['price'],
+            'subtotal' => $item['qty_in_base']*$item['price'],
         ])->values(); // Reset indeks array
         
         $notMatched = $groupedData[1]->values(); // Reset indeks array
@@ -477,6 +477,8 @@ class ApiJubelioController extends Controller
 
                 $createData =  $this->createTransaction(Transaction::TYPE_RETURN, $dataCollect);
 
+                $dataInvoice = $dataApi['return_no']." - ".$data['salesorder_no'];
+
             
                 if($createData['status'] == "200" ){
 
@@ -503,13 +505,13 @@ class ApiJubelioController extends Controller
 
                         $skuNotmatche = $notMatched->count()." SKU tidak ditemukan";
                     
-                        $logStore = $this->logJubelio($data['salesorder_id'],'TRANSACTION','RETURN-SR',$data['customer_name'],$data['location_name'],$data['salesorder_no'],$data['store_id'],$data['location_id'],$skuNotmatche);
+                        $logStore = $this->logJubelio($dataApi['return_id'],'TRANSACTION','RETURN-SR',$data['customer_name'],$data['location_name'],$dataInvoice,$data['store_id'],$data['location_id'],$skuNotmatche);
 
                     }
 
                 }else{
 
-                    $logStore = $this->logJubelio($data['salesorder_id'],'SYSTEM','RETURN-SR',$data['customer_name'],$data['location_name'],$data['salesorder_no'],$data['store_id'],$data['location_id'],$createData['message'],$createData['deadLock']);
+                    $logStore = $this->logJubelio($dataApi['return_id'],'SYSTEM','RETURN-SR',$data['customer_name'],$data['location_name'],$dataInvoice,$data['store_id'],$data['location_id'],$createData['message'],$createData['deadLock']);
 
 
                     return response()->json([
