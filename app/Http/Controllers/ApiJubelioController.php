@@ -570,6 +570,18 @@ class ApiJubelioController extends Controller
 
             $limitTime = $tanggal->lessThan($threshold) ? 0 : 1;
 
+            $cekCron = Logjubelio::where('order_id',$dataApi['salesorder_id'])->where('invoice',$dataApi['salesorder_no'])->where('type','SALE')->first();
+
+            if($cekCron){
+
+                return response()->json([
+                    'status' => 'ok',
+                    'pesan' => 'log cron sudah ada',
+                    'logStore' => $logStore
+                ], 200);
+
+            }
+
             if($limitTime == 1){
 
                 $jubelioSync = Jubeliosync::where('jubelio_store_id',$dataApi['store_id'])->where('jubelio_location_id',$dataApi['location_id'])->first();
