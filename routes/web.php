@@ -9,6 +9,7 @@ use App\Http\Controllers\BoronganController;
 use App\Http\Controllers\CashFlowController;
 use App\Http\Controllers\CompareController;
 use App\Http\Controllers\ContributorController;
+use App\Http\Controllers\CronController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DeletedController;
@@ -87,6 +88,8 @@ Route::get('/role-set', function () {
 Route::get('/logjubelio', [LogJubelioController::class, 'index']);
 Route::get('/logjubelio/{id}/detail', [LogJubelioController::class, 'detail']);
 
+Route::get('/edititemstat', [CronController::class, 'itemEdit']);
+Route::get('/itemcron', [CronController::class, 'itemCron']);
 
 Route::get('/role-create', function () {
     

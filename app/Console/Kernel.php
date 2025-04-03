@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('jubelio:process-orders')->everyMinute();
+        $schedule->command('jubelio:item-update')->everyMinute();
     }
 
     /**
