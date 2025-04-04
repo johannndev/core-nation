@@ -32,7 +32,7 @@ class UpdateItemIdJubelio extends Command
     {
         Log::info('jubelio:item-update dijalankan pada: ' . now());
         
-        $item = Item::whereNull('jubelio_item_id')->orderBy('id','asc')->first();
+        $item = Item::whereNull('jubelio_item_id')->orderBy('id','desc')->first();
 
         // dd($item);
 
