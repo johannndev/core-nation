@@ -22,15 +22,15 @@ class CronController extends Controller
       
         $data = CronStatRun::where('name','edit_item')->first();
 
-        $whItem = WarehouseItem::with(['item' => function ($query) {
-            $query->whereNull('jubelio_item_id');
+        $whItem = WarehouseItem::with(['item' => function ($q) {
+            $q->orderBy('id');
         }])
-        ->whereIn('warehouse_id', $jubelioSync)
-        ->orderBy('id', 'asc')
-        ->first();
+        ->whereHas('item', function ($q) {
+            $q->whereNull('jubelio_item_id');
+        })->get();
 
 
-        $itemCode = $whItem;
+        $itemCode = $whItem->item->code;
         dd($itemCode);
 
         return response()->json([
