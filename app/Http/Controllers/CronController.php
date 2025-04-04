@@ -30,7 +30,7 @@ class CronController extends Controller
         ->first();
 
 
-        $itemCode = $whItem->item;
+        $itemCode = $whItem;
         dd($itemCode);
 
         return response()->json([
