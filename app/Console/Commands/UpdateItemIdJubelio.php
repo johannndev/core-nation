@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Item;
+use App\Models\Jubeliosync;
+use App\Models\WarehouseItem;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +36,18 @@ class UpdateItemIdJubelio extends Command
         
         $item = Item::whereNull('jubelio_item_id')->orderBy('id','desc')->first();
 
+        $jubelioSync = Jubeliosync::select('warehouse_id')->groupBy('warehouse_id')->pluck('warehouse_id')->toArray();
+
+        $whItem = WarehouseItem::with(['item' => function ($query) {
+            $query->whereNull('jubelio_item_id');
+        }])
+        ->whereIn('warehouse_id', $jubelioSync)
+        ->orderBy('id', 'asc')
+        ->first();
+
+
+        $itemCode = $whItem->item->code;
+
         // dd($item);
 
         if($item){
@@ -43,13 +57,13 @@ class UpdateItemIdJubelio extends Command
                 'authorization'=> Cache::get('jubelio_data')['token'], 
             ]) 
             ->get('https://api2.jubelio.com/inventory/items/to-stock/',[
-                'q' => $item->code,
+                'q' => $itemCode,
             ]); 
     
             $data = json_decode($response->body(), true);
 
             if($data['totalCount'] == 0){
-                DB::table('items')->where('code',$item->code)->update([
+                DB::table('items')->where('code',$itemCode)->update([
                     'jubelio_item_id' => 0, // Kolom yang diperbarui
                 ]);
                
@@ -59,7 +73,7 @@ class UpdateItemIdJubelio extends Command
                 ]);
             }else{
                 
-                DB::table('items')->where('code',$item->code)->update([
+                DB::table('items')->where('code',$itemCode)->update([
                     'jubelio_item_id' => $data['data'][0]['item_id'], // Kolom yang diperbarui
                 ]);
 

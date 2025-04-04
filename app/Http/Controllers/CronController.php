@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\CronStatRun;
 use App\Models\Item;
+use App\Models\Jubeliosync;
+use App\Models\WarehouseItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -12,8 +14,10 @@ use Illuminate\Support\Facades\Http;
 class CronController extends Controller
 {
     public function itemEdit(){
-        $itemCount = Item::count();
+        $jubelioSync = Jubeliosync::select('warehouse_id')->groupBy('warehouse_id')->pluck('warehouse_id')->toArray();
 
+        $itemCount = WarehouseItem::whereIn('warehouse_id', $jubelioSync)->count();
+      
         $data = CronStatRun::where('name','edit_item')->first();
 
         return response()->json([
