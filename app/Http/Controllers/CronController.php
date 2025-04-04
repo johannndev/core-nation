@@ -22,17 +22,6 @@ class CronController extends Controller
       
         $data = CronStatRun::where('name','edit_item')->first();
 
-        $whItem = WarehouseItem::with(['item' => function ($q) {
-            $q->orderBy('id');
-        }])
-        ->whereHas('item', function ($q) {
-            $q->whereNull('jubelio_item_id');
-        })->first();
-
-
-        $itemCode = $whItem->item->code;
-        dd($itemCode);
-
         return response()->json([
 
             'total_item' => $itemCount,

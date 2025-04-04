@@ -38,9 +38,14 @@ class UpdateItemIdJubelio extends Command
 
         $jubelioSync = Jubeliosync::select('warehouse_id')->groupBy('warehouse_id')->pluck('warehouse_id')->toArray();
 
-        $whItem = WarehouseItem::with(['item' => function ($query) {
-            $query->whereNull('jubelio_item_id');
+    
+
+        $whItem = WarehouseItem::with(['item' => function ($q) {
+            $q->orderBy('id');
         }])
+        ->whereHas('item', function ($q) {
+            $q->whereNull('jubelio_item_id');
+        })
         ->whereIn('warehouse_id', $jubelioSync)
         ->orderBy('id', 'asc')
         ->first();
