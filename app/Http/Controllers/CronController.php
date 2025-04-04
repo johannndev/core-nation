@@ -27,7 +27,7 @@ class CronController extends Controller
         }])
         ->whereHas('item', function ($q) {
             $q->whereNull('jubelio_item_id');
-        })->get();
+        })->first();
 
 
         $itemCode = $whItem->item->code;
