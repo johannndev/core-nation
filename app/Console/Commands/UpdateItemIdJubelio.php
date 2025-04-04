@@ -34,7 +34,7 @@ class UpdateItemIdJubelio extends Command
     {
         Log::info('jubelio:item-update dijalankan pada: ' . now());
         
-        $item = Item::whereNull('jubelio_item_id')->orderBy('id','desc')->first();
+        // $item = Item::whereNull('jubelio_item_id')->orderBy('id','desc')->first();
 
         $jubelioSync = Jubeliosync::select('warehouse_id')->groupBy('warehouse_id')->pluck('warehouse_id')->toArray();
 
@@ -50,7 +50,7 @@ class UpdateItemIdJubelio extends Command
 
         // dd($item);
 
-        if($item){
+        if($whItem){
 
             $response = Http::withHeaders([ 
                 'Content-Type'=> 'application/json', 
