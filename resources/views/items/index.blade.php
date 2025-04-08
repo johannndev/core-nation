@@ -156,21 +156,19 @@
                                     <td class="px-4 py-3">{{$item->getItemInWarehouse($item->id)}}</td>
                                     <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
 
-                                        @if($item->jubelio_item_id)
-    
-                                            @if ($item->jubelio_item_id > 0)
-                                                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300">{{ $item->jubelio_item_id }}</span>
-    
-                                            @else
-                                                <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-red-300">Tidak ada</span>
-    
-                                            @endif
-                                            
-                                        @else
+                                        @php
+                                            $status = $item->jubelio_item_id ?? null;
+                                        @endphp
+                                        
+                                        @if (is_null($status))
+                                            <span class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">Belum Cek</span>
 
-                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">Belum cek</span>
-
+                                        @elseif ($status === 0)
+                                            <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-red-300">Tidak Ada</span>
+                                        @elseif ($status > 0)
+                                            <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300">{{ $item->jubelio_item_id }}</span>
                                         @endif
+    
     
                                     
     
