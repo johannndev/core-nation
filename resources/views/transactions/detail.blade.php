@@ -273,7 +273,7 @@
                     </div>
                     <div class="flex items-center flex-1 space-x-4 justify-end">
 
-                        @if ($cekJubelio > 0 && !$data->reference_id)
+                        @if ($cekJubelio > 0 && is_null($data->reference_id))
 
                         <a href="{{ route('transaction.detailJubelioSync', $data->id) }}" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg">
                             <svg class="h-3.5 w-3.5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
