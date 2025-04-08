@@ -206,6 +206,11 @@ class Transaction extends Model
 		return $this->belongsTo('App\Models\User','user_id');
 	}
 
+	public function adjustUser()
+	{
+		return $this->belongsTo('App\Models\User','user_jubelio');
+	}
+
 	public function transactionDetail(): HasMany
     {
         return $this->hasMany(TransactionDetail::class, 'transaction_id', 'id');

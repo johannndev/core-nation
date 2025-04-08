@@ -99,6 +99,7 @@
                                     <th scope="col" class="px-4 py-3">Price</th>
                                     <th scope="col" class="px-4 py-3">NB</th>
                                     <th scope="col" class="px-4 py-3">Quantity</th>
+                                    <th scope="col" class="px-4 py-3">Jubelio</th>
                                     <th scope="col" class="px-4 py-3">Actions</th>
                                     
                                 </tr>
@@ -137,6 +138,27 @@
                                         
                                    
                                     <td class="px-4 py-3">{{$item->getItemInWarehouse($item->id)}}</td>
+                                    <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+
+                                        @isset($item->jubelio_item_id)
+    
+                                            @if ($item->jubelio_item_id > 0)
+                                                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300">{{ $item->jubelio_item_id }}</span>
+    
+                                            @else
+                                                <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-red-300">Tidak ada</span>
+    
+                                            @endif
+                                            
+                                        @endisset
+    
+                                        @empty($item->jubelio_item_id)
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">Belum cek</span>
+    
+                                        @endempty
+    
+                                    
+                                    </td>
                                     <td class="px-4 py-3">
                                         <a href="{{route('asetLancar.edit',$item->id)}}" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                                             Edit

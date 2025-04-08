@@ -192,6 +192,28 @@
                             </div>
                         </div>
 
+                        @if ($cekJubelio > 0)
+                            
+                            <div>
+                                <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                    <div class="col-span-2">
+                                        <p class="font-bold">Jubelio</p>
+                                    </div>
+                                    <div class="col-span-3">
+                                        
+                                        @isset($data->user_jubelio)
+                                            Adjustment by {{ $data->adjustUser->name }}
+                                        @endisset
+
+                                        @empty($data->user_jubelio)
+                                            -
+                                        @endempty
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         @if ($data->jubelio_return > 0)
 
                         <div>
@@ -249,7 +271,21 @@
                             Receipt
                         </a>
                     </div>
-                    <div class="">
+                    <div class="flex items-center flex-1 space-x-4 justify-end">
+
+                        @if ($cekJubelio > 0 && !$data->reference_id)
+
+                        <a href="{{ route('transaction.detailJubelioSync', $data->id) }}" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg">
+                            <svg class="h-3.5 w-3.5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                                <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
+                            </svg>
+                              
+                           Jubelio Adjustment
+                        </a>
+                            
+                        @endif
+                       
+
                         <button type="button" id="deleteButton" data-modal-target="deleteModal" data-modal-toggle="deleteModal" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 rounded-lg">
                             
 

@@ -131,6 +131,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/jubelio/sync', [JubelioSyncController::class, 'index'])->name('jubelio.sync.index');
     Route::get('/jubelio/sync/{id}/edit', [JubelioSyncController::class, 'edit'])->name('jubelio.sync.edit');
     Route::patch('/jubelio/sync/{id}/update', [JubelioSyncController::class, 'update'])->name('jubelio.sync.update');
+    Route::get('/jubelio/sync/{id}/getBin', [JubelioSyncController::class, 'getBin'])->name('jubelio.sync.getBin');
 
     Route::get('/jubelio/return', [JubelioReturnController::class, 'index'])->name('jubelio.return.index');
     Route::get('/jubelio/return/{id}/detail', [JubelioReturnController::class, 'jubelioReturn'])->name('jubelio.return.detail');
@@ -138,6 +139,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/jubelio/return/{id}/finished', [JubelioReturnController::class, 'createSolved'])->name('jubelio.return.finished');
     Route::post('/jubelio/return/{id}/finishedstore', [JubelioReturnController::class, 'storeSolved'])->name('jubelio.return.finishedstore');
 
+    Route::post('/jubelio/adjust/{id}/warehouse', [ApiJubelioController::class, 'adjustStok'])->name('jubelio.adjustStok');
 
     Route::delete('/jubelio/sync/{id}/delete', [JubelioSyncController::class, 'delete'])->name('jubelio.sync.delete');
     Route::get('/jubelio/sync/create', [JubelioSyncController::class, 'create'])->name('jubelio.sync.create');
@@ -233,6 +235,10 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/transaction/{id}/detail', [TransactionsController::class, 'getDetail'])->name('transaction.getDetail')->middleware('permission:transactions.detail');
+
+    
+    Route::get('/transaction/{id}/detail/jubelio-sync', [TransactionsController::class, 'detailJubelioSync'])->name('transaction.detailJubelioSync')->middleware('permission:transactions.detail');
+
 
     Route::get('/transaction/delete', [DeletedController::class, 'index'])->name('transaction.delete')->middleware('permission:transactions.deleteList');
     Route::get('/transaction/delete/filter', [FilterQueryController::class, 'transactionFilterDelete'])->name('transaction.deletefilter')->middleware('permission:transactions.deleteList');

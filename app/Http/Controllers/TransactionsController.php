@@ -20,6 +20,7 @@ use App\Libraries\StatManager;
 use App\Libraries\TransactionsManager;
 use App\Models\Customer;
 use App\Models\Item;
+use App\Models\Jubeliosync;
 use App\Models\StatSell;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
@@ -655,7 +656,17 @@ class TransactionsController extends Controller
     public function getDetail($id, Request $request)
     {
 
-		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+		$data = Transaction::with(['receiver','sender','user','adjustUser','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+
+		if($data->type = Transaction::TYPE_SELL){
+            $warehouse = $data->sender_id;
+            $customer = $data->receiver_id;
+        }else{
+            $warehouse = $data->receiver_id;
+            $customer = $data->sender_id;
+        }
+
+		$cekJubelio = Jubeliosync::where('warehouse_id',$warehouse)->count();
 
 		
 
@@ -667,10 +678,34 @@ class TransactionsController extends Controller
 			
 
 		}else{
-			return view('transactions.detail',compact('data','nameWh'));
+			return view('transactions.detail',compact('data','nameWh','cekJubelio'));
 		}
 
 		
+
+    }
+
+	public function detailJubelioSync($id, Request $request)
+    {
+
+		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->withCount([
+			'transactionDetail as item_with_jubelio_count' => function ($query) {
+				$query->whereHas('item', function ($q) {
+					$q->where(function ($q) {
+						$q->whereNull('jubelio_item_id')
+						  ->orWhere('jubelio_item_id','<', 1);
+					});
+				});
+			}
+		])->where('id',$id)->first();
+		
+
+		if($data->user_jubelio){
+
+            return redirect()->route('transaction.getDetail',$id);
+        }
+
+		return view('transactions.detail-jubelio-sync',compact('data'));
 
     }
 

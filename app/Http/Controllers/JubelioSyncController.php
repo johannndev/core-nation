@@ -219,4 +219,38 @@ class JubelioSyncController extends Controller
 
         return redirect()->route('jubelio.sync.index')->with('success', 'Jubelio sync deleted.');
     }
+
+    public function getBin($id){
+        $data = Jubeliosync::find($id);
+
+        $response = Http::withHeaders([ 
+            'Content-Type'=> 'application/json', 
+            'authorization'=> Cache::get('jubelio_data')['token'], 
+        ]) 
+        ->get('https://api2.jubelio.com/wms/default-bin/'.  $data->jubelio_location_id); 
+
+    
+
+        
+        if ($response->successful()) {
+            $result = json_decode($response->body(), true); // atau json_decode($response->body(), true)
+
+            $data->bin_id = $result['bin_id'];
+            $data->save();
+
+            return redirect()->route('jubelio.sync.index')->with('success', 'Jubelio updated bin id.');
+          
+        } else {
+            // Ambil pesan error dari response
+            $error =json_decode($response->body(), true); // atau json_decode($response->body(), true)
+            $message = $error['message'] ?? 'Terjadi kesalahan.';
+            
+            return redirect()->route('jubelio.sync.index')->with('fail',  $message);
+        }
+
+
+        
+
+       
+    }
 }

@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class ApiJubelioController extends Controller
 {
@@ -1091,4 +1092,101 @@ class ApiJubelioController extends Controller
 
 		return response()->json(['message' => 'Data processed successfully'], 200);
 	}
+
+    private function qtyType($type, $qty){
+
+        if($type == Transaction::TYPE_RETURN){
+            $qtyValue = -$qty;
+        }else{
+            $qtyValue = $qty;
+        }
+
+        return $qtyValue;
+
+    } 
+
+    public function adjustStok($id){
+
+        $trans = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+
+        if($trans->user_jubelio){
+
+            return redirect()->route('transaction.getDetail',$id);
+        }
+
+        if($trans->type = Transaction::TYPE_SELL){
+            $warehouse = $trans->sender_id;
+            $customer = $trans->receiver_id;
+        }else{
+            $warehouse = $trans->receiver_id;
+            $customer = $trans->sender_id;
+        }
+
+        $jubelioLocation = Jubeliosync::where('warehouse_id',$warehouse)->where('customer_id',$customer)->first();
+
+        $now = Carbon::now('UTC'); // harus UTC kalau mau pakai Z
+
+        $formatted = $now->format('Y-m-d\TH:i:s.000\Z');
+
+        $detailItem = [];
+
+        foreach ($trans->detailItem as $row) {
+            $detailItem[] = [
+                "item_adj_detail_id" => 0,
+                "item_id" => $row->item->jubelio_item_id,
+                "serial_no" => null,
+                "qty_in_base" => $this->qtyType($trans->type,$row->quantity),
+                "original_item_adj_detail_id" => 0,
+                "unit" => "Buah",
+                "amount" => $row->total,
+                "location_id" => $jubelioLocation->jubelio_location_id,
+                "account_id" => 75,
+                "description" => "Item ".$row->item->code,
+                "batch_no" => null,
+                "expired_date" => null,
+                "bin_id" => $jubelioLocation->jubelio_location_bin,
+                "cost" => 0,
+            ];
+        }
+
+        $dataArray = [
+            "item_adj_id" => 0,
+            "item_adj_no" => "[auto]",
+            "transaction_date" => $formatted,
+            "note" => "Adjust form aria with order no. ". $trans->invoice,
+            "location_id" => $jubelioLocation->jubelio_location_id,
+            "is_opening_balance" => false,
+            "items" => $detailItem
+        ];
+
+        $response = Http::withHeaders([ 
+            'Content-Type' => 'application/json', 
+            'authorization' => Cache::get('jubelio_data')['token'], 
+        ]) 
+        ->post('https://api2.jubelio.com/inventory/adjustments/warehouse',$dataArray);
+
+        if ($response->successful()) {
+            $data = json_decode($response->body(), true); // atau json_decode($response->body(), true)
+
+
+            $trans->user_jubelio = Auth::user()->id;
+            $trans->user_jubelio = $data->id;
+            $trans->save();
+
+            return redirect()->route('transaction.getDetail',$id)->with('success', 'Jubelio adjustment updated');
+         
+        } else {
+            // Ambil pesan error dari response
+            $error =json_decode($response->body(), true); // atau json_decode($response->body(), true)
+            $message = $error['message'] ?? 'Terjadi kesalahan.';
+            $code = $error['code'] ;
+
+            dd($message,$code);
+
+            // return redirect()->route('transaction.getDetail',$id)->with('fail',$code);
+        
+        }
+    
+      
+    }
 }

@@ -38,8 +38,6 @@ class UpdateItemIdJubelio extends Command
 
         $jubelioSync = Jubeliosync::select('warehouse_id')->groupBy('warehouse_id')->pluck('warehouse_id')->toArray();
 
-    
-
         $whItem = WarehouseItem::with(['item' => function ($q) {
             $q->orderBy('id');
         }])
