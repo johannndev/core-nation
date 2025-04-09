@@ -21,7 +21,7 @@ class CronController extends Controller
             $q->orderBy('id');
         }])
         ->whereHas('item', function ($q) {
-            $q->orderBy('jubelio_item_id');
+            $q->whereNotNull('jubelio_item_id');
         })
         ->whereIn('warehouse_id', $jubelioSync)
         ->orderBy('id', 'asc')
