@@ -53,6 +53,8 @@ class UpdateItemIdJubelio extends Command
 
         // dd($item);
 
+        Log::info('jubelio:item-update item ' . $whItem);
+
         if($whItem){
 
             $response = Http::withHeaders([ 
