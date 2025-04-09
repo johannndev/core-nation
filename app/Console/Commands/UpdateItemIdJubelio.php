@@ -48,13 +48,15 @@ class UpdateItemIdJubelio extends Command
         ->orderBy('id', 'asc')
         ->first();
 
+        Log::info('jubelio:item-update item ' . $whItem);
+
+
 
         $itemCode = $whItem->item->code;
 
         // dd($item);
 
-        Log::info('jubelio:item-update item ' . $whItem);
-
+        
         if($whItem){
 
             $response = Http::withHeaders([ 
