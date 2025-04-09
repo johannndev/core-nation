@@ -20,12 +20,10 @@ class CronController extends Controller
         $whItem = WarehouseItem::with(['item' => function ($q) {
             $q->orderBy('id');
         }])
-        ->whereHas('item', function ($q) {
-            $q->whereNull('jubelio_item_id');
-        })
+       
         ->whereIn('warehouse_id', $jubelioSync)
         ->orderBy('id', 'asc')
-        ->first();
+        ->count();
 
         dd($whItem);
 
