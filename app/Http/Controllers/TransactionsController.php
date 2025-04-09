@@ -239,6 +239,7 @@ class TransactionsController extends Controller
         $transaction->description = ' ';
 		$transaction->detail_ids = ' ';
 		$transaction->due = '0000-00-00';
+		$transaction->submit_type = 1;
         $transaction->save();
 
 		$transaction->sender_id = $warehouse;
@@ -319,6 +320,7 @@ class TransactionsController extends Controller
         $transaction->description = ' ';
 		$transaction->detail_ids = ' ';
 		$transaction->due = '0000-00-00';
+		$transaction->submit_type = 1;
         $transaction->save();
 
 		$transaction->sender_id = $warehouse;
@@ -439,6 +441,7 @@ class TransactionsController extends Controller
 		$transaction->invoice = $request->invoice ?? ' ';
 		$transaction->adjustment = $request->adjustment ?? 0;
 		$transaction->discount = $request->disc ?? 0;
+		$transaction->submit_type = 1;
 		$transaction->detail_ids = ' ';
 		
         $transaction->save();
@@ -775,6 +778,7 @@ class TransactionsController extends Controller
 		$transaction = new Transaction();
         $transaction->date = $request->date;
         $transaction->type = Transaction::TYPE_MOVE;
+		$transaction->submit_type = 1;
      
 		if($request->note){
 			$transaction->description = $request->note;
@@ -842,6 +846,7 @@ class TransactionsController extends Controller
 		$transaction->detail_ids = ' ';
 		$transaction->receiver_id = ' ';
 		$transaction->due = '0000-00-00';
+		$transaction->submit_type = 1;
         $transaction->save();
 
 		$transaction->sender_id = $warehouse;
@@ -918,6 +923,7 @@ class TransactionsController extends Controller
 		$transaction->detail_ids = ' ';
 		$transaction->receiver_id = ' ';
 		$transaction->due = '0000-00-00';
+		$transaction->submit_type = 1;
         $transaction->save();
 
 		$transaction->sender_id = $warehouse->id;
@@ -1028,6 +1034,7 @@ class TransactionsController extends Controller
 
 			$transaction = new Transaction();
 			$transaction->date = $date;
+			$transaction->submit_type = 1;
 			$transaction->invoice = isset($c['invoice']) ? $c['invoice'] : null;
 			$transaction->description = isset($c['description']) ? $c['description'] : '';
 			$transaction->total = $c['total'];
@@ -1166,6 +1173,7 @@ class TransactionsController extends Controller
 
 		$transaction = new Transaction();
 		$transaction->date = $request->date;
+		$transaction->submit_type = 1;
 		$transaction->type = Transaction::TYPE_ADJUST;
 		
 		if($request->description){
@@ -1268,6 +1276,7 @@ class TransactionsController extends Controller
 
 		$transaction = new Transaction();
 		$transaction->date = $request->date;
+		$transaction->submit_type = 1;
 		$transaction->type = Transaction::TYPE_TRANSFER;
 		if($request->description){
 			$transaction->description = $request->description;

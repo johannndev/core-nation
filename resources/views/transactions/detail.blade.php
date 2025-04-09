@@ -71,6 +71,28 @@
                         </div>
                             
                         @endif
+
+                        @if ($data->submit_type < 2)
+
+                        <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
+                                    <p class="font-bold">System Submit</p>
+                                </div>
+                                <div class="col-span-3">
+                                    @if ($data->submit_type == 1)
+                                        Aria
+                                    @elseif ($data->submit_type == 2)
+                                        Jubelio Webhook
+                                    @else
+                                    
+                                    @endif
+                                
+                                </div>
+                            </div>
+                        </div>
+                            
+                        @endif
                         
 
                         @if ($data->description)
@@ -192,7 +214,7 @@
                             </div>
                         </div>
 
-                        @if ($cekJubelio > 0)
+                        @if ($cekJubelio > 0  && $data->submit_type == 1)
                             
                             <div>
                                 <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
@@ -273,7 +295,7 @@
                     </div>
                     <div class="flex items-center flex-1 space-x-4 justify-end">
 
-                        @if ($cekJubelio > 0 && is_null($data->reference_id))
+                        @if ($cekJubelio > 0 && is_null($data->reference_id) && $data->submit_type == 1)
 
                         <a href="{{ route('transaction.detailJubelioSync', $data->id) }}" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg">
                             <svg class="h-3.5 w-3.5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
