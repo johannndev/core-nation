@@ -15,6 +15,21 @@ class CronController extends Controller
 {
     public function itemEdit(){
 
+        $jubelioSync = Jubeliosync::select('warehouse_id')->groupBy('warehouse_id')->pluck('warehouse_id')->toArray();
+
+        $whItem = WarehouseItem::with(['item' => function ($q) {
+            $q->orderBy('id');
+        }])
+        ->whereHas('item', function ($q) {
+            $q->whereNull('jubelio_item_id');
+        })
+        ->whereIn('warehouse_id', $jubelioSync)
+        ->orderBy('id', 'asc')
+        ->first();
+
+        dd($whItem);
+
+
         
         $jubelioSync = Jubeliosync::select('warehouse_id')->groupBy('warehouse_id')->pluck('warehouse_id')->toArray();
 
