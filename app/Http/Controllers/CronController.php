@@ -17,7 +17,12 @@ class CronController extends Controller
 
         $jubelioSync = Jubeliosync::select('warehouse_id')->groupBy('warehouse_id')->pluck('warehouse_id')->toArray();
 
-        $whItem = WarehouseItem::whereHas('item')
+        $whItem = WarehouseItem::with(['item' => function ($q) {
+            $q->orderBy('id');
+        }])
+        ->whereHas('item', function ($q) {
+            $q->orderBy('jubelio_item_id');
+        })
         ->whereIn('warehouse_id', $jubelioSync)
         ->orderBy('id', 'asc')
         ->count();
