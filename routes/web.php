@@ -269,7 +269,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/asset-lancar/{id}/edit', [AsetLancarController::class, 'edit'])->name('asetLancar.edit')->middleware('permission:asset lancar edit');
     Route::post('/asset-lancar/{id}/update', [AsetLancarController::class, 'postEdit'])->name('asetLancar.update')->middleware('permission:asset lancar edit');
     Route::get('/asset-lancar/{id}/duplicate', [AsetLancarController::class, 'duplicate'])->name('asetLancar.duplicate')->middleware('permission:asset lancar create');
-    Route::get('/asset-lancar/filter', [FilterQueryController::class, 'assetLancarFilter'])->name('asetLancar.filter')->middleware('permission:asset lancar search');
+    Route::get('/asset-lancar/filter', [FilterQueryController::class, 'assetLancarFilter'])->name('asetLancar.filter')->middleware('permission:asset lancar list');
     Route::get('/asset-lancar/{id}/detail', [AsetLancarController::class, 'detail'])->name('asetLancar.detail')->middleware('permission:asset lancar detail');
     Route::get('/asset-lancar/{id}/transaction', [AsetLancarController::class, 'transaction'])->name('asetLancar.transaction')->middleware('permission:asset lancar transaction');
     Route::get('/asset-lancar/{id}/transaction/filter', [FilterQueryController::class, 'assetLancarTransFilter'])->name('asetLancar.transactionFilter')->middleware('permission:asset lancar transaction');
