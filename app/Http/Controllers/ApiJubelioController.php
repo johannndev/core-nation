@@ -1181,12 +1181,45 @@ class ApiJubelioController extends Controller
             $message = $error['message'] ?? 'Terjadi kesalahan.';
             $code = $error['code'] ;
 
-            dd($message,$code);
+            // dd($message,$code);
 
-            // return redirect()->route('transaction.getDetail',$id)->with('fail',$code);
+            return redirect()->route('transaction.getDetail',$id)->with('fail',$code);
         
         }
     
       
+    }
+
+    public function getItem($id){
+
+        $item = Item::find($id);
+
+        $response = Http::withHeaders([ 
+            'Content-Type'=> 'application/json', 
+            'authorization'=> Cache::get('jubelio_data')['token'], 
+        ]) 
+        ->get('https://api2.jubelio.com/inventory/items/to-stock/',[
+            'q' => $item->code,
+        ]); 
+
+        $data = json_decode($response->body(), true);
+
+        if($data['totalCount'] == 0){
+           
+            return redirect()->route('item.jubelio',$id)->with('fail', 'Item ID not found');
+        }else{
+            
+            DB::table('items')->where('code',$item->code)->update([
+                'jubelio_item_id' => $data['data'][0]['item_id'], // Kolom yang diperbarui
+            ]);
+
+            return redirect()->route('item.jubelio',$id)->with('success', 'Item updated');
+
+        
+        
+
+           
+           
+        }
     }
 }

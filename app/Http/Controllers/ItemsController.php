@@ -16,8 +16,9 @@ use App\Models\WarehouseItem;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Http;
 
 class ItemsController extends Controller
 {
@@ -122,6 +123,49 @@ class ItemsController extends Controller
 		
 
 		return view('items.detail',compact('data','urlImage','whList','tid'));
+	}
+
+	public function jubelio($id)
+	{
+		$data = Item::with('group','tags')->where('id',$id)->first();
+
+		$urlImage = $data->item_image_path;
+
+		$message = "";
+		$dataJubelio = [];
+
+		if($data->jubelio_item_id > 0){
+
+			$body = [
+				'ids' => [$data->jubelio_item_id],
+			];
+
+			$response = Http::withHeaders([ 
+				'Content-Type'=> 'application/json', 
+				'authorization'=> Cache::get('jubelio_data')['token'], 
+			]) 
+			->post('https://api2.jubelio.com/inventory/items/all-stocks/',$body); 
+	
+			$result = json_decode($response->body(), true);
+
+			if (!isset($result['data']) || is_null($result['data'])) {
+				$message = "Item tidak ada";
+				// dd('Data is null or not set', $result);
+			} else {
+				$message = "ok";
+				$dataJubelio = $result['data'][0];
+				
+			}
+
+			
+		}
+
+		
+
+		$tid=$id;
+		
+
+		return view('items.jubelio',compact('data','urlImage','tid','dataJubelio','message'));
 	}
 
 	public function edit($id)

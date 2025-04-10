@@ -23,6 +23,10 @@
                 <li class="me-2">
                     <a href="{{route('item.stat',$tid)}}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Stats</a>
                 </li>
+
+                <li class="me-2">
+                    <a href="{{route('item.jubelio',$tid)}}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Jubelio</a>
+                </li>
                 
             </ul>
         </div>
@@ -214,6 +218,24 @@
                         </div>
 
                      
+                        
+                    </div>
+                </div>
+
+                
+                <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden mt-4">
+                    <div class="grid grid-cols-1 divide-y">
+                        <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
+                                    <p class="font-bold">Jubelio Sync</p>
+                                </div>
+                                <div class="col-span-3">
+                                    <a href="{{route('item.edit',$data->id)}}" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Get Item</a>
+                                </div>
+                            </div>
+                        </div>
+
                         
                     </div>
                 </div>

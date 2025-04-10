@@ -253,6 +253,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/item/{id}/update', [ItemsController::class, 'postEdit'])->name('item.update')->middleware('permission:item edit');
     Route::get('/item/filter', [FilterQueryController::class, 'itemFilter'])->name('item.filter')->middleware('permission:item search');
     Route::get('/item/{id}/detail', [ItemsController::class, 'detail'])->name('item.detail')->middleware('permission:item detail');
+
+    Route::get('/item/{id}/jubelio', [ItemsController::class, 'jubelio'])->name('item.jubelio')->middleware('permission:item detail');
+    Route::get('/item/{id}/jubelio/cek', [ApiJubelioController::class, 'getItem'])->name('item.jubelioGetItem')->middleware('permission:item detail');
+
     Route::get('/item/{id}/transaction', [ItemsController::class, 'transaction'])->name('item.transaction')->middleware('permission:item transaction');
     Route::get('/item/{id}/transaction/filter', [FilterQueryController::class, 'itemTransFilter'])->name('item.transactionFilter')->middleware('permission:item transaction');
     Route::get('/item/{id}/stat', [ItemsController::class, 'stat'])->name('item.stat')->middleware('permission:item stat');
