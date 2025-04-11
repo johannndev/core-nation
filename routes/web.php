@@ -255,8 +255,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/item/{id}/detail', [ItemsController::class, 'detail'])->name('item.detail')->middleware('permission:item detail');
 
     Route::get('/item/{id}/jubelio', [ItemsController::class, 'jubelio'])->name('item.jubelio')->middleware('permission:item detail');
-    Route::get('/item/{id}/jubelio/cek', [ApiJubelioController::class, 'getItem'])->name('item.jubelioGetItem')->middleware('permission:item detail');
-
+  
     Route::get('/item/{id}/transaction', [ItemsController::class, 'transaction'])->name('item.transaction')->middleware('permission:item transaction');
     Route::get('/item/{id}/transaction/filter', [FilterQueryController::class, 'itemTransFilter'])->name('item.transactionFilter')->middleware('permission:item transaction');
     Route::get('/item/{id}/stat', [ItemsController::class, 'stat'])->name('item.stat')->middleware('permission:item stat');
@@ -275,6 +274,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/asset-lancar/{id}/duplicate', [AsetLancarController::class, 'duplicate'])->name('asetLancar.duplicate')->middleware('permission:asset lancar create');
     Route::get('/asset-lancar/filter', [FilterQueryController::class, 'assetLancarFilter'])->name('asetLancar.filter')->middleware('permission:asset lancar list');
     Route::get('/asset-lancar/{id}/detail', [AsetLancarController::class, 'detail'])->name('asetLancar.detail')->middleware('permission:asset lancar detail');
+
+    
+    Route::get('/asset-lancar/{id}/jubelio', [AsetLancarController::class, 'jubelio'])->name('asetLancar.jubelio')->middleware('permission:asset lancar detail');
+
+    Route::get('/item/{id}/jubelio/cek', [ApiJubelioController::class, 'getItem'])->name('item.jubelioGetItem')->middleware('permission:item detail');
+
+
     Route::get('/asset-lancar/{id}/transaction', [AsetLancarController::class, 'transaction'])->name('asetLancar.transaction')->middleware('permission:asset lancar transaction');
     Route::get('/asset-lancar/{id}/transaction/filter', [FilterQueryController::class, 'assetLancarTransFilter'])->name('asetLancar.transactionFilter')->middleware('permission:asset lancar transaction');
     Route::get('/asset-lancar/{id}/stat', [AsetLancarController::class, 'stat'])->name('asetLancar.stat')->middleware('permission:asset lancar stat');

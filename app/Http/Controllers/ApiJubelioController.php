@@ -1205,20 +1205,33 @@ class ApiJubelioController extends Controller
         $data = json_decode($response->body(), true);
 
         if($data['totalCount'] == 0){
+
+            DB::table('items')->where('code',$item->code)->update([
+                'jubelio_item_id' => 0, // Kolom yang diperbarui
+            ]);
            
-            return redirect()->route('item.jubelio',$id)->with('fail', 'Item ID not found');
+            if($item->type == Item::TYPE_ITEM){
+                return redirect()->route('item.jubelio',$id)->with('fail', 'Item ID not found');
+    
+            }else if($item->type == Item::TYPE_ASSET_LANCAR){
+                return redirect()->route('asetLancar.jubelio',$id)->with('fail', 'Item ID not found');
+            }else{
+                return redirect()->route('dashboard');
+            }
         }else{
             
             DB::table('items')->where('code',$item->code)->update([
                 'jubelio_item_id' => $data['data'][0]['item_id'], // Kolom yang diperbarui
             ]);
 
-            return redirect()->route('item.jubelio',$id)->with('success', 'Item updated');
-
-        
-        
-
-           
+            if($item->type == Item::TYPE_ITEM){
+                return redirect()->route('item.jubelio',$id)->with('success', 'Item updated');
+    
+            }else if($item->type == Item::TYPE_ASSET_LANCAR){
+                return redirect()->route('asetLancar.jubelio',$id)->with('success', 'Item updated');
+            }else{
+                return redirect()->route('dashboard');
+            }
            
         }
     }
