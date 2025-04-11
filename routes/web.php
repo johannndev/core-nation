@@ -13,6 +13,7 @@ use App\Http\Controllers\CronController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DeletedController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FilterQueryController;
 use App\Http\Controllers\GajihController;
 use App\Http\Controllers\HashController;
@@ -119,6 +120,9 @@ Route::get('/cek', [HomeController::class, 'cekData'])->name('');
 Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filter.get');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/transaction/export/sell/item', [ExportController::class, 'sellItem'])->name('export.sellItem');
+
 
     Route::get('/logjubelio', [LogJubelioController::class, 'index'])->name('jubelio.log.index');
     Route::get('/logjubelio/{id}/json', [LogJubelioController::class, 'viewJson'])->name('jubelio.log.viewJson');

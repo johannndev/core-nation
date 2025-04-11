@@ -33,9 +33,24 @@ class TransactionDetail extends Model
 		return $this->belongsTo('App\Models\Transaction','transaction_id');
 	}
 
+	public function receiver()
+	{
+		return $this->belongsTo('App\Models\Customer','receiver_id')->withTrashed();
+	}
+
+	public function sender()
+	{
+		return $this->belongsTo('App\Models\Customer','sender_id')->withTrashed();
+	}
+
 	public function item()
 	{
 		return $this->belongsTo('App\Models\Item','item_id');
+	}
+
+	public function getTypeNameAttribute()
+	{
+		return Transaction::$types[$this->transaction_type];
 	}
 
 	public function getWareHouse($id)
