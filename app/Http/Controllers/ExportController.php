@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SellItemExport;
 use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ExportController extends Controller
 {
@@ -37,4 +39,12 @@ class ExportController extends Controller
 
 		return view('transactions.export.sellItem',compact('dataList','allWh'));
 	}
+
+    public function exportSellItem(Request $request) 
+	{
+        // dd($request);
+
+		return Excel::download(new SellItemExport($request->from,$request->to,$request->whId), 'sell_item.csv');
+	}
+
 }

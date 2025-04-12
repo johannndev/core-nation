@@ -122,6 +122,7 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 Route::middleware('auth')->group(function () {
 
     Route::get('/transaction/export/sell/item', [ExportController::class, 'sellItem'])->name('export.sellItem');
+    Route::get('/transaction/export/sell/item/build', [ExportController::class, 'exportSellItem'])->name('export.sellItemBuild');
 
 
     Route::get('/logjubelio', [LogJubelioController::class, 'index'])->name('jubelio.log.index');
