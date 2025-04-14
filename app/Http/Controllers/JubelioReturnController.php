@@ -62,6 +62,13 @@ class JubelioReturnController extends Controller
 
         $returnData = Jubelioreturn::find($id);
 
+        if(!$request->return_item){
+
+            return redirect()->back()->with('fail','Item belum dipilih');
+        }
+
+        dd('stop');
+
 		$transactionData = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$returnData->transaction_id	)->first();
 
 		

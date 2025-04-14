@@ -117,7 +117,6 @@
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" class="px-4 py-3">ID</th>
                                     <th scope="col" class="px-4 py-3">Date</th>
                                     <th scope="col" class="px-4 py-3">Type</th>
                                     <th scope="col" class="px-4 py-3">Invoice</th>
@@ -136,17 +135,18 @@
                                 
 
                                 <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
-                                    <td class="px-4 py-3">{{$item->id}}</td>
-                                    <th scope="row" class="px-4 py-3  whitespace-nowrap ">
-
-                                        <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{\Carbon\Carbon::parse($item->date)->format('d/m/Y')}}</a>
-
-                                    </th>
+                                    <td class="px-4 py-3 font-bold">{{\Carbon\Carbon::parse($item->date)->format('d/m/Y')}}</td>
+                                  
 
                                     <td class="px-4 py-3">
                                         <span class="text-nowrap bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"> {{$item->type_name}}</span>
                                        
                                     </td>
+                                    <th scope="row" class="px-4 py-3  whitespace-nowrap ">
+
+                                        <a href="{{ route('transaction.getDetail',$item->transaction_id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->transaction->invoice ?? ''}}</a>
+
+                                    </th>
                                     
                                     <td class="px-4 py-3">{{$item->transaction->invoice ?? ''}}</td>
                                     <td class="px-4 py-3">{{$item->item->code}}</td>

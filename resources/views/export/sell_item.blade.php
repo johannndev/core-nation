@@ -19,7 +19,6 @@
         @forelse ( $dataList as $item)
             
         <tr >
-           
    
             <td >{{$item->id}}</td>
             <td >{{\Carbon\Carbon::parse($item->date)->format('d/m/Y')}}</td>
@@ -38,10 +37,6 @@
                     {{$item->receiver->name}}               
                 @endisset
             </td>
-           
-          
-            
-            
         </tr>
             
         @empty
