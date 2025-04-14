@@ -67,7 +67,7 @@ class JubelioReturnController extends Controller
             return redirect()->back()->with('fail','Item belum dipilih');
         }
 
-        dd('stop');
+        // dd('stop');
 
 		$transactionData = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$returnData->transaction_id	)->first();
 
