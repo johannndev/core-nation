@@ -63,6 +63,15 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+Route::get('/cache-role-reset', function () {
+    app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+    return 'cache role dihapus'
+});
+
+
+
+
 Route::get('/role-set', function () {
 
     // $user = User::find(1);
