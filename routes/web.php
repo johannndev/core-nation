@@ -66,7 +66,7 @@ Route::get('/', function () {
 Route::get('/cache-role-reset', function () {
     app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
-    return 'cache role dihapus'
+    return 'cache role dihapus';
 });
 
 
