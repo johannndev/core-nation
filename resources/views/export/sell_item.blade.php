@@ -1,9 +1,9 @@
 <table >
     <thead >
         <tr>
-           
-            <th >ID</th>
+        
             <th >Date</th>
+            <th >Type</th>
             <th >Invoice</th>
             <th >Items</th>
             <th >Qty</th>
@@ -19,8 +19,9 @@
             
         <tr >
    
-            <td >{{$item->id}}</td>
+           
             <td >{{\Carbon\Carbon::parse($item->date)->format('d/m/Y')}}</td>
+            <td >{{$item->type_name}}</td>
             <td >{{$item->transaction->invoice ?? ''}}</td>
             <td >{{$item->item->code}}</td>
             <td >{{number_format($item->quantity,2)}}</td>

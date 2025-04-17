@@ -123,7 +123,7 @@
                                     <th scope="col" class="px-4 py-3">Items</th>
                                     <th scope="col" class="px-4 py-3">Qty</th>
                                     <th scope="col" class="px-4 py-3">Discount</th>
-                                    <th scope="col" class="px-4 py-3">Total</th>
+                                    <th scope="col" class="px-4 py-3">Subtotal</th>
                                     <th scope="col" class="px-4 py-3">Receiver</th>
                                     <th scope="col" class="px-4 py-3">Sender</th>
                                     
