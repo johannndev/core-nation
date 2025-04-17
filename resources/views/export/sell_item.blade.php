@@ -4,12 +4,11 @@
            
             <th >ID</th>
             <th >Date</th>
-            <th >Type</th>
             <th >Invoice</th>
             <th >Items</th>
             <th >Qty</th>
             <th >Discount</th>
-            <th >Total</th>
+            <th >Subtotal</th>
             <th >Receiver</th>
             <th >Sender</th>
             
