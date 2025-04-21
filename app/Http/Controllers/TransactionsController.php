@@ -743,7 +743,7 @@ class TransactionsController extends Controller
 
 		}else if($data->type == Transaction::TYPE_MOVE){
 			
-			$sjbA = Jubeliosync::with('warehouse')->where('warehouse_id',$data->sender_id)->first();
+			$sjbA = Jubeliosync::with('customer')->where('customer_id',$data->sender_id)->first();
 			$sjbB = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->first();
 
 			dd($sjbA,$sjbB);
