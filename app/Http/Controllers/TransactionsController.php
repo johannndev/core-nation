@@ -770,7 +770,6 @@ class TransactionsController extends Controller
 
 		}
 
-		dd($JubelioA,$JubelioB,$adJustTypeA,$adJustTypeB);
 		
 
 		if($data->user_jubelio){
