@@ -1132,9 +1132,9 @@ class ApiJubelioController extends Controller
 
         $detailItem = [];
 
-        dd($trans->detailItem,  $trans);
+        // dd($trans->transactionDetail,  $trans);
 
-        foreach ($trans->detailItem as $row) {
+        foreach ($trans->transactionDetail as $row) {
             $detailItem[] = [
                 "item_adj_detail_id" => 0,
                 "item_id" => $row->item->jubelio_item_id,
