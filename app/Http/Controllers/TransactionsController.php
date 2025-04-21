@@ -766,10 +766,11 @@ class TransactionsController extends Controller
 				
 			}
 
-			$JubelioA = [];
-			$JubelioB = Jubeliosync::where('warehouse_id',$data->receiver_id)->first();
+		
 
 		}
+
+		dd($JubelioA,$JubelioB,$adJustTypeA,$adJustTypeB);
 		
 
 		if($data->user_jubelio){
