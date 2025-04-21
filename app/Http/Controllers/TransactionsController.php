@@ -761,7 +761,7 @@ class TransactionsController extends Controller
 			}else if(is_null($sjbA) && $sjbB){
 
 				$adJustTypeA = 1;
-				$JubelioB = $sjbB->warehouse->name;
+				$JubelioA = $sjbB->warehouse->name;
 				
 				
 			}
@@ -770,7 +770,7 @@ class TransactionsController extends Controller
 
 		}
 
-	
+		dd($JubelioA,$JubelioB,$adJustTypeA,$adJustTypeB);
 		
 
 		if($data->user_jubelio){
