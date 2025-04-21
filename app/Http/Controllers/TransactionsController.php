@@ -712,6 +712,64 @@ class TransactionsController extends Controller
 				});
 			}
 		])->where('id',$id)->first();
+
+		
+
+		$JubelioA = [];
+		$JubelioB = [];
+
+		$adJustTypeA = 0;
+		$adJustTypeB = 0;
+		
+
+
+		if($data->type == Transaction::TYPE_SELL || $data->type == Transaction::TYPE_RETURN_SUPPLIER){
+
+			$$adJustTypeA = 1;
+
+			$data = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->first();
+
+			$JubelioA = $data->warehouse->name;
+			
+
+		}else if($data->type == Transaction::TYPE_BUY || $data->type == Transaction::TYPE_RETURN){
+
+			$adJustTypeA = 2;
+
+			$data = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->first();
+
+			$JubelioA = $data->warehouse->name;
+			
+
+		}else if($data->type == Transaction::TYPE_MOVE){
+			
+			$sjbA = Jubeliosync::with('customer')->where('customer_id',$data->sender_id)->first();
+			$sjbB = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->first();
+
+			if($sjbA && $sjbB){
+				$adJustTypeA = 2;
+				$adJustTypeB = 1;
+
+				$JubelioA =  $sjbA->customer->name;
+				$JubelioB = $sjbB->warehouse->name;
+
+			}else if($sjbA && is_null($sjbB)){
+				$adJustTypeA = 2;
+
+				$JubelioA = $sjbA->customer->name;
+
+			}else if(is_null($sjbA) && $sjbB){
+
+				$adJustTypeA = 1;
+				$JubelioB = $sjbB->warehouse->name;
+				
+				
+			}
+
+			$JubelioA = [];
+			$JubelioB = Jubeliosync::where('warehouse_id',$data->receiver_id)->first();
+
+		}
 		
 
 		if($data->user_jubelio){
@@ -719,7 +777,7 @@ class TransactionsController extends Controller
             return redirect()->route('transaction.getDetail',$id);
         }
 
-		return view('transactions.detail-jubelio-sync',compact('data'));
+		return view('transactions.detail-jubelio-sync',compact('data','JubelioA','JubelioB','adJustTypeA','adJustTypeB'));
 
     }
 

@@ -1124,7 +1124,27 @@ class ApiJubelioController extends Controller
             $customer = $trans->sender_id;
         }
 
-        $jubelioLocation = Jubeliosync::where('warehouse_id',$warehouse)->where('customer_id',$customer)->first();
+        $jubelioLocation = [];
+
+        if($trans->type == Transaction::TYPE_SELL || $trans->type == Transaction::TYPE_RETURN_SUPPLIER){
+
+			$jubelioLocation = Jubeliosync::where('warehouse_id',$trans->sender_id)->first();
+
+		}else if($trans->type == Transaction::TYPE_BUY || $trans->type == Transaction::TYPE_RETURN){
+
+			$jubelioLocation = Jubeliosync::where('warehouse_id',$trans->receiver_id)->first();
+
+		}else if($trans->type == Transaction::TYPE_MOVE){
+            
+			$jubelioLocation = Jubeliosync::whereIn('warehouse_id', [$trans->sender_id, $trans->receiver_id])->first();
+
+		}
+
+        if(is_null($jubelioLocation)){
+            return redirect()->route('transaction.getDetail',$id)->with('fail','Type transaction tidak valid');
+        }
+
+      
 
         $now = Carbon::now('UTC'); // harus UTC kalau mau pakai Z
 

@@ -81,15 +81,18 @@
     	@stack('jsBody')
 
 		<script>
-			document.getElementById("myForm").addEventListener("submit", function(event){
-                var submitBtn = document.getElementById("submit-btn");
-                var spinner = document.getElementById("loading-btn");
-                spinner.classList.remove('hidden');
+			document.querySelectorAll(".myForm").forEach(function(form) {
+				form.addEventListener("submit", function(event) {
+					var submitBtn = form.querySelector(".submit-btn");
+					var spinner = form.querySelector(".loading-btn");
 
-                submitBtn.classList.add('hidden');
+					spinner.classList.remove("hidden");
+					submitBtn.classList.add("hidden");
 
-                // submitBtn.disabled = true;
-            });
+					// Optionally disable further interaction
+					// submitBtn.disabled = true;
+				});
+			});
 		</script>
 
     
