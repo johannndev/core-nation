@@ -72,6 +72,24 @@
                             
                         @endif
 
+                       
+                        
+
+                        @if ($data->description)
+
+                        <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
+                                    <p class="font-bold">Note</p>
+                                </div>
+                                <div class="col-span-3">
+                                    <p>{{$data->description}}</p>
+                                </div>
+                            </div>
+                        </div>
+                            
+                        @endif
+
                         @if ($data->submit_type < 3)
 
                         <div>
@@ -88,22 +106,6 @@
                                     
                                     @endif
                                 
-                                </div>
-                            </div>
-                        </div>
-                            
-                        @endif
-                        
-
-                        @if ($data->description)
-
-                        <div>
-                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
-                                <div class="col-span-2">
-                                    <p class="font-bold">Note</p>
-                                </div>
-                                <div class="col-span-3">
-                                    <p>{{$data->description}}</p>
                                 </div>
                             </div>
                         </div>
