@@ -182,6 +182,7 @@ class JubelioReturnController extends Controller
                 $transaction->type = $type;
                 $transaction->adjustment	 = $dataJubelio->adjustment;
                 $transaction->user_id =-100;
+                $transaction->submit_type = 2;
 
 
 

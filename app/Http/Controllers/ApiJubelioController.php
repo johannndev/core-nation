@@ -863,6 +863,8 @@ class ApiJubelioController extends Controller
                 $transaction->description = $dataJubelio->description ?? '';
                 $transaction->invoice = $dataJubelio->invoice;
 
+                $transaction->submit_type = 2;
+
                 if($dataJubelio->due){
                     $transaction->due = $dataJubelio->due;
                 }else{
@@ -1129,6 +1131,8 @@ class ApiJubelioController extends Controller
         $formatted = $now->format('Y-m-d\TH:i:s.000\Z');
 
         $detailItem = [];
+
+        dd($trans->detailItem,  $trans);
 
         foreach ($trans->detailItem as $row) {
             $detailItem[] = [

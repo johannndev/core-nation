@@ -440,11 +440,10 @@ class LogJubelioController extends Controller
                     'invoice' => $dataApi['salesorder_no'],
                     'total' => $grandTotalConvert,
                     'total_items' => $sumQty,
-
                     'sender_balance' => $newSenderBalance,
                     'receiver_balance' => $newRecaiverBalance,
                     'real_total' => $sumTotal,
-
+                    'submit_type' => 2,
                     'created_at' => now(),
                     'updated_at' => now()
                 ];
