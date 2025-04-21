@@ -746,7 +746,7 @@ class TransactionsController extends Controller
 			$sjbA = Jubeliosync::with('customer')->where('customer_id',$data->sender_id)->first();
 			$sjbB = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->first();
 
-			dd($sjbA,$sjbB);
+			// dd($sjbA,$sjbB);
 
 			if($sjbA && $sjbB){
 				$adJustTypeA = 2;
