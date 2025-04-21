@@ -678,6 +678,8 @@ class TransactionsController extends Controller
 
 		}
 
+		dd($data, $cekJubelio);
+
 		
 
 		
