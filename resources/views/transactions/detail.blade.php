@@ -72,7 +72,7 @@
                             
                         @endif
 
-                        @if ($data->submit_type < 2)
+                        @if ($data->submit_type < 3)
 
                         <div>
                             <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
