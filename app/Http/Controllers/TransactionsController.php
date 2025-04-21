@@ -663,20 +663,18 @@ class TransactionsController extends Controller
 
 		$data = Transaction::with(['receiver','sender','user','adjustUser','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
 
-		if($data->type = Transaction::TYPE_SELL){
-            $warehouse = $data->sender_id;
-            $customer = $data->receiver_id;
-        }else{
-            $warehouse = $data->receiver_id;
-            $customer = $data->sender_id;
-        }
+		$cekJubelio = 0;
 
-		if($data->type == Transaction::TYPE_SELL){
+		if($data->type == Transaction::TYPE_SELL || $data->type == Transaction::TYPE_RETURN_SUPPLIER){
 
-			$cekJubelio = Jubeliosync::where('warehouse_id',$warehouse)->count();
+			$cekJubelio = Jubeliosync::where('warehouse_id',$data->sender_id)->count();
+
+		}else if($data->type == Transaction::TYPE_BUY || $data->type == Transaction::TYPE_RETURN){
+
+			$cekJubelio = Jubeliosync::where('warehouse_id',$data->receiver_id)->count();
 
 		}else if($data->type == Transaction::TYPE_MOVE){
-			$cekJubelio = Jubeliosync::whereIn('warehouse_id', [$warehouse, $customer])->count();
+			$cekJubelio = Jubeliosync::whereIn('warehouse_id', [$data->sender_id, $data->receiver_id])->count();
 
 		}
 
