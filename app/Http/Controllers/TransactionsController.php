@@ -671,7 +671,16 @@ class TransactionsController extends Controller
             $customer = $data->sender_id;
         }
 
-		$cekJubelio = Jubeliosync::where('warehouse_id',$warehouse)->count();
+		if($data->type == Transaction::TYPE_SELL){
+
+			$cekJubelio = Jubeliosync::where('warehouse_id',$warehouse)->count();
+
+		}else if($data->type == Transaction::TYPE_MOVE){
+			$cekJubelio = Jubeliosync::whereIn('warehouse_id', [$warehouse, $customer])->count();
+
+		}
+
+		
 
 		
 
