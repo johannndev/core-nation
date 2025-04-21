@@ -722,7 +722,7 @@ class TransactionsController extends Controller
 		$adJustTypeB = 0;
 		
 
-		dd($type);
+		dd($data);
 
 
 		if($data->type == Transaction::TYPE_SELL || $data->type == Transaction::TYPE_RETURN_SUPPLIER){
