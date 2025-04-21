@@ -722,8 +722,6 @@ class TransactionsController extends Controller
 		$adJustTypeB = 0;
 		
 
-		dd($data);
-
 
 		if($data->type == Transaction::TYPE_SELL || $data->type == Transaction::TYPE_RETURN_SUPPLIER){
 
@@ -731,7 +729,7 @@ class TransactionsController extends Controller
 
 			$data = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->first();
 
-			$JubelioA = $data->warehouse->name;
+			$JubelioA = $data->warehouse->name ?? null;
 			
 
 		}else if($data->type == Transaction::TYPE_BUY || $data->type == Transaction::TYPE_RETURN){
@@ -740,7 +738,7 @@ class TransactionsController extends Controller
 
 			$data = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->first();
 
-			$JubelioA = $data->warehouse->name;
+			$JubelioA = $data->warehouse->name ?? null;
 			
 
 		}else if($data->type == Transaction::TYPE_MOVE){
@@ -752,18 +750,18 @@ class TransactionsController extends Controller
 				$adJustTypeA = 2;
 				$adJustTypeB = 1;
 
-				$JubelioA =  $sjbA->customer->name;
-				$JubelioB = $sjbB->warehouse->name;
+				$JubelioA =  $sjbA->customer->name ?? null;
+				$JubelioB = $sjbB->warehouse->name ?? null;
 
 			}else if($sjbA && is_null($sjbB)){
 				$adJustTypeA = 2;
 
-				$JubelioA = $sjbA->customer->name;
+				$JubelioA = $sjbA->customer->name ?? null;
 
 			}else if(is_null($sjbA) && $sjbB){
 
 				$adJustTypeA = 1;
-				$JubelioA = $sjbB->warehouse->name;
+				$JubelioA = $sjbB->warehouse->name ?? null;
 				
 				
 			}
