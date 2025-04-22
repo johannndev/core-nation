@@ -201,64 +201,7 @@
                     </table>
                 </div>
 
-                @if ($data->item_with_jubelio_count == 0)
-
-
-                    @if ($adJustTypeA > 0)
-                    <form class="myForm p-4" action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whA, 'adjustType' => $adJustTypeA,'side' => 1]) }}" method="post">
-
-                        @csrf
-
-                        <div class=" p-4 border rounded-lg flex justify-between items-center space-x-2">
-    
-                            <div>
-                                <p>Adjustmen stok sebanyak <span class="font-bold">{{ $adJustTypeA == 2 ? "-":"" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioA }}</span>  di jubelio</p>
-                            </div>
-    
-                            <div>
-    
-                                <x-layout.submit-button />
-    
-                            </div>
-    
-                           
-    
-                        </div>
-                        <!-- form fields -->
-                        
-    
-                    </form>
-                    @endif
-
-                    @if ($adJustTypeB > 0)
-                    <form class="myForm p-4" action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whB, 'adjustType' => $adJustTypeB,'side' => 2]) }}" method="post">
-
-                        @csrf
-
-                        <div class=" p-4 border rounded-lg flex justify-between items-center space-x-2">
-    
-                            <div>
-                                <p>Adjustmen stok sebanyak <span class="font-bold">{{ $adJustTypeB == 2 ? "-":"" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioB }}</span>  di jubelio</p>
-                            </div>
-    
-                            <div>
-    
-                                <x-layout.submit-button />
-    
-                            </div>
-    
-                           
-    
-                        </div>
-                        <!-- form fields -->
-                        
-    
-                    </form>
-                    @endif
-                    
-               
-                
-                @endif
+              
 
 
                 
@@ -289,7 +232,68 @@
             
             </div>
         </div>
-      </section>
+    </section>
+
+    @if ($data->item_with_jubelio_count == 0)
+
+
+        @if ($adJustTypeA > 0)
+        <form class="myForm  " action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whA, 'adjustType' => $adJustTypeA,'side' => 1]) }}" method="post">
+
+            @csrf
+
+            <div class=" bg-gray-50 shadow p-4  rounded-lg flex justify-between items-center space-x-2">
+
+                <div>
+                    <p>Adjustmen stok sebanyak <span class="font-bold">{{ $adJustTypeA == 2 ? "-":"" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioA }}</span>  di jubelio</p>
+                </div>
+
+                <div>
+
+                    <x-layout.submit-button />
+
+                </div>
+
+            
+
+            </div>
+            <!-- form fields -->
+            
+
+        </form>
+        @endif
+
+        @if ($adJustTypeB > 0)
+        <form class="myForm " action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whB, 'adjustType' => $adJustTypeB,'side' => 2]) }}" method="post">
+
+            @csrf
+
+            <div class=" p-4 bg-gray-50 shadow rounded-lg flex justify-between items-center space-x-2">
+
+                <div>
+                    <p>Adjustmen stok sebanyak <span class="font-bold">{{ $adJustTypeB == 2 ? "-":"" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioB }}</span>  di jubelio</p>
+                </div>
+
+                <div>
+
+                    <x-layout.submit-button />
+
+                </div>
+
+            
+
+            </div>
+            <!-- form fields -->
+            
+
+        </form>
+        @endif
+        
+
+
+    @endif
+
+      
 
 
       @push('jsBody')
