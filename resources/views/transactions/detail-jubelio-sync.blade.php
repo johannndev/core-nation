@@ -242,7 +242,15 @@
 
             @csrf
 
-            <div class=" bg-gray-50 shadow p-4  rounded-lg flex justify-between items-center space-x-2">
+            <div id="alert-additional-content-1" class="p-4 mb-4 text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+               
+                <div class="mt-2 mb-4 text-sm">
+                    <p>Adjustmen stok sebanyak <span class="font-bold">{{ $adJustTypeA == 2 ? "-":"" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioA }}</span>  di jubelio</p>
+                </div>
+                <x-layout.submit-button />
+            </div>
+
+            {{-- <div class=" bg-gray-50 shadow p-4  rounded-lg flex justify-between items-center space-x-2">
 
                 <div>
                     <p>Adjustmen stok sebanyak <span class="font-bold">{{ $adJustTypeA == 2 ? "-":"" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioA }}</span>  di jubelio</p>
@@ -257,7 +265,7 @@
             
 
             </div>
-            <!-- form fields -->
+            <!-- form fields --> --}}
             
 
         </form>
