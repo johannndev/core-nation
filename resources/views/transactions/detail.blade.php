@@ -262,6 +262,19 @@
 
                         @endif
 
+                        <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
+                                    <p class="font-bold">Submit Type</p>
+                                </div>
+                                <div class="col-span-3">
+                                    {{ $data->submit_type }}
+                                 
+
+                                </div>
+                            </div>
+                        </div>
+
                      
                         
                     </div>
