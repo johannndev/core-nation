@@ -739,7 +739,7 @@ class TransactionsController extends Controller
 	public function detailJubelioSync($id, Request $request)
     {
 
-		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->withCount([
+		$data = Transaction::with(['receiver','sender','user','submitByA','submitByB','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->withCount([
 			'transactionDetail as item_with_jubelio_count' => function ($query) {
 				$query->whereHas('item', function ($q) {
 					$q->where(function ($q) {
@@ -750,7 +750,7 @@ class TransactionsController extends Controller
 			}
 		])->where('id',$id)->first();
 
-		dd($data);
+		// dd($data);
 
 		
 
