@@ -1183,7 +1183,7 @@ class ApiJubelioController extends Controller
                 $trans->save();
                 DB::commit();
         
-                return redirect()->route('jubelio.adjustStok', $id)->with('success', 'Jubelio adjustment updated');
+                return redirect()->route('transaction.detailJubelioSync', $id)->with('success', 'Jubelio adjustment updated');
             } else {
                 DB::rollBack();
         
@@ -1196,12 +1196,12 @@ class ApiJubelioController extends Controller
                 $message = $error['message'] ?? 'Terjadi kesalahan.';
                 $code = $error['code'] ?? '500';
         
-                return redirect()->route('jubelio.adjustStok', $id)->with('fail', $message . ' | Code: ' . $code);
+                return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', $message . ' | Code: ' . $code);
             }
         
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('jubelio.adjustStok', $id)->with('fail', 'Gagal melakukan proses. Error: ' . $e->getMessage());
+            return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Gagal melakukan proses. Error: ' . $e->getMessage());
         }    
       
     }
