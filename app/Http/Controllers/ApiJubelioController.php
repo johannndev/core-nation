@@ -1189,7 +1189,7 @@ class ApiJubelioController extends Controller
         
                 $error = json_decode($response->body(), true);
 
-                dd($error);
+                dd($error['code']);
 
                 throw new \Exception("Jubelio API Error: $error");
 
