@@ -1109,7 +1109,6 @@ class ApiJubelioController extends Controller
 
     public function adjustStok($id, Request $request){
 
-        dd($request);
 
         $trans = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
 

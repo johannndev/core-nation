@@ -241,16 +241,22 @@
             <div id="alert-additional-content-1" class="p-4 mb-4 text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
                     
                 <div class="mt-2 mb-4 text-sm">
-                    <p>Adjustmen stok sebanyak <span class="font-bold {{ $adJustTypeA == 2 ? "text-red-500":"text-green-500" }}">{{ $adJustTypeA == 2 ? "-":"+" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioA }}</span>  di jubelio</p>
+                    <p>Adjustmen stok sebanyak <span class="font-bold {{ $adJustTypeA == 2 ? "text-red-500":"text-green-500" }}">{{ $adJustTypeA == 2 ? "-":"+" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioA }}</span>  di jubelio{{$data->a_submit_by ? ', Disubmit oleh <span class="font-bold"> '.$data->submitByA->name.' </span>'}}</p>
                 </div>
 
-                <form class="myForm  " action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whA, 'adjustType' => $adJustTypeA,'side' => 1]) }}" method="post">
+                @empty($data->a_submit_by)
 
-                    @csrf
+                    <form class="myForm  " action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whA, 'adjustType' => $adJustTypeA,'side' => 1]) }}" method="post">
 
-                    <x-layout.submit-button />
-        
-                </form>
+                        @csrf
+
+                        <x-layout.submit-button />
+            
+                    </form>
+                        
+                @endempty
+
+              
                 
             </div>
        
@@ -261,8 +267,10 @@
         <div id="alert-additional-content-1" class="p-4 mb-4 text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
                     
             <div class="mt-2 mb-4 text-sm">
-                <p>Adjustmen stok sebanyak <span class="font-bold {{ $adJustTypeB == 2 ? "text-red-500":"text-green-500" }}">{{ $adJustTypeB == 2 ? "-":"+" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioB }}</span>  di jubelio</p>
+                <p>Adjustmen stok sebanyak <span class="font-bold {{ $adJustTypeB == 2 ? "text-red-500":"text-green-500" }}">{{ $adJustTypeB == 2 ? "-":"+" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioB }}</span>  di jubelio{{$data->b_submit_by ? ', Disubmit oleh <span class="font-bold"> '.$data->submitByB->name.' </span>'}}</p>
             </div>
+
+            @empty($data->b_submit_by)
 
             <form class="myForm  " action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whB, 'adjustType' => $adJustTypeB,'side' => 2]) }}" method="post">
 
@@ -271,6 +279,9 @@
                 <x-layout.submit-button />
     
             </form>
+
+            @endempty
+
             
         </div>
 
