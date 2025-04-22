@@ -205,7 +205,9 @@
 
 
                     @if ($adJustTypeA > 0)
-                    <form class="myForm p-4">
+                    <form class="myForm p-4" action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whA, 'adjustType' => $adJustTypeA]) }}" method="post">
+
+                        @csrf
 
                         <div class=" p-4 border rounded-lg flex justify-between items-center space-x-2">
     
@@ -229,7 +231,9 @@
                     @endif
 
                     @if ($adJustTypeB > 0)
-                    <form class="myForm p-4">
+                    <form class="myForm p-4" action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whB, 'adjustType' => $adJustTypeB]) }}" method="post">
+
+                        @csrf
 
                         <div class=" p-4 border rounded-lg flex justify-between items-center space-x-2">
     
