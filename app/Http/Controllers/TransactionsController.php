@@ -664,8 +664,8 @@ class TransactionsController extends Controller
 		$data = Transaction::with(['receiver','sender','user','submitByA','submitByB','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
 
 		$dataSubmit = [
-			'by_a' => $data->submitByA->name ?? null,
-			'by_b' =>  $data->submitByB->name ?? null,
+			'by_a' => $data->submitByA->username ?? null,
+			'by_b' =>  $data->submitByB->username ?? null,
 		];
 
 		$notNullCount = count(array_filter($dataSubmit, function ($value) {
@@ -749,8 +749,6 @@ class TransactionsController extends Controller
 				});
 			}
 		])->where('id',$id)->first();
-
-		dd($data->submitByB);
 
 		
 
