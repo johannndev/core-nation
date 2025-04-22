@@ -1196,7 +1196,7 @@ class ApiJubelioController extends Controller
                 $message = $error['message'] ?? 'Terjadi kesalahan.';
                 $code = $error['code'] ?? '500';
         
-                return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Gagal adujustment stock' . $code);
+                return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Gagal adujustment stock: ' . $code);
             }
         
         } catch (\Exception $e) {
