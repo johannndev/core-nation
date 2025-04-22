@@ -1207,6 +1207,7 @@ class ApiJubelioController extends Controller
         if ($response->successful()) {
             $data = json_decode($response->body(), true); // atau json_decode($response->body(), true)
 
+            dd($data);
 
             if($request->side == 1){
 
