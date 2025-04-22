@@ -1189,12 +1189,12 @@ class ApiJubelioController extends Controller
         
                 $error = json_decode($response->body(), true);
 
-                dd($error['code']);
+                // dd($error['code']);
 
-                throw new \Exception("Jubelio API Error: $error");
+                // throw new \Exception("Jubelio API Error: $error");
 
-                // $message = $error['message'] ?? 'Terjadi kesalahan.';
-                // $code = $error['code'] ?? '500';
+                $message = $error['message'] ?? 'Terjadi kesalahan.';
+                $code = $error['code'] ?? '500';
         
                 return redirect()->route('transaction.getDetail', $id)->with('fail', $message . ' | Code: ' . $code);
             }
