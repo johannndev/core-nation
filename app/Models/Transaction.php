@@ -206,9 +206,14 @@ class Transaction extends Model
 		return $this->belongsTo('App\Models\User','user_id');
 	}
 
-	public function adjustUser()
+	public function submitByA()
 	{
-		return $this->belongsTo('App\Models\User','user_jubelio');
+		return $this->belongsTo('App\Models\User','a_submit_by');
+	}
+
+	public function submitByB()
+	{
+		return $this->belongsTo('App\Models\User','b_submit_by');
 	}
 
 	public function transactionDetail(): HasMany

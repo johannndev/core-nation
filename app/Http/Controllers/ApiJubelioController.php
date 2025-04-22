@@ -1097,10 +1097,10 @@ class ApiJubelioController extends Controller
 
     private function qtyType($type, $qty){
 
-        if($type == Transaction::TYPE_RETURN){
-            $qtyValue = -$qty;
-        }else{
+        if($type == 1){
             $qtyValue = $qty;
+        }else{
+            $qtyValue = -$qty;
         }
 
         return $qtyValue;
@@ -1118,29 +1118,43 @@ class ApiJubelioController extends Controller
             return redirect()->route('transaction.getDetail',$id);
         }
 
-        if($trans->type = Transaction::TYPE_SELL){
-            $warehouse = $trans->sender_id;
-            $customer = $trans->receiver_id;
-        }else{
-            $warehouse = $trans->receiver_id;
-            $customer = $trans->sender_id;
-        }
-
         $jubelioLocation = [];
 
-        if($trans->type == Transaction::TYPE_SELL || $trans->type == Transaction::TYPE_RETURN_SUPPLIER){
+        if($request->whType == 1){
 
-			$jubelioLocation = Jubeliosync::where('warehouse_id',$trans->sender_id)->first();
+            $jubelioLocation = Jubeliosync::where('warehouse_id',$trans->receiver_id)->first();
 
-		}else if($trans->type == Transaction::TYPE_BUY || $trans->type == Transaction::TYPE_RETURN){
+        }else if($request->whType == 2){
 
-			$jubelioLocation = Jubeliosync::where('warehouse_id',$trans->receiver_id)->first();
+            $jubelioLocation = Jubeliosync::where('warehouse_id',$trans->sender_id)->first();
 
-		}else if($trans->type == Transaction::TYPE_MOVE){
+        }else{
+
+        }
+
+        // if($trans->type = Transaction::TYPE_SELL){
+        //     $warehouse = $trans->sender_id;
+        //     $customer = $trans->receiver_id;
+        // }else{
+        //     $warehouse = $trans->receiver_id;
+        //     $customer = $trans->sender_id;
+        // }
+
+        // $jubelioLocation = [];
+
+        // if($trans->type == Transaction::TYPE_SELL || $trans->type == Transaction::TYPE_RETURN_SUPPLIER){
+
+		// 	$jubelioLocation = Jubeliosync::where('warehouse_id',$trans->sender_id)->first();
+
+		// }else if($trans->type == Transaction::TYPE_BUY || $trans->type == Transaction::TYPE_RETURN){
+
+		// 	$jubelioLocation = Jubeliosync::where('warehouse_id',$trans->receiver_id)->first();
+
+		// }else if($trans->type == Transaction::TYPE_MOVE){
             
-			$jubelioLocation = Jubeliosync::whereIn('warehouse_id', [$trans->sender_id, $trans->receiver_id])->first();
+		// 	$jubelioLocation = Jubeliosync::whereIn('warehouse_id', [$trans->sender_id, $trans->receiver_id])->first();
 
-		}
+		// }
 
         if(is_null($jubelioLocation)){
             return redirect()->route('transaction.getDetail',$id)->with('fail','Type transaction tidak valid');
@@ -1161,7 +1175,7 @@ class ApiJubelioController extends Controller
                 "item_adj_detail_id" => 0,
                 "item_id" => $row->item->jubelio_item_id,
                 "serial_no" => null,
-                "qty_in_base" => $this->qtyType($trans->type,$row->quantity),
+                "qty_in_base" => $this->qtyType($request->adjustType,$row->quantity),
                 "original_item_adj_detail_id" => 0,
                 "unit" => "Buah",
                 "amount" => $row->total,
@@ -1195,8 +1209,21 @@ class ApiJubelioController extends Controller
             $data = json_decode($response->body(), true); // atau json_decode($response->body(), true)
 
 
-            $trans->user_jubelio = Auth::user()->id;
-            $trans->user_jubelio = $data->id;
+            if($request->side == 1){
+
+                $trans->a_submit_by = Auth::user()->id;
+                $trans->a_reference_id = $data->id;
+
+            }elseif($request->side == 2){
+
+                $trans->b_submit_by = Auth::user()->id;
+                $trans->b_reference_id = $data->id;
+
+            }else{
+
+            }
+
+         
             $trans->save();
 
             return redirect()->route('transaction.getDetail',$id)->with('success', 'Jubelio adjustment updated');

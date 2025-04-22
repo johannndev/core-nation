@@ -661,13 +661,39 @@ class TransactionsController extends Controller
     public function getDetail($id, Request $request)
     {
 
-		$data = Transaction::with(['receiver','sender','user','adjustUser','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+		$data = Transaction::with(['receiver','sender','user','submitByA','submitByB','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+
+		$dataSubmit = [
+			'by_a' => $data->submitByA->name ?? null,
+			'by_b' =>  $data->submitByB->name ?? null,
+		];
+
+		$notNullCount = count(array_filter($dataSubmit, function ($value) {
+			return !is_null($value);
+		}));
+		
+		$submitBy = implode(', ', array_filter([$dataSubmit['by_a'] ?? null, $dataSubmit['by_b'] ?? null]));
 
 		$cekJubelio = 0;
+		$countA = 0;
+		$countB = 0;
+
+		if($data->a_submit_by){
+			$countA = 1;
+		}
+
+		if($data->b_submit_by){
+			$countB = 1;
+		}
+
+		$countAll = $countA+$countB;
+
+		$limitShow = 1;
 
 		if($data->type == Transaction::TYPE_SELL || $data->type == Transaction::TYPE_RETURN_SUPPLIER){
 
 			$cekJubelio = Jubeliosync::where('warehouse_id',$data->sender_id)->count();
+
 
 		}else if($data->type == Transaction::TYPE_BUY || $data->type == Transaction::TYPE_RETURN){
 
@@ -675,6 +701,17 @@ class TransactionsController extends Controller
 
 		}else if($data->type == Transaction::TYPE_MOVE){
 			$cekJubelio = Jubeliosync::whereIn('warehouse_id', [$data->sender_id, $data->receiver_id])->count();
+
+			$sjbA = Jubeliosync::with('warehouse')->where('warehouse_id',$data->sender_id)->exists();
+			$sjbB = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->exists();
+
+			// dd($sjbA,$sjbB);
+
+			if($sjbA && $sjbB){
+
+				$limitShow = 2;
+			}
+
 
 		}
 
@@ -692,7 +729,7 @@ class TransactionsController extends Controller
 			
 
 		}else{
-			return view('transactions.detail',compact('data','nameWh','cekJubelio'));
+			return view('transactions.detail',compact('data','nameWh','cekJubelio','countAll','limitShow','notNullCount','submitBy'));
 		}
 
 		
