@@ -729,7 +729,7 @@ class TransactionsController extends Controller
 			
 
 		}else{
-			return view('transactions.detail',compact('data','nameWh','submitByA','submitByB','cekJubelio','countAll','limitShow','notNullCount','submitBy'));
+			return view('transactions.detail',compact('data','nameWh','cekJubelio','countAll','limitShow','notNullCount','submitBy'));
 		}
 
 		
