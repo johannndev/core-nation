@@ -236,65 +236,45 @@
 
     @if ($data->item_with_jubelio_count == 0)
 
-
         @if ($adJustTypeA > 0)
-        <form class="myForm  " action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whA, 'adjustType' => $adJustTypeA,'side' => 1]) }}" method="post">
-
-            @csrf
-
+         
             <div id="alert-additional-content-1" class="p-4 mb-4 text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
-               
+                    
                 <div class="mt-2 mb-4 text-sm">
-                    <p>Adjustmen stok sebanyak <span class="font-bold">{{ $adJustTypeA == 2 ? "-":"" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioA }}</span>  di jubelio</p>
-                </div>
-                <x-layout.submit-button />
-            </div>
-
-            {{-- <div class=" bg-gray-50 shadow p-4  rounded-lg flex justify-between items-center space-x-2">
-
-                <div>
-                    <p>Adjustmen stok sebanyak <span class="font-bold">{{ $adJustTypeA == 2 ? "-":"" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioA }}</span>  di jubelio</p>
+                    <p>Adjustmen stok sebanyak <span class="font-bold {{ $adJustTypeA == 2 ? "text-red-500":"text-green-500" }}">{{ $adJustTypeA == 2 ? "-":"+" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioA }}</span>  di jubelio</p>
                 </div>
 
-                <div>
+                <form class="myForm  " action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whA, 'adjustType' => $adJustTypeA,'side' => 1]) }}" method="post">
+
+                    @csrf
 
                     <x-layout.submit-button />
-
-                </div>
-
-            
-
+        
+                </form>
+                
             </div>
-            <!-- form fields --> --}}
-            
-
-        </form>
+       
         @endif
 
         @if ($adJustTypeB > 0)
-        <form class="myForm " action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whB, 'adjustType' => $adJustTypeB,'side' => 2]) }}" method="post">
 
-            @csrf
-
-            <div class=" p-4 bg-gray-50 shadow rounded-lg flex justify-between items-center space-x-2">
-
-                <div>
-                    <p>Adjustmen stok sebanyak <span class="font-bold">{{ $adJustTypeB == 2 ? "-":"" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioB }}</span>  di jubelio</p>
-                </div>
-
-                <div>
-
-                    <x-layout.submit-button />
-
-                </div>
-
-            
-
+        <div id="alert-additional-content-1" class="p-4 mb-4 text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+                    
+            <div class="mt-2 mb-4 text-sm">
+                <p>Adjustmen stok sebanyak <span class="font-bold {{ $adJustTypeB == 2 ? "text-red-500":"text-green-500" }}">{{ $adJustTypeB == 2 ? "-":"+" }}{{ $data->total_items }}</span>  pada warehouse <span class="font-bold">{{ $JubelioB }}</span>  di jubelio</p>
             </div>
-            <!-- form fields -->
-            
 
-        </form>
+            <form class="myForm  " action="{{ route('jubelio.adjustStok',['id' => $data->id, 'whType' => $whB, 'adjustType' => $adJustTypeB,'side' => 2]) }}" method="post">
+
+                @csrf
+
+                <x-layout.submit-button />
+    
+            </form>
+            
+        </div>
+
+
         @endif
         
 
