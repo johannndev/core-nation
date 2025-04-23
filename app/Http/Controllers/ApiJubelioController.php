@@ -1114,7 +1114,19 @@ class ApiJubelioController extends Controller
         
             $trans = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id', $id)->first();
         
-            if ($trans->user_jubelio) {
+          
+            if($request->side == 1){
+                
+                if ($trans->a_submit_by) {
+                    return redirect()->route('transaction.getDetail', $id);
+                }
+    
+            }else if($request->side == 1){
+  
+                if ($trans->b_submit_by) {
+                    return redirect()->route('transaction.getDetail', $id);
+                }
+            }else{
                 return redirect()->route('transaction.getDetail', $id);
             }
         
@@ -1127,7 +1139,7 @@ class ApiJubelioController extends Controller
             }
         
             if (is_null($jubelioLocation)) {
-                return redirect()->route('transaction.getDetail', $id)->with('fail', 'Type transaction tidak valid');
+                return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Type transaction tidak valid');
             }
         
             $now = Carbon::now('UTC');
