@@ -748,11 +748,7 @@ class TransactionsController extends Controller
 					});
 				});
 			}
-		])->where('id',$id)->first();
-
-		dd($data);
-
-		
+		])->where('id',$id)->first();		
 
 		$JubelioA = [];
 		$JubelioB = [];
