@@ -826,10 +826,7 @@ class TransactionsController extends Controller
 
 		
 
-		if($data->user_jubelio){
-
-            return redirect()->route('transaction.getDetail',$id);
-        }
+	
 
 		return view('transactions.detail-jubelio-sync',compact('data','JubelioA','JubelioB','adJustTypeA','adJustTypeB','whA','whB'));
 
