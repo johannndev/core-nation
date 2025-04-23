@@ -763,7 +763,7 @@ class TransactionsController extends Controller
 
 		if($data->type == Transaction::TYPE_SELL || $data->type == Transaction::TYPE_RETURN_SUPPLIER){
 
-			$$adJustTypeA = 2;
+			$adJustTypeA = 2;
 
 			$dataJub = Jubeliosync::with('warehouse')->where('warehouse_id',$data->sender_id)->first();
 
