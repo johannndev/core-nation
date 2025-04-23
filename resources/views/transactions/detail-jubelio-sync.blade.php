@@ -287,7 +287,7 @@
                     <span class="font-bold">{{ $JubelioB }}</span> 
                     di jubelio
                     @if ($data->b_submit_by)
-                        , Disubmit oleh <span class="font-bold">{{ $data->submitByB->username }}</span>
+                        - Disubmit oleh <span class="font-bold">{{ $data->submitByB->username }}, Adjustmen ID <span class="font-bold">{{ $data->a_reference_id }}</span>
                     @endif
                 </p>
             </div>
