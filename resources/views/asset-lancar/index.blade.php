@@ -93,8 +93,8 @@
                                 <tr>
                                     <th scope="col" class=" image-col hidden px-4 py-3">Image</th>
                                     <th scope="col" class="px-4 py-3">Barcode</th>
+                                    <th scope="col" class="px-4 py-3">Nama</th>
                                     <th scope="col" class="px-4 py-3">SKU</th>
-                                    <th scope="col" class="px-4 py-3">Kode Produksi</th>
                                     <th scope="col" class="px-4 py-3">Description</th>
                                     <th scope="col" class="px-4 py-3">Price</th>
                                     <th scope="col" class="px-4 py-3">NB</th>
