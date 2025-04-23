@@ -769,9 +769,9 @@ class TransactionsController extends Controller
 
 			$$adJustTypeA = 1;
 
-			$data = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->first();
+			$dataJub = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->first();
 
-			$JubelioA = $data->warehouse->name ?? null;
+			$JubelioA = $dataJub->warehouse->name ?? null;
 
 			$whA = 1;
 			
@@ -780,9 +780,9 @@ class TransactionsController extends Controller
 
 			$adJustTypeA = 2;
 
-			$data = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->first();
+			$dataJub = Jubeliosync::with('warehouse')->where('warehouse_id',$data->receiver_id)->first();
 
-			$JubelioA = $data->warehouse->name ?? null;
+			$JubelioA = $dataJub->warehouse->name ?? null;
 
 			$whA = 1;
 			
