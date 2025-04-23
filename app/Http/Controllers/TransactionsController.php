@@ -769,7 +769,7 @@ class TransactionsController extends Controller
 
 			$JubelioA = $dataJub->warehouse->name ?? null;
 
-			$whA = 1;
+			$whA = 2;
 			
 
 		}else if($data->type == Transaction::TYPE_BUY || $data->type == Transaction::TYPE_RETURN){
