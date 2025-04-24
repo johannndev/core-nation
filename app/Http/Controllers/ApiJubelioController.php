@@ -1121,7 +1121,7 @@ class ApiJubelioController extends Controller
                     return redirect()->route('transaction.getDetail', $id);
                 }
     
-            }else if($request->side == 1){
+            }else if($request->side == 2){
   
                 if ($trans->b_submit_by) {
                     return redirect()->route('transaction.getDetail', $id);
