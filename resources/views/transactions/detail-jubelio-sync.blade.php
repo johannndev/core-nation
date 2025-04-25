@@ -247,7 +247,7 @@
                             {{ $adJustTypeA == 2 ? '-' : '+' }}{{ $data->total_items }}
                         </span> 
                         pada warehouse 
-                        <span class="font-bold">{{ $JubelioA }}</span> 
+                        <span class="font-bold">{{ $whAName }}</span> 
                         di jubelio
                         @if ($data->a_submit_by)
                             - Disubmit oleh <span class="font-bold">{{ $data->submitByA->username }}</span>, Adjustmen ID <span class="font-bold">{{ $data->a_reference_id }}</span>
@@ -284,7 +284,7 @@
                         {{ $adJustTypeB == 2 ? '-' : '+' }}{{ $data->total_items }}
                     </span> 
                     pada warehouse 
-                    <span class="font-bold">{{ $JubelioB }}</span> 
+                    <span class="font-bold">{{ $whBName }}</span> 
                     di jubelio
                     @if ($data->b_submit_by)
                         - Disubmit oleh <span class="font-bold">{{ $data->submitByB->username }}</span>, Adjustmen ID <span class="font-bold">{{ $data->b_reference_id }}</span>

@@ -758,6 +758,9 @@ class TransactionsController extends Controller
 
 		$whA = 0;
 		$whB = 0;
+
+		$whAName = '';
+		$whBName = '';
 		
 
 
@@ -770,6 +773,10 @@ class TransactionsController extends Controller
 			$JubelioA = $dataJub->warehouse->name ?? null;
 
 			$whA = 2;
+
+			$whAName = $data->sender->name;
+
+
 			
 
 		}else if($data->type == Transaction::TYPE_BUY || $data->type == Transaction::TYPE_RETURN){
@@ -781,6 +788,8 @@ class TransactionsController extends Controller
 			$JubelioA = $dataJub->warehouse->name ?? null;
 
 			$whA = 1;
+
+			$whAName = $data->receiver->name;
 			
 
 		}else if($data->type == Transaction::TYPE_MOVE){
@@ -802,6 +811,9 @@ class TransactionsController extends Controller
 				$JubelioA =  $sjbA->customer->name ?? null;
 				$JubelioB = $sjbB->warehouse->name ?? null;
 
+				$whAName = $data->sender->name;
+				$whBName = $data->receiver->name;
+
 			}else if($sjbA && is_null($sjbB)){
 				$adJustTypeA = 2;
 
@@ -809,13 +821,15 @@ class TransactionsController extends Controller
 
 				$JubelioA = $sjbA->customer->name ?? null;
 
+				$whAName = $data->sender->name;
+
 			}else if(is_null($sjbA) && $sjbB){
 
 				$whA = 1;
 				$adJustTypeA = 1;
 				$JubelioA = $sjbB->warehouse->name ?? null;
 				
-				
+				$whAName = $data->receiver->name;				
 			}
 
 		
@@ -826,7 +840,7 @@ class TransactionsController extends Controller
 
 	
 
-		return view('transactions.detail-jubelio-sync',compact('data','JubelioA','JubelioB','adJustTypeA','adJustTypeB','whA','whB'));
+		return view('transactions.detail-jubelio-sync',compact('data','JubelioA','JubelioB','adJustTypeA','adJustTypeB','whA','whB','whAName','whBName'));
 
     }
 
