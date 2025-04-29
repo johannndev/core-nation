@@ -671,7 +671,7 @@ class TransactionsController extends Controller
 
 		$path = env('INVOICE_PATH', '/home/u343060430/domains/invoice.corenationactive.com/');
 		$filePath = $path . $fileName;
-
+		$pdfFile = 0;
 		if (File::exists($filePath)) {
 			$pdfFile = 1; // Membuat direktori dengan izin 755
 		}
@@ -1783,7 +1783,7 @@ class TransactionsController extends Controller
 		
 		$fileUrl = $url.$fileName;
 
-		$message = urlencode("Halo! Berikut invoice Anda:\n\n$fileUrl");
+		$message = urlencode("Terimakasih telah belanja di CoreNation! Berikut invoice anda:\n\n$fileUrl");
 		$waLink = "https://wa.me/" . $request->wa . "?text=" . $message;
 
 		return redirect()->away($waLink);
