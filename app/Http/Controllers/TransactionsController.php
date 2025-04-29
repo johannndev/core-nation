@@ -34,6 +34,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 
 class TransactionsController extends Controller
@@ -665,16 +666,14 @@ class TransactionsController extends Controller
 
 		$data = Transaction::with(['receiver','sender','user','submitByA','submitByB','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
 
-		$fileName = 'invoice_' . $data->invoice . '.pdf';
-		$folderName = 'invoices';
-		$fullPath = $folderName . '/' . $fileName; // relatif ke public
-		$fileUrl = asset($fullPath); // URL untuk frontend
 
-		$pdfFile = 0;
+		$fileName = 'invoice_' . $data->id . '.pdf';
 
-		// Cek file berdasarkan path lokal di server, bukan URL
-		if (file_exists(public_path($fullPath))) {
-			$pdfFile = 1;
+		$path = env('INVOICE_PATH', '/laragon/www/core-nation/public/asset/inv/');
+		$filePath = $path . $fileName;
+
+		if (File::exists($filePath)) {
+			$pdfFile = 1; // Membuat direktori dengan izin 755
 		}
 			
 
@@ -1741,24 +1740,33 @@ class TransactionsController extends Controller
 	
 		// Nama file statis berdasarkan ID
 		$fileName = 'invoice_' . $invoice->id . '.pdf';
-		$fullPath = $folderPath . '/' . $fileName;
-		$url = asset('invoices/' . $fileName);
-	
+		// $fullPath = $folderPath . '/' . $fileName;
+		// $url = asset('invoices/' . $fileName);
 
-		$this->checkAndDeleteFile($fullPath);
+		$path = env('INVOICE_PATH', '/laragon/www/core-nation/public/asset/inv/');
+		$filePath = $path . $fileName;
+
+		// Buat direktori jika belum ada
+		if (!File::exists($path)) {
+			File::makeDirectory($path, 0755, true); // Membuat direktori dengan izin 755
+		}
+
+		if (File::exists($filePath)) {
+			unlink($filePath); // Membuat direktori dengan izin 755
+		}
 
 		$view = view('pdf.invoice', compact('invoice','typeInvoice'))->render();
 
-		preg_match('/name="docHeight" value="(\d+)"/', $view, $matches);
-		$docHeight = isset($matches[1]) ? (int)$matches[1] : 842; // default A4 height kalau gagal
+		// preg_match('/name="docHeight" value="(\d+)"/', $view, $matches);
+		// $docHeight = isset($matches[1]) ? (int)$matches[1] : 842; // default A4 height kalau gagal
 
-		$pdf = Pdf::loadView('pdf.invoice', compact('invoice','typeInvoice'))->setPaper([0, 0, 595, $docHeight])
+		$pdf = Pdf::loadView('pdf.invoice', compact('invoice','typeInvoice'))->setPaper('A4','portrait')
 		->setOptions([
 			'isHtml5ParserEnabled' => true,
 			'isRemoteEnabled' => true,
 			'isPhpEnabled' => true,
 		]);
-		$pdf->save($fullPath);
+		$pdf->save($filePath);
 		
 		// // Kirim ke WhatsApp
 		// $this->sendToWhatsapp($invoice->phone, $url);
