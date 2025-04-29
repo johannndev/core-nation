@@ -103,7 +103,7 @@ Route::get('/itemcron', [CronController::class, 'itemCron']);
 
 Route::get('/viewTest', function () {
     
-    return view('pdf.invoicetest');
+    return base_path();
 });
 
 Route::get('/role-create', function () {
