@@ -669,7 +669,7 @@ class TransactionsController extends Controller
 
 		$fileName = 'invoice_' . $data->id . '.pdf';
 
-		$path = env('INVOICE_PATH', '/laragon/www/core-nation/public/asset/inv/');
+		$path = env('INVOICE_PATH', '/home/u343060430/domains/invoice.corenationactive.com/');
 		$filePath = $path . $fileName;
 
 		if (File::exists($filePath)) {
@@ -1778,10 +1778,12 @@ class TransactionsController extends Controller
 	{
 
 		$fileName = 'invoice_' . $id . '.pdf';
-		
-		$url = asset('invoices/' . $fileName);
 
-		$message = urlencode("Halo! Berikut invoice Anda:\n\n$url");
+		$url = env('INVOICE_URL', 'https://invoice.corenationactive.com/');
+		
+		$fileUrl = $url.$fileName;
+
+		$message = urlencode("Halo! Berikut invoice Anda:\n\n$fileUrl");
 		$waLink = "https://wa.me/" . $request->wa . "?text=" . $message;
 
 		return redirect()->away($waLink);

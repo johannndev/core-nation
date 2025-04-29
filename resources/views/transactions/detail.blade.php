@@ -338,7 +338,7 @@
 
                                         <p class=" text-gray-500 dark:text-gray-300">Kirim link PDF via WhatsApp</p>
 
-                                        <form action="{{route('transaction.sendToWhatsapp',$data->invoice)}}" method="post">
+                                        <form action="{{route('transaction.sendToWhatsapp',$data->id)}}" method="post">
 
                                             @csrf
                                            
