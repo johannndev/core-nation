@@ -1740,7 +1740,7 @@ class TransactionsController extends Controller
 		}
 	
 		// Nama file statis berdasarkan ID
-		$fileName = 'invoice_' . $invoice->invoice . '.pdf';
+		$fileName = 'invoice_' . $invoice->id . '.pdf';
 		$fullPath = $folderPath . '/' . $fileName;
 		$url = asset('invoices/' . $fileName);
 	
