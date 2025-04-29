@@ -92,7 +92,7 @@
             </table>
         </div>
         <h4>Invoice {{$typeInvoice}}</h4>
-        <p><strong>Invoice #: </strong>{{ $invoice->invoice }}</p>
+        <p><strong>Invoice : </strong>{{ $invoice->invoice }}</p>
         <p><strong>Date: </strong>{{ \Carbon\Carbon::parse($invoice->date)->format('d M Y') }}</p>
     </div>
 
