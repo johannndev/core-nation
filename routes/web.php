@@ -214,7 +214,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/transaction/sell/post', [TransactionsController::class, 'postSell'])->name('transaction.postSell')->middleware('permission:transactions.sell');
 
     Route::get('/transaction/sell-batch', [TransactionsController::class, 'sellBatch'])->name('transaction.postSellBatch')->middleware('permission:transactions.sellbatch');
-    Route::post('/transaction/sell-batch/store', [TransactionsController::class, 'postSellBatch'])->name('transaction.sellBatchStore')->middleware('permissiontransactions.sellbatch');
+    Route::post('/transaction/sell-batch/store', [TransactionsController::class, 'postSellBatch'])->name('transaction.sellBatchStore')->middleware('permission:transactions.sellbatch');
 
     Route::get('/transaction/buy', [TransactionsController::class, 'buy'])->name('transaction.buy')->middleware('permission:transactions.buy');
     Route::post('/transaction/buy/post', [TransactionsController::class, 'postbuy'])->name('transaction.postBuy')->middleware('permission:transactions.buy');
