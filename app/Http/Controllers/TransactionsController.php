@@ -32,6 +32,8 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 
 class TransactionsController extends Controller
@@ -663,6 +665,20 @@ class TransactionsController extends Controller
 
 		$data = Transaction::with(['receiver','sender','user','submitByA','submitByB','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
 
+		$fileName = 'invoice_' . $data->invoice . '.pdf';
+		$folderName = 'invoices';
+		$fullPath = $folderName . '/' . $fileName; // relatif ke public
+		$fileUrl = asset($fullPath); // URL untuk frontend
+
+		$pdfFile = 0;
+
+		// Cek file berdasarkan path lokal di server, bukan URL
+		if (file_exists(public_path($fullPath))) {
+			$pdfFile = 1;
+		}
+			
+
+
 		$dataSubmit = [
 			'by_a' => $data->submitByA->username ?? null,
 			'by_b' =>  $data->submitByB->username ?? null,
@@ -729,7 +745,7 @@ class TransactionsController extends Controller
 			
 
 		}else{
-			return view('transactions.detail',compact('data','nameWh','cekJubelio','countAll','limitShow','notNullCount','submitBy'));
+			return view('transactions.detail',compact('data','nameWh','cekJubelio','countAll','limitShow','notNullCount','submitBy','pdfFile'));
 		}
 
 		
@@ -1703,6 +1719,66 @@ class TransactionsController extends Controller
 		
 
 	}
+
+	private function checkAndDeleteFile($filePath)
+	{
+		if (file_exists($filePath)) {
+			unlink($filePath); // Hapus file lama
+		}
+	}
+
+	public function generateInvoice($id)
+	{
+		$invoice = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+
+		$typeInvoice = Transaction::$types[$invoice->type];
+
+
+		$folderPath = public_path('invoices');
+		if (!file_exists($folderPath)) {
+			mkdir($folderPath, 0777, true);
+		}
+	
+		// Nama file statis berdasarkan ID
+		$fileName = 'invoice_' . $invoice->invoice . '.pdf';
+		$fullPath = $folderPath . '/' . $fileName;
+		$url = asset('invoices/' . $fileName);
+	
+
+		$this->checkAndDeleteFile($fullPath);
+
+		$view = view('pdf.invoice', compact('invoice','typeInvoice'))->render();
+
+		preg_match('/name="docHeight" value="(\d+)"/', $view, $matches);
+		$docHeight = isset($matches[1]) ? (int)$matches[1] : 842; // default A4 height kalau gagal
+
+		$pdf = Pdf::loadView('pdf.invoice', compact('invoice','typeInvoice'))->setPaper([0, 0, 595, $docHeight])
+		->setOptions([
+			'isHtml5ParserEnabled' => true,
+			'isRemoteEnabled' => true,
+			'isPhpEnabled' => true,
+		]);
+		$pdf->save($fullPath);
+		
+		// // Kirim ke WhatsApp
+		// $this->sendToWhatsapp($invoice->phone, $url);
+
+		return redirect()->route('transaction.getDetail',$invoice->id)->with('success', 'Transaction # ' . $invoice->id. ' PDF created.');
+	}
+
+	public function sendToWhatsapp($id,Request $request)
+	{
+
+		$fileName = 'invoice_' . $id . '.pdf';
+		
+		$url = asset('invoices/' . $fileName);
+
+		$message = urlencode("Halo! Berikut invoice Anda:\n\n$url");
+		$waLink = "https://wa.me/" . $request->wa . "?text=" . $message;
+
+		return redirect()->away($waLink);
+	}
+
 
 	
 	

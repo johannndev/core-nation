@@ -310,6 +310,72 @@
                     </div>
                     <div class="flex items-center flex-1 space-x-4 justify-end">
 
+                        @if ($pdfFile > 0)
+                            
+                            <button type="button" id="send-wa" data-modal-target="sendWaModal" data-modal-toggle="sendWaModal" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg">
+                                
+                            Send WhatsApp
+
+                            </button>
+
+                        
+                            
+                            <!-- Main modal -->
+                            <div id="sendWaModal" tabindex="-1" aria-hidden="true" class=" hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+                                <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                                    <!-- Modal content -->
+                                    <div class="relative p-4 mt-40 md:mt-0 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                                        <button type="button" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="sendWaModal">
+                                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto">
+                                            <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625Z" />
+                                            <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                                        </svg>
+                                          
+
+                                        <p class=" text-gray-500 dark:text-gray-300">Kirim link PDF via WhatsApp</p>
+
+                                        <form action="{{route('transaction.sendToWhatsapp',$data->invoice)}}" method="post">
+
+                                            @csrf
+                                           
+
+                                            <div class="col-span-2 mt-4">
+                                                <label for="wa" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">No. WhatsApp</label>
+                                                <input type="text" name="wa" id="wa" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="+62811111111111" value="{{old('wa')}}">
+                
+                                            </div>
+                                        
+                                            <div class="flex justify-center items-center space-x-4 mt-4">
+                                                <button data-modal-toggle="sendWaModal" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                                                    No, cancel
+                                                </button>
+
+                                            
+
+                                                <button type="submit" class="py-2 px-3 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-900">
+                                                    Send now
+                                                </button>
+                                        
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        @else
+
+                        <a href="{{ route('transaction.detailJubelioSync', $data->id) }}" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg">
+                           Generete PDF
+                        </a>
+
+
+                        @endif
+
                         @if ($cekJubelio > 0 && $countAll != $limitShow && $data->submit_type == 1)
 
                         <a href="{{ route('transaction.detailJubelioSync', $data->id) }}" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg">

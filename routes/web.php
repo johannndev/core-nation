@@ -101,6 +101,11 @@ Route::get('/logjubelio/{id}/detail', [LogJubelioController::class, 'detail']);
 Route::get('/edititemstat', [CronController::class, 'itemEdit']);
 Route::get('/itemcron', [CronController::class, 'itemCron']);
 
+Route::get('/viewTest', function () {
+    
+    return view('pdf.invoicetest');
+});
+
 Route::get('/role-create', function () {
     
     $perm = [
@@ -249,6 +254,10 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/transaction/{id}/detail', [TransactionsController::class, 'getDetail'])->name('transaction.getDetail')->middleware('permission:transactions.detail');
+
+    Route::get('/transaction/{id}/invoice', [TransactionsController::class, 'generateInvoice'])->name('transaction.genereteInvoice')->middleware('permission:transactions.detail');
+
+    Route::post('/transaction/{id}/sendWa', [TransactionsController::class, 'sendToWhatsapp'])->name('transaction.sendToWhatsapp')->middleware('permission:transactions.detail');
 
     
     Route::get('/transaction/{id}/detail/jubelio-sync', [TransactionsController::class, 'detailJubelioSync'])->name('transaction.detailJubelioSync')->middleware('permission:transactions.detail');
