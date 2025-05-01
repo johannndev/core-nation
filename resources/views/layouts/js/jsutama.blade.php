@@ -114,7 +114,7 @@
             if (button) {
                 window.stopScanButton();
             }
-        }, 5000); // Klik otomatis setelah 2 detik
+        }, 2000); // Klik otomatis setelah 2 detik
     }
 
     
