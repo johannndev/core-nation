@@ -73,4 +73,14 @@ function starScanButton(id) {
     
 }
 
+function stopScanButton() {
+    modal.hide();
+    stopScan();
+
+    console.log('modal di tutup')
+    
+}
+
 window.starScanButton = starScanButton;
+
+window.stopScanButton = stopScanButton;

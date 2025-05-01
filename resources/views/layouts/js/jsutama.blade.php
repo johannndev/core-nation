@@ -94,8 +94,6 @@
 
         
 
-        
-
         // alert("Detected barcode: " + result.codeResult.code);
     });
 
@@ -108,12 +106,15 @@
     
 
     function closeAll(){
+
+        console.log('modal akan di tutup')
+
         setTimeout(function() {
             var button = document.getElementById('closeModalButton');
             if (button) {
-                button.click();
+                window.stopScanButton();
             }
-        }, 2000); // Klik otomatis setelah 2 detik
+        }, 5000); // Klik otomatis setelah 2 detik
     }
 
     
