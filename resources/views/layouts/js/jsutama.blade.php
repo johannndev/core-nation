@@ -92,7 +92,7 @@
 
         document.getElementById("quantity"+scanId).focus();
 
-        stopScan();
+        
 
         
 

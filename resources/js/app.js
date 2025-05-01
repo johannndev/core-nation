@@ -57,9 +57,9 @@ document.querySelectorAll('#openModalButton').forEach(button => {
 
 
 // Event listener untuk menutup modal
-// document.getElementById('closeModalButton').addEventListener('click', () => {
-//     modal.hide();
-// });
+document.getElementById('closeModalButton').addEventListener('click', () => {
+    modal.hide();
+});
 
 
 
