@@ -92,6 +92,8 @@
 
         document.getElementById("quantity"+scanId).focus();
 
+        stopScan();
+
         
 
         // alert("Detected barcode: " + result.codeResult.code);
