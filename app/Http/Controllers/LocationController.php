@@ -7,6 +7,7 @@ use App\Models\LC;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class LocationController extends Controller
 {
@@ -107,7 +108,7 @@ class LocationController extends Controller
 
         $location = Location::findOrFail($id);
 
-        $dataList = Customer::query();
+        $dataList = Customer::with('locations');
 
         
         if(Request('name')) {
@@ -129,6 +130,7 @@ class LocationController extends Controller
 			"type" => Customer::TYPE_CUSTOMER.",".Customer::TYPE_RESELLER.",".Customer::TYPE_WAREHOUSE.",".Customer::TYPE_BANK.",".Customer::TYPE_SUPPLIER.",".Customer::TYPE_VWAREHOUSE.",".Customer::TYPE_VACCOUNT.",".Customer::TYPE_ACCOUNT
 			
 		];
+
 
         return view('location.detail',compact('dataList','location','dataListPropSender','uid'));
 
@@ -164,5 +166,12 @@ class LocationController extends Controller
         
 
 
+    }
+
+    public function dismis($id,$cus){
+        $data = DB::table('location_customer')->where('location_id', $id)->where('customer_id', $cus)->delete();
+
+
+        return redirect()->route('location.detail',$id)->with('success', 'Location customer dismis.');
     }
 }
