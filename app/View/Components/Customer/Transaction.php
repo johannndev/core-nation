@@ -86,7 +86,7 @@ class Transaction extends Component
 
 		// dd($dataList);
 
-		$dataList = $dataList->paginate(50)->withQueryString();
+		$dataList = $dataList->paginate(1000)->withQueryString();
 
         // dd($dataList);
         return view('components.customer.transaction',compact('dataList'));
