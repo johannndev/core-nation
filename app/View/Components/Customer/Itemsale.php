@@ -41,7 +41,7 @@ class Itemsale extends Component
 			$dataList = $dataList->where('type',Request('type'));
 		}
 
-		$dataList = $dataList->paginate(100)->withQueryString();
+		$dataList = $dataList->paginate(1000)->withQueryString();
 
         return view('components.customer.itemsale',compact('dataList'));
     }
