@@ -1251,6 +1251,8 @@ class ApiJubelioController extends Controller
         }else{
 
             $filtered = collect($data)->firstWhere('item_code', $item->code);
+
+            dd($filtered);
             
             DB::table('items')->where('code',$item->code)->update([
                 'jubelio_item_id' => $filtered['item_id'], // Kolom yang diperbarui
