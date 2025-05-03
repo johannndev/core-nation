@@ -123,7 +123,6 @@
                 <th>#</th>
                 <th>Code</th>
                 <th>Item Name</th>
-                <th>Description</th>
                 <th class="text-right">Quantity</th>
                 <th class="text-right">Price</th>
                 <th class="text-right">Discount</th>
@@ -136,7 +135,6 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->item->code }}</td>
                     <td>{{ $item->item->getItemName() }}</td>
-                    <td>{{ $item->item->group? $item->item->group->description : $item->item->description }}</td>
                     <td class="text-right">{{ $item->quantity }}</td>
                     <td class="text-right">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
                     <td class="text-right">Rp{{ number_format($item->discount, 0, ',', '.') }}</td>
