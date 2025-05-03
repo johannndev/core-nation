@@ -73,9 +73,11 @@ class UpdateItemIdJubelio extends Command
                     'failed' => 1,
                 ]);
             }else{
+
+                $filtered = collect($data['data'])->firstWhere('item_code', $itemCode);
                 
                 DB::table('items')->where('code',$itemCode)->update([
-                    'jubelio_item_id' => $data['data'][0]['item_id'], // Kolom yang diperbarui
+                    'jubelio_item_id' =>  $filtered['item_id'], // Kolom yang diperbarui
                 ]);
 
                 DB::table('cron_stat_runs')->increment('runner');
