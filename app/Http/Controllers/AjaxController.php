@@ -238,6 +238,8 @@ class AjaxController extends Controller
         // Parse the CSV file to an array
         $array = $this->parseCsvToArray($filePath); // Use the parsing function from earlier
 
+    
+
         
 
         $qtyPluck = collect($array)->pluck('qty','id')->toArray();
@@ -258,7 +260,7 @@ class AjaxController extends Controller
 
         $items = Item::where(function ($query) use ($collect) {
             $query->whereIn('id', $collect)
-                    ->orWhereIn('pcode', $collect);
+                    ->orWhereIn('code', $collect);
             })
             ->with(['warehousesItemAlt' => function ($query) use ($whid) {
                 $query->where('warehouse_id', $whid);
@@ -287,7 +289,6 @@ class AjaxController extends Controller
         }
 
         $dataColl = collect($dataList);
-
         
         // dd($dataColl->sum('price'));
 
