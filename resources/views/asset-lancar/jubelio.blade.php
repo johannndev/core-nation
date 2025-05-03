@@ -66,6 +66,15 @@
 
                             <div class="grid grid-cols-5 p-4">
                                 <div  class="col-span-2">
+                                    <p class="font-bold">Jubelio Item Code</p>
+                                </div>
+                                <div class="col-span-3">
+                                    <p>{{$dataJubelio['item_code'] ?? ''}}</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
                                     <p class="font-bold">Jubelio Item Name</p>
                                 </div>
                                 <div class="col-span-3">
