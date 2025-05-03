@@ -276,8 +276,8 @@ class AjaxController extends Controller
             $warehouseQuantity = $i->warehousesItemAlt->first()->quantity ?? 0; // Ambil quantity warehouse terkait, atau 0 jika tidak ada
         
             // Use array indexing to get values, or default to 0
-            $qty = isset($qtyPluck[$i->pcode]) ? (float) $qtyPluck[$i->pcode] : 0;
-            $price = isset($qtyPrice[$i->pcode]) ? (float) $qtyPrice[$i->pcode] : 0;
+            $qty = isset($qtyPluck[$i->code]) ? (float) $qtyPluck[$i->code] : 0;
+            $price = isset($qtyPrice[$i->code]) ? (float) $qtyPrice[$i->code] : 0;
 
             $dataList[] = [
                 'id' => $i->id,
