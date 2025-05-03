@@ -1232,6 +1232,8 @@ class ApiJubelioController extends Controller
 
         $data = json_decode($response->body(), true);
 
+   
+
         if($data['totalCount'] == 0){
 
             DB::table('items')->where('code',$item->code)->update([
@@ -1247,9 +1249,11 @@ class ApiJubelioController extends Controller
                 return redirect()->route('dashboard');
             }
         }else{
+
+            $filtered = collect($data)->firstWhere('item_code', $item->code);
             
             DB::table('items')->where('code',$item->code)->update([
-                'jubelio_item_id' => $data['data'][0]['item_id'], // Kolom yang diperbarui
+                'jubelio_item_id' => $filtered['item_id'], // Kolom yang diperbarui
             ]);
 
             if($item->type == Item::TYPE_ITEM){
