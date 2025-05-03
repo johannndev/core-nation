@@ -101,7 +101,7 @@ class AsetLancarController extends Controller
 	
 			$result = json_decode($response->body(), true);
 
-			dd($result);
+			// dd($result);
 
 			if (!isset($result['data']) || is_null($result['data'])) {
 				$message = "Item tidak ada";
