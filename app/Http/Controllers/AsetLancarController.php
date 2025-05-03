@@ -103,7 +103,7 @@ class AsetLancarController extends Controller
 
 			// dd($result);
 
-			if (!isset($result['data']) || is_null($result['data'])) {
+			if (!isset($result['data'][0]) || is_null($result['data'][0])) {
 				$message = "Item tidak ada";
 				// dd('Data is null or not set', $result);
 			} else {
