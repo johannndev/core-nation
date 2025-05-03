@@ -1250,7 +1250,7 @@ class ApiJubelioController extends Controller
             }
         }else{
 
-            $filtered = collect($data)->all();
+            $filtered = collect($data['data'])->firstWhere('item_code', $item->code);
 
             dd($filtered);
             
