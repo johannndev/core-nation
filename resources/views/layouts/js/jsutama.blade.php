@@ -344,7 +344,7 @@
                 document.getElementById("code"+id).focus();
             }else{
 
-                document.getElementById("discount"+id).focus();
+                document.getElementById("price"+id).focus();
 
             }
 
