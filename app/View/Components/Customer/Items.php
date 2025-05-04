@@ -54,6 +54,8 @@ class Items extends Component
 		}
 
         if(Request('show0')){
+            $query = $query->where('quantity','>=',0);
+        } else {
             $query = $query->where('quantity','>',0);
         }
 
