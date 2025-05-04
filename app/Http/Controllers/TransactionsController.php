@@ -270,6 +270,8 @@ class TransactionsController extends Controller
 			throw new ModelException($sm->getErrors());
 
 		$transaction->receiver_balance = $receiver_balance;
+        if(!$transaction->invoice)
+            $transaction->invoice = $transaction->id;
 		if(!$transaction->save())
 			throw new ModelException($transaction->getErrors());
 
@@ -353,7 +355,10 @@ class TransactionsController extends Controller
 			throw new ModelException($sm->getErrors());
 
 		$transaction->receiver_balance = $receiver_balance;
-		if(!$transaction->save())
+        if(!$transaction->invoice)
+            $transaction->invoice = $transaction->id;
+
+        if(!$transaction->save())
 			throw new ModelException($transaction->getErrors());
 
 		InvoiceTrackerHelpers::flag($transaction);
@@ -1008,7 +1013,8 @@ class TransactionsController extends Controller
 
 		if(!$details = $transaction->createDetails($request->addMoreInputFields))
 			throw new ModelException($transaction->getErrors(), __LINE__);
-
+        if(!$transaction->invoice)
+            $transaction->invoice = $transaction->id;
 		//update the transaction
 		if(!$transaction->save())
 		throw new ModelException($transaction->getErrors(), __LINE__);
