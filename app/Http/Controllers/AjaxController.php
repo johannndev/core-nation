@@ -240,53 +240,78 @@ class AjaxController extends Controller
 
     
 
-        
+        // dd($array);
 
-        $qtyPluck = collect($array)->pluck('qty','id')->toArray();
-        $qtyPrice = collect($array)->pluck('price','id')->toArray();
+        // $qtyPluck = collect($array)->pluck('qty','id')->toArray();
+        // $qtyPrice = collect($array)->pluck('price','id')->toArray();
 
-        
+        // $collect = collect($array)->pluck('id');
 
-        $collect = collect($array)->pluck('id');
 
-        // $item = Item::whereIn('id',$collect)->orderBy('name','asc')->get();
+        $codes = collect($array)->pluck('id')->unique();
 
-        // $items = Item::whereIn('id', $collect)
-        //         ->with(['warehousesItemAlt' => function ($query) use ($whid) {
-        //             $query->where('warehouse_id', $whid);
-        //         }])
-        //         ->orderBy('name', 'asc')
-        //         ->get();
-
-        $items = Item::where(function ($query) use ($collect) {
-            $query->whereIn('id', $collect)
-                    ->orWhereIn('code', $collect);
-            })
+        $items = Item::whereIn('code', $codes)
             ->with(['warehousesItemAlt' => function ($query) use ($whid) {
                 $query->where('warehouse_id', $whid);
             }])
-            ->orderBy('name', 'asc')
-            ->get();
+            ->get()
+            ->keyBy('code');
 
-        // dd(count($items), count($array), $qtyPluck);
+           
 
-        $dataList = [];
+        // $items = Item::where(function ($query) use ($collect) {
+        //     $query->whereIn('id', $collect)
+        //             ->orWhereIn('code', $collect);
+        //     })
+        //     ->with(['warehousesItemAlt' => function ($query) use ($whid) {
+        //         $query->where('warehouse_id', $whid);
+        //     }])
+        //     ->orderBy('name', 'asc')
+        //     ->get();
 
-        foreach ($items as $i) {
-            $warehouseQuantity = $i->warehousesItemAlt->first()->quantity ?? 0; // Ambil quantity warehouse terkait, atau 0 jika tidak ada
+
+            $dataList = [];
+
+            foreach ($array as $row) {
+                $code = $row['id'];
+                $qty = (float) $row['qty'];
+                $price = (int) $row['price'];
+
+                $item = $items[$code] ?? null;
+
+                if ($item) {
+                    $warehouseQuantity = $item->warehousesItemAlt->first()->quantity ?? 0;
+
+                    $dataList[] = [
+                        'id' => $item->id,
+                        'code' => $item->code,
+                        'quantity' => $qty,
+                        'warehouse' => $warehouseQuantity,
+                        'price' => $price,
+                    ];
+                }
+            }
+
+      
+      
+
+        //tambah id dan warehaouse
+
+        // foreach ($items as $i) {
+        //     $warehouseQuantity = $i->warehousesItemAlt->first()->quantity ?? 0; // Ambil quantity warehouse terkait, atau 0 jika tidak ada
         
-            // Use array indexing to get values, or default to 0
-            $qty = isset($qtyPluck[$i->code]) ? (float) $qtyPluck[$i->code] : 0;
-            $price = isset($qtyPrice[$i->code]) ? (float) $qtyPrice[$i->code] : 0;
+        //     // Use array indexing to get values, or default to 0
+        //     $qty = isset($qtyPluck[$i->code]) ? (float) $qtyPluck[$i->code] : 0;
+        //     $price = isset($qtyPrice[$i->code]) ? (float) $qtyPrice[$i->code] : 0;
 
-            $dataList[] = [
-                'id' => $i->id,
-                'code' => $i->code,
-                'quantity' => $qty,
-                'warehouse' => $warehouseQuantity,
-                'price' => (int)Str::replace('.', '', $price),
-            ];
-        }
+        //     $dataList[] = [
+        //         'id' => $i->id,
+        //         'code' => $i->code,
+        //         'quantity' => $qty,
+        //         'warehouse' => $warehouseQuantity,
+        //         'price' => (int)Str::replace('.', '', $price),
+        //     ];
+        // }
 
         $dataColl = collect($dataList);
         
