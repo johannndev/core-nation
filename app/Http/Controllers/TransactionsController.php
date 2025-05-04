@@ -9,13 +9,11 @@ use App\Helpers\CCManagerHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\DeleterHelper;
 use App\Helpers\HashManagerHelper;
-use App\Helpers\InvoiceTrackerHelpers;
 use App\Helpers\StatManagerHelper;
 use App\Helpers\StockManagerHelpers;
 use App\Helpers\TransactionsManagerHelper;
 use App\Libraries\CCManager;
 use App\Libraries\HashManager;
-use App\Libraries\InvoiceTracker;
 
 use App\Libraries\StatManager;
 use App\Libraries\TransactionsManager;
@@ -275,8 +273,6 @@ class TransactionsController extends Controller
 		if(!$transaction->save())
 			throw new ModelException($transaction->getErrors());
 
-		InvoiceTrackerHelpers::flag($transaction);
-		TransactionsManagerHelper::checkSell($transaction, $details);
 		$cc = new CCManagerHelper;
 		$class['date'] = Carbon::parse($transaction->date)->startOfMonth()->toDateString();
 		$class['type'] = Transaction::TYPE_SELL;
@@ -361,8 +357,6 @@ class TransactionsController extends Controller
         if(!$transaction->save())
 			throw new ModelException($transaction->getErrors());
 
-		InvoiceTrackerHelpers::flag($transaction);
-		TransactionsManagerHelper::checkSell($transaction, $details);
 		$cc = new CCManagerHelper;
 		$class['date'] = Carbon::parse($transaction->date)->startOfMonth()->toDateString();
 		$class['type'] = Transaction::TYPE_BUY;
@@ -1256,10 +1250,6 @@ class TransactionsController extends Controller
 				$transaction->save();
 			}
 
-			//track for customers
-			InvoiceTrackerHelpers::flag($transaction);
-			HashManagerHelper::save($transaction);
-
 			//save urls for links
 			$urls[] = '#'.$transaction->id;
 		}
@@ -1385,10 +1375,6 @@ class TransactionsController extends Controller
 			'customer' => $transaction->sender,
 			'total' => 0 - $transaction->total,
 		));
-
-		//track for customers
-		InvoiceTrackerHelpers::flag($transaction);
-		HashManagerHelper::save($transaction);
 
 		DB::commit();
 
