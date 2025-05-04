@@ -238,18 +238,18 @@ class TransactionsController extends Controller
 
 		
 		$transaction = new Transaction();
-
+		
 		$transaction->date = $request->date;
         $transaction->type = Transaction::TYPE_SELL;
-        $transaction->description = ' ';
-		$transaction->detail_ids = ' ';
-		$transaction->due = '0000-00-00';
-		$transaction->submit_type = 1;
-        $transaction->save();
-
 		$transaction->sender_id = $warehouse;
 		$transaction->receiver_id = $customer;
-		$transaction->init(TRANSACTION::TYPE_SELL);
+		$transaction->due = $request->due ?? '0000-00-00';
+		$transaction->description = $request->note ?? ' ';
+		$transaction->invoice = $request->invoice ?? ' ';
+		$transaction->adjustment = $request->adjustment ?? 0;
+		$transaction->discount = $request->disc ?? 0;
+		$transaction->submit_type = 1;
+		$transaction->detail_ids = ' ';
 
 		//gets the transaction id
 		if(!$transaction->save())
@@ -322,15 +322,17 @@ class TransactionsController extends Controller
 
 		$transaction->date = $request->date;
         $transaction->type = Transaction::TYPE_BUY;
-        $transaction->description = ' ';
-		$transaction->detail_ids = ' ';
-		$transaction->due = '0000-00-00';
-		$transaction->submit_type = 1;
-        $transaction->save();
-
 		$transaction->sender_id = $warehouse;
 		$transaction->receiver_id = $customer;
-		$transaction->init(TRANSACTION::TYPE_BUY);
+		$transaction->due = $request->due ?? '0000-00-00';
+		$transaction->description = $request->note ?? ' ';
+		$transaction->invoice = $request->invoice ?? ' ';
+		$transaction->adjustment = $request->adjustment ?? 0;
+		$transaction->discount = $request->disc ?? 0;
+		$transaction->submit_type = 1;
+		$transaction->detail_ids = ' ';
+
+		
 
 		//gets the transaction id
 		if(!$transaction->save())
