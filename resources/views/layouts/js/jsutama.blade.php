@@ -305,8 +305,18 @@
         // goBtn.classList.add('hidden');
 
         console.log('dienter')
+        if( "{{$trType}}" == "move" ||  "{{$trType}}" == "use"){
+            ++id 
+            ++lineC
 
-        document.getElementById("price"+id).focus();
+            console.log(id)
+
+            newLine2(id);
+
+            document.getElementById("code"+id).focus();
+        }else{
+            document.getElementById("price"+id).focus();
+        }
 
         // event.preventDefault(); // Mencegah form dari submitting
         // codeFunction(id);
@@ -333,22 +343,7 @@
 
             // goBtn.classList.add('hidden');
 
-            if( "{{$trType}}" == "move" ||  "{{$trType}}" == "use"){
-                ++id 
-                ++lineC
-
-                console.log(id)
-
-                newLine2(id);
-
-                document.getElementById("code"+id).focus();
-            }else{
-
-                document.getElementById("price"+id).focus();
-
-            }
-
-
+            document.getElementById("discount"+id).focus();
 
             // event.preventDefault(); // Mencegah form dari submitting
             // codeFunction(id);
