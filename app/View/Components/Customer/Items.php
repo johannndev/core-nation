@@ -77,6 +77,14 @@ class Items extends Component
             $query = $query->whereHas('item', function($query)  {
 				$query->orderBy('name','asc');
 			});
+        }elseif(Request('sort') == 'iddesc'){
+            $query = $query->whereHas('item', function($query)  {
+				$query->orderBy('id','desc');
+			});
+        }elseif(Request('sort') == 'idasc'){
+            $query = $query->whereHas('item', function($query)  {
+				$query->orderBy('id','asc');
+			});
         } else {
             $query = $query->orderBy('quantity',  'desc');
         }
