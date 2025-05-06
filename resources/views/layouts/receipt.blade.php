@@ -18,7 +18,7 @@
 </head>
 <body>
 
-<h3 class="title center"><img src="{{ asset('img/logo20px.jpg') }}" width="15px" />&nbsp;CORENATION</h3>
+<h3 class="title center">CORENATION</h3>
 <div class="center">@corenationactive</div>
 <hr/>
 <div class="float-left">Bill No: {{ $data->id }}</div>
