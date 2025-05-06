@@ -79,11 +79,11 @@ class Items extends Component
 			});
         }elseif(Request('sort') == 'iddesc'){
             $query = $query->whereHas('item', function($query)  {
-				$query->orderBy('id','desc');
+				$query->orderBy('item_id','desc');
 			});
         }elseif(Request('sort') == 'idasc'){
             $query = $query->whereHas('item', function($query)  {
-				$query->orderBy('id','asc');
+				$query->orderBy('item_id','asc');
 			});
         } else {
             $query = $query->orderBy('quantity',  'desc');
