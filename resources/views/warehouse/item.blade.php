@@ -67,9 +67,8 @@
                                             <option {{Request('sort') == 'codeasc' ? 'selected' : ''}} value="codeasc">	Code Ascending</option>
                                             <option {{Request('sort') == 'namedesc' ? 'selected' : ''}} value="namedesc">	Name Descending</option>
                                             <option {{Request('sort') == 'nameasc' ? 'selected' : ''}} value="nameasc">	Name Ascending</option>
-                                            
-                                            
-                                          
+                                            <option {{Request('sort') == 'iddesc' ? 'selected' : ''}} value="iddesc">	ID Descending</option>
+                                            <option {{Request('sort') == 'idasc' ? 'selected' : ''}} value="idasc">	ID Ascending</option>
                                         </select>
 
                                     </div>
