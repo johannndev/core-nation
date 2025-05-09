@@ -120,6 +120,7 @@
                                     <th scope="col" class="px-4 py-3">Date</th>
                                     <th scope="col" class="px-4 py-3">Type</th>
                                     <th scope="col" class="px-4 py-3">Invoice</th>
+                                    <th scope="col" class="px-4 py-3">Barcode</th>
                                     <th scope="col" class="px-4 py-3">Items</th>
                                     <th scope="col" class="px-4 py-3">Qty</th>
                                     <th scope="col" class="px-4 py-3">Discount</th>
@@ -147,7 +148,7 @@
                                         <a href="{{ route('transaction.getDetail',$item->transaction_id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->transaction->invoice ?? ''}}</a>
 
                                     </th>
-                                    
+                                    <td class="px-4 py-3">{{$item->item->id}}</td>
                                     <td class="px-4 py-3">{{$item->item->code}}</td>
                                     <td class="px-4 py-3">{{number_format($item->quantity,2)}}</td>
                                     <td class="px-4 py-3">{{number_format($item->discount,2)}}</td>
