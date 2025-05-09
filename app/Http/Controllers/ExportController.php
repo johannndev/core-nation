@@ -33,7 +33,7 @@ class ExportController extends Controller
             });
         }
         
-        $dataList = $dataList->paginate(20)->withQueryString();
+        $dataList = $dataList->paginate(300)->withQueryString();
 
 		// dd($dataList);
 
