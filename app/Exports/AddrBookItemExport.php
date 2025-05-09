@@ -62,7 +62,7 @@ class AddrBookItemExport implements FromView
         }
         
 
-        $query =  $query->paginate(25)->withQueryString();
+        $query =  $query->paginate(1000)->withQueryString();
 
 
         $dataList = $query;
