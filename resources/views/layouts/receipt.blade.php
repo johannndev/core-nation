@@ -24,30 +24,28 @@
       <div class="subheader">@corenationactive</div>
 
       <!-- Order meta -->
-      Bill No: 399325<br />
-      Date: 10/05/2025<br />
+      Bill No: {{ $data->id }}<br />
+      Date: {{\Carbon\Carbon::parse($data->date)->format('d/m/Y')}}<br />
       
       <div class="separator"></div>
+@php
+	$subtotal =0;
+@endphp
 
-      <!-- Item list -->
+    <!-- Item list -->
+@foreach($data->transactionDetail as $d)
       <div class="line-item">
-        <span class="qty">1.00 ×</span>
-        <span class="description">INSTANT SPORTS HIJAB</span>
-        <span class="price">139.930</span>
+        <span class="qty">{{ $d->quantity }}</span>
+        <span class="description">{{ $d->item->getItemName() }}</span>
+        <span class="price">{{ Number::format($d->total) }}</span>
       </div>
-
-      <div class="line-item">
-        <span class="qty">2</span>
-        <span class="description">GYM GLOVES – S</span>
-        <span class="price">98.000</span>
-      </div>
-
+@endforeach
       <div class="separator"></div>
 
       <!-- Totals -->
       <div class="total-row">
         <span>Total:</span>
-        <span>139.930</span>
+        <span>{{ $data->total; }}</span>
       </div>
       
       <div class="separator"></div>
@@ -58,7 +56,7 @@
   </div>
 
 <?
-    /*
+/*
 <h3 class="title center">CORENATION</h3>
 <div class="center">@corenationactive</div>
 <hr/>
@@ -100,6 +98,6 @@
 <hr>
 <p class="center">Thank you for shopping with CORENATION</p>
 */
-    ?>
+?>
 </body>
 </html>
