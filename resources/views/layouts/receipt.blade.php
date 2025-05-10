@@ -22,7 +22,7 @@
 <div class="center title-sub tight">
   CILANDAK TOWN SQUARE no.171<br>
   FX SUDIRMAN lt.4<br>
-  BSD<br>
+  BSD MAGGIORE GRANDE G50<br>
 </div>
 <br>
 <div class="center bold invoice-label">Retail Invoice</div>
@@ -31,7 +31,7 @@
   Date : {{\Carbon\Carbon::parse($data->date)->format('d/m/Y')}}<br>
   Bill No: {{ $data->id }}<br>
 </div>
-
+<br>
 <hr>
 @php
 	$subtotal =0;
@@ -82,7 +82,7 @@ $discount = abs($data->total) - $subtotal;
     <td class="value">{{ Number::format(abs($data->total)); }}</td>
   </tr>
 </table>
-
+<br>
 <!-- ========= FOOTER ========= -->
 <div class="thankyou">@corenationactive phone: 082244226656</div>
 </div>
