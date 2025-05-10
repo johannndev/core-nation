@@ -15,7 +15,7 @@
                     <td class="px-4 py-3">{{ number_format($dataCashIn->total_cash_in) }}</td>
                     <td class="px-4 py-3">{{ number_format($dataCashOut->total_cash_out) }}</td>
                     <td class="px-4 py-3">{{ number_format($dataSell->total_sell) }}</td>
-                    <td class="px-4 py-3">{{ number_format($dataReturn>total_return) }}</td>
+                    <td class="px-4 py-3">{{ number_format($dataReturn->total_return) }}</td>
                 </tr>
             </tbody>
         </table>
