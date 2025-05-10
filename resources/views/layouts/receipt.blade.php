@@ -47,10 +47,10 @@
 @php
 $discount = abs($data->total) - $subtotal;
 @endphp
-@if($discount > 0)
+@if($discount < 0)
     <div class="total-row">
         <span>Discount:</span>
-        <span>{{ $discount; }}</span>
+        <span>{{ Number::format($discount); }}</span>
       </div>
 @endif
     <!-- Totals -->
@@ -65,50 +65,5 @@ $discount = abs($data->total) - $subtotal;
       <div class="thankyou">Thank you for shopping with CORENATION</div>
     </div>
   </div>
-
-<?
-/*
-<h3 class="title center">CORENATION</h3>
-<div class="center">@corenationactive</div>
-<hr/>
-<div class="float-left">Bill No: {{ $data->id }}</div>
-<div class="float-right">Date: {{\Carbon\Carbon::parse($data->date)->format('d/m/Y')}}</div>
-<div class="clear"></div>
-<hr/>
-@php
-
-	$subtotal =0;
-		
-	@endphp
-
-<div class="content">
-@foreach($data->transactionDetail as $d)
-<div class="row">
-	<div>{{ $d->quantity }} x {{ $d->item->getItemName() }}
-		@if($d->discount > 0)
-		( {{ $d->discount }} % )
-		@endif
-	</div>
-	<div class="right">{{ Number::format($d->total) }}</div>
-</div>
-
-	@php
-
-	$subtotal += $d->total;
-		
-	@endphp
-
-@endforeach
-</div>
-<hr>
-@if($data->discount > 0)
-<div class="right">Subtotal: {{ Number::format($subtotal) }}</div>
-<div class="right">Discount: {{ Number::format($data->discount) }}%</div>
-@endif
-<div class="right">Total: {{ Number::format($data->total) }}</div>
-<hr>
-<p class="center">Thank you for shopping with CORENATION</p>
-*/
-?>
 </body>
 </html>
