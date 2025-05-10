@@ -75,17 +75,29 @@ class Stat extends Component
 			$dataCashOut = DB::table($transactionTable)->select(array(
 				DB::raw('SUM(total) as total_cash_out'),
 			))->where('date','>=',$startDate)->where('date','<=',$endDate)->where("$transactionTable.type",'=',Transaction::TYPE_CASH_OUT)->where("$transactionTable.receiver_id",'=',$customer->id)->first();
-		} else {
+			$dataSell = DB::table($transactionTable)->select(array(
+				DB::raw('SUM(total) as total_sell'),
+			))->where('date','>=',$startDate)->where('date','<=',$endDate)->where("$transactionTable.type",'=',Transaction::TYPE_SELL)->where("$transactionTable.receiver_id",'=',$customer->id)->first();
+			$dataReturn = DB::table($transactionTable)->select(array(
+				DB::raw('SUM(total) as total_return'),
+			))->where('date','>=',$startDate)->where('date','<=',$endDate)->where("$transactionTable.type",'=',Transaction::TYPE_RETURN)->where("$transactionTable.sender_id",'=',$customer->id)->first();
+        } else {
 			$dataCashIn = DB::table($transactionTable)->select(array(
 				DB::raw('SUM(total) as total_cash_in'),
 			))->where('date','>=',$startDate)->where('date','<=',$endDate)->where("$transactionTable.type",'=',Transaction::TYPE_CASH_IN)->where("$transactionTable.receiver_id",'=',$customer->id)->first();
 			$dataCashOut = DB::table($transactionTable)->select(array(
 				DB::raw('SUM(total) as total_cash_out'),
 			))->where('date','>=',$startDate)->where('date','<=',$endDate)->where("$transactionTable.type",'=',Transaction::TYPE_CASH_OUT)->where("$transactionTable.sender_id",'=',$customer->id)->first();
-		}
+			$dataSell = DB::table($transactionTable)->select(array(
+				DB::raw('SUM(total) as total_sell'),
+			))->where('date','>=',$startDate)->where('date','<=',$endDate)->where("$transactionTable.type",'=',Transaction::TYPE_SELL)->where("$transactionTable.sender_id",'=',$customer->id)->first();
+			$dataReturn = DB::table($transactionTable)->select(array(
+				DB::raw('SUM(total) as total_return'),
+			))->where('date','>=',$startDate)->where('date','<=',$endDate)->where("$transactionTable.type",'=',Transaction::TYPE_RETURN)->where("$transactionTable.receiver_id",'=',$customer->id)->first();
+        }
 
         // dd($dataCashIn->total_cash_in,$dataCashOut);
 
-        return view('components.customer.stat',compact('dataCashIn','dataCashOut'));
+        return view('components.customer.stat',compact('dataSell','dataReturn','dataCashIn','dataCashOut'));
     }
 }
