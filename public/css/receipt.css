@@ -1,105 +1,66 @@
-/* ----------------------
-
-body{font-family: monospace;}
-.right{text-align: right;}
-.center{text-align: center;}
-.float-left{float: left;}
-.float-right{float: right;}
-.clear{clear: both;}
-.title{margin-bottom: 0.4em;}
-.content{font-size: 0.8em;}
-   ---------------------- */
-
 :root {
-  /* Adjust these custom properties to fine‑tune sizing quickly */
-  --receipt-width: 58mm;
-  --receipt-padding: 3mm;
-  --font-base-size: 10px; /* default text size for body lines */
-  --font-header-size: 14px;
-  --font-subheader-size: 11px;
-  --font-family-print: 'Courier New', Courier, monospace;
+  /* Paper */
+  --paper-width: 58mm;
+  --side-pad: 3mm;
+
+  /* Fonts */
+  --ff-print: 'Courier New', Courier, monospace;
+  --f-xs: 7.8px;
+  --f-s: 8.8px;
+  --f-m: 9.8px;
+  --f-l: 10.8px;
+  --lh-default: 1.05; /* global default */
+  --lh-tight:   0.95; /* tighter for address & meta */
 }
 
-/* Wrapper that represents one printed receipt */
+/* Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { width: 100%; height: 100%; }
+
+/* Receipt wrapper */
 .receipt {
-  width: var(--receipt-width);
-  margin: 0 auto;
-  padding: 0 var(--receipt-padding);
-  font-family: var(--font-family-print);
-  font-size: var(--font-base-size);
-  line-height: 1.35;
+  width: var(--paper-width);
+  padding: 0 var(--side-pad);
+  font-family: var(--ff-print);
+  font-size: var(--f-s);
+  line-height: var(--lh-default);
+  white-space: normal; /* prevent code newlines from adding blank lines */
   color: #000;
-  background: #fff;
-  white-space: pre-wrap; /* preserve intentional line breaks */
 }
 
-/* --- Header Area --- */
-.receipt .header {
-  text-align: center;
-  font-size: var(--font-header-size);
-  font-weight: 700;
-  letter-spacing: 1px;
-  margin: 0 0 2mm 0;
-}
+.center { text-align: center; }
+.bold   { font-weight: 700; }
 
-.receipt .subheader {
-  text-align: center;
-  font-size: var(--font-subheader-size);
-  font-weight: 400;
-  margin: 0 0 2mm 0;
-}
+/* Rules */
+hr { border: 0; border-top: 1px dashed #000; margin: 0.4mm 0; }
 
-/* --- Body Lines --- */
-.line-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
+/* Tables */
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 0; }
 
-.line-item .qty {
-  width: 6mm;
-  text-align: right;
-}
-.line-item .description {
-  flex: 1 1 auto;
-  padding: 0 1mm;
-  word-break: break-all;
-}
-.line-item .price {
-  width: 14mm;
-  text-align: right;
-}
+th.qty, td.qty { width: 20%; text-align: right; }
+th.amt, td.amt { width: 25%; text-align: right; }
+th.item, td.item { text-align: left; }
 
-/* --- Dashed separator --- */
-.separator {
-  margin: 1mm 0;
-  border-top: 1px dashed #000;
-}
+tbody tr td { border-bottom: 1px dashed #000; }
+tfoot tr td { border: none; }
 
-/* --- Totals --- */
-.total-row {
-  display: flex;
-  justify-content: space-between;
-  font-weight: 700;
-  margin-top: 1mm;
-}
+/* Totals */
+.totals { width: 100%; margin-top: 0.2mm; }
+.totals td { padding: 0; }
+.totals .label { text-align: left; }
+.totals .value { text-align: right; }
 
-/* --- Footer / Thank‑you message --- */
-.receipt .thankyou {
-  margin-top: 3mm;
-  text-align: center;
-  letter-spacing: 0.5px;
-  font-size: var(--font-subheader-size);
-}
+/* Footer */
+.thankyou { margin-top: 0.6mm; text-align: center; font-size: var(--f-xs); }
 
-/* --- Print adjustments --- */
-@media print {
-  html, body {
-    margin: 0;
-    padding: 0;
-    background: #fff;
-  }
-  .receipt {
-    box-shadow: none !important; /* avoid printer trying to render shadows */
-  }
-}
+/* Headings */
+.title-main { font-size: var(--f-l); }
+.title-sub  { font-size: var(--f-xs); line-height: var(--lh-tight); }
+.invoice-label { margin: 0.2mm 0; }
+
+/* Tight blocks */
+.tight { line-height: var(--lh-tight); }
+
+/* Print mode */
+@media print { html,body { margin: 0; } }
