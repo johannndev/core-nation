@@ -90,7 +90,7 @@
 
                             <div id="dynamicAddRemove">
                                
-                                <div class="grid gap-6 mb-6 md:grid-cols-8 items-end addField0 hidden" id="gridItemLoading0">
+                                <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField0 hidden" id="gridItemLoading0">
                                     <div>
                                         <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code </label>
                                         <div class="relative">
@@ -187,8 +187,8 @@
                                     
                                 </div>
                                 
-                                <div class="grid gap-6 mb-6 md:grid-cols-9 items-end addField0 "id="gridItem0">
-                                    <div class="col-span-9 md:col-span-1">
+                                <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField0 "id="gridItem0">
+                                    <div class="">
                                         <input type="text" name="addMoreInputFields[0][itemId]"  id="id0"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
                                 
                                         <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
@@ -207,7 +207,7 @@
                                             <input  onkeydown="return handleCode(event,0)" type="text" name="addMoreInputFields[0][code]"  id="code0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  />
                                         </div>
                                     </div>
-                                    <div class="col-span-9 md:col-span-1">
+                                    <div class="">
                                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
                                        
                                         <div class="">
@@ -228,31 +228,31 @@
                                    
                                 
                                     </div>
-                                    <div class="col-span-9 md:col-span-1">
+                                    <div class="">
                                         <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 ">Quantity </label>
                                         <input onkeyup="return handleQty(event,0)" type="text" name="addMoreInputFields[0][quantity]"  id="quantity0" class="qty register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                                     </div>  
-                                    <div class="col-span-9 md:col-span-1">
+                                    <div class="">
                                         <label for="wh" class="block mb-2 text-sm font-medium text-gray-900 ">Warehouse</label>
                                         <input type="text" name="addMoreInputFields[0][wh]"   id="wh0"class=" bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" disabled/>
                                     </div>  
                                 
-                                    <div class="col-span-9 md:col-span-1">
+                                    <div class="">
                                         <label for="price" class="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
                                         <input onkeyup="return handlePrice(event,0)" type="text" name="addMoreInputFields[0][price]"  id="price0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                                     </div> 
                                     
-                                    <div class="col-span-9 md:col-span-1">
+                                    <div class="">
                                         <label for="discount" class="block mb-2 text-sm font-medium text-gray-900 ">Discount</label>
                                         <input onkeyup="return handleDisc(event,0)" type="text" name="addMoreInputFields[0][discount]"   id="discount0" class="register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                                     </div> 
                                 
-                                    <div class="col-span-9 md:col-span-1">
+                                    <div class="">
                                         <label for="subtotal" class="block mb-2 text-sm font-medium text-gray-900 ">Subtotal</label>
                                         <input type="text" name="addMoreInputFields[0][subtotal]"  id="subtotal0" class="sto register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" aria-valuetext="0" aria-label="subtotal" />
                                     </div> 
                                 
-                                    <div class="col-span-9 md:col-span-1">
+                                    <div class="">
                                         <button  onclick="remove('0')" type="button" class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                                 
                                             <svg class="mr-1 -ml-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
