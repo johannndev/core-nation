@@ -13,57 +13,81 @@
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('img/ico/ico114.png') }}">
 <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('img/ico/ico72.png') }}">
 <link rel="apple-touch-icon-precomposed" href="{{ asset('img/ico/ico57.png') }}">
-<link rel="stylesheet" href="{{ asset('css/normalize.min.css') }}"/>
 <link rel="stylesheet" href="{{ asset('css/receipt.css') }}"/>
 </head>
 <body>
-  <div class="preview-wrapper">
-    <div class="receipt">
-      <!-- Header -->
-      <div class="header">CORENATION</div>
-      <div class="subheader">@corenationactive</div>
+<div class="receipt">
+<!-- ========= HEADER ========= -->
+<div class="center bold title-main">CORENATION</div>
+<div class="center title-sub tight">
+  CILANDAK TOWN SQUARE no.171<br>
+  FX SUDIRMAN lt.4<br>
+  BSD<br>
+</div>
+<br>
+<div class="center bold invoice-label">Retail Invoice</div>
+<!-- ========= META ========= -->
+<div class="tight">
+  Date : {{\Carbon\Carbon::parse($data->date)->format('d/m/Y')}}<br>
+  Bill No: {{ $data->id }}<br>
+</div>
 
-      <!-- Order meta -->
-      Bill No: {{ $data->id }}<br />
-      Date: {{\Carbon\Carbon::parse($data->date)->format('d/m/Y')}}<br />
-      
-      <div class="separator"></div>
+<hr>
 @php
 	$subtotal =0;
+    $subq = 0;
 @endphp
-
-    <!-- Item list -->
+<!-- ========= ITEMS ========= -->
+<table>
+  <thead>
+    <tr class="bold">
+      <th class="item">Item</th>
+      <th class="qty">Qty</th>
+      <th class="amt">Amt</th>
+    </tr>
+  </thead>
+  <tbody>
 @foreach($data->transactionDetail as $d)
-      <div class="line-item">
-        <span class="qty">{{ $d->quantity }}</span>
-        <span class="description">{{ $d->item->getItemName() }}</span>
-        <span class="price">{{ Number::format($d->total) }}</span>
-      </div>
+    <tr>
+      <td class="item">{{ $d->item->getItemName() }}</td>
+      <td class="qty">{{ $d->quantity }}</td>
+      <td class="amt">{{ Number::format($d->total) }}</td>
+    </tr>
 @php
     $subtotal += $d->total;
+    $subq += $d->quantity;
 @endphp
 @endforeach
-      <div class="separator"></div>
+  </tbody>
+  <tfoot>
+    <tr class="bold">
+      <td class="item">Sub Total</td>
+      <td class="qty">{{ $subq }}</td>
+      <td class="amt">{{ Number::format($subtotal) }}</td>
+    </tr>
+  </tfoot>
+</table>
+<hr>
 @php
 $discount = abs($data->total) - $subtotal;
 @endphp
-@if($discount < 0)
-    <div class="total-row">
-        <span>Discount:</span>
-        <span>{{ Number::format($discount); }}</span>
-      </div>
-@endif
-    <!-- Totals -->
-      <div class="total-row">
-        <span>Total:</span>
-        <span>{{ Number::format(abs($data->total)); }}</span>
-      </div>
-      
-      <div class="separator"></div>
+<!-- ========= TOTALS ========= -->
+<table class="totals">
+  <tr>
+    <td class="label">Discount :</td>
+    <td class="value">{{ Number::format($discount); }}</td>
+  </tr>
+  <tr class="bold">
+    <td class="label">TOTAL</td>
+    <td class="value">{{ Number::format(abs($data->total)); }}</td>
+  </tr>
+</table>
 
-      <!-- Thank‑you note -->
-      <div class="thankyou">Thank you for shopping with CORENATION</div>
-    </div>
-  </div>
+<!-- ========= FOOTER ========= -->
+<div class="thankyou">@corenationactive phone: 082244226656</div>
+</div>
 </body>
 </html>
+
+
+
