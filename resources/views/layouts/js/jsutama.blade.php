@@ -634,7 +634,7 @@
 
         const newRow = `
 
-            <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-9 items-end addField`+i+` hidden" id="gridItemLoading`+i+`">
+            <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField`+i+` hidden" id="gridItemLoading`+i+`">
                 <div>
                     <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code </label>
                     <div class="relative">
@@ -720,7 +720,7 @@
                 
             </div>
 
-            <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-9 items-end addField`+i+` "id="gridItem`+i+`">
+            <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField`+i+` "id="gridItem`+i+`">
                 <div class="">
                     <input type="text" name="addMoreInputFields[`+i+`][itemId]"  id="id`+i+`"  placeholder=""  aria-valuetext="`+i+`" aria-label="id" hidden/>
 
@@ -819,7 +819,7 @@
         
         const newRow = `
 
-                <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-9 items-end addField0 hidden" id="gridItemLoading`+i+`">
+                <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField0 hidden" id="gridItemLoading`+i+`">
                     <div>
                         <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code </label>
                         <div class="relative">

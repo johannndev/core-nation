@@ -127,7 +127,7 @@
 
                             <div id="dynamicAddRemove">
                                
-                                <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-9 items-end addField0 hidden" id="gridItemLoading0">
+                                <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField0 hidden" id="gridItemLoading0">
                                     <div>
                                         <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code </label>
                                         <div class="relative">
@@ -224,7 +224,7 @@
                                     
                                 </div>
                           
-                                <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-9 items-end addField0 "id="gridItem0">
+                                <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField0 "id="gridItem0">
                                     <div class="flex items-end w-full ">
 
                                         <div class="w-full">
