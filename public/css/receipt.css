@@ -1,3 +1,5 @@
+/* ----------------------
+
 body{font-family: monospace;}
 .right{text-align: right;}
 .center{text-align: center;}
@@ -6,3 +8,98 @@ body{font-family: monospace;}
 .clear{clear: both;}
 .title{margin-bottom: 0.4em;}
 .content{font-size: 0.8em;}
+   ---------------------- */
+
+:root {
+  /* Adjust these custom properties to fine‑tune sizing quickly */
+  --receipt-width: 58mm;
+  --receipt-padding: 3mm;
+  --font-base-size: 10px; /* default text size for body lines */
+  --font-header-size: 14px;
+  --font-subheader-size: 11px;
+  --font-family-print: 'Courier New', Courier, monospace;
+}
+
+/* Wrapper that represents one printed receipt */
+.receipt {
+  width: var(--receipt-width);
+  margin: 0 auto;
+  padding: 0 var(--receipt-padding);
+  font-family: var(--font-family-print);
+  font-size: var(--font-base-size);
+  line-height: 1.35;
+  color: #000;
+  background: #fff;
+  white-space: pre-wrap; /* preserve intentional line breaks */
+}
+
+/* --- Header Area --- */
+.receipt .header {
+  text-align: center;
+  font-size: var(--font-header-size);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0 0 2mm 0;
+}
+
+.receipt .subheader {
+  text-align: center;
+  font-size: var(--font-subheader-size);
+  font-weight: 400;
+  margin: 0 0 2mm 0;
+}
+
+/* --- Body Lines --- */
+.line-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.line-item .qty {
+  width: 6mm;
+  text-align: right;
+}
+.line-item .description {
+  flex: 1 1 auto;
+  padding: 0 1mm;
+  word-break: break-all;
+}
+.line-item .price {
+  width: 14mm;
+  text-align: right;
+}
+
+/* --- Dashed separator --- */
+.separator {
+  margin: 1mm 0;
+  border-top: 1px dashed #000;
+}
+
+/* --- Totals --- */
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  margin-top: 1mm;
+}
+
+/* --- Footer / Thank‑you message --- */
+.receipt .thankyou {
+  margin-top: 3mm;
+  text-align: center;
+  letter-spacing: 0.5px;
+  font-size: var(--font-subheader-size);
+}
+
+/* --- Print adjustments --- */
+@media print {
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+  .receipt {
+    box-shadow: none !important; /* avoid printer trying to render shadows */
+  }
+}
