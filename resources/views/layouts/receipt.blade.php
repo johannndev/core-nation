@@ -39,13 +39,24 @@
         <span class="description">{{ $d->item->getItemName() }}</span>
         <span class="price">{{ Number::format($d->total) }}</span>
       </div>
+@php
+    $subtotal += $d->total;
+@endphp
 @endforeach
       <div class="separator"></div>
-
-      <!-- Totals -->
+@php
+$discount = abs($data->total) - $subtotal;
+@endphp
+@if($discount > 0)
+    <div class="total-row">
+        <span>Discount:</span>
+        <span>{{ $discount; }}</span>
+      </div>
+@endif
+    <!-- Totals -->
       <div class="total-row">
         <span>Total:</span>
-        <span>{{ $data->total; }}</span>
+        <span>{{ Number::format(abs($data->total)); }}</span>
       </div>
       
       <div class="separator"></div>
