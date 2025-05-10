@@ -1,66 +1,62 @@
-:root {
-  /* Paper */
-  --paper-width: 58mm;
-  --side-pad: 3mm;
+@page { size: 58mm auto; margin: 0; }
 
-  /* Fonts */
+:root {
+  /* Printable area */
+  --paper-width: 46mm;
+  --side-pad: 1.5mm;
+
+  /* Typography ramp */
   --ff-print: 'Courier New', Courier, monospace;
-  --f-xs: 7.8px;
-  --f-s: 8.8px;
-  --f-m: 9.8px;
-  --f-l: 10.8px;
-  --lh-default: 1.05; /* global default */
-  --lh-tight:   0.95; /* tighter for address & meta */
+  --f-xxs: 5.4px;  /* address / footnotes */
+  --f-xs:  6.0px;  /* body text */
+  --f-s:   7.0px;  /* sub‑headers */
+  --f-m:   8.0px;  /* main header */
+  --lh-tight: 1.0;
+  --lh-default: 1.08;
 }
 
-/* Reset */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html,body { width: 100%; height: 100%; }
+/* Optional global shrink – uncomment if still too large
+html { transform: scale(.92); transform-origin: top left; }
+*/
 
-/* Receipt wrapper */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 .receipt {
   width: var(--paper-width);
   padding: 0 var(--side-pad);
   font-family: var(--ff-print);
-  font-size: var(--f-s);
+  font-size: var(--f-xs);
   line-height: var(--lh-default);
-  white-space: normal; /* prevent code newlines from adding blank lines */
   color: #000;
 }
 
 .center { text-align: center; }
 .bold   { font-weight: 700; }
+.tight  { line-height: var(--lh-tight); }
 
-/* Rules */
-hr { border: 0; border-top: 1px dashed #000; margin: 0.4mm 0; }
+/* Header sizes */
+.title-main { font-size: var(--f-m); }
+.title-sub  { font-size: var(--f-xxs); }
 
-/* Tables */
-table { width: 100%; border-collapse: collapse; }
+/* Separator – ASCII line */
+.sep { font-size: var(--f-xxs); line-height: 1; text-align: center; margin: 0.3mm 0; }
+.sep::before { content: "----------------------------------------"; }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; font-size: var(--f-xs); }
 th, td { padding: 0; }
-
 th.qty, td.qty { width: 20%; text-align: right; }
-th.amt, td.amt { width: 25%; text-align: right; }
+th.amt, td.amt { width: 27%; text-align: right; }
 th.item, td.item { text-align: left; }
 
-tbody tr td { border-bottom: 1px dashed #000; }
-tfoot tr td { border: none; }
-
 /* Totals */
-.totals { width: 100%; margin-top: 0.2mm; }
+.totals { width: 100%; font-size: var(--f-xs); }
 .totals td { padding: 0; }
-.totals .label { text-align: left; }
-.totals .value { text-align: right; }
 
 /* Footer */
-.thankyou { margin-top: 0.6mm; text-align: center; font-size: var(--f-xs); }
+.thankyou { margin-top: 0.4mm; text-align: center; font-size: var(--f-xxs); }
 
-/* Headings */
-.title-main { font-size: var(--f-l); }
-.title-sub  { font-size: var(--f-xs); line-height: var(--lh-tight); }
-.invoice-label { margin: 0.2mm 0; }
+/* Minimal vertical spacing helpers */
+.block { margin: 0.3mm 0; }
 
-/* Tight blocks */
-.tight { line-height: var(--lh-tight); }
-
-/* Print mode */
-@media print { html,body { margin: 0; } }
+@media print { html,body { margin: 0; background: #fff; } }
