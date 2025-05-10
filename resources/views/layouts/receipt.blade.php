@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Amazing Crystal</title>
+<title>CORENATION</title>
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,7 +17,48 @@
 <link rel="stylesheet" href="{{ asset('css/receipt.css') }}"/>
 </head>
 <body>
+  <div class="preview-wrapper">
+    <div class="receipt">
+      <!-- Header -->
+      <div class="header">CORENATION</div>
+      <div class="subheader">@corenationactive</div>
 
+      <!-- Order meta -->
+      Bill No: 399325<br />
+      Date: 10/05/2025<br />
+      
+      <div class="separator"></div>
+
+      <!-- Item list -->
+      <div class="line-item">
+        <span class="qty">1.00 ×</span>
+        <span class="description">INSTANT SPORTS HIJAB</span>
+        <span class="price">139.930</span>
+      </div>
+
+      <div class="line-item">
+        <span class="qty">2</span>
+        <span class="description">GYM GLOVES – S</span>
+        <span class="price">98.000</span>
+      </div>
+
+      <div class="separator"></div>
+
+      <!-- Totals -->
+      <div class="total-row">
+        <span>Total:</span>
+        <span>139.930</span>
+      </div>
+      
+      <div class="separator"></div>
+
+      <!-- Thank‑you note -->
+      <div class="thankyou">Thank you for shopping with CORENATION</div>
+    </div>
+  </div>
+
+<?
+    /*
 <h3 class="title center">CORENATION</h3>
 <div class="center">@corenationactive</div>
 <hr/>
@@ -58,5 +99,7 @@
 <div class="right">Total: {{ Number::format($data->total) }}</div>
 <hr>
 <p class="center">Thank you for shopping with CORENATION</p>
+*/
+    ?>
 </body>
 </html>
