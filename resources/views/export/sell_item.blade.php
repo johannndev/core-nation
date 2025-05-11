@@ -54,15 +54,10 @@
             <td >{{number_format($item->discount,2)}}</td>
             <td >{{number_format($item->total,2)}}</td>
         </tr>
-        @empty
-
-    
 @php
     $previous = $item;
 @endphp
-        @endforelse 
-        
-      
-    
+        @empty
+        @endforelse
     </tbody>
 </table>
