@@ -125,6 +125,7 @@ class AsetLancarController extends Controller
 
     public function transaction($id, Request $request)
 	{
+        $data = Item::where('id',$id)->first();
 		$dataList = TransactionDetail::with('transaction','transaction.receiver','transaction.sender')->where('item_id',$id)->orderBy('date','desc');
 
 		if($request->addr){
@@ -151,7 +152,7 @@ class AsetLancarController extends Controller
 
 		$tid=$id;
 
-		return view('asset-lancar.transaction',compact('dataList','dataListPropCustomer','tid'));
+		return view('asset-lancar.transaction',compact('data','dataList','dataListPropCustomer','tid'));
 	}
 
     public function stat($id, Request $request)
