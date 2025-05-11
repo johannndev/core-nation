@@ -157,6 +157,7 @@ class AsetLancarController extends Controller
 
     public function stat($id, Request $request)
 	{
+        $itemData = Item::where('id',$id)->first();
 		if($request->from){
 			$from = $request->from;
 		}else{
@@ -169,11 +170,6 @@ class AsetLancarController extends Controller
 		}else{
 			$to = Carbon::now()->endOfMonth()->toDateString();
 		}
-
-
-		
-
-
 		
 		$data = TransactionDetail::select(array(
 			"transaction_type",
@@ -216,6 +212,7 @@ class AsetLancarController extends Controller
 			'moveCode' => Transaction::TYPE_MOVE,
 			'returnCode' => Transaction::TYPE_RETURN,
 			'prodCode' => Transaction::TYPE_PRODUCTION,
+            'itemData' => $itemData,
 		]);
 
 		
