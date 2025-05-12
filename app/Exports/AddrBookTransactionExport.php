@@ -35,7 +35,7 @@ class AddrBookTransactionExport implements FromView
 
 		// dd($dataList);
 
-		$dataList = $dataList->paginate(50)->withQueryString();
+		$dataList = $dataList->get();
 
 
         return view('export.ab_transaction', [
