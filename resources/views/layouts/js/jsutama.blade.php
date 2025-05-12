@@ -917,7 +917,7 @@
                 </div>
 
             
-                <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-9 items-end addField`+i+` "id="gridItem`+i+`">
+                <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField`+i+` "id="gridItem`+i+`">
                     <div class="flex items-end w-full ">
 
                         <div class="w-full">
