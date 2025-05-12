@@ -14,6 +14,7 @@
             <th>Adjust</th>
             <th>Disc</th>
             <th>Total</th>
+            <th>Desc</th>
         </tr>
     </thead>
     <tbody>
@@ -48,8 +49,9 @@
         <td>{{number_format($item->transaction->discount,2)}}</td>
         <td>{{number_format($item->transaction->adjustment,2)}}</td>
         <td>{{number_format(abs($item->transaction->total),2)}}</td>
+        <td>{{$item->transaction->description)}}</td>
 @else
-        <td></td><td></td><td></td>
+        <td></td><td></td><td></td><td></td>
 @endif
     </tr>
 @php
