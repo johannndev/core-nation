@@ -49,7 +49,7 @@
                                 <div class="">
                                     <div>
 
-                                        <x-partial.data-list :dataProp='$dataListPropCustomer' />
+                                       <x-partial.select-addr :dataProp='$dataListPropCustomer' />
 
                                        
                                     </div>

@@ -254,6 +254,8 @@ class Item extends Model
 		$imageUrl = env('CDN_URL', '/laragon/www/core-nation/public/asset/').$folder.'/'.$idg.'.jpg';
 		$imagePath = env('CDN_PATH', '/laragon/www/core-nation/public/asset/').$folder.'/'.$idg.'.jpg';
 
+		dd($imagePath);
+
 		return file_exists($imagePath)
 		? $imageUrl
 		: asset('img/noimg.jpg');

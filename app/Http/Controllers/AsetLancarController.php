@@ -134,7 +134,7 @@ class AsetLancarController extends Controller
 		}else{
 			$default = null;
 		}
-
+		
 		$dataListPropCustomer = [
 			"label" => "Addr Book",
 			"id" => "addr",
