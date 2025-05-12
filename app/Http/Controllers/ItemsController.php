@@ -109,9 +109,11 @@ class ItemsController extends Controller
 	{
 		$data = Item::with('group','tags')->where('id',$id)->first();
 
+		dd($data->item_image_path);
+
 		$urlImage = $data->item_image_path;
 
-		// dd($urlImage);
+		
 
 		$whList = WarehouseItem::with('warehouse')->whereHas('warehouse', function (Builder $query) {
 			$query->where('customers.type','=',Customer::TYPE_WAREHOUSE);
@@ -129,7 +131,7 @@ class ItemsController extends Controller
 	{
 		$data = Item::with('group','tags')->where('id',$id)->first();
 
-		dd($data->item_image_path);
+	
 
 		$urlImage = $data->item_image_path;
 
