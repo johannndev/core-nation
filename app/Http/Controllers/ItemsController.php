@@ -109,7 +109,7 @@ class ItemsController extends Controller
 	{
 		$data = Item::with('group','tags')->where('id',$id)->first();
 
-		dd($data->item_image_path);
+		dd($data);
 
 		$urlImage = $data->item_image_path;
 
