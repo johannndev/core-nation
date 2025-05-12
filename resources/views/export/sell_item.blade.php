@@ -9,29 +9,20 @@
             <th >Barcode</th>
             <th >Items</th>
             <th >Qty</th>
-            <th >Discount</th>
+            <th >Sub Discount</th>
             <th >Subtotal</th>
+            <th>Adjust</th>
+            <th>Disc</th>
+            <th>Total</th>
         </tr>
     </thead>
     <tbody>
 @php
       $currentInvoice = 0;
-      $previous = false;
 @endphp
         @forelse ( $dataList as $item)
+        <tr>
 @if($currentInvoice != $item->transaction->invoice)
-@php
-      $currentInvoice = $item->transaction->invoice;
-@endphp
-@if($previous)
-      <tr>
-        <td></td><td></td><td></td><td></td>
-        <td>Discount</td><td>{{number_format($previous->transaction->discount,2)}}</td>
-        <td>Adjust</td><td>{{number_format($previous->transaction->adjustment,2)}}</td>
-        <td>Total</td><td>{{number_format($previous->transaction->total,2)}}</td>
-      </tr>
-@endif
-      <tr >
             <td >{{\Carbon\Carbon::parse($item->date)->format('d/m/Y')}}</td>
             <td >{{$item->transaction->invoice ?? ''}}</td>
             <td >
@@ -45,7 +36,7 @@
                 @endisset
             </td>
 @else
-            <tr ><td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td><td></td>
 @endif
             <td >{{$item->type_name}}</td>
             <td >{{$item->item->id}}</td>
@@ -53,9 +44,16 @@
             <td >{{number_format($item->quantity,2)}}</td>
             <td >{{number_format($item->discount,2)}}</td>
             <td >{{number_format($item->total,2)}}</td>
-        </tr>
+@if($currentInvoice != $item->transaction->invoice)
+        <td>{{number_format($item->transaction->discount,2)}}</td>
+        <td>{{number_format($item->transaction->adjustment,2)}}</td>
+        <td>{{number_format($item->transaction->total,2)}}</td>
+@else
+        <td></td><td></td><td></td>
+@endif
+    </tr>
 @php
-    $previous = $item;
+      $currentInvoice = $item->transaction->invoice;
 @endphp
         @empty
         @endforelse
