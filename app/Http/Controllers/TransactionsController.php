@@ -8,12 +8,10 @@ use App\Helpers\AppSettingsHelper;
 use App\Helpers\CCManagerHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\DeleterHelper;
-use App\Helpers\HashManagerHelper;
 use App\Helpers\StatManagerHelper;
 use App\Helpers\StockManagerHelpers;
 use App\Helpers\TransactionsManagerHelper;
 use App\Libraries\CCManager;
-use App\Libraries\HashManager;
 
 use App\Libraries\StatManager;
 use App\Libraries\TransactionsManager;
@@ -268,7 +266,7 @@ class TransactionsController extends Controller
 			throw new ModelException($sm->getErrors());
 
 		$transaction->receiver_balance = $receiver_balance;
-        if(!$transaction->invoice)
+        if(empty(trim($transaction->invoice)))
             $transaction->invoice = $transaction->id;
 		if(!$transaction->save())
 			throw new ModelException($transaction->getErrors());
@@ -351,7 +349,7 @@ class TransactionsController extends Controller
 			throw new ModelException($sm->getErrors());
 
 		$transaction->receiver_balance = $receiver_balance;
-        if(!$transaction->invoice)
+        if(empty(trim($transaction->invoice)))
             $transaction->invoice = $transaction->id;
 
         if(!$transaction->save())
@@ -950,12 +948,11 @@ class TransactionsController extends Controller
 
 		if(!$transaction->createDetails($request->addMoreInputFields))
 			throw new ModelException($transaction->getErrors(), __LINE__);
-
+        if(empty(trim($transaction->invoice)))
+            $transaction->invoice = $transaction->id;
 		//update the transaction
 		if(!$transaction->save())
 			throw new ModelException($transaction->getErrors(), __LINE__);
-
-		HashManagerHelper::save($transaction);
 
 		//commit db transaction
 		DB::commit();
@@ -1007,7 +1004,7 @@ class TransactionsController extends Controller
 
 		if(!$details = $transaction->createDetails($request->addMoreInputFields))
 			throw new ModelException($transaction->getErrors(), __LINE__);
-        if(!$transaction->invoice)
+        if(empty(trim($transaction->invoice)))
             $transaction->invoice = $transaction->id;
 		//update the transaction
 		if(!$transaction->save())
@@ -1088,8 +1085,6 @@ class TransactionsController extends Controller
 		//update the transaction
 		if(!$transaction->save())
 			throw new ModelException($transaction->getErrors(), __LINE__);
-
-		HashManagerHelper::save($transaction);
 
 		//commit db transaction
 		DB::commit();
@@ -1472,8 +1467,6 @@ class TransactionsController extends Controller
 			$transaction->invoice = $transaction->id;
 			$transaction->save();
 		}
-
-		HashManagerHelper::save($transaction);
 
 		$date = $request->date;
 		$cc = new CCManagerHelper;
