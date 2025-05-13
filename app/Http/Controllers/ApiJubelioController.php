@@ -1233,6 +1233,8 @@ class ApiJubelioController extends Controller
 
         $data = json_decode($response->body(), true);
 
+        dd($data);
+
     }
 
     public function getItem($id){
