@@ -49,7 +49,7 @@
         <td>{{number_format($item->transaction->discount,2)}}</td>
         <td>{{number_format($item->transaction->adjustment,2)}}</td>
         <td>{{number_format(abs($item->transaction->total),2)}}</td>
-        <td>{{$item->transaction->description)}}</td>
+        <td>{{$item->transaction->description}}</td>
 @else
         <td></td><td></td><td></td><td></td>
 @endif
