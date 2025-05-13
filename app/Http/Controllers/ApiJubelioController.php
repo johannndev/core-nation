@@ -1224,7 +1224,7 @@ class ApiJubelioController extends Controller
             'Content-Type'=> 'application/json', 
             'authorization'=> Cache::get('jubelio_data')['token'], 
         ]) 
-        ->get('https://api2.jubelio.com/inventory/items/to-stock/',[
+        ->get('https://api2.jubelio.com/sales/orders/',[
             'page' => 1,
             'pageSize' => 200,
             'transactionDateTo' => '2025-05-12T00:00:00Z',
