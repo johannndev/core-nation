@@ -135,6 +135,8 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/get/seles-order', [ApiJubelioController::class, 'getSaleOrder'])->name('jubelio.getSaleOrder');
+
     Route::get('/transaction/export/sell/item', [ExportController::class, 'sellItem'])->name('export.sellItem');
     Route::get('/transaction/export/sell/item/build', [ExportController::class, 'exportSellItem'])->name('export.sellItemBuild');
 
