@@ -1227,8 +1227,8 @@ class ApiJubelioController extends Controller
         ->get('https://api2.jubelio.com/sales/orders/',[
             'page' => 1,
             'pageSize' => 200,
-            'transactionDateTo' => '2025-05-12T00:00:00Z',
-            'lastModifiedSince' => '2025-05-13T00:00:00Z'
+            'transactionDateTo' => '2025-05-11T00:00:00Z',
+            'lastModifiedSince' => '2025-05-12T00:00:00Z'
         ]); 
 
         $data = json_decode($response->body(), true);
