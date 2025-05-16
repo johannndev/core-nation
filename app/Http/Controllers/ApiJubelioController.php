@@ -9,6 +9,7 @@ use App\Helpers\HashManagerHelper;
 use App\Helpers\InvoiceTrackerHelpers;
 use App\Helpers\StatManagerHelper;
 use App\Helpers\TransactionsManagerHelper;
+use App\Models\Crongetorder;
 use App\Models\Customer;
 use App\Models\Item;
 use App\Models\Jubelioreturn;
@@ -1220,20 +1221,105 @@ class ApiJubelioController extends Controller
 
     public function getSaleOrder(){
 
-        $response = Http::withHeaders([ 
-            'Content-Type'=> 'application/json', 
-            'authorization'=> Cache::get('jubelio_data')['token'], 
-        ]) 
-        ->get('https://api2.jubelio.com/sales/orders/',[
-            'page' => 1,
-            'pageSize' => 200,
-            'transactionDateTo' => '2025-05-11T00:00:00Z',
-            'lastModifiedSince' => '2025-05-12T00:00:00Z'
-        ]); 
+       try {
+            $data = Crongetorder::with('orderDetail')->withCount('orderDetail')->orderBy('created_at', 'desc')->first();
 
-        $data = json_decode($response->body(), true);
+            if (!$data) {
+                throw new \Exception('Data Crongetorder tidak ditemukan.');
+            }
 
-        dd($data);
+            if ($data->status == 1) {
+                throw new \Exception('Data Crongetorder tidak aktif.');
+            }
+
+            $dateFrom = Carbon::parse($data->from, 'Asia/Jakarta');
+            $isoUtcDateFrom = $dateFrom->setTimezone('UTC')->toIso8601String();
+
+            $dateTo = Carbon::parse($data->to, 'Asia/Jakarta');
+            $isoUtcDateTo = $dateTo->setTimezone('UTC')->toIso8601String();
+
+            $token = Cache::get('jubelio_data')['token'] ?? null;
+
+            if (!$token) {
+                throw new \Exception('Token Jubelio tidak ditemukan di cache.');
+            }
+
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'authorization' => $token,
+            ])->get('https://api2.jubelio.com/sales/orders/', [
+                'page' => $data->count+1,
+                'pageSize' => 200,
+                'transactionDateFrom' => $isoUtcDateFrom,
+                'transactionDateTo' => $isoUtcDateTo
+            ]);
+
+            if ($response->failed()) {
+                Log::error('API Jubelio gagal merespon', [
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
+
+                throw new \Exception('Gagal mendapatkan data dari API Jubelio. Status: ' . $response->status());
+            }
+
+            $responData = $response->json(); // atau json_decode($response->body(), true);
+
+           
+            if($data->total < 1){
+
+                $a = $responData['totalCount'];
+                $b = 200;
+
+                $hasil = (int)ceil($a / $b);
+
+                $data->total = $hasil;
+
+                $data->save();
+          
+            }
+
+            $dataArray = []; 
+
+            if(count($responData['data']) > 0){
+
+                foreach ($responData['data'] as $row) {
+                    $dataArray[] = [
+                        'get_order_id' => $data->id,
+                        'order_id' =>  $row['salesorder_id'],
+                        'invoice' => $row['salesorder_no'],
+                        'location_id' => $row['location_name'],
+                        'store_id' => $row['store_id'],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+                DB::table('crongetorderdetails')->insert($dataArray);
+
+                $data->increment('count');
+
+            }else{
+                $data->status = 1;
+
+                $data->save();
+            }
+
+          
+            // Lanjutkan proses dengan $data...
+
+        } catch (\Exception $e) {
+            Log::error('Terjadi kesalahan saat mengambil data dari Jubelio API', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            // Jika ingin kirim respon ke front-end
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
+        }
 
     }
 

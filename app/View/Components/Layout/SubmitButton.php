@@ -11,9 +11,17 @@ class SubmitButton extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+
+    public string $label;
+    public string $color;
+    public ?string $icon;
+
+
+    public function __construct(string $label = 'Submit', string $color = 'blue', ?string $icon = null)
     {
-        //
+        $this->label = $label;
+        $this->color = $color;
+        $this->icon = $icon;
     }
 
     /**

@@ -31,7 +31,8 @@
             "app/Helpers/StatManagerHelper.php",
             "app/Helpers/LocalHelper.php",
             "app/Helpers/LocationHelper.php",
-            "app/Helpers/JubelioHelper.php"
+            "app/Helpers/JubelioHelper.php",
+            "app/Helpers/CronHelper.php"
         ],
         "psr-4": {
             "App\\": "app/",
