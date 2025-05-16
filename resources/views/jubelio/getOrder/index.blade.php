@@ -262,6 +262,10 @@
 
                                         <th scope="col" class="px-4 py-3">Location</th>
 
+                                        <th scope="col" class="px-4 py-3">Transaksi</th>
+
+                                        <th scope="col" class="px-4 py-3">Log Jubelio</th>
+
                                         {{-- <th scope="col" class="px-4 py-3">Customer</th>
 
                                         <th scope="col" class="px-4 py-3">Bin</th>
@@ -292,6 +296,62 @@
                                         <td scope="row" class="px-4 py-3  whitespace-nowrap ">
                                             
                                             <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->location_id}}</a>
+                    
+                                        </td>
+
+                                         <td scope="row" class="px-4 py-3  whitespace-nowrap ">
+                                            
+                                            @isset($item->transaksi)
+                                                <span class="inline-flex items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                                                    </svg>
+
+                                                    <span class="sr-only">Icon description</span>
+                                                </span>
+                                            @endisset
+                                        
+
+                                            @empty($item->transaksi)
+
+                                                <span class="inline-flex items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-red-800 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-300">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                                    </svg>
+
+                                                    
+                                                    <span class="sr-only">Icon description</span>
+                                                </span>
+                                                
+                                            @endempty
+                    
+                                        </td>
+
+                                         <td scope="row" class="px-4 py-3  whitespace-nowrap ">
+                                            
+                                            @isset($item->logJubelio)
+                                                <span class="inline-flex items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                                                    </svg>
+
+                                                    <span class="sr-only">Icon description</span>
+                                                </span>
+                                            @endisset
+                                        
+
+                                            @empty($item->logJubelio)
+
+                                                <span class="inline-flex items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-red-800 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-300">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                                    </svg>
+
+                                                    
+                                                    <span class="sr-only">Icon description</span>
+                                                </span>
+                                                
+                                            @endempty
                     
                                         </td>
 
