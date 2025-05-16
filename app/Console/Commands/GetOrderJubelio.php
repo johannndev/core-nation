@@ -125,9 +125,12 @@ class GetOrderJubelio extends Command
 
                 CronHelper::refreshCronCache();
 
+                
                 Crongetorderdetail::where('get_order_id', $data->id)
-                    ->whereDoesntHave('transaksi')
-                    ->whereDoesntHave('logJubelio')
+                    ->where(function ($query) {
+                        $query->whereHas('transaksi')
+                            ->orWhereHas('logJubelio');
+                    })
                     ->delete();
             }
 

@@ -282,8 +282,8 @@
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                        
                                         <td scope="row" class="px-4 py-3  whitespace-nowrap ">
-                                            
-                                            {{$item->order_id}}
+                                             <a href="https://v2.jubelio.com/sales/transactions/orders/detail/{{$item->order_id}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"> {{$item->order_id}}</a>
+                                           
                     
                                         </td>
 
