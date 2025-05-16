@@ -210,7 +210,7 @@
 
                     --}}
 
-                    @if ($data->cek_log == 0)
+                    {{-- @if ($data->cek_log == 0)
 
                   
                         <form class="myForm" id="myForm" action="{{ route('jubelio.order.cekLog') }}" method="post" >
@@ -233,7 +233,7 @@
                             Cek Log
                         </button>
                                             
-                    @endif 
+                    @endif  --}}
 
 
                    <form class="myForm" id="myForm" action="{{ route('jubelio.order.deleteAll') }}" method="post" >
@@ -284,7 +284,7 @@
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                        
                                         <td scope="row" class="px-4 py-3  whitespace-nowrap ">
-                                             <a href="https://v2.jubelio.com/sales/transactions/orders/detail/{{$item->order_id}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"> {{$item->order_id}}</a>
+                                             <a target="_blank" href="https://v2.jubelio.com/sales/transactions/orders/detail/{{$item->order_id}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"> {{$item->order_id}}</a>
                                            
                     
                                         </td>
