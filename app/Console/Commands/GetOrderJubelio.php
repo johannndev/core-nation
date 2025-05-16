@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Helpers\CronHelper;
 use App\Models\Crongetorder;
+use App\Models\Crongetorderdetail;
 use App\Models\Cronrun;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -123,6 +124,11 @@ class GetOrderJubelio extends Command
                 $cronStatus->save();
 
                 CronHelper::refreshCronCache();
+
+                Crongetorderdetail::where('get_order_id', $data->id)
+                    ->whereDoesntHave('transaksi')
+                    ->whereDoesntHave('logJubelio')
+                    ->delete();
             }
 
           

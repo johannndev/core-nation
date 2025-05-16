@@ -114,14 +114,12 @@ class JubelioGetOrderController extends Controller
 
         $data = Crongetorder::withCount('orderDetail')->orderBy('created_at','desc')->first();
 
-        $trans = Logjubelio::whereDate('created_at', '>=', $data->from)
-                ->whereDate('created_at', '<=', $data->to)
-                ->pluck('invoice')
-                ->toArray();
-
-        $detail = Crongetorderdetail::whereIn('invoice', $trans)->delete();
-
-         $data->cek_log = 1;
+        Crongetorderdetail::where('get_order_id', $data->id)
+            ->whereDoesntHave('transaksi')
+            ->whereDoesntHave('logJubelio')
+            ->delete();
+            
+        $data->cek_log = 1;
         $data->save();
 
         return redirect()->route('jubelio.order.getall')->with('success','Menghapus data');

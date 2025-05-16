@@ -185,7 +185,7 @@
 
             <div class="flex space-x-2 mb-2">
 
-                    @if ($data->cek_transaction == 0)
+                    {{-- @if ($data->cek_transaction == 0)
 
                         <form class="myForm" id="myForm" action="{{ route('jubelio.order.cekTransaction') }}" method="post" >
                             @csrf
@@ -231,7 +231,7 @@
                             Cek Log
                         </button>
                                             
-                    @endif
+                    @endif --}}
 
 
                    <form class="myForm" id="myForm" action="{{ route('jubelio.order.deleteAll') }}" method="post" >
