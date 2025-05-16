@@ -19,7 +19,7 @@ class JubelioGetOrderController extends Controller
 
         // Total tahapan
 
-        dd($crons = CronHelper::getCachedCrons()->where('status', 1));
+        // dd($crons = CronHelper::getCachedCrons()->where('status', 1));
 
         $dataList = [];
 
