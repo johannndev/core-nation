@@ -95,7 +95,7 @@ class JubelioGetOrderController extends Controller
         $data = Crongetorder::withCount('orderDetail')->orderBy('created_at','desc')->first();
 
         $trans = Transaction::whereDate('date', '>=', $data->from)
-                ->whereDate('date', '<=', $data->from)
+                ->whereDate('date', '<=', $data->to)
                 ->pluck('invoice')
                 ->toArray();
 
@@ -114,7 +114,7 @@ class JubelioGetOrderController extends Controller
         $data = Crongetorder::withCount('orderDetail')->orderBy('created_at','desc')->first();
 
         $trans = Logjubelio::whereDate('created_at', '>=', $data->from)
-                ->whereDate('created_at', '<=', $data->from)
+                ->whereDate('created_at', '<=', $data->to)
                 ->pluck('invoice')
                 ->toArray();
 
