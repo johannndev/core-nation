@@ -96,6 +96,7 @@ class JubelioGetOrderController extends Controller
 
         $trans = Transaction::whereDate('date', '>=', $data->from)
                 ->whereDate('date', '<=', $data->to)
+                ->where('submit_type',2)
                 ->pluck('invoice')
                 ->toArray();
 
