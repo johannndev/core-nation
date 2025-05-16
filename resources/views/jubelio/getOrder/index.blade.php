@@ -208,6 +208,8 @@
                                             
                     @endif
 
+                    --}}
+
                     @if ($data->cek_log == 0)
 
                   
@@ -231,7 +233,7 @@
                             Cek Log
                         </button>
                                             
-                    @endif --}}
+                    @endif 
 
 
                    <form class="myForm" id="myForm" action="{{ route('jubelio.order.deleteAll') }}" method="post" >

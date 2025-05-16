@@ -113,14 +113,15 @@ class JubelioGetOrderController extends Controller
      public function cekLog(){
 
         $data = Crongetorder::withCount('orderDetail')->orderBy('created_at','desc')->first();
-
         Crongetorderdetail::where('get_order_id', $data->id)
-            ->whereDoesntHave('transaksi')
-            ->whereDoesntHave('logJubelio')
+            ->where(function ($query) {
+                $query->whereHas('transaksi')
+                    ->orWhereHas('logJubelio');
+            })
             ->delete();
             
-        $data->cek_log = 1;
-        $data->save();
+        // $data->cek_log = 1;
+        // $data->save();
 
         return redirect()->route('jubelio.order.getall')->with('success','Menghapus data');
     }
