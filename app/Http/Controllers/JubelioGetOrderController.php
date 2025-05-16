@@ -99,6 +99,8 @@ class JubelioGetOrderController extends Controller
                 ->pluck('invoice')
                 ->toArray();
 
+        dd($trans);
+
         $detail = Crongetorderdetail::whereIn('invoice', $trans)->delete();
 
         $data->cek_transaction = 1;
