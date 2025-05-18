@@ -24,8 +24,7 @@ class SellItemExport implements FromView
 
     public function view(): View
     {
-        
-        $dataList = TransactionDetail::where('transaction_type',Transaction::TYPE_SELL)->with('transaction','item','receiver','sender')->orderBy('date','desc');
+        $dataList = TransactionDetail::where('transaction_type',Transaction::TYPE_SELL)->with('transaction','item','receiver','sender')->orderBy('date','desc')->orderBy('transaction_id','desc');
         
         $tanggalAwal = $this->from;
         $tanggalAkhir =$this->to;
