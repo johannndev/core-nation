@@ -115,7 +115,7 @@
                                    
                                     <th scope="row" class="px-4 py-3  whitespace-nowrap ">
                                         
-                                        <a href="{{route('transaction.getDetail',$item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{\App\Helpers\DateHelper::display($item->date)}}</a>
+                                        <a href="{{route('transaction.getDetail',$item->transaction->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{\App\Helpers\DateHelper::display($item->date)}}</a>
 
                                     </th>
                            
