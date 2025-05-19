@@ -37,7 +37,7 @@
                 @endisset
             </td>
 @else
-            <td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td>
 @endif
             <td >{{$item->type_name}}</td>
             <td >{{$item->item->id}}</td>
