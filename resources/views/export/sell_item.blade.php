@@ -1,8 +1,8 @@
 <table >
     <thead >
         <tr>
-            <th >Date</th>
             <th >Invoice</th>
+            <th >Date</th>
             <th >Sender</th>
             <th >Receiver</th>
             <th >Type</th>
@@ -23,9 +23,9 @@
 @endphp
         @forelse ( $dataList as $item)
         <tr>
+            <td >{{$item->transaction->invoice ?? ''}}</td>
 @if($currentInvoice != $item->transaction->invoice)
             <td >{{\Carbon\Carbon::parse($item->date)->format('d/m/Y')}}</td>
-            <td >{{$item->transaction->invoice ?? ''}}</td>
             <td >
                 @isset($item->sender)
                     {{$item->sender->name}}               
@@ -37,7 +37,7 @@
                 @endisset
             </td>
 @else
-            <td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td>
 @endif
             <td >{{$item->type_name}}</td>
             <td >{{$item->item->id}}</td>
