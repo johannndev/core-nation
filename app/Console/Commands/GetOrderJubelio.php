@@ -97,6 +97,13 @@ class GetOrderJubelio extends Command
             if(count($responData['data']) > 0){
 
                 foreach ($responData['data'] as $row) {
+
+                    if($row['is_canceled'] == 1){
+                        $cancel = 'Y';
+                    }else{
+                        $cancel = 'N';
+                    }
+
                     $dataArray[] = [
                         'get_order_id' => $data->id,
                         'order_id' =>  $row['salesorder_id'],
@@ -104,7 +111,7 @@ class GetOrderJubelio extends Command
                         'location_id' => $row['location_name'],
                         'store_id' => $row['store_name'],
                         'status' => $row['internal_status'],
-                        'is_canceled' => $row['is_canceled'],
+                        'is_canceled' => $cancel,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
