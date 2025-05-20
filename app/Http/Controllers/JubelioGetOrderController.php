@@ -136,4 +136,46 @@ class JubelioGetOrderController extends Controller
 
         return redirect()->route('jubelio.order.getall')->with('success','Menghapus data');
     }
+
+    public function toLog(){
+
+        $data = Crongetorder::withCount('orderDetail')->orderBy('created_at','desc')->first();
+
+        $detail = Crongetorderdetail::where('get_order_id',$data->id)->get();
+
+        $dataArray = []; 
+
+            if($detail ){
+
+                foreach ($detail as $row) {
+                    $dataArray[] = [
+                        'order_id' => $row->order_id,
+                        'error' => 'SYSTEM',
+                        'type' => 'SALE',
+                        'invoice' => $row->invoice,
+                        'pesan' => 'Data tidak di kirim oleh Jubelio',
+                        'location_name' => $row->location_id,
+                        'store_name' => $row->store_id,
+                        'cron_failed' => null,
+                        'cron_run' => 0,
+                        'status' => 0,
+                        'user_solved_by' => 0,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+            }
+
+        DB::table('logjubelios')->insert($dataArray);
+
+
+        
+
+        Crongetorderdetail::where('get_order_id',$data->id)->delete();
+
+        $data->delete();
+
+        return redirect()->route('jubelio.order.getall')->with('success','Order dipindah ke logjubelio');
+    }
 }

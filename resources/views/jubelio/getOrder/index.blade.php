@@ -185,62 +185,20 @@
 
             <div class="flex space-x-2 mb-2">
 
-                    {{-- @if ($data->cek_transaction == 0)
+                    <form class="myForm" id="myForm" action="{{ route('jubelio.order.toLog') }}" method="post" >
 
-                        <form class="myForm" id="myForm" action="{{ route('jubelio.order.cekTransaction') }}" method="post" >
-                            @csrf
-
-                            <x-layout.submit-button label="Cek Transaksi" color="red" icon="exclamation-triangle" />
-                        
-                        </form>
-
-                        
-                    @else
-
-                        <button type="button" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 font-bold me-2">
-                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
-                            </svg>
-
-                            Cek Transaksi
-                        </button>
-                                            
-                    @endif
-
-                    --}}
-
-                    {{-- @if ($data->cek_log == 0)
-
-                  
-                        <form class="myForm" id="myForm" action="{{ route('jubelio.order.cekLog') }}" method="post" >
-
-                            @csrf
-                            <x-layout.submit-button label="Cek Log" color="red" icon="exclamation-triangle"   />
+                        @csrf
+                        <x-layout.submit-button label="Generate Cron" />
 
                         
                     </form>
-
-                          
-                    @else
-
-                        <button type="button" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 font-bold me-2">
-                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
-                            </svg>
-
-                            Cek Log
-                        </button>
-                                            
-                    @endif  --}}
 
 
                    <form class="myForm" id="myForm" action="{{ route('jubelio.order.deleteAll') }}" method="post" >
 
                         @csrf
 
-                        <x-layout.submit-button label="Hapus" color="red" icon="trash"   />
+                        <x-layout.submit-button label="Hapus" color="red"  />
 
                         
                    </form>
@@ -263,6 +221,8 @@
                                         <th scope="col" class="px-4 py-3">Invoice</th>
 
                                         <th scope="col" class="px-4 py-3">Location</th>
+
+                                        <th scope="col" class="px-4 py-3">Store Name</th>
 
                                         <th scope="col" class="px-4 py-3">Transaksi</th>
 
@@ -297,7 +257,13 @@
 
                                         <td scope="row" class="px-4 py-3  whitespace-nowrap ">
                                             
-                                            <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->location_id}}</a>
+                                            {{$item->location_id}}
+                    
+                                        </td>
+
+                                        <td scope="row" class="px-4 py-3  whitespace-nowrap ">
+                                            
+                                            {{$item->store_id}}
                     
                                         </td>
 

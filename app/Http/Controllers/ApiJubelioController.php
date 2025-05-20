@@ -1265,6 +1265,8 @@ class ApiJubelioController extends Controller
 
             $responData = $response->json(); // atau json_decode($response->body(), true);
 
+        
+
            
             if($data->total < 1){
 
@@ -1289,7 +1291,7 @@ class ApiJubelioController extends Controller
                         'order_id' =>  $row['salesorder_id'],
                         'invoice' => $row['salesorder_no'],
                         'location_id' => $row['location_name'],
-                        'store_id' => $row['store_id'],
+                        'store_id' => $row['store_name'],
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
@@ -1336,6 +1338,8 @@ class ApiJubelioController extends Controller
         ]); 
 
         $data = json_decode($response->body(), true);
+
+       
 
    
 
