@@ -102,7 +102,7 @@ class GetOrderJubelio extends Command
                         'order_id' =>  $row['salesorder_id'],
                         'invoice' => $row['salesorder_no'],
                         'location_id' => $row['location_name'],
-                        'store_id' => $row['store_id'],
+                        'store_id' => $row['store_name'],
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
