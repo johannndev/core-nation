@@ -1263,7 +1263,9 @@ class ApiJubelioController extends Controller
                 throw new \Exception('Gagal mendapatkan data dari API Jubelio. Status: ' . $response->status());
             }
 
-            $responData = $response->json(); // atau json_decode($response->body(), true);
+            $responData =json_decode($response->body(), true); // atau json_decode($response->body(), true);
+
+    
 
         
 
@@ -1292,6 +1294,8 @@ class ApiJubelioController extends Controller
                         'invoice' => $row['salesorder_no'],
                         'location_id' => $row['location_name'],
                         'store_id' => $row['store_name'],
+                        'status' => $row['internal_status'],
+                        'is_canceled' => $row['is_canceled'],
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];

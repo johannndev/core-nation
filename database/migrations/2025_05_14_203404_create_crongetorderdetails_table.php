@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('invoice');
             $table->string('location_id');
             $table->string('store_id');
+            $table->string('status');
+            $table->string('is_canceled')->default(10);
             $table->timestamps();
         });
     }

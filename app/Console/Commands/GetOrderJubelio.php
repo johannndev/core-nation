@@ -103,6 +103,8 @@ class GetOrderJubelio extends Command
                         'invoice' => $row['salesorder_no'],
                         'location_id' => $row['location_name'],
                         'store_id' => $row['store_name'],
+                        'status' => $row['internal_status'],
+                        'is_canceled' => $row['is_canceled'],
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
@@ -127,6 +129,8 @@ class GetOrderJubelio extends Command
 
                 
                 Crongetorderdetail::where('get_order_id', $data->id)
+                    ->where('is_cenceled', 1)
+                    ->whereNotIn('status', ['SHIPPED', 'COMPLETED'])
                     ->where(function ($query) {
                         $query->whereHas('transaksi')
                             ->orWhereHas('logJubelio');
