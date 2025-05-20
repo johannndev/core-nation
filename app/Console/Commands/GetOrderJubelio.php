@@ -129,7 +129,7 @@ class GetOrderJubelio extends Command
 
                 
                 Crongetorderdetail::where('get_order_id', $data->id)
-                    ->where('is_cenceled', 1)
+                    ->where('is_cenceled', "1")
                     ->whereNotIn('status', ['SHIPPED', 'COMPLETED'])
                     ->where(function ($query) {
                         $query->whereHas('transaksi')
