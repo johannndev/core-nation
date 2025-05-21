@@ -101,7 +101,7 @@
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
 
                     <div class="grid grid-cols-12">
-                        <div class="col-span-11  flex items-center space-x-2">
+                        <div class="col-span-10  flex items-center space-x-2">
 
                             <div>
 
@@ -162,16 +162,21 @@
 
                         </div>
 
-                        <div class="col-span-1">
+                        <div class="col-span-2">
                             @if ($data->status == 1)
                                 <div class="bg-green-50 font-medium text-green-600 p-2 rounded-lg text-center">
-                                    <p>Success</p>
+                                    <p>3/3 Finished</p>
                                 </div>
 
                             @else
 
                                 <div class="bg-yellow-50 font-medium text-yellow-600 p-2 rounded-lg text-center">
-                                    <p>Pending</p>
+                                    @if ($data->step == 1)
+                                        <p>1/3 Get item...</p>
+                                    @elseif ($data->step == 2)
+                                        <p>2/3 Analyzing...</p>
+                                    @endif
+                                   
                                 </div>
 
                             @endif

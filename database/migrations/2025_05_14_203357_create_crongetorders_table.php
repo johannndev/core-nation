@@ -18,8 +18,7 @@ return new class extends Migration
             $table->integer('count')->default(0);
             $table->integer('total')->default(0);
             $table->integer('status')->default(0);
-            $table->integer('cek_log')->default(0);
-            $table->integer('cek_transaction')->default(0);
+            $table->integer('step')->default(1);
             $table->timestamps();
         });
     }

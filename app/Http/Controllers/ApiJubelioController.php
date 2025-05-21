@@ -10,6 +10,7 @@ use App\Helpers\InvoiceTrackerHelpers;
 use App\Helpers\StatManagerHelper;
 use App\Helpers\TransactionsManagerHelper;
 use App\Models\Crongetorder;
+use App\Models\Crongetorderdetail;
 use App\Models\Customer;
 use App\Models\Item;
 use App\Models\Jubelioreturn;
@@ -1263,11 +1264,9 @@ class ApiJubelioController extends Controller
                 throw new \Exception('Gagal mendapatkan data dari API Jubelio. Status: ' . $response->status());
             }
 
-            $responData =json_decode($response->body(), true); // atau json_decode($response->body(), true);
+            $responData =  $response->json(); // atau json_decode($response->body(), true);
 
-    
 
-        
 
            
             if($data->total < 1){
@@ -1306,9 +1305,47 @@ class ApiJubelioController extends Controller
                 $data->increment('count');
 
             }else{
-                $data->status = 1;
 
-                $data->save();
+                
+
+                if( $data->status == 0){
+
+                       if($data->step == 1){
+
+                            Crongetorderdetail::where('get_order_id', $data->id)
+                            ->where(function ($query) {
+                                $query->whereHas('transaksi')
+                                    ->orWhereHas('logJubelio');
+                            })
+                            ->delete();
+
+                            // dd($data->step);
+
+                            $data->step = 2;
+                            $data->save(); 
+
+                        }else if($data->step == 2){
+
+                            Crongetorderdetail::where('get_order_id', $data->id)
+                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                            ->delete();
+
+                            Crongetorderdetail::where('get_order_id', $data->id)
+                            ->where('is_canceled', 'Y')
+                            ->delete();
+
+                            $data->step = 3;
+                            $data->status = 1;
+
+                            $data->save(); 
+
+                        }
+
+                }
+
+             
+
+             
             }
 
           
