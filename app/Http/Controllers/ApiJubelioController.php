@@ -1306,8 +1306,6 @@ class ApiJubelioController extends Controller
 
             }else{
 
-                
-
                 if( $data->status == 0){
 
                        if($data->step == 1){

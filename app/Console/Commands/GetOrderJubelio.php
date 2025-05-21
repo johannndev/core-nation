@@ -122,27 +122,51 @@ class GetOrderJubelio extends Command
                 $data->increment('count');
 
             }else{
-                $data->status = 1;
 
-                $data->save();
+                if( $data->status == 0){
 
-                $cronStatus = Cronrun::where('name', 'get_order')->first();
+                       if($data->step == 1){
 
-                $cronStatus->status = 0;
+                            Crongetorderdetail::where('get_order_id', $data->id)
+                            ->where(function ($query) {
+                                $query->whereHas('transaksi')
+                                    ->orWhereHas('logJubelio');
+                            })
+                            ->delete();
 
-                $cronStatus->save();
+                            // dd($data->step);
 
-                CronHelper::refreshCronCache();
+                            $data->step = 2;
+                            $data->save(); 
 
-                
-                Crongetorderdetail::where('get_order_id', $data->id)
-                    ->whereNotIn('status', ['SHIPPED', 'COMPLETED'])
-                    ->where('is_cenceled', 'Y')
-                    ->where(function ($query) {
-                        $query->whereHas('transaksi')
-                            ->orWhereHas('logJubelio');
-                    })
-                    ->delete();
+                        }else if($data->step == 2){
+
+                            Crongetorderdetail::where('get_order_id', $data->id)
+                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                            ->delete();
+
+                            Crongetorderdetail::where('get_order_id', $data->id)
+                            ->where('is_canceled', 'Y')
+                            ->delete();
+
+                            $data->step = 3;
+                            $data->status = 1;
+
+                            $data->save(); 
+
+                            $cronStatus = Cronrun::where('name', 'get_order')->first();
+
+                            $cronStatus->status = 0;
+
+                            $cronStatus->save();
+
+                            CronHelper::refreshCronCache();
+
+                        }
+
+                }
+
+               
             }
 
           
