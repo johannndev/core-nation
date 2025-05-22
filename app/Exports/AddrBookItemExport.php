@@ -35,7 +35,7 @@ class AddrBookItemExport implements FromView
 			});
 		}
 
-        if($this->show0){
+        if(!$this->show0){
             $query = $query->where('quantity','>',0);
         }
 
