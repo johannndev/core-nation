@@ -676,5 +676,13 @@ class Transaction extends Model
 		return $query;
 	}
 
-
+    public function save()
+    {
+        if(!$this->user_id)
+        {
+            $this->user_id = Auth::user() ? Auth::user()->id : -100;
+			$this->location_id = Auth::user() ? Auth::user()->location_id : 0;
+        }
+        return parent::save();
+    }
 }
