@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -427,6 +428,7 @@ class LogJubelioController extends Controller
                 $senderBalance->update(['balance' => $newSenderBalance]);
                 $receiverBalance->update(['balance' => $newRecaiverBalance]);
 
+                $user_id = Auth::user() ? Auth::user()->id : -100;
 
                 // Buat transaksi
                 $transactionData = [
@@ -444,6 +446,7 @@ class LogJubelioController extends Controller
                     'receiver_balance' => $newRecaiverBalance,
                     'real_total' => $sumTotal,
                     'submit_type' => 2,
+                    'user_id' => $user_id,
                     'created_at' => now(),
                     'updated_at' => now()
                 ];
