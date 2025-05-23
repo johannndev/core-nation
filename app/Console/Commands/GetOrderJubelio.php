@@ -45,11 +45,8 @@ class GetOrderJubelio extends Command
                 throw new \Exception('Data Crongetorder tidak aktif.');
             }
 
-            $dateFrom = Carbon::parse($data->from, 'Asia/Jakarta');
-            $isoUtcDateFrom = $dateFrom->setTimezone('UTC')->toIso8601String();
-
-            $dateTo = Carbon::parse($data->to, 'Asia/Jakarta');
-            $isoUtcDateTo = $dateTo->setTimezone('UTC')->toIso8601String();
+            $dateFrom = $data->from."T00:00:00Z";
+            $dateTo = $data->to."T00:00:00Z";
 
             $token = Cache::get('jubelio_data')['token'] ?? null;
 
@@ -63,8 +60,8 @@ class GetOrderJubelio extends Command
             ])->get('https://api2.jubelio.com/sales/orders/', [
                 'page' => $data->count+1,
                 'pageSize' => 200,
-                'transactionDateFrom' => $isoUtcDateFrom,
-                'transactionDateTo' => $isoUtcDateTo
+                'transactionDateFrom' => $dateFrom,
+                'transactionDateTo' => $dateTo
             ]);
 
             if ($response->failed()) {
@@ -132,11 +129,22 @@ class GetOrderJubelio extends Command
                                 $query->whereHas('transaksi')
                                     ->orWhereHas('logJubelio');
                             })
+                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                            ->delete();
+
+                            Crongetorderdetail::where('type', 'Y')
+                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED'])
+                            ->where(function ($query) {
+                                $query->whereHas('transaksi')
+                                    ->orWhereHas('logJubelio');
+                            })
                             ->delete();
 
                             // dd($data->step);
 
-                            $data->step = 2;
+                            $data->step = 3;
+                            $data->status = 1;
+
                             $data->save(); 
 
                         }else if($data->step == 2){
