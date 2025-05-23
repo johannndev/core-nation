@@ -1263,7 +1263,7 @@ class ApiJubelioController extends Controller
 
             $responData =  $response->json(); // atau json_decode($response->body(), true);
 
-            dd($responData);
+          
 
             
 
