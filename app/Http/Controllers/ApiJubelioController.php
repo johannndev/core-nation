@@ -1242,62 +1242,65 @@ class ApiJubelioController extends Controller
                 throw new \Exception('Token Jubelio tidak ditemukan di cache.');
             }
 
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'authorization' => $token,
-            ])->get('https://api2.jubelio.com/sales/orders/', [
-                'page' => $data->count+1,
-                'pageSize' => 200,
-                'transactionDateFrom' => $dateFrom,
-                'transactionDateTo' => $dateTo
-            ]);
+            if($data->count != $data->total){
 
-            if ($response->failed()) {
-                Log::error('API Jubelio gagal merespon', [
-                    'status' => $response->status(),
-                    'body' => $response->body()
+                $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'authorization' => $token,
+                ])->get('https://api2.jubelio.com/sales/orders/', [
+                    'page' => $data->count+1,
+                    'pageSize' => 200,
+                    'transactionDateFrom' => $dateFrom,
+                    'transactionDateTo' => $dateTo
                 ]);
 
-                throw new \Exception('Gagal mendapatkan data dari API Jubelio. Status: ' . $response->status());
-            }
+                if ($response->failed()) {
+                    Log::error('API Jubelio gagal merespon', [
+                        'status' => $response->status(),
+                        'body' => $response->body()
+                    ]);
 
-            $responData =  $response->json(); // atau json_decode($response->body(), true);
-
-           
-            if($data->total < 1){
-
-                $a = $responData['totalCount'];
-                $b = 200;
-
-                $hasil = (int)ceil($a / $b);
-
-                $data->total = $hasil;
-
-                $data->save();
-          
-            }
-
-            $dataArray = []; 
-
-            if(count($responData['data']) > 0){
-
-                foreach ($responData['data'] as $row) {
-                    $dataArray[] = [
-                        'get_order_id' => $data->id,
-                        'order_id' =>  $row['salesorder_id'],
-                        'invoice' => $row['salesorder_no'],
-                        'location_id' => $row['location_name'],
-                        'store_id' => $row['store_name'],
-                        'status' => $row['internal_status'],
-                        'is_canceled' => $row['is_canceled'],
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
+                    throw new \Exception('Gagal mendapatkan data dari API Jubelio. Status: ' . $response->status());
                 }
 
-                DB::table('crongetorderdetails')->insert($dataArray);
+                $responData =  $response->json(); // atau json_decode($response->body(), true);
 
-                $data->increment('count');
+            
+                if($data->total < 1){
+
+                    $a = $responData['totalCount'];
+                    $b = 200;
+
+                    $hasil = (int)ceil($a / $b);
+
+                    $data->total = $hasil;
+
+                    $data->save();
+            
+                }
+
+                 $dataArray = []; 
+
+                  if(count($responData['data']) > 0){{
+                    foreach ($responData['data'] as $row) {
+                        $dataArray[] = [
+                            'get_order_id' => $data->id,
+                            'order_id' =>  $row['salesorder_id'],
+                            'invoice' => $row['salesorder_no'],
+                            'location_id' => $row['location_name'],
+                            'store_id' => $row['store_name'],
+                            'status' => $row['internal_status'],
+                            'is_canceled' => $row['is_canceled'],
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+
+                    DB::table('crongetorderdetails')->insert($dataArray);
+
+                    $data->increment('count');
+                  }
+
 
             }else{
 
@@ -1365,12 +1368,9 @@ class ApiJubelioController extends Controller
 
                 }
 
-             
-
-             
             }
 
-          
+                  
             // Lanjutkan proses dengan $data...
 
         } catch (\Exception $e) {
