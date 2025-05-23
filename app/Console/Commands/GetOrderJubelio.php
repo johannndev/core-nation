@@ -124,13 +124,6 @@ class GetOrderJubelio extends Command
 
                        if($data->step == 1){
 
-                            Crongetorderdetail::where('get_order_id', $data->id)
-                            ->where(function ($query) {
-                                $query->whereHas('transaksi')
-                                    ->orWhereHas('logJubelio');
-                            })
-                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
-                            ->delete();
 
                             Crongetorderdetail::where('type', 'Y')
                             ->whereNotIn('status', ['SHIPPED', 'COMPLETED'])
