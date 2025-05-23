@@ -1369,6 +1369,7 @@ class ApiJubelioController extends Controller
                 }
 
             }
+        }
 
                   
             // Lanjutkan proses dengan $data...
