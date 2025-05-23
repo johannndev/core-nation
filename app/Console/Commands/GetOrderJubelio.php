@@ -45,11 +45,8 @@ class GetOrderJubelio extends Command
                 throw new \Exception('Data Crongetorder tidak aktif.');
             }
 
-            $dateFrom = Carbon::parse($data->from, 'Asia/Jakarta');
-            $isoUtcDateFrom = $dateFrom->setTimezone('UTC')->toIso8601String();
-
-            $dateTo = Carbon::parse($data->to, 'Asia/Jakarta');
-            $isoUtcDateTo = $dateTo->setTimezone('UTC')->toIso8601String();
+            $dateFrom = $data->from."T00:00:00Z";
+            $dateTo = $data->to."T00:00:00Z";
 
             $token = Cache::get('jubelio_data')['token'] ?? null;
 
@@ -63,8 +60,8 @@ class GetOrderJubelio extends Command
             ])->get('https://api2.jubelio.com/sales/orders/', [
                 'page' => $data->count+1,
                 'pageSize' => 200,
-                'transactionDateFrom' => $isoUtcDateFrom,
-                'transactionDateTo' => $isoUtcDateTo
+                'transactionDateFrom' => $dateFrom,
+                'transactionDateTo' => $dateTo
             ]);
 
             Log::info('infocron: ' .json_decode($response->body(), true));
