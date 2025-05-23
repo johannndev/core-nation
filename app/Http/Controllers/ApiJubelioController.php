@@ -1324,11 +1324,11 @@ class ApiJubelioController extends Controller
 
                         }else if($data->step == 2){
 
-                            Crongetorderdetail::where(function ($query) {
-                                $query->whereHas('transaksi')
-                                    ->orWhereHas('logJubelio');
-                            })
-                            ->delete();
+                            // Crongetorderdetail::where(function ($query) {
+                            //     $query->whereHas('transaksi')
+                            //         ->orWhereHas('logJubelio');
+                            // })
+                            // ->delete();
                           
                             $data->step = 3;
                             $data->status = 1;
