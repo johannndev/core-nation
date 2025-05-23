@@ -1243,7 +1243,71 @@ class ApiJubelioController extends Controller
             }
 
             if($data->count == $data->total){
-                dd('ini dong');
+                if( $data->status == 0){
+
+                       if($data->step == 1){
+
+                          DB::table('crongetorderdetails')
+                            ->whereExists(function ($query) {
+                                $query->select(DB::raw(1))
+                                    ->from('transaksis')
+                                    ->whereRaw('transaksis.crongetorderdetail_id = crongetorderdetails.id');
+                            })
+                            ->orWhereExists(function ($query) {
+                                $query->select(DB::raw(1))
+                                    ->from('log_jubelios')
+                                    ->whereRaw('log_jubelios.crongetorderdetail_id = crongetorderdetails.id');
+                            })
+                            ->delete();
+
+                        //    Crongetorderdetail::where('get_order_id', $data->id)
+                        //     ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                        //     ->delete();
+
+                        //     Crongetorderdetail::where('get_order_id', $data->id)
+                        //     ->where('is_canceled', 'Y')
+                        //     ->delete();
+
+
+                          
+                                dd('delete');
+                            // dd($data->step);
+
+                            $data->step = 2;
+                           
+                            $data->save(); 
+
+                        }else if($data->step == 2){
+
+                            // Crongetorderdetail::where(function ($query) {
+                            //     $query->whereHas('transaksi')
+                            //         ->orWhereHas('logJubelio');
+                            // })
+                            // ->delete();
+
+                            // DB::table('crongetorderdetails')
+                            // ->whereExists(function ($query) {
+                            //     $query->select(DB::raw(1))
+                            //         ->from('transaksis')
+                            //         ->whereRaw('transaksis.crongetorderdetail_id = crongetorderdetails.id');
+                            // })
+                            // ->orWhereExists(function ($query) {
+                            //     $query->select(DB::raw(1))
+                            //         ->from('log_jubelios')
+                            //         ->whereRaw('log_jubelios.crongetorderdetail_id = crongetorderdetails.id');
+                            // })
+                            // ->delete();
+                          
+                            $data->step = 3;
+                            $data->status = 1;
+
+                            $data->save(); 
+
+                        }
+
+                }
+            }else{
+
             }
 
             dd('c', $data->count, $data->total);
@@ -1314,69 +1378,7 @@ class ApiJubelioController extends Controller
 
                 dd('a');
 
-                if( $data->status == 0){
-
-                       if($data->step == 1){
-
-                          DB::table('crongetorderdetails')
-                            ->whereExists(function ($query) {
-                                $query->select(DB::raw(1))
-                                    ->from('transaksis')
-                                    ->whereRaw('transaksis.crongetorderdetail_id = crongetorderdetails.id');
-                            })
-                            ->orWhereExists(function ($query) {
-                                $query->select(DB::raw(1))
-                                    ->from('log_jubelios')
-                                    ->whereRaw('log_jubelios.crongetorderdetail_id = crongetorderdetails.id');
-                            })
-                            ->delete();
-
-                        //    Crongetorderdetail::where('get_order_id', $data->id)
-                        //     ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
-                        //     ->delete();
-
-                        //     Crongetorderdetail::where('get_order_id', $data->id)
-                        //     ->where('is_canceled', 'Y')
-                        //     ->delete();
-
-
-                          
-
-                            // dd($data->step);
-
-                            $data->step = 2;
-                           
-                            $data->save(); 
-
-                        }else if($data->step == 2){
-
-                            // Crongetorderdetail::where(function ($query) {
-                            //     $query->whereHas('transaksi')
-                            //         ->orWhereHas('logJubelio');
-                            // })
-                            // ->delete();
-
-                            // DB::table('crongetorderdetails')
-                            // ->whereExists(function ($query) {
-                            //     $query->select(DB::raw(1))
-                            //         ->from('transaksis')
-                            //         ->whereRaw('transaksis.crongetorderdetail_id = crongetorderdetails.id');
-                            // })
-                            // ->orWhereExists(function ($query) {
-                            //     $query->select(DB::raw(1))
-                            //         ->from('log_jubelios')
-                            //         ->whereRaw('log_jubelios.crongetorderdetail_id = crongetorderdetails.id');
-                            // })
-                            // ->delete();
-                          
-                            $data->step = 3;
-                            $data->status = 1;
-
-                            $data->save(); 
-
-                        }
-
-                }
+               
 
             }
         }
