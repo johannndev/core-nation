@@ -172,6 +172,8 @@ class GetOrderJubelio extends Command
             // Lanjutkan proses dengan $data...
 
         } catch (\Exception $e) {
+            
+
             Log::error('Terjadi kesalahan saat mengambil data dari Jubelio API', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()

@@ -1263,12 +1263,6 @@ class ApiJubelioController extends Controller
 
             $responData =  $response->json(); // atau json_decode($response->body(), true);
 
-          
-
-            
-
-
-
            
             if($data->total < 1){
 
@@ -1324,9 +1318,8 @@ class ApiJubelioController extends Controller
 
                             // dd($data->step);
 
-                            $data->step = 3;
-                            $data->status = 1;
-
+                            $data->step = 2;
+                           
                             $data->save(); 
 
                         }else if($data->step == 2){
