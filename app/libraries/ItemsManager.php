@@ -135,8 +135,10 @@ class ItemsManager
 		//1. generate the item code
 		$item->code = static::$_tags[Tag::TYPE_TYPE][$type_id]->code.str_replace('/','', $item->pcode); //add type
 		$item->code = $item->code.static::$_tags[Tag::TYPE_SIZE][$size_id]->code;
+        $item->code = strtoupper($item->code);
 
 		$item->name = static::$_tags[Tag::TYPE_TYPE][$type_id]->code.' '.$item->pcode.' '.static::$_tags[Tag::TYPE_SIZE][$size_id]->name;
+        $item->name = strtoupper($item->name);
 
 		//NEW: catch for contributor data
 		$item->genre = $type_id;
