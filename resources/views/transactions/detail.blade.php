@@ -2,7 +2,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">Detail Transaction #{{$data->id}}</p>
+        <p class="text-2xl font-bold">Detail Transaction #{{$data->invoice}}</p>
 
        
     </div>
@@ -90,7 +90,7 @@
                             
                         @endif
 
-                        @if ($data->submit_type == 1 || $data->submit_type == 1)
+                        @if ($data->submit_type == 1 || $data->submit_type == 2)
 
                         <div>
                             <div class="grid grid-cols-5 p-4 print:p-0 text-sm">

@@ -99,6 +99,7 @@ class ReportController extends Controller
 			2858, //vava
 			2790, //william
 			2703, //seko
+            2546, //umum sby
 		);
 
 		//1. get month input

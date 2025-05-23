@@ -304,10 +304,7 @@ class LogJubelioController extends Controller
 
     public function postManualSeek($id)
     {
-        $maxRetries = 3;
-        $retryCount = 0;
 
-        while ($retryCount < $maxRetries) {
             DB::beginTransaction();
 
             try {
@@ -427,6 +424,7 @@ class LogJubelioController extends Controller
                 $senderBalance->update(['balance' => $newSenderBalance]);
                 $receiverBalance->update(['balance' => $newRecaiverBalance]);
 
+                $user_id = Auth::user() ? Auth::user()->id : -100;
 
                 // Buat transaksi
                 $transactionData = [
@@ -444,6 +442,7 @@ class LogJubelioController extends Controller
                     'receiver_balance' => $newRecaiverBalance,
                     'real_total' => $sumTotal,
                     'submit_type' => 2,
+                    'user_id' => $user_id,
                     'created_at' => now(),
                     'updated_at' => now()
                 ];
@@ -548,19 +547,13 @@ class LogJubelioController extends Controller
                 
                 Log::error('Database Error: ' . $e->getMessage());
 
-                if ($e->errorInfo[1] == 1213 && $retryCount < $maxRetries) {
-                    $retryCount++;
-                    usleep(100000);
-                    continue;
-                }
-
                 return redirect()->back()->with('errorMessage', 'Terjadi kesalahan database');
             } catch (Exception $e) {
                 DB::rollBack();
                 Log::error('Error: ' . $e->getMessage());
                 return redirect()->back()->with('errorMessage', $e->getMessage());
             }
-        }
+        
 
         return redirect()->back()->with('errorMessage', 'Gagal memproses setelah 3 kali percobaan');
     }

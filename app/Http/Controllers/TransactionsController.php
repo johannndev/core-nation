@@ -729,12 +729,6 @@ class TransactionsController extends Controller
 
 		}
 
-		// dd($data, $cekJubelio);
-
-		
-
-		
-
 		$nameWh = StockManagerHelpers::$names;
 
 		if($request->receipt == 1){
@@ -925,6 +919,7 @@ class TransactionsController extends Controller
         $transaction->date = $request->date;
         $transaction->type = Transaction::TYPE_MOVE;
 		$transaction->submit_type = 1;
+        $transaction->invoice = $request->invoice ?? ' ';
      
 		if($request->note){
 			$transaction->description = $request->note;

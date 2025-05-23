@@ -358,11 +358,7 @@ class Transaction extends Model
 			$this->due = Carbon::createFromFormat('Y-m-d',$this->due)->toDateString();
 		if(!empty($this->invoice))
 			$this->invoice = trim($this->invoice);
-		if(Auth::user())
-		{
-			$this->user_id = Auth::user()->id;
-			$this->location_id = Auth::user()->location_id;
-		}
+
 		if(!empty($this->receiver_id))
 		{
 			$receiver = Customer::find($this->receiver_id);
@@ -676,5 +672,13 @@ class Transaction extends Model
 		return $query;
 	}
 
-
+    public function save(array $options = [])
+    {
+        if(!$this->user_id)
+        {
+            $this->user_id = Auth::user() ? Auth::user()->id : -100;
+			$this->location_id = Auth::user() ? Auth::user()->location_id : 0;
+        }
+        return parent::save($options);
+    }
 }
