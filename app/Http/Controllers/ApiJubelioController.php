@@ -1242,6 +1242,8 @@ class ApiJubelioController extends Controller
                 throw new \Exception('Token Jubelio tidak ditemukan di cache.');
             }
 
+            dd('c', $data->count, $data->total);
+
             if($data->count != $data->total){
 
                  dd('b');
