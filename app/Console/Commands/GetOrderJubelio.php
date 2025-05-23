@@ -79,7 +79,7 @@ class GetOrderJubelio extends Command
            
             if($data->total < 1){
 
-                $a = $responData['totalCount'];
+                $a = (int)$responData['totalCount'];
                 $b = 200;
 
                 $hasil = (int)ceil($a / $b);
