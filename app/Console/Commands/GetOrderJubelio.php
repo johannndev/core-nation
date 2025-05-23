@@ -127,12 +127,14 @@ class GetOrderJubelio extends Command
 
                        if($data->step == 1){
 
-                            Crongetorderdetail::where('is_canceled', 'Y')
-                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED'])
-                            ->where(function ($query) {
-                                $query->whereHas('transaksi')
-                                    ->orWhereHas('logJubelio');
-                            })
+                            
+
+                            Crongetorderdetail::where('get_order_id', $data->id)
+                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                            ->delete();
+
+                            Crongetorderdetail::where('get_order_id', $data->id)
+                            ->where('is_canceled', 'Y')
                             ->delete();
 
                             // dd($data->step);
@@ -142,13 +144,11 @@ class GetOrderJubelio extends Command
 
                         }else if($data->step == 2){
 
-                            // Crongetorderdetail::where('get_order_id', $data->id)
-                            // ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
-                            // ->delete();
-
-                            // Crongetorderdetail::where('get_order_id', $data->id)
-                            // ->where('is_canceled', 'Y')
-                            // ->delete();
+                            Crongetorderdetail::where(function ($query) {
+                                $query->whereHas('transaksi')
+                                    ->orWhereHas('logJubelio');
+                            })
+                            ->delete();
 
                             $data->step = 3;
                             $data->status = 1;
