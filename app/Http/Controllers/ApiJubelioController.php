@@ -1348,18 +1348,18 @@ class ApiJubelioController extends Controller
                             // })
                             // ->delete();
 
-                            DB::table('crongetorderdetails')
-                            ->whereExists(function ($query) {
-                                $query->select(DB::raw(1))
-                                    ->from('transaksis')
-                                    ->whereRaw('transaksis.crongetorderdetail_id = crongetorderdetails.id');
-                            })
-                            ->orWhereExists(function ($query) {
-                                $query->select(DB::raw(1))
-                                    ->from('log_jubelios')
-                                    ->whereRaw('log_jubelios.crongetorderdetail_id = crongetorderdetails.id');
-                            })
-                            ->delete();
+                            // DB::table('crongetorderdetails')
+                            // ->whereExists(function ($query) {
+                            //     $query->select(DB::raw(1))
+                            //         ->from('transaksis')
+                            //         ->whereRaw('transaksis.crongetorderdetail_id = crongetorderdetails.id');
+                            // })
+                            // ->orWhereExists(function ($query) {
+                            //     $query->select(DB::raw(1))
+                            //         ->from('log_jubelios')
+                            //         ->whereRaw('log_jubelios.crongetorderdetail_id = crongetorderdetails.id');
+                            // })
+                            // ->delete();
                           
                             $data->step = 3;
                             $data->status = 1;
