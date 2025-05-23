@@ -58,7 +58,7 @@ class GetOrderJubelio extends Command
                 'Content-Type' => 'application/json',
                 'authorization' => $token,
             ])->get('https://api2.jubelio.com/sales/orders/', [
-                'page' => $data->count+1,
+                'page' => 1,
                 'pageSize' => 200,
                 'transactionDateFrom' => $dateFrom,
                 'transactionDateTo' => $dateTo
