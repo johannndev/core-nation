@@ -1309,21 +1309,16 @@ class ApiJubelioController extends Controller
 
                        if($data->step == 1){
 
-                            Crongetorderdetail::where('get_order_id', $data->id)
-                            ->where(function ($query) {
-                                $query->whereHas('transaksi')
-                                    ->orWhereHas('logJubelio');
-                            })
+                           Crongetorderdetail::where('get_order_id', $data->id)
                             ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
                             ->delete();
 
-                            Crongetorderdetail::where('type', 'Y')
-                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED'])
-                            ->where(function ($query) {
-                                $query->whereHas('transaksi')
-                                    ->orWhereHas('logJubelio');
-                            })
+                            Crongetorderdetail::where('get_order_id', $data->id)
+                            ->where('is_canceled', 'Y')
                             ->delete();
+
+
+                          
 
                             // dd($data->step);
 
@@ -1334,14 +1329,12 @@ class ApiJubelioController extends Controller
 
                         }else if($data->step == 2){
 
-                            Crongetorderdetail::where('get_order_id', $data->id)
-                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                            Crongetorderdetail::where(function ($query) {
+                                $query->whereHas('transaksi')
+                                    ->orWhereHas('logJubelio');
+                            })
                             ->delete();
-
-                            // Crongetorderdetail::where('get_order_id', $data->id)
-                            // ->where('is_canceled', 'Y')
-                            // ->delete();
-
+                          
                             $data->step = 3;
                             $data->status = 1;
 
