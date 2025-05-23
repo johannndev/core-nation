@@ -1251,12 +1251,12 @@ class ApiJubelioController extends Controller
                             ->whereExists(function ($query) {
                                 $query->select(DB::raw(1))
                                     ->from('transactions')
-                                    ->whereRaw('transaksis.crongetorderdetail_id = crongetorderdetails.id');
+                                    ->whereRaw('transaksis.invoice = crongetorderdetails.invoice');
                             })
                             ->orWhereExists(function ($query) {
                                 $query->select(DB::raw(1))
                                     ->from('logjubelios')
-                                    ->whereRaw('log_jubelios.crongetorderdetail_id = crongetorderdetails.id');
+                                    ->whereRaw('log_jubelios.invoice = crongetorderdetails.invoice');
                             })
                             ->delete();
 
