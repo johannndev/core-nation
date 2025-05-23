@@ -67,6 +67,8 @@ class GetOrderJubelio extends Command
                 'transactionDateTo' => $isoUtcDateTo
             ]);
 
+            Log::info('infocron: ' .json_decode($response->body(), true));
+
             if ($response->failed()) {
                 Log::error('API Jubelio gagal merespon', [
                     'status' => $response->status(),
