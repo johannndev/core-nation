@@ -60,8 +60,8 @@ class GetOrderJubelio extends Command
             ])->get('https://api2.jubelio.com/sales/orders/', [
                 'page' => 1,
                 'pageSize' => 200,
-                'transactionDateFrom' => $dateFrom,
-                'transactionDateTo' => $dateTo
+                'transactionDateFrom' => '2025-05-01T00:00:00',
+                'transactionDateTo' => '2025-05-04T00:00:00'
             ]);
 
             Log::info('infocron: ' .json_decode($response->body(), true));
