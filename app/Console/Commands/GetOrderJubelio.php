@@ -76,9 +76,6 @@ class GetOrderJubelio extends Command
             }
 
             $responData = $response->json(); // atau json_decode($response->body(), true);
-
-            Log::info('info: ' .$responData);
-
            
             if($data->total < 1){
 
