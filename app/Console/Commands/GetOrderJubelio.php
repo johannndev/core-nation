@@ -127,7 +127,7 @@ class GetOrderJubelio extends Command
 
                        if($data->step == 1){
 
-                            Crongetorderdetail::where('type', 'Y')
+                            Crongetorderdetail::where('is_canceled', 'Y')
                             ->whereNotIn('status', ['SHIPPED', 'COMPLETED'])
                             ->where(function ($query) {
                                 $query->whereHas('transaksi')
