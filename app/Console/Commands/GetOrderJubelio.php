@@ -129,9 +129,9 @@ class GetOrderJubelio extends Command
 
                             
 
-                            Crongetorderdetail::where('get_order_id', $data->id)
-                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
-                            ->delete();
+                            // Crongetorderdetail::where('get_order_id', $data->id)
+                            // ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                            // ->delete();
 
                             // Crongetorderdetail::where('get_order_id', $data->id)
                             // ->where('is_canceled', 'Y')
