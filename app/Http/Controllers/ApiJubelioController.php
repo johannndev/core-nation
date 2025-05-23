@@ -1305,13 +1305,26 @@ class ApiJubelioController extends Controller
 
                        if($data->step == 1){
 
-                           Crongetorderdetail::where('get_order_id', $data->id)
-                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                          DB::table('crongetorderdetails')
+                            ->whereExists(function ($query) {
+                                $query->select(DB::raw(1))
+                                    ->from('transaksis')
+                                    ->whereRaw('transaksis.crongetorderdetail_id = crongetorderdetails.id');
+                            })
+                            ->orWhereExists(function ($query) {
+                                $query->select(DB::raw(1))
+                                    ->from('log_jubelios')
+                                    ->whereRaw('log_jubelios.crongetorderdetail_id = crongetorderdetails.id');
+                            })
                             ->delete();
 
-                            Crongetorderdetail::where('get_order_id', $data->id)
-                            ->where('is_canceled', 'Y')
-                            ->delete();
+                        //    Crongetorderdetail::where('get_order_id', $data->id)
+                        //     ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                        //     ->delete();
+
+                        //     Crongetorderdetail::where('get_order_id', $data->id)
+                        //     ->where('is_canceled', 'Y')
+                        //     ->delete();
 
 
                           
