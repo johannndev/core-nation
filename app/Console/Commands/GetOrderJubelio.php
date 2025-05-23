@@ -45,8 +45,11 @@ class GetOrderJubelio extends Command
                 throw new \Exception('Data Crongetorder tidak aktif.');
             }
 
-            $dateFrom = $data->from."T00:00:00Z";
-            $dateTo = $data->to."T00:00:00Z";
+            $dateFrom = Carbon::parse($data->from, 'Asia/Jakarta');
+            $isoUtcDateFrom = $dateFrom->setTimezone('UTC')->toIso8601String();
+
+            $dateTo = Carbon::parse($data->to, 'Asia/Jakarta');
+            $isoUtcDateTo = $dateTo->setTimezone('UTC')->toIso8601String();
 
             $token = Cache::get('jubelio_data')['token'] ?? null;
 
@@ -60,8 +63,8 @@ class GetOrderJubelio extends Command
             ])->get('https://api2.jubelio.com/sales/orders/', [
                 'page' => $data->count+1,
                 'pageSize' => 200,
-                'transactionDateFrom' => $dateFrom,
-                'transactionDateTo' => $dateTo
+                'transactionDateFrom' => $isoUtcDateFrom,
+                'transactionDateTo' => $isoUtcDateTo
             ]);
 
             if ($response->failed()) {
@@ -124,7 +127,6 @@ class GetOrderJubelio extends Command
 
                        if($data->step == 1){
 
-
                             Crongetorderdetail::where('type', 'Y')
                             ->whereNotIn('status', ['SHIPPED', 'COMPLETED'])
                             ->where(function ($query) {
@@ -135,20 +137,18 @@ class GetOrderJubelio extends Command
 
                             // dd($data->step);
 
-                            $data->step = 3;
-                            $data->status = 1;
-
+                            $data->step = 2;
                             $data->save(); 
 
                         }else if($data->step == 2){
 
-                            Crongetorderdetail::where('get_order_id', $data->id)
-                            ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
-                            ->delete();
+                            // Crongetorderdetail::where('get_order_id', $data->id)
+                            // ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                            // ->delete();
 
-                            Crongetorderdetail::where('get_order_id', $data->id)
-                            ->where('is_canceled', 'Y')
-                            ->delete();
+                            // Crongetorderdetail::where('get_order_id', $data->id)
+                            // ->where('is_canceled', 'Y')
+                            // ->delete();
 
                             $data->step = 3;
                             $data->status = 1;
