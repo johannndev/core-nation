@@ -1242,86 +1242,10 @@ class ApiJubelioController extends Controller
                 throw new \Exception('Token Jubelio tidak ditemukan di cache.');
             }
 
-            if($data->count == $data->total){
-                if( $data->status == 0){
-
-                       if($data->step == 1){
-
-                        
-                            $ids = Crongetorderdetail::where(function ($query) {
-                                $query->whereHas('transaksi')
-                                    ->orWhereHas('logJubelio');
-                            })
-                            ->limit(500)
-                            ->pluck('id');
-
-                            if($ids->count() > 0){
-
-                                Crongetorderdetail::whereIn('id', $ids)->delete();
-
-                            }else{
-
-                                
-                                $data->step = 2;
-                            
-                                $data->save(); 
-                                dd('habis');
-                            }
-
-                                
-                          
-
-                        //    Crongetorderdetail::where('get_order_id', $data->id)
-                        //     ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
-                        //     ->delete();
-
-                        //     Crongetorderdetail::where('get_order_id', $data->id)
-                        //     ->where('is_canceled', 'Y')
-                        //     ->delete();
-
-
-                          
-                                dd('delete');
-                            // dd($data->step);
-
-
-                        }else if($data->step == 2){
-
-                            // Crongetorderdetail::where(function ($query) {
-                            //     $query->whereHas('transaksi')
-                            //         ->orWhereHas('logJubelio');
-                            // })
-                            // ->delete();
-
-                            // DB::table('crongetorderdetails')
-                            // ->whereExists(function ($query) {
-                            //     $query->select(DB::raw(1))
-                            //         ->from('transaksis')
-                            //         ->whereRaw('transaksis.crongetorderdetail_id = crongetorderdetails.id');
-                            // })
-                            // ->orWhereExists(function ($query) {
-                            //     $query->select(DB::raw(1))
-                            //         ->from('log_jubelios')
-                            //         ->whereRaw('log_jubelios.crongetorderdetail_id = crongetorderdetails.id');
-                            // })
-                            // ->delete();
-                          
-                            $data->step = 3;
-                            $data->status = 1;
-
-                            $data->save(); 
-
-                        }
-
-                }
-            }else{
-
-            }
-
-         
-
-            if($data->count != $data->total &&  $data->status == 0){
-
+            if (
+                ($data->count == 0 && $data->total == 0 && $data->status == 0) ||
+                ($data->count != $data->total && $data->status == 0)
+            ) {
                
                 $response = Http::withHeaders([
                     'Content-Type' => 'application/json',
@@ -1358,9 +1282,10 @@ class ApiJubelioController extends Controller
             
                 }
 
-                 $dataArray = []; 
+                $dataArray = []; 
 
-                  if(count($responData['data']) > 0){{
+                if(count($responData['data']) > 0){
+                    
                     foreach ($responData['data'] as $row) {
                         $dataArray[] = [
                             'get_order_id' => $data->id,
@@ -1378,17 +1303,63 @@ class ApiJubelioController extends Controller
                     DB::table('crongetorderdetails')->insert($dataArray);
 
                     $data->increment('count');
-                  }
+
+                    
+
+         
+                }
+
+            } elseif ($data->count == $data->total && $data->total != 0 && $data->status == 0) {
+                if($data->step == 1){
+
+                    Crongetorderdetail::where('get_order_id', $data->id)
+                        ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                        ->delete();
+
+                    Crongetorderdetail::where('get_order_id', $data->id)
+                        ->where('is_canceled', 'Y')
+                        ->delete();
+                        
+                        $data->step = 2;
+                        
+                        $data->save(); 
+                        
 
 
-            }else{
+                    }else if($data->step == 2){
 
-                dd('a');
+                        
+                        $ids = Crongetorderdetail::where(function ($query) {
+                            $query->whereHas('transaksi')
+                                ->orWhereHas('logJubelio');
+                        })
+                        ->limit(500)
+                        ->pluck('id');
 
-               
+                        if($ids->count() > 0){
 
+                            Crongetorderdetail::whereIn('id', $ids)->delete();
+
+                        }else{
+
+                            
+                            $data->step = 3;
+                            $data->status = 1;
+
+                            $data->save(); 
+                        }
+
+
+                    }
+
+            } elseif ($data->count == $data->total && $data->total != 0 && $data->status == 1) {
+                // Proses Selesai
             }
-        }
+
+           
+
+                
+        
 
                   
             // Lanjutkan proses dengan $data...
