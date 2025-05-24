@@ -1247,19 +1247,24 @@ class ApiJubelioController extends Controller
 
                        if($data->step == 1){
 
-                            do {
-                                $ids = Crongetorderdetail::where(function ($query) {
-                                    $query->whereHas('transaksi')
-                                        ->orWhereHas('logJubelio');
-                                })
-                                ->limit(1000)
-                                ->pluck('id');
+                        
+                            $ids = Crongetorderdetail::where(function ($query) {
+                                $query->whereHas('transaksi')
+                                    ->orWhereHas('logJubelio');
+                            })
+                            ->limit(500)
+                            ->pluck('id');
 
-                                $count = $ids->count();
+                            if($ids->count() > 0){
 
                                 Crongetorderdetail::whereIn('id', $ids)->delete();
 
-                            } while ($count > 0);
+                            }else{
+                                dd('habis');
+                            }
+
+                                
+                          
 
                         //    Crongetorderdetail::where('get_order_id', $data->id)
                         //     ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
