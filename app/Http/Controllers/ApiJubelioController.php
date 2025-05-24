@@ -1260,6 +1260,11 @@ class ApiJubelioController extends Controller
                                 Crongetorderdetail::whereIn('id', $ids)->delete();
 
                             }else{
+
+                                
+                                $data->step = 2;
+                            
+                                $data->save(); 
                                 dd('habis');
                             }
 
@@ -1279,9 +1284,6 @@ class ApiJubelioController extends Controller
                                 dd('delete');
                             // dd($data->step);
 
-                            $data->step = 2;
-                           
-                            $data->save(); 
 
                         }else if($data->step == 2){
 
