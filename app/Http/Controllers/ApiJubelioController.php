@@ -1318,12 +1318,11 @@ class ApiJubelioController extends Controller
 
             }
 
-            dd('c', $data->count, $data->total);
+         
 
-            if($data->count != $data->total){
+            if($data->count != $data->total &&  $data->status == 0){
 
-                 dd('b');
-
+               
                 $response = Http::withHeaders([
                     'Content-Type' => 'application/json',
                     'authorization' => $token,
