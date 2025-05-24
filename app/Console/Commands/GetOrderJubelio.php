@@ -54,118 +54,118 @@ class GetOrderJubelio extends Command
                 throw new \Exception('Token Jubelio tidak ditemukan di cache.');
             }
 
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'authorization' => $token,
-            ])->get('https://api2.jubelio.com/sales/orders/', [
-                'page' => 1,
-                'pageSize' => 200,
-                'transactionDateFrom' => '2025-05-01T00:00:00',
-                'transactionDateTo' => '2025-05-04T00:00:00'
-            ]);
-
-            Log::info('infocron: ' .json_decode($response->body(), true));
-
-            if ($response->failed()) {
-                Log::error('API Jubelio gagal merespon', [
-                    'status' => $response->status(),
-                    'body' => $response->body()
+                 if (
+                ($data->count == 0 && $data->total == 0 && $data->status == 0) ||
+                ($data->count != $data->total && $data->status == 0)
+            ) {
+               
+                $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'authorization' => $token,
+                ])->get('https://api2.jubelio.com/sales/orders/', [
+                    'page' => $data->count+1,
+                    'pageSize' => 200,
+                    'transactionDateFrom' => $dateFrom,
+                    'transactionDateTo' => $dateTo
                 ]);
 
-                throw new \Exception('Gagal mendapatkan data dari API Jubelio. Status: ' . $response->status());
-            }
+                if ($response->failed()) {
+                    Log::error('API Jubelio gagal merespon', [
+                        'status' => $response->status(),
+                        'body' => $response->body()
+                    ]);
 
-            $responData = $response->json(); // atau json_decode($response->body(), true);
-           
-            if($data->total < 1){
-
-                $a = (int)$responData['totalCount'];
-                $b = 200;
-
-                $hasil = (int)ceil($a / $b);
-
-                $data->total = $hasil;
-
-                $data->save();
-          
-            }
-
-            $dataArray = []; 
-
-            if(count($responData['data']) > 0){
-
-                foreach ($responData['data'] as $row) {
-
-                    if($row['is_canceled'] == 1){
-                        $cancel = 'Y';
-                    }else{
-                        $cancel = 'N';
-                    }
-
-                    $dataArray[] = [
-                        'get_order_id' => $data->id,
-                        'order_id' =>  $row['salesorder_id'],
-                        'invoice' => $row['salesorder_no'],
-                        'location_id' => $row['location_name'],
-                        'store_id' => $row['store_name'],
-                        'status' => $row['internal_status'],
-                        'is_canceled' => $cancel,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
+                    throw new \Exception('Gagal mendapatkan data dari API Jubelio. Status: ' . $response->status());
                 }
 
-                DB::table('crongetorderdetails')->insert($dataArray);
+                $responData =  $response->json(); // atau json_decode($response->body(), true);
 
-                $data->increment('count');
+            
+                if($data->total < 1){
 
-            }else{
+                    $a = $responData['totalCount'];
+                    $b = 200;
 
-                if( $data->status == 0){
+                    $hasil = (int)ceil($a / $b);
 
-                       if($data->step == 1){
+                    $data->total = $hasil;
+
+                    $data->save();
+            
+                }
+
+                $dataArray = []; 
+
+                if(count($responData['data']) > 0){
+                    
+                    foreach ($responData['data'] as $row) {
+                        $dataArray[] = [
+                            'get_order_id' => $data->id,
+                            'order_id' =>  $row['salesorder_id'],
+                            'invoice' => $row['salesorder_no'],
+                            'location_id' => $row['location_name'],
+                            'store_id' => $row['store_name'],
+                            'status' => $row['internal_status'],
+                            'is_canceled' => $row['is_canceled'],
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+
+                    DB::table('crongetorderdetails')->insert($dataArray);
+
+                    $data->increment('count');
+
+                    
+
+         
+                }
+
+            } elseif ($data->count == $data->total && $data->total != 0 && $data->status == 0) {
+                if($data->step == 1){
+
+                    Crongetorderdetail::where('get_order_id', $data->id)
+                        ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                        ->delete();
+
+                    Crongetorderdetail::where('get_order_id', $data->id)
+                        ->where('is_canceled', 'Y')
+                        ->delete();
+                        
+                        $data->step = 2;
+                        
+                        $data->save(); 
+                        
+
+
+                    }else if($data->step == 2){
+
+                        
+                        $ids = Crongetorderdetail::where(function ($query) {
+                            $query->whereHas('transaksi')
+                                ->orWhereHas('logJubelio');
+                        })
+                        ->limit(500)
+                        ->pluck('id');
+
+                        if($ids->count() > 0){
+
+                            Crongetorderdetail::whereIn('id', $ids)->delete();
+
+                        }else{
 
                             
-
-                            // Crongetorderdetail::where('get_order_id', $data->id)
-                            // ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
-                            // ->delete();
-
-                            // Crongetorderdetail::where('get_order_id', $data->id)
-                            // ->where('is_canceled', 'Y')
-                            // ->delete();
-
-                            // dd($data->step);
-
-                            $data->step = 2;
-                            $data->save(); 
-
-                        }else if($data->step == 2){
-
-                            Crongetorderdetail::where(function ($query) {
-                                $query->whereHas('transaksi')
-                                    ->orWhereHas('logJubelio');
-                            })
-                            ->delete();
-
                             $data->step = 3;
                             $data->status = 1;
 
                             $data->save(); 
-
-                            $cronStatus = Cronrun::where('name', 'get_order')->first();
-
-                            $cronStatus->status = 0;
-
-                            $cronStatus->save();
-
-                            CronHelper::refreshCronCache();
-
                         }
 
-                }
 
-               
+                    }
+
+            } elseif ($data->count == $data->total && $data->total != 0 && $data->status == 1) {
+                // Proses Selesai
             }
 
           
