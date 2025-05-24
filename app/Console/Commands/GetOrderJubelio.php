@@ -159,6 +159,14 @@ class GetOrderJubelio extends Command
                             $data->status = 1;
 
                             $data->save(); 
+
+                            $cronStatus = Cronrun::where('name', 'get_order')->first();
+
+                            $cronStatus->status = 0;
+
+                            $cronStatus->save();
+
+                            CronHelper::refreshCronCache();
                         }
 
 
