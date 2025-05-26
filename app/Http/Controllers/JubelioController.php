@@ -29,19 +29,19 @@ class JubelioController extends Controller
 
         $dataApi = $request->all(); 
 
-        // $tanggal = Carbon::parse($dataApi['transaction_date']);
-        // $threshold = Carbon::parse('2025-03-06');
+        $tanggal = Carbon::parse($dataApi['transaction_date']);
+        $threshold = Carbon::parse('2025-03-06');
 
-        // $limitTime = $tanggal->lessThan($threshold) ? 0 : 1;
+        $limitTime = $tanggal->lessThan($threshold) ? 0 : 1;
 
-        // if($limitTime == 1){
-        //     return response()->json([
-        //         'success' => 'error',
-        //         'message' => 'transaksi sebelum tanggal 03/03/25 tidak dibuat, tangggal transaksi'.$dataApi['transaction_date'],
-        //     ], 200);
+        if($limitTime == 1){
+            return response()->json([
+                'success' => 'error',
+                'message' => 'transaksi sebelum tanggal 03/03/25 tidak dibuat, tangggal transaksi'.$dataApi['transaction_date'],
+            ], 200);
 
-        //     // throw new \Exception('transaksi sebelum tanggal 03/03/25 tidak dibuat, tangggal transaksi'.$dataApi['transaction_date']);
-        // }
+            // throw new \Exception('transaksi sebelum tanggal 03/03/25 tidak dibuat, tangggal transaksi'.$dataApi['transaction_date']);
+        }
 
         // if($dataApi['status'] == "SHIPPED"){
 
