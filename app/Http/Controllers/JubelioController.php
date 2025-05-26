@@ -13,19 +13,24 @@ class JubelioController extends Controller
 {
     public function order(Request $request)
     {
+        $secret = 'corenation2025';
+        $content = trim($request->getContent());
+
+        $sign = hash_hmac('sha256',$content . $secret, $secret, false);
+
+        $signature = $request->header('Sign');
+
+        if ($signature !== $sign) {
+            return response()->json([
+                'success' => 'error',
+                'message' => ' Invalid signature',
+            ], 200);
+        }
+
         try {
             DB::transaction(function () use ($request) {
 
-                $secret = 'corenation2025';
-                $content = trim($request->getContent());
-
-                $sign = hash_hmac('sha256',$content . $secret, $secret, false);
-
-                $signature = $request->header('Sign');
-
-                if ($signature !== $sign) {
-                    throw new \Exception('Invalid signature');
-                }
+               
 
                 $dataApi = $request->all(); 
 
@@ -35,7 +40,12 @@ class JubelioController extends Controller
                 $limitTime = $tanggal->lessThan($threshold) ? 0 : 1;
 
                 if($limitTime == 1){
-                    throw new \Exception('transaksi sebelum tanggal 03/03/25 tidak dibuat, tangggal transaksi'.$dataApi['transaction_date']);
+                    return response()->json([
+                        'success' => 'error',
+                        'message' => 'transaksi sebelum tanggal 03/03/25 tidak dibuat, tangggal transaksi'.$dataApi['transaction_date'],
+                    ], 200);
+
+                    // throw new \Exception('transaksi sebelum tanggal 03/03/25 tidak dibuat, tangggal transaksi'.$dataApi['transaction_date']);
                 }
 
                 if($dataApi['status'] == "SHIPPED"){
@@ -45,7 +55,13 @@ class JubelioController extends Controller
 
                     if ($exists) {
                         // Jika sudah ada, throw error agar langsung masuk ke catch
-                        throw new \Exception('Data already exists');
+
+                         return response()->json([
+                            'success' => 'error',
+                            'message' => 'Data already exists',
+                        ], 200);
+
+                        
                     }
 
                     DB::table('jubelioorders')->insert([
@@ -70,7 +86,12 @@ class JubelioController extends Controller
                     if($dataTransaksi){
                         if($dataTransaksi->jubelio_return > 0){
 
-                            throw new \Exception('Transaksi sudah return');
+                            return response()->json([
+                                'success' => 'error',
+                                'message' => 'Transaksi sudah return',
+                            ], 200);
+
+                            // throw new \Exception('Transaksi sudah return');
 
                         }
                     }
