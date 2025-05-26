@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiJubelioController;
+use App\Http\Controllers\JubelioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/order', [ApiJubelioController::class, 'order']);
+Route::post('/order', [JubelioController::class, 'order']);
 Route::post('/retur', [ApiJubelioController::class, 'retur']);
 
