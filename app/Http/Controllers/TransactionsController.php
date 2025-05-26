@@ -1799,7 +1799,7 @@ class TransactionsController extends Controller
 
 	}
 
-	public function clearSubmit(Request $request, $id)
+	public function clearWarning(Request $request, $id)
 	{
 
 		   $trans = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id', $id)->first();
