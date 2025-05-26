@@ -30,7 +30,7 @@ class JubelioController extends Controller
 
             if ($tanggal->lessThan($threshold)) {
                 return response()->json([
-                    'status' => 'error',
+                    'status' => 'ok',
                     'message' => 'Transaksi sebelum tanggal 06 Maret 2025 tidak dibuat. Tanggal transaksi: ' . $tanggal->toDateTimeString(),
                 ], 200);
             }
@@ -75,7 +75,7 @@ class JubelioController extends Controller
             if ($transaction) {
                 if ($transaction->jubelio_return > 0) {
                     return response()->json([
-                        'status' => 'error',
+                        'status' => 'ok',
                         'message' => 'Transaksi sudah return',
                     ], 200);
                 }
@@ -97,7 +97,7 @@ class JubelioController extends Controller
             }
 
             return response()->json([
-                'status' => 'error',
+                'status' => 'ok',
                 'message' => 'Transaksi tidak ditemukan',
             ], 200);
         }
