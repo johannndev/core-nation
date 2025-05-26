@@ -21,10 +21,9 @@ class JubelioController extends Controller
         $signature = $request->header('Sign');
 
         if ($signature !== $sign) {
-            return response()->json([
-                'success' => 'error',
-                'message' => ' Invalid signature',
-            ], 200);
+            if ($signature !== $sign) {
+                return response()->json(['error' => 'Invalid signature'], 403);
+            }
         }
 
         $dataApi = $request->all(); 
