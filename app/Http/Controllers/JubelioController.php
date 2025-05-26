@@ -86,12 +86,16 @@ class JubelioController extends Controller
                     $returnData->store_name = $dataApi['source_name'];
 
                     $returnData->save();
+                }else{
+
+                    return response()->json([
+                        'success' => 'ok',
+                        'message' => ' Status '.$dataApi['status'].' ok',
+                    ], 200);
+
                 }
 
-                return response()->json([
-                    'success' => 'ok',
-                    'message' => 'Data saved successfully',
-                ], 200);
+               
                 
             });
 
