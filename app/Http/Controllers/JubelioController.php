@@ -89,15 +89,20 @@ class JubelioController extends Controller
                 }
 
                 return response()->json([
-                    'success' => true,
+                    'success' => 'ok',
                     'message' => 'Data saved successfully',
                 ], 200);
                 
             });
 
+             return response()->json([
+                'success' => 'ok',
+                'message' => 'Data saved successfully',
+            ], 200);
+
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false,
+                'success' => 'error',
                 'message' => $e->getMessage(),
             ], 200);
         }
