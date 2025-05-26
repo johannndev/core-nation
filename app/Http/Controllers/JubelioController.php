@@ -24,7 +24,7 @@ class JubelioController extends Controller
             return response()->json(['error' => 'Invalid signature'], 403);
         }
 
-        $dataApi = $request->all(); 
+        // $dataApi = $request->all(); 
 
         // $tanggal = Carbon::parse($dataApi['transaction_date']);
         // $threshold = Carbon::parse('2025-03-06');
