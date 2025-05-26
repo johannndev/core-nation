@@ -262,7 +262,7 @@ class ItemsController extends Controller
 
 		// dd($dataList);
 
-		$dataList = $dataList->paginate(20)->withQueryString();
+		$dataList = $dataList->paginate(200)->withQueryString();
 
 		$tid=$id;
 
