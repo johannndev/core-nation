@@ -119,7 +119,7 @@ class JubelioController extends Controller
 
         
         return response()->json([
-            'success' => 'ok',
+            'status' => 'ok',
             'message' => 'ok',
         ], 200);
        
