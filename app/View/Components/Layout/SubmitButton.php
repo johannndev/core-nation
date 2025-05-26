@@ -15,13 +15,15 @@ class SubmitButton extends Component
     public string $label;
     public string $color;
     public ?string $icon;
+    public string $type;
 
 
-    public function __construct(string $label = 'Submit', string $color = 'blue', ?string $icon = null)
+    public function __construct(string $label = 'Submit', string $color = 'blue', ?string $icon = null, string $type = 'default' )
     {
         $this->label = $label;
         $this->color = $color;
         $this->icon = $icon;
+        $this->type = $type;
     }
 
     /**

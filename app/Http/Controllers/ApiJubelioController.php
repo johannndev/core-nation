@@ -1111,12 +1111,41 @@ class ApiJubelioController extends Controller
 
     public function adjustStok($id, Request $request){
 
+        $trans = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id', $id)->first();
+       
+        if($request->side == 1){
+
+            if($trans->submit_a_count > 0){
+
+                return redirect()->route('transaction.warningJubelioSync',['id'=>$id,'side'=>$request->side]);
+
+            }else{
+                DB::table('transactions')->where('id', $id)->increment('submit_a_count');
+                
+
+            }
+
+        }
+
+        if($request->side == 2){
+
+            if($trans->submit_b_count > 0){
+
+                return redirect()->route('transaction.warningJubelioSync',['id'=>$id,'side'=>$request->side]);
+
+            }else{
+                DB::table('transactions')->where('id', $id)->increment('submit_b_count');
+                
+
+            }
+
+        }
+
+        
+
         try {
             DB::beginTransaction();
-        
-            $trans = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id', $id)->first();
-        
-          
+      
             if($request->side == 1){
                 
                 if ($trans->a_submit_by) {

@@ -8,6 +8,8 @@ $colorClasses = [
     'red' => 'text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900',
     'yellow' => 'text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 dark:focus:ring-yellow-900',
     'purple' => 'text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900',
+    'red-2' => 'text-red-800  bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-red-300'
+    
 ];
 
 $iconLabel = [
@@ -18,22 +20,30 @@ $iconLabel = [
 ];
 
 
+$types = [
+    'default' => 'text-sm px-5 py-2.5',
+    'small' => 'text-xs px-3 py-1.5',
+];
+
+
 
 
 $classes = $colorClasses[$color] ?? $colorClasses['blue'];
 
 $icons = $iconLabel[$icon] ?? "";
 
+$btnType = $types[$type] ?? $types['default'] ;
+
 @endphp
 
 
 <div>
-    <button type="submit" class="submit-btn inline-flex items-center font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none  {{ $classes }}">
+    <button type="submit" class="submit-btn inline-flex items-center font-medium rounded-lg {{ $btnType }} focus:outline-none  {{ $classes }}">
         {!! $icons !!}
         {{ $label }}
     </button>
 
-    <button type="button" class="loading-btn hidden py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" disabled>
+    <button type="button" class="loading-btn hidden {{ $btnType }} font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" disabled>
         <div class="flex justify-center items-center">
             <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>

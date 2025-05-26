@@ -1771,6 +1771,53 @@ class TransactionsController extends Controller
 		return redirect()->away($waLink);
 	}
 
+	public function warning($id)
+    {
+	
+		$tid = $id;
+		
+     	return view('transactions.warning',compact('tid'));
+    }
+
+	public function warningKonfirmasi(Request $request, $id)
+	{
+
+		   DB::table('transactions')->where('id', $id)->increment('submit_count');
+		   $trans = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id', $id)->first();
+
+		   if ($request->side == 1) {
+				$trans->a_submit_by = Auth::user()->id;
+				
+			} elseif ($request->side == 2) {
+				$trans->b_submit_by = Auth::user()->id;
+			
+			}
+        
+            $trans->save();
+
+			return redirect()->route('transaction.detailJubelioSync', $id)->with('success', 'Jubelio adjustment confirmed');
+
+	}
+
+	public function clearSubmit(Request $request, $id)
+	{
+
+		   $trans = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id', $id)->first();
+
+		   if ($request->side == 1) {
+				$trans->submit_a_count = 0;
+				
+			} elseif ($request->side == 2) {
+				$trans->submit_b_count = 0;
+			
+			}
+        
+            $trans->save();
+
+			return redirect()->route('transaction.detailJubelioSync', $id)->with('success', 'Jubelio adjustment warning cleared');
+
+	}
+
 
 	
 	
