@@ -53,18 +53,26 @@
                                 </div>
                             </div>
                         </div>
-                       
                         <div>
                             <div class="grid grid-cols-5 p-4">
                                 <div  class="col-span-2">
-                                    <p class="font-bold">Type</p>
+                                    <p class="font-bold">SKU</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p>{{$data->type == 1 ? 'Item' : 'Non item'}}</p>
+                                    <p>{{$data->code}}</p>
                                 </div>
                             </div>
                         </div>
-
+                        <div>
+                            <div class="grid grid-cols-5 p-4">
+                                <div  class="col-span-2">
+                                    <p class="font-bold">Barcode</p>
+                                </div>
+                                <div class="col-span-3">
+                                    <p>{{$data->id}}</p>
+                                </div>
+                            </div>
+                        </div>
                         @if($data->type == \App\Models\Item::TYPE_ITEM)
                         <div>
                             <div class="grid grid-cols-5 p-4">
@@ -114,9 +122,6 @@
 
 
                         @endif
-
-                      
-
                         <div>
                             <div class="grid grid-cols-5 p-4">
                                 <div  class="col-span-2">
