@@ -59,7 +59,6 @@ class JubelioController extends Controller
                     'message' => 'Data already exists',
                 ], 200);
 
-                
             }
 
             DB::table('jubelioorders')->insert([
@@ -82,7 +81,7 @@ class JubelioController extends Controller
                 'message' => 'Data saved successfully',
             ], 200);
 
-        }else if($dataApi['status'] == "CANCELED"){
+        }elseif($dataApi['status'] == "CANCELED"){
 
             $dataTransaksi = Transaction::where('type',Transaction::TYPE_SELL)->where('invoice',$dataApi['salesorder_no'])->exists();
 
