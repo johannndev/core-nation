@@ -15,25 +15,18 @@ class JubelioController extends Controller
     {
         $secret = 'corenation2025';
         $content = trim($request->getContent());
-
-        $sign = hash_hmac('sha256',$content . $secret, $secret, false);
-
+        $sign = hash_hmac('sha256', $content . $secret, $secret, false);
         $signature = $request->header('Sign');
 
         if ($signature !== $sign) {
             return response()->json(['error' => 'Invalid signature'], 403);
         }
 
-        $dataApi = $request->all(); 
+        $dataApi = $request->all();
 
-      
-
-        if($dataApi['status'] == "SHIPPED"){
-
+        if ($dataApi['status'] === "SHIPPED") {
             $tanggal = Carbon::parse($dataApi['transaction_date']);
             $threshold = Carbon::parse('2025-03-06');
-
-            $limitTime = $tanggal->lessThan($threshold) ? 0 : 1;
 
             if ($tanggal->lessThan($threshold)) {
                 return response()->json([
@@ -42,32 +35,31 @@ class JubelioController extends Controller
                 ], 200);
             }
 
-            $exists = Jubelioorder::where('jubelio_order_id',$dataApi['salesorder_id'])->where('type','SELL')->where('order_status',$dataApi['status'])->exists();
-
+            $exists = Jubelioorder::where('jubelio_order_id', $dataApi['salesorder_id'])
+                ->where('type', 'SELL')
+                ->where('order_status', $dataApi['status'])
+                ->exists();
 
             if ($exists) {
-                // Jika sudah ada, throw error agar langsung masuk ke catch
-
                 return response()->json([
                     'status' => 'ok',
                     'message' => 'Data already exists',
                 ], 200);
-
             }
 
             DB::table('jubelioorders')->insert([
                 'jubelio_order_id' => $dataApi['salesorder_id'],
-                'invoice' => $dataApi['salesorder_no'],
-                'type' => 'SELL',
-                'order_status' => $dataApi['status'],
-                'run_count' => 0,
-                'error_type' => null,
-                'error' => null,
-                'payload' => json_encode($request->all()),
-                'execute_by' => null,
-                'status' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'invoice'           => $dataApi['salesorder_no'],
+                'type'              => 'SELL',
+                'order_status'      => $dataApi['status'],
+                'run_count'         => 0,
+                'error_type'        => null,
+                'error'             => null,
+                'payload'           => json_encode($dataApi),
+                'execute_by'        => null,
+                'status'            => 0,
+                'created_at'        => now(),
+                'updated_at'        => now(),
             ]);
 
             return response()->json([
@@ -75,53 +67,45 @@ class JubelioController extends Controller
                 'message' => 'Data saved successfully',
             ], 200);
 
-        }elseif($dataApi['status'] == "CANCELED"){
+        } elseif ($dataApi['status'] === "CANCELED") {
+            $transaction = Transaction::where('type', Transaction::TYPE_SELL)
+                ->where('invoice', $dataApi['salesorder_no'])
+                ->first();
 
-            $dataTransaksi = Transaction::where('type',Transaction::TYPE_SELL)->where('invoice',$dataApi['salesorder_no'])->exists();
-
-            if($dataTransaksi){
-                if($dataTransaksi->jubelio_return > 0){
-
+            if ($transaction) {
+                if ($transaction->jubelio_return > 0) {
                     return response()->json([
                         'status' => 'error',
                         'message' => 'Transaksi sudah return',
                     ], 200);
-
-                    // throw new \Exception('Transaksi sudah return');
-
                 }
+
+                $returnData = new Jubelioreturn();
+                $returnData->order_id       = $dataApi['salesorder_id'];
+                $returnData->transaction_id = $transaction->id;
+                $returnData->method_pay     = $dataApi['payment_method'];
+                $returnData->invoice        = $dataApi['salesorder_no'];
+                $returnData->pesan          = $dataApi['cancel_reason_detail'];
+                $returnData->location_name  = $dataApi['location_name'];
+                $returnData->store_name     = $dataApi['source_name'];
+                $returnData->save();
+
+                return response()->json([
+                    'status' => 'ok',
+                    'message' => 'Data saved successfully',
+                ], 200);
             }
 
-            $returnData = new Jubelioreturn();
-                    
-            $returnData->order_id = $dataApi['salesorder_id'];
-            $returnData->transaction_id = $dataTransaksi->id;
-            $returnData->method_pay = $dataApi['payment_method'];
-            $returnData->invoice = $dataApi['salesorder_no'];
-            $returnData->pesan = $dataApi['cancel_reason_detail'];
-            $returnData->location_name = $dataApi['location_name'];
-            $returnData->store_name = $dataApi['source_name'];
-
-            $returnData->save();
-
             return response()->json([
-                'status' => 'ok',
-                'message' => 'Data saved successfully',
+                'status' => 'error',
+                'message' => 'Transaksi tidak ditemukan',
             ], 200);
-        }else{
-
-            return response()->json([
-                'status' => 'ok',
-                'message' => ' Status '.$dataApi['status'].' ok',
-            ], 200);
-
         }
 
-        
         return response()->json([
             'status' => 'ok',
-            'message' => 'ok',
+            'message' => 'Status ' . $dataApi['status'] . ' ok',
         ], 200);
-       
     }
+
 }
