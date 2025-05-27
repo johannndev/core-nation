@@ -1782,7 +1782,6 @@ class TransactionsController extends Controller
 	public function warningKonfirmasi(Request $request, $id)
 	{
 
-		   DB::table('transactions')->where('id', $id)->increment('submit_count');
 		   $trans = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id', $id)->first();
 
 		   if ($request->side == 1) {

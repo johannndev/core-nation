@@ -34,6 +34,8 @@ class GetOrderJubelio extends Command
      */
     public function handle()
     {
+        Log::info('jubelio:get-orders run at: ' . now());
+        
         try {
             $data = Crongetorder::with('orderDetail')->withCount('orderDetail')->orderBy('created_at', 'desc')->first();
 
