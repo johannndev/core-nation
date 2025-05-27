@@ -1465,16 +1465,37 @@ class ApiJubelioController extends Controller
         }
     }
 
+    private function getOrder($orderId){
+         $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'authorization' => Cache::get('jubelio_data')['token'],
+        ])->get('https://api2.jubelio.com/sales/orders/' . $orderId);
+
+        $dataApi = $response->json();
+
+        return $dataApi;
+    }
+
     public function testCron()
     {
-        $logjubelio = Jubelioorder::where('id','340')->where('type','SELL')->where('status',0)->where('run_count',0)->orderBy('updated_at','asc')->first();
+        $logjubelio = Jubelioorder::where('id','585')->where('type','SELL')->where('status',0)->where('run_count',0)->orderBy('updated_at','asc')->first();
 
-        $firstDecode = json_decode($logjubelio->payload, true);
-        $finalArray = json_decode($firstDecode, true);
+        // $firstDecode = json_decode($logjubelio->payload, true);
+        // $finalArray = json_decode($firstDecode, true);
 
-        dd($logjubelio->source, $finalArray );
+       
 
         if($logjubelio){
+
+            $dataApi = json_decode($logjubelio->payload, true);
+
+            if($logjubelio->source == 1){
+
+                 $dataApi = json_decode($logjubelio->payload, true);
+
+            }else{
+                 $dataApi = $this->getOrder($logjubelio->jubelio_order_id);
+            }
 
             $arrayStoreId = $dataApi['store_id'];
             $arrayLocationId = $dataApi['location_id'];
@@ -1483,6 +1504,8 @@ class ApiJubelioController extends Controller
             $arrayInvoice = $dataApi['salesorder_no'];
             $arraySubTotal = $dataApi['sub_total'];
             $arrayGrandTotal = $dataApi['grand_total'];
+
+         
           
             // Cari mapping gudang dengan lock
             $jubelioSync = Jubeliosync::where('jubelio_store_id', $arrayStoreId)
@@ -1516,6 +1539,8 @@ class ApiJubelioController extends Controller
                 $notMatched = $groupedData[1]->values(); // Reset indeks array
 
                 $createData = [];
+
+                dd($notMatched, $matched );
 
                 if($notMatched->count() > 0){
                     // Ambil item_code dari notMatched
