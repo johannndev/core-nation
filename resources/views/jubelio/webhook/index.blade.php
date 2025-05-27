@@ -10,6 +10,25 @@
     <div class="mb-8">
 
 
+        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+            <ul class="flex flex-wrap -mb-px">
+                <li class="me-2">
+                    <a href="{{ route('jubelio.webhook.order') }}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Pending</a>
+                </li>
+
+                <li class="me-2">
+                    <a href="{{ route('jubelio.webhook.warning') }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Warning</a>
+                </li>
+
+                <li class="me-2">
+                    <a href="{{ route('jubelio.webhook.success') }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Success</a>
+                </li>
+
+            
+            </ul>
+        </div>
+
+
         <section class="bg-gray-50 dark:bg-gray-900 ">
             <div class="mx-auto  ">
                 <!-- Start coding here -->

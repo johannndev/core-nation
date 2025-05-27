@@ -158,6 +158,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/jubelio/order/getall/deleteAll', [JubelioGetOrderController::class, 'deleteAll'])->name('jubelio.order.deleteAll');
 
     Route::get('/jubelio/webhook', [JubelioController::class, 'index'])->name('jubelio.webhook.order');
+    Route::get('/jubelio/webhook/warning', [JubelioController::class, 'warning'])->name('jubelio.webhook.warning');
     Route::get('/jubelio/webhook/success', [JubelioController::class, 'success'])->name('jubelio.webhook.success');
     Route::get('/jubelio/webhook/{id}/detail', [JubelioController::class, 'detail'])->name('jubelio.webhook.detail');
 

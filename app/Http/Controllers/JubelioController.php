@@ -35,6 +35,8 @@ class JubelioController extends Controller
                 ], 200);
             }
 
+            $cekTransaksi = Transaction::where('type',Transaction::TYPE_SELL)->where('invoice',$dataApi['salesorder_no'])->first();
+
             $exists = Jubelioorder::where('jubelio_order_id', $dataApi['salesorder_id'])
                 ->where('type', 'SELL')
                 ->where('order_status', $dataApi['status'])
@@ -45,28 +47,43 @@ class JubelioController extends Controller
                     'status' => 'ok',
                     'message' => 'Data already exists',
                 ], 200);
+            }else{
+
+                if($cekTransaksi){
+
+                    DB::table('jubelioorders')->insert([
+                        'jubelio_order_id'  => $dataApi['salesorder_id'],
+                        'source'            => 1,
+                        'invoice'           => $dataApi['salesorder_no'],
+                        'type'              => 'SELL',
+                        'order_status'      => $dataApi['status'],
+                        'run_count'         => 0,
+                        'error_type'        => null,
+                        'error'             => null,
+                        'payload'           => json_encode($dataApi),
+                        'execute_by'        => null,
+                        'status'            => 0,
+                        'created_at'        => now(),
+                        'updated_at'        => now(),
+                    ]);
+
+                    return response()->json([
+                        'status' => 'ok',
+                        'message' => 'Data saved successfully',
+                    ], 200);
+
+                }else{
+
+                    return response()->json([
+                        'status' => 'ok',
+                        'message' => 'Invoice sudah ada',
+                    ], 200);
+                    
+                }
+
             }
 
-            DB::table('jubelioorders')->insert([
-                'jubelio_order_id'  => $dataApi['salesorder_id'],
-                'source'            => 1,
-                'invoice'           => $dataApi['salesorder_no'],
-                'type'              => 'SELL',
-                'order_status'      => $dataApi['status'],
-                'run_count'         => 0,
-                'error_type'        => null,
-                'error'             => null,
-                'payload'           => json_encode($dataApi),
-                'execute_by'        => null,
-                'status'            => 0,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ]);
 
-            return response()->json([
-                'status' => 'ok',
-                'message' => 'Data saved successfully',
-            ], 200);
 
         } elseif ($dataApi['status'] === "CANCELED") {
             $transaction = Transaction::where('type', Transaction::TYPE_SELL)
@@ -111,7 +128,21 @@ class JubelioController extends Controller
 
 
     public function index(Request $request){
-         $dataList = Jubelioorder::where('status',0)->orderBy('created_at','desc');
+        $dataList = Jubelioorder::where('status',0)->orderBy('created_at','desc');
+
+        if($request->invoice){
+			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
+		}
+
+        $dataList = $dataList->paginate(20)->withQueryString();
+
+        // dd($allRolesInDatabase);
+
+        return view('jubelio.webhook.index',compact('dataList'));
+    }
+
+    public function warning(Request $request){
+        $dataList = Jubelioorder::where('status',2)->where('type',1)->orderBy('created_at','desc');
 
         if($request->invoice){
 			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
@@ -125,7 +156,7 @@ class JubelioController extends Controller
     }
 
     public function success(Request $request){
-         $dataList = Jubelioorder::where('status',2)->orderBy('created_at','desc');
+        $dataList = Jubelioorder::where('status',2)->where('type',10)->orderBy('created_at','desc');
 
         if($request->invoice){
 			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
