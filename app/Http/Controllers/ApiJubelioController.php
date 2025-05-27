@@ -1617,9 +1617,11 @@ class ApiJubelioController extends Controller
     }
 
     public function cektrx(){
-        $orders = Jubelioorder::with('trx')->has('trx')->get();
+        $orders = Jubelioorder::with('trx')->has('trx')->pluck('id');
 
-        dd($orders);
+        Jubelioorder::whereIn('id',$orders)->delete();
+
+        // dd($orders);
 
     }
 }

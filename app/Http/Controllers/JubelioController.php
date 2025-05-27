@@ -128,11 +128,21 @@ class JubelioController extends Controller
 
 
     public function index(Request $request){
-        $dataList = Jubelioorder::where('status',0)->orderBy('created_at','desc');
+        $dataList = Jubelioorder::orderBy('created_at','desc');
 
         if($request->invoice){
 			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
 		}
+
+        if($request->status == 'warning'){
+            $dataList = $dataList->where('status',2)->where('error_type',2);
+        }elseif($request->status == 'success'){
+            $dataList = $dataList->where('status',2)->where('error_type',10);
+        }elseif($request->status == 'error'){
+            $dataList = $dataList->where('status',1)->where('error_type',1);
+        }else{
+            $dataList = $dataList->where('status',0);
+        }
 
         $dataList = $dataList->paginate(20)->withQueryString();
 
@@ -142,7 +152,7 @@ class JubelioController extends Controller
     }
 
     public function warning(Request $request){
-        $dataList = Jubelioorder::where('status',2)->where('type',1)->orderBy('created_at','desc');
+        $dataList = Jubelioorder::where('status',2)->where('error_type',2)->orderBy('created_at','desc');
 
         if($request->invoice){
 			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
@@ -156,7 +166,7 @@ class JubelioController extends Controller
     }
 
     public function success(Request $request){
-        $dataList = Jubelioorder::where('status',2)->where('type',10)->orderBy('created_at','desc');
+        $dataList = Jubelioorder::where('status',2)->where('error_type',10)->orderBy('created_at','desc');
 
         if($request->invoice){
 			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');

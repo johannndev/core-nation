@@ -132,9 +132,10 @@ Route::get('/statsell/generete', [StatSellController::class, 'generet'])->name('
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified','exceptRole:ban'])->name('dashboard');
 
 
-Route::get('/cek', [HomeController::class, 'cekData'])->name('');
+Route::get('/cek', [HomeController::class, 'cekData']);
 
 Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filter.get');
+
 
 Route::middleware('auth')->group(function () {
 
@@ -159,8 +160,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/jubelio/order/getall/deleteAll', [JubelioGetOrderController::class, 'deleteAll'])->name('jubelio.order.deleteAll');
 
     Route::get('/jubelio/webhook', [JubelioController::class, 'index'])->name('jubelio.webhook.order');
-    Route::get('/jubelio/webhook/warning', [JubelioController::class, 'warning'])->name('jubelio.webhook.warning');
-    Route::get('/jubelio/webhook/success', [JubelioController::class, 'success'])->name('jubelio.webhook.success');
+   
     Route::get('/jubelio/webhook/{id}/detail', [JubelioController::class, 'detail'])->name('jubelio.webhook.detail');
 
     Route::get('/logjubelio', [LogJubelioController::class, 'index'])->name('jubelio.log.index');
