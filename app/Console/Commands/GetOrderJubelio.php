@@ -124,6 +124,8 @@ class GetOrderJubelio extends Command
                     
 
          
+                }else{
+                    $data->increment('count');
                 }
 
             } elseif ($data->count == $data->total && $data->total != 0 && $data->status == 0) {
