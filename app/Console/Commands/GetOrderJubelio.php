@@ -35,7 +35,7 @@ class GetOrderJubelio extends Command
     public function handle()
     {
         Log::info('jubelio:get-orders run at: ' . now());
-        
+
         try {
             $data = Crongetorder::with('orderDetail')->withCount('orderDetail')->orderBy('created_at', 'desc')->first();
 
@@ -81,6 +81,9 @@ class GetOrderJubelio extends Command
                 }
 
                 $responData =  $response->json(); // atau json_decode($response->body(), true);
+
+                Log::info('jubelio:get-orders run at: ' . $responData);
+        
 
             
                 if($data->total < 1){
