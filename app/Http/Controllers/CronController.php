@@ -15,10 +15,6 @@ class CronController extends Controller
 {
     public function itemEdit(){
 
-        
-
-
-        
         $jubelioSync = Jubeliosync::select('warehouse_id')->groupBy('warehouse_id')->pluck('warehouse_id')->toArray();
 
         $itemCount = WarehouseItem::whereIn('warehouse_id', $jubelioSync)->count();
