@@ -1631,5 +1631,7 @@ class ApiJubelioController extends Controller
         ->groupBy('invoice')
         ->having('invoice', '>', 1)
         ->get();
+
+        dd($duplicates);
     }
 }
