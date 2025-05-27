@@ -56,7 +56,7 @@ class GetOrderJubelio extends Command
                 throw new \Exception('Token Jubelio tidak ditemukan di cache.');
             }
 
-                 if (
+            if (
                 ($data->count == 0 && $data->total == 0 && $data->status == 0) ||
                 ($data->count != $data->total && $data->status == 0)
             ) {
@@ -85,49 +85,61 @@ class GetOrderJubelio extends Command
                 // Log::info('jubelio:get-orders data: ' . $responData['totalCount']);
         
 
-            
-                if($data->total < 1){
+                if($responData['totalCount'] == 0){
 
-                    $a = $responData['totalCount'];
-                    $b = 200;
+                    $data->step = 3;
+                    $data->status = 1;
 
-                    $hasil = (int)ceil($a / $b);
+                    $data->save(); 
 
-                    $data->total = $hasil;
+                    $cronStatus = Cronrun::where('name', 'get_order')->first();
 
-                    $data->save();
-            
-                }
+                    $cronStatus->status = 0;
 
-                $dataArray = []; 
+                    $cronStatus->save();
 
-               
+                    CronHelper::refreshCronCache();
 
-                if(count($responData['data']) > 0){
+                }else{
                     
-                    foreach ($responData['data'] as $row) {
-                        $dataArray[] = [
-                            'get_order_id' => $data->id,
-                            'order_id' =>  $row['salesorder_id'],
-                            'invoice' => $row['salesorder_no'],
-                            'location_id' => $row['location_name'],
-                            'store_id' => $row['store_name'],
-                            'status' => $row['internal_status'],
-                            'is_canceled' => $row['is_canceled'],
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ];
+                    if($data->total < 1){
+
+                        $a = $responData['totalCount'];
+                        $b = 200;
+
+                        $hasil = (int)ceil($a / $b);
+
+                        $data->total = $hasil;
+
+                        $data->save();
+                
                     }
 
-                    DB::table('crongetorderdetails')->insert($dataArray);
+                    $dataArray = []; 
 
-                    $data->increment('count');
+                
 
-                    
+                    if(count($responData['data']) > 0){
+                        
+                        foreach ($responData['data'] as $row) {
+                            $dataArray[] = [
+                                'get_order_id' => $data->id,
+                                'order_id' =>  $row['salesorder_id'],
+                                'invoice' => $row['salesorder_no'],
+                                'location_id' => $row['location_name'],
+                                'store_id' => $row['store_name'],
+                                'status' => $row['internal_status'],
+                                'is_canceled' => $row['is_canceled'],
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ];
+                        }
 
-         
-                }else{
-                    $data->increment('count');
+                        DB::table('crongetorderdetails')->insert($dataArray);
+
+                        $data->increment('count');
+            
+                    }
                 }
 
             } elseif ($data->count == $data->total && $data->total != 0 && $data->status == 0) {
