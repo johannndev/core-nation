@@ -111,7 +111,7 @@ class JubelioController extends Controller
 
 
     public function index(Request $request){
-         $dataList = Jubelioorder::where('status',0);
+         $dataList = Jubelioorder::where('status',0)->orderBy('created_at','desc');
 
         if($request->invoice){
 			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
