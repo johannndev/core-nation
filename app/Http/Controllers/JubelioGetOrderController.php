@@ -27,7 +27,7 @@ class JubelioGetOrderController extends Controller
 
         if($data){
 
-            $dataList = Crongetorderdetail::with('transaksi','logJubelio')->where('get_order_id',$data->id)->paginate('200');
+            $dataList = Crongetorderdetail::with('transaksi','jubelio')->where('get_order_id',$data->id)->paginate('200');
 
             if($data->total > 0 && $data->count > 0 ){
 

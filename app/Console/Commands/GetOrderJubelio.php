@@ -165,7 +165,7 @@ class GetOrderJubelio extends Command
                         
                         $ids = Crongetorderdetail::where(function ($query) {
                             $query->whereHas('transaksi')
-                                ->orWhereHas('logJubelio');
+                                ->orWhereHas('jubelio');
                         })
                         ->limit(500)
                         ->pluck('id');

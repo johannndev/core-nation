@@ -20,7 +20,7 @@ class Crongetorderdetail extends Model
         return $this->hasOne(Logjubelio::class,'invoice','invoice');
     }
 
-    public function Jubelio(): HasOne
+    public function jubelio(): HasOne
     {
         return $this->hasOne(Jubelioorder::class,'invoice','invoice');
     }

@@ -235,7 +235,7 @@
 
                                         <th scope="col" class="px-4 py-3">Transaksi</th>
 
-                                        <th scope="col" class="px-4 py-3">Log Jubelio</th>
+                                        <th scope="col" class="px-4 py-3">Jubelio</th>
 
                                         {{-- <th scope="col" class="px-4 py-3">Customer</th>
 
