@@ -37,7 +37,7 @@ class JubelioController extends Controller
 
             $cekTransaksi = Transaction::where('type',Transaction::TYPE_SELL)->where('invoice',$dataApi['salesorder_no'])->first();
 
-            $exists = Jubelioorder::where('jubelio_order_id', $dataApi['salesorder_id'])
+            $exists = Jubelioorder::where('invoice',$dataApi['salesorder_no'])
                 ->where('type', 'SELL')
                 ->where('order_status', $dataApi['status'])
                 ->exists();
