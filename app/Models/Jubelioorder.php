@@ -16,6 +16,11 @@ class Jubelioorder extends Model
         return $this->hasOne(User::class,'id','execute_by',);
     }
 
+    public function trx()
+    {
+        return $this->hasOne(Transaction::class,'invoice','invoice');
+    }
+
     // protected $casts = [
     //     'payload' => 'array',
     // ];

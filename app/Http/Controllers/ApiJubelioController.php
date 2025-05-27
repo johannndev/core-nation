@@ -1615,4 +1615,11 @@ class ApiJubelioController extends Controller
 
         }
     }
+
+    public function cektrx(){
+        $orders = Jubelioorder::with('trx')->has('trx')->get();
+
+        dd($orders);
+
+    }
 }
