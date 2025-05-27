@@ -82,7 +82,7 @@ class GetOrderJubelio extends Command
 
                 $responData =  $response->json(); // atau json_decode($response->body(), true);
 
-                Log::info('jubelio:get-orders run at: ' . $responData);
+                Log::info('jubelio:get-orders data: ' . $responData['totalCount']);
         
 
             
