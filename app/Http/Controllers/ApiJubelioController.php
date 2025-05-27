@@ -1286,7 +1286,7 @@ class ApiJubelioController extends Controller
                     'transactionDateTo' => $dateTo
                 ]);
 
-                dd(json_decode($response->body(), true));
+             
 
                 if ($response->failed()) {
                     Log::error('API Jubelio gagal merespon', [
