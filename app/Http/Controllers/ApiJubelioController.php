@@ -1624,4 +1624,12 @@ class ApiJubelioController extends Controller
         // dd($orders);
 
     }
+
+    public function dua(){
+        $duplicates = DB::table('jubelioorders')
+        ->select('invoice', DB::raw('COUNT(*) as count'))
+        ->groupBy('invoice')
+        ->having('invoice', '>', 1)
+        ->get();
+    }
 }

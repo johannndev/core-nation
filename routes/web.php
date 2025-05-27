@@ -141,6 +141,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/test-running', [ApiJubelioController::class, 'testCron']);
     Route::get('/trx', [ApiJubelioController::class, 'cektrx']);
+    Route::get('/dua', [ApiJubelioController::class, 'dua']);
 
     Route::get('/cron-runner', [CronrunController::class, 'index'])->name('cronrunner.index');
     Route::get('/cron-runner/{id}/edit', [CronrunController::class, 'edit'])->name('cronrunner.edit');
