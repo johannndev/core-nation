@@ -162,7 +162,7 @@ class OrderJubelioToAria extends Command
         
                         }else{
 
-                            $logjubelio->update(['cron_run' => $arrayRunCount, 'error_type' => 1, 'error' => $createData['message'],'status' => 1]);
+                            $logjubelio->update(['run_count' => $arrayRunCount, 'error_type' => 1, 'error' => $createData['message'],'status' => 1]);
                             return;
 
                         }
