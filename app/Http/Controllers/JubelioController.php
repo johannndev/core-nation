@@ -144,41 +144,14 @@ class JubelioController extends Controller
             $dataList = $dataList->where('status',0);
         }
 
-        $dataList = $dataList->paginate(20)->withQueryString();
+        $dataList = $dataList->paginate(200)->withQueryString();
 
         // dd($allRolesInDatabase);
 
         return view('jubelio.webhook.index',compact('dataList'));
     }
 
-    public function warning(Request $request){
-        $dataList = Jubelioorder::where('status',2)->where('error_type',2)->orderBy('created_at','desc');
-
-        if($request->invoice){
-			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
-		}
-
-        $dataList = $dataList->paginate(20)->withQueryString();
-
-        // dd($allRolesInDatabase);
-
-        return view('jubelio.webhook.index',compact('dataList'));
-    }
-
-    public function success(Request $request){
-        $dataList = Jubelioorder::where('status',2)->where('error_type',10)->orderBy('created_at','desc');
-
-        if($request->invoice){
-			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
-		}
-
-        $dataList = $dataList->paginate(20)->withQueryString();
-
-        // dd($allRolesInDatabase);
-
-        return view('jubelio.webhook.index',compact('dataList'));
-    }
-
+  
      public function detail($id){
         $data = Jubelioorder::find($id);
 
