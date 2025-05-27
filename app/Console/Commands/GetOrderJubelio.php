@@ -130,6 +130,7 @@ class GetOrderJubelio extends Command
                                 'store_id' => $row['store_name'],
                                 'status' => $row['internal_status'],
                                 'is_canceled' => $row['is_canceled'],
+                                'payload' => json_encode($row),
                                 'created_at' => now(),
                                 'updated_at' => now(),
                             ];

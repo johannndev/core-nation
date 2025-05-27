@@ -149,28 +149,25 @@ class JubelioGetOrderController extends Controller
 
                 foreach ($detail as $row) {
                     $dataArray[] = [
-                        'order_id' => $row->order_id,
-                        'error' => 'SYSTEM',
-                        'type' => 'SALE',
-                        'invoice' => $row->invoice,
-                        'pesan' => 'Data tidak di kirim oleh Jubelio',
-                        'location_name' => $row->location_id,
-                        'store_name' => $row->store_id,
-                        'cron_failed' => null,
-                        'cron_run' => 0,
-                        'status' => 0,
-                        'user_solved_by' => 0,
-                        'created_at' => now(),
-                        'updated_at' => now(),
+                        'jubelio_order_id'  => $row->order_id,
+                        'source'            => 2,
+                        'invoice'           => $row->invoice,
+                        'type'              => 'SELL',
+                        'order_status'      => $row->status,
+                        'run_count'         => 0,
+                        'error_type'        => null,
+                        'error'             => null,
+                        'payload'           => json_encode($row->payload),
+                        'execute_by'        => null,
+                        'status'            => 0,
+                        'created_at'        => now(),
+                        'updated_at'        => now(),
                     ];
                 }
 
             }
 
-        DB::table('logjubelios')->insert($dataArray);
-
-
-        
+        DB::table('jubelioorders')->insert($dataArray);
 
         Crongetorderdetail::where('get_order_id',$data->id)->delete();
 
