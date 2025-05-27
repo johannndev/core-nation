@@ -1332,13 +1332,9 @@ class ApiJubelioController extends Controller
                     }
 
                     DB::table('crongetorderdetails')->insert($dataArray);
-
-                    $data->increment('count');
-
-                    
-
-         
                 }
+
+                 $data->increment('count');
 
             } elseif ($data->count == $data->total && $data->total != 0 && $data->status == 0) {
                 if($data->step == 1){
