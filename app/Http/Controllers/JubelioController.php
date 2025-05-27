@@ -48,7 +48,8 @@ class JubelioController extends Controller
             }
 
             DB::table('jubelioorders')->insert([
-                'jubelio_order_id' => $dataApi['salesorder_id'],
+                'jubelio_order_id'  => $dataApi['salesorder_id'],
+                'source'            => 1,
                 'invoice'           => $dataApi['salesorder_no'],
                 'type'              => 'SELL',
                 'order_status'      => $dataApi['status'],
