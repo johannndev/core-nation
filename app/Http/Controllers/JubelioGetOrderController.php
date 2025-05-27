@@ -29,6 +29,8 @@ class JubelioGetOrderController extends Controller
 
             $dataList = Crongetorderdetail::with('transaksi','jubelio')->where('get_order_id',$data->id)->paginate('200');
 
+            dd($dataList);
+
             if($data->total > 0 && $data->count > 0 ){
 
                 $totalTahapan = $data->total;
