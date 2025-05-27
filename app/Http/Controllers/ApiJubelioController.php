@@ -1315,6 +1315,8 @@ class ApiJubelioController extends Controller
 
                 $dataArray = []; 
 
+                 dd(count($responData['data']));
+
                 if(count($responData['data']) > 0){
                     
                     foreach ($responData['data'] as $row) {

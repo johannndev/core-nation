@@ -101,7 +101,7 @@ class GetOrderJubelio extends Command
 
                 $dataArray = []; 
 
-                dd(count($responData['data']));
+               
 
                 if(count($responData['data']) > 0){
                     
