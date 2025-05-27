@@ -16,5 +16,9 @@ class Jubelioorder extends Model
         return $this->hasOne(User::class,'id','execute_by',);
     }
 
+    // protected $casts = [
+    //     'payload' => 'array',
+    // ];
+
 
 }

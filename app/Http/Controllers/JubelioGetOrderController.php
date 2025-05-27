@@ -158,7 +158,7 @@ class JubelioGetOrderController extends Controller
                         'run_count'         => 0,
                         'error_type'        => null,
                         'error'             => null,
-                        'payload'           => json_encode($row->payload),
+                        'payload'           => $row->payload,
                         'execute_by'        => null,
                         'status'            => 0,
                         'created_at'        => now(),
