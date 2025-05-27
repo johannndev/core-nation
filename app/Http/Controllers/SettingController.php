@@ -6,6 +6,7 @@ use App\Models\AppSetting;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class SettingController extends Controller
 {
@@ -54,5 +55,18 @@ class SettingController extends Controller
         });
 
         return redirect()->back()->with('success','Settings Updated');
+    }
+
+    public function systemLog(){
+        
+        $logPath = storage_path('logs/laravel.log');
+
+        if (File::exists($logPath)) {
+            $logContent = File::get($logPath);
+        } else {
+            $logContent = 'Log file not found.';
+        }
+
+        return view('log.system', compact('logContent'));
     }
 }
