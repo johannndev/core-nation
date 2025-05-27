@@ -40,7 +40,7 @@ class OrderJubelioToAria extends Command
     {
         Log::info('Proese order jubelio ke aria transaction dijalankan pada: ' . now());
       
-        $logjubelio = Jubelioorder::where('type','SALE')->where('status',0)->where('run_count',0)->orderBy('updated_at','asc')->first();
+        $logjubelio = Jubelioorder::where('type','SELL')->where('status',0)->where('run_count',0)->orderBy('updated_at','asc')->first();
 
         if($logjubelio){
 
@@ -54,6 +54,9 @@ class OrderJubelioToAria extends Command
                  $dataApi = $this->getOrder($logjubelio->jubelio_order_id);
 
                 if (isset($dataApi['error'])) {
+
+                    Log::info('get data dari api error');
+
                     $logjubelio->update([
                         'run_count' => $logjubelio->logjubelio + 1,
                         'error_type' => 3,
