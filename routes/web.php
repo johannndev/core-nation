@@ -19,6 +19,7 @@ use App\Http\Controllers\GajihController;
 use App\Http\Controllers\HashController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\JubelioController;
 use App\Http\Controllers\JubelioGetOrderController;
 use App\Http\Controllers\JubelioReturnController;
 use App\Http\Controllers\JubelioSyncController;
@@ -147,6 +148,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/jubelio/order/getall/toLog', [JubelioGetOrderController::class, 'toLog'])->name('jubelio.order.toLog');
     Route::post('/jubelio/order/getall/deleteAll', [JubelioGetOrderController::class, 'deleteAll'])->name('jubelio.order.deleteAll');
 
+    Route::get('/logjubelio/webhook', [JubelioController::class, 'index'])->name('jubelio.webhook.order');
+    Route::get('/logjubelio/webhook/{id}/detail', [JubelioController::class, 'detail'])->name('jubelio.webhook.detail');
 
     Route::get('/logjubelio', [LogJubelioController::class, 'index'])->name('jubelio.log.index');
     Route::get('/logjubelio/{id}/json', [LogJubelioController::class, 'viewJson'])->name('jubelio.log.viewJson');

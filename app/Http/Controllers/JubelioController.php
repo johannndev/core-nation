@@ -108,4 +108,28 @@ class JubelioController extends Controller
         ], 200);
     }
 
+
+    public function index(Request $request){
+         $dataList = Jubelioorder::where('status',0);
+
+        if($request->invoice){
+			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
+		}
+
+        $dataList = $dataList->paginate(20)->withQueryString();
+
+        // dd($allRolesInDatabase);
+
+        return view('jubelio.webhook.index',compact('dataList'));
+    }
+
+     public function detail($id){
+        $data = Jubelioorder::find($id);
+
+        $jsonData = json_decode($data->payload, true); // pastikan jadi array/objek PHP
+
+
+        return view('jubelio.webhook.detail',compact('data','jsonData'));
+    }
+
 }
