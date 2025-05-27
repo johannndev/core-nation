@@ -157,7 +157,7 @@ class OrderJubelioToAria extends Command
                     
                         if($createData['status'] == "200" ){
 
-                            $logjubelio->update(['run_count' => $arrayRunCount, 'error_type' => 10, 'error' =>null,'status' => 2]);
+                            $logjubelio->update(['run_count' => $arrayRunCount, 'error_type' => 10, 'error' =>null,'execute_by' =>0, 'status' => 2]);
 
         
                         }else{
