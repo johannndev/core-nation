@@ -10,6 +10,7 @@ use App\Http\Controllers\CashFlowController;
 use App\Http\Controllers\CompareController;
 use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\CronController;
+use App\Http\Controllers\CronrunController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DeletedController;
@@ -136,6 +137,11 @@ Route::get('/cek', [HomeController::class, 'cekData'])->name('');
 Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filter.get');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/cron-runner', [CronrunController::class, 'index'])->name('cronrunner.index');
+    Route::get('/cron-runner/{id}/edit', [CronrunController::class, 'edit'])->name('cronrunner.edit');
+    Route::patch('/cron-runner/{id}/update', [CronrunController::class, 'update'])->name('cronrunner.update');
+
 
     Route::get('/get/seles-order', [ApiJubelioController::class, 'getSaleOrder'])->name('jubelio.getSaleOrder');
     Route::get('/log/system', [SettingController::class, 'systemLog'])->name('log.system');
