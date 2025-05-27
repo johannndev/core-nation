@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
             };
         }
 
-        $schedule->command('jubelio:process-orders')->everyMinute();
+        // $schedule->command('jubelio:process-orders')->everyMinute();
         $schedule->command('jubelio:item-update')->everyMinute();
     }
 

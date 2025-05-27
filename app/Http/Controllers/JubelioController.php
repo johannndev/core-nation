@@ -124,6 +124,20 @@ class JubelioController extends Controller
         return view('jubelio.webhook.index',compact('dataList'));
     }
 
+    public function success(Request $request){
+         $dataList = Jubelioorder::where('status',2)->orderBy('created_at','desc');
+
+        if($request->invoice){
+			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
+		}
+
+        $dataList = $dataList->paginate(20)->withQueryString();
+
+        // dd($allRolesInDatabase);
+
+        return view('jubelio.webhook.index',compact('dataList'));
+    }
+
      public function detail($id){
         $data = Jubelioorder::find($id);
 
