@@ -40,7 +40,7 @@ class OrderJubelioToAria extends Command
     {
         Log::info('Proese order jubelio ke aria transaction dijalankan pada: ' . now());
       
-        $logjubelio = Jubelioorder::where('type','SELL')->where('status',0)->where('run_count',0)->orderBy('updated_at','asc')->first();
+        $logjubelio = Jubelioorder::where('type','SELL')->where('status',0)->where('run_count',0)->orderBy('created_at','asc')->first();
 
         if($logjubelio){
 
