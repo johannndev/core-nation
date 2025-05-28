@@ -116,7 +116,7 @@
                                         <td class="px-4 py-3">{{$item->order_status}}</td>
                                     
 
-                                         <td class="px-4 py-3 max-w-[300px]">
+                                         <td class="px-4 py-3 ">
                                             <div>
 
                                                 @if ($item->status == 0)
@@ -160,7 +160,9 @@
 
                                             </div>
 
-                                            <div class="mt-2 text-red-500 font-medium text-xs ">
+                                            <div class="mt-2  w-80">
+                                                <p class="text-red-500 font-medium text-xs"> PREMIUM NYLON AUTO LOCK LIFTING BELT - BLACK - M cuma ada 0.00, mau diambil 1.0000</p>
+                                               
 
                                                 {{$item->error}}
 
