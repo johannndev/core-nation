@@ -99,11 +99,9 @@
                     
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                         <th class="px-4 py-3">
-                                            @if ($item->status == 0)
-                                                
-                                            @else
-                                                {{$item->updated_at}}
-                                            @endif
+                                         
+                                            {{$item->updated_at}}
+                                           
                                         </th>
                                         <th class="px-4 py-3">
                                             @if ($item->source == 1)
