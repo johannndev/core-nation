@@ -161,8 +161,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/jubelio/order/getall/deleteAll', [JubelioGetOrderController::class, 'deleteAll'])->name('jubelio.order.deleteAll');
 
     Route::get('/jubelio/webhook', [JubelioController::class, 'index'])->name('jubelio.webhook.order');
-   
     Route::get('/jubelio/webhook/{id}/detail', [JubelioController::class, 'detail'])->name('jubelio.webhook.detail');
+    Route::get('/jubelio/webhook/{id}/manual/create', [JubelioController::class, 'createManual'])->name('jubelio.webhook.createManual');
+    Route::post('/jubelio/webhook/{id}/manual/store', [JubelioController::class, 'storeManual'])->name('jubelio.webhook.storeManual');
 
     Route::get('/logjubelio', [LogJubelioController::class, 'index'])->name('jubelio.log.index');
     Route::get('/logjubelio/{id}/json', [LogJubelioController::class, 'viewJson'])->name('jubelio.log.viewJson');
