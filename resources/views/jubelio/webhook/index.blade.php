@@ -160,7 +160,7 @@
 
                                             </div>
 
-                                            <div>
+                                            <div class="mt-2 text-red-500 font-medium text-xs ">
 
                                                 {{$item->error}}
 
