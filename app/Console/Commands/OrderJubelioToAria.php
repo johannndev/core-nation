@@ -251,6 +251,7 @@ class OrderJubelioToAria extends Command
                 $transaction->type = $type;
                 $transaction->adjustment	 = $dataJubelio->adjustment;
                 $transaction->user_id =-100;
+                $transaction->submit_type = 2;
 
                 //    if($dataJubelio->note){
                 //        $transaction->description = $dataJubelio->note;

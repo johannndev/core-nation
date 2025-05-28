@@ -8,6 +8,7 @@ use App\Models\Crongetorderdetail;
 use App\Models\Cronrun;
 use App\Models\Logjubelio;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -25,7 +26,14 @@ class JubelioGetOrderController extends Controller
 
         $persentase = 0;
 
+        $dateFrom ='';
+        $dateTo ='';
+
+
         if($data){
+
+            $dateFrom = Carbon::parse( $data ->from, 'UTC')->startOfDay()->format('Y-m-d\TH:i:s\Z');
+            $dateTo = Carbon::parse( $data ->from, 'UTC')->addDays($data ->to)->endOfDay()->format('Y-m-d\TH:i:s\Z');
 
             $dataList = Crongetorderdetail::with('transaksi','jubelio')->where('get_order_id',$data->id)->paginate('200');
 
@@ -47,7 +55,7 @@ class JubelioGetOrderController extends Controller
 
         }
         
-        return view('jubelio.getOrder.index', compact('data','persentase','dataList'));
+        return view('jubelio.getOrder.index', compact('data','persentase','dataList','dateFrom','dateTo'));
     }
 
     public function store(Request $request) {
@@ -68,6 +76,8 @@ class JubelioGetOrderController extends Controller
         ];
 
         $this->validate($request, $rules, $messages, $attributes);
+
+       
 
         $data = new Crongetorder();
 
