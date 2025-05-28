@@ -87,6 +87,7 @@
                                         <th scope="col" class="px-4 py-3">Invoice</th>
                                         <th scope="col" class="px-4 py-3">Type</th>
                                         <th scope="col" class="px-4 py-3">Order Status</th>
+                                        <th scope="col" class="px-4 py-3">Error</th>
                                         <th scope="col" class="px-4 py-3">Status</th>
                                         <th scope="col" class="px-4 py-3"></th>
                                     </tr>
@@ -113,7 +114,7 @@
                                         <td class="px-4 py-3">{{$item->invoice}}</td>
                                         <td class="px-4 py-3">{{$item->type}}</td>
                                         <td class="px-4 py-3">{{$item->order_status}}</td>
-                                        
+                                        <td class="px-4 py-3">{{$item->error}}</td>
                                      
 
                                          <td class="px-4 py-3">
