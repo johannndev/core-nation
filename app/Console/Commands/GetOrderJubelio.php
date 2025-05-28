@@ -48,7 +48,7 @@ class GetOrderJubelio extends Command
             }
 
             $dateFrom = $data->from."T00:00:00Z";
-            $dateTo = $data->to."T00:00:00Z";
+            $dateTo = $data->to."T23:59:59Z";
 
             $token = Cache::get('jubelio_data')['token'] ?? null;
 
