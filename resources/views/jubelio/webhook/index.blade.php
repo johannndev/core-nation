@@ -116,7 +116,7 @@
                                         <td class="px-4 py-3">{{$item->order_status}}</td>
                                     
 
-                                         <td class="px-4 py-3">
+                                         <td class="px-4 py-3 w-60">
                                             <div>
 
                                                 @if ($item->status == 0)
