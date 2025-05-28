@@ -98,7 +98,13 @@
                                   
                     
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
-                                        <th class="px-4 py-3">{{$item->created_at}}</th>
+                                        <th class="px-4 py-3">
+                                            @if ($item->status == 0)
+                                                
+                                            @else
+                                                {{$item->updated_at}}
+                                            @endif
+                                        </th>
                                         <th class="px-4 py-3">
                                             @if ($item->source == 1)
                                                 <span class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-sm me-2 dark:bg-blue-700 dark:text-blue-400 border border-blue-500 ">
