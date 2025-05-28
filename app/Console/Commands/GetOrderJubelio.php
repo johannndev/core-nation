@@ -47,10 +47,9 @@ class GetOrderJubelio extends Command
                 throw new \Exception('Data Crongetorder tidak aktif.');
             }
 
-            $dateFrom = Carbon::parse( $data->from, 'UTC')->startOfDay()->toIso8601String();
-            $dateTo = Carbon::parse( $data->from, 'UTC')->addDays($data->to)->endOfDay()->toIso8601String();
+            $dateFrom = Carbon::parse( $data->from, 'UTC')->startOfDay()->format('Y-m-d\TH:i:s\Z');
+            $dateTo = Carbon::parse( $data->from, 'UTC')->addDays($data->to)->endOfDay()->format('Y-m-d\TH:i:s\Z');
 
-       
 
             $token = Cache::get('jubelio_data')['token'] ?? null;
 

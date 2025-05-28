@@ -142,7 +142,7 @@
                                
                             </div>
                             <div>
-                                <p class="font-medium">Get order di jubelio tanggal {{$data->from}} s/d  {{$data->to}}</p>
+                                <p class="font-medium">Get order di jubelio tanggal {{$dateFrom}} s/d  {{$dateTo}}</p>
 
                                 
                                 <div class="flex justify-between mt-1">
