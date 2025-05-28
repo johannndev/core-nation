@@ -165,6 +165,19 @@
                                                 {{$item->error}}
 
                                             </div>
+
+                                            <div>
+
+                                                @php
+                                                    $dataApi = json_decode($item->payload, true);
+                                                @endphp
+
+                                                <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">{{ $dataApi['store_name'] }}</span>
+
+                                                <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">{{ $dataApi['location_name'] }}</span>
+
+
+                                            </div>
                                              
                                         
 
