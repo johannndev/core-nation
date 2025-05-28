@@ -134,25 +134,72 @@
                                                     </span>
 
                                                 @elseif ($item->status == 1)
-                                                    <span class="bg-red-100 text-red-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-sm me-2 dark:bg-red-700 dark:text-red-400 border border-red-500 ">
+                                                    <div>
+
+                                                        <span class="bg-red-100 text-red-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-sm me-2 dark:bg-red-700 dark:text-red-400 border border-red-500 ">
 
                                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-2.5 h-2.5 me-1.5" stroke-width="2" stroke="currentColor">
                                                             <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
                                                             </svg>
 
                                                             Error
-                                                    </span>
+                                                        </span>
+
+                                                    </div>
+                                          
+                                                    <div class="mt-2  w-80">
+                                                        <p class="text-red-500 font-medium text-xs">{{$item->error}}</p>
+
+                                                    </div>
+
+                                                    <div class="mt-2">
+
+                                                        @php
+                                                            $dataApi = json_decode($item->payload, true);
+                                                        @endphp
+
+                                                        <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">{{ $dataApi['store_name'] }}</span>
+
+                                                        <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">{{ $dataApi['location_name'] }}</span>
+
+
+                                                    </div>
 
                                                 @elseif ($item->status == 2)
 
-                                                    <span class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-sm me-2 dark:bg-green-700 dark:text-green-400 border border-green-500 ">
-                                                    
-                                                        <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"  stroke-width="2" stroke="currentColor">
-                                                            <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd" />
-                                                        </svg>
+                                                    <div>
 
-                                                        Success submit by {{ $item->execute_by == 0 ? 'Cron' : $item->user->name }}
-                                                    </span>
+                                                        <span class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-sm me-2 dark:bg-green-700 dark:text-green-400 border border-green-500 ">
+                                                        
+                                                            <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"  stroke-width="2" stroke="currentColor">
+                                                                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd" />
+                                                            </svg>
+
+                                                            Success submit by {{ $item->execute_by == 0 ? 'Cron' : $item->user->name }}
+                                                        </span>
+                                                        
+                                                    </div>
+                                                    
+                                                    
+                                                    @if ($item->error)
+                                                        <div class="mt-2  w-80">
+                                                            <p class="text-yellow-500 font-medium text-xs">{{$item->error}}</p>
+
+                                                        </div>
+
+                                                        <div class="mt-2">
+
+                                                            @php
+                                                                $dataApi = json_decode($item->payload, true);
+                                                            @endphp
+
+                                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{ $dataApi['store_name'] }}</span>
+
+                                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{ $dataApi['location_name'] }}</span>
+
+
+                                                        </div>
+                                                    @endif
 
                                                 @else
                                                     
@@ -160,26 +207,9 @@
 
                                             </div>
 
-                                            <div class="mt-2  w-80">
-                                                <p class="text-red-500 font-medium text-xs"> PREMIUM NYLON AUTO LOCK LIFTING BELT - BLACK - M cuma ada 0.00, mau diambil 1.0000</p>
-                                               
+                                           
 
-                                                {{$item->error}}
-
-                                            </div>
-
-                                            <div>
-
-                                                @php
-                                                    $dataApi = json_decode($item->payload, true);
-                                                @endphp
-
-                                                <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">{{ $dataApi['store_name'] }}</span>
-
-                                                <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">{{ $dataApi['location_name'] }}</span>
-
-
-                                            </div>
+                                          
                                              
                                         
 
