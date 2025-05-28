@@ -13,6 +13,7 @@ use App\Models\Jubeliosync;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -207,13 +208,13 @@ class JubelioController extends Controller
 
         $logjubelio = Jubelioorder::findOrFail($id);
 
-            if($logjubelio->source == 1){
+        if($logjubelio->source == 1){
 
-                $data = json_decode($logjubelio->payload, true);
+            $data = json_decode($logjubelio->payload, true);
 
-            }else{
-                $data = $this->getOrder($logjubelio->jubelio_order_id);
-            }
+        }else{
+            $data = $this->getOrder($logjubelio->jubelio_order_id);
+        }
 
 
        
@@ -368,8 +369,6 @@ class JubelioController extends Controller
 
         }
     }
-
-  
 
     protected function toggleSign($value) {
         return -$value;
@@ -644,6 +643,41 @@ class JubelioController extends Controller
 
 		return response()->json(['message' => 'Data processed successfully'], 200);
 	}
+
+    public function createSolved($id){
+
+        $logjubelio = Jubelioorder::findOrFail($id);
+
+        if($logjubelio->source == 1){
+
+            $data = json_decode($logjubelio->payload, true);
+
+        }else{
+            $data = $this->getOrder($logjubelio->jubelio_order_id);
+        }
+
+        $adjust = $data['sub_total'] - $data['grand_total'];
+
+        $jubelioSync = Jubeliosync::where('jubelio_store_id', $data['store_id'])->where('jubelio_location_id',$data['location_id'])->first();
+        
+        $sid = $id;
+
+        return view('jubelio.webhook.solved',compact('jubelioSync','data','adjust','sid'));
+    }
+
+    public function storeSolved($id){
+
+        $logjubelio = Jubelioorder::findOrFail($id);
+        $logjubelio->error_type = 10;
+        $logjubelio->error = null;
+        $logjubelio->execute_by = Auth::id();
+        $logjubelio->status = 2;
+
+        $logjubelio->save();
+
+        return redirect()->route('jubelio.webhook.order')->with('success','Jubelio order Solved');
+    }
+
 
 
 }

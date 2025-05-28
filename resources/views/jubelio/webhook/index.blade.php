@@ -210,26 +210,30 @@
 
                                         </td>
                                         <td class="px-4 py-3 ">
-                                           
-                                               <button id="dropdownMore-{{$item->id}}" data-dropdown-toggle="dropdownM-{{$item->id}}" class=" inline-flex items-center  text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg px-3 py-2 text-xs me-2  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">More <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                                    </svg>
+                                            @if (!$item->status == 2)
+                                                <button id="dropdownMore-{{$item->id}}" data-dropdown-toggle="dropdownM-{{$item->id}}" class=" inline-flex items-center  text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg px-3 py-2 text-xs me-2  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">More <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                                        </svg>
                                                 </button>
-                                                    
+                                                        
                                                 <!-- Dropdown menu -->
                                                 <div id="dropdownM-{{$item->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
                                                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMore-{{$item->id}}">
                                                         <li>
-                                                        <a href="{{ route('jubelio.webhook.detail',$item->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Detail</a>
+                                                            <a href="{{ route('jubelio.webhook.detail',$item->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Detail</a>
                                                         </li>
                                                         <li>
-                                                        <a href="{{ route('jubelio.webhook.createManual',$item->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Manual</a>
+                                                            <a href="{{ route('jubelio.webhook.createManual',$item->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Manual</a>
                                                         </li>
+
                                                         <li>
-                                                       
+                                                            <a href="{{ route('jubelio.webhook.createSolved',$item->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Solved</a>
+                                                        </li>
+                                                        
+                                                    
                                                     </ul>
                                                 </div>   
-                                         
+                                            @endif
 
                                         </td>
                                         
