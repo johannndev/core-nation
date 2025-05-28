@@ -61,6 +61,15 @@ class JubelioController extends Controller
 
                 if($cekTransaksi){
 
+                    return response()->json([
+                        'status' => 'ok',
+                        'message' => 'Invoice sudah ada',
+                    ], 200);
+
+                    
+
+                }else{
+
                     DB::table('jubelioorders')->insert([
                         'jubelio_order_id'  => $dataApi['salesorder_id'],
                         'source'            => 1,
@@ -82,12 +91,7 @@ class JubelioController extends Controller
                         'message' => 'Data saved successfully',
                     ], 200);
 
-                }else{
-
-                    return response()->json([
-                        'status' => 'ok',
-                        'message' => 'Invoice sudah ada',
-                    ], 200);
+                  
                     
                 }
 
