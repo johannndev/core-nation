@@ -1483,7 +1483,7 @@ class ApiJubelioController extends Controller
         // $firstDecode = json_decode($logjubelio->payload, true);
         // $finalArray = json_decode($firstDecode, true);
 
-       
+       dd('logjubelio');
 
         if($logjubelio){
 
