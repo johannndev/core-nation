@@ -1487,6 +1487,8 @@ class ApiJubelioController extends Controller
 
         if($logjubelio){
 
+            dd('a');
+
             $dataApi = json_decode($logjubelio->payload, true);
 
             if($logjubelio->source == 1){
@@ -1549,7 +1551,7 @@ class ApiJubelioController extends Controller
                     // Ubah menjadi string dengan koma sebagai pemisah
                     $notMatchedString = implode(", ", $item_codes);
 
-                    $logjubelio->update(['run_count' => $arrayRunCount, 'error_type' => 1, 'error' => 'SKU tidak di temukan: '.$notMatchedString, 'status' => 1]);
+                    // $logjubelio->update(['run_count' => $arrayRunCount, 'error_type' => 1, 'error' => 'SKU tidak di temukan: '.$notMatchedString, 'status' => 1]);
                 }
 
                 if($matched->count() > 0){
@@ -1558,7 +1560,7 @@ class ApiJubelioController extends Controller
 
                     if($cekTransaksi){
 
-                        $logjubelio->update(['run_count' =>  $arrayRunCount, 'error_type' => 2, 'error' =>'Transaction sudah ada',  'status' => 2, ]);
+                        // $logjubelio->update(['run_count' =>  $arrayRunCount, 'error_type' => 2, 'error' =>'Transaction sudah ada',  'status' => 2, ]);
 
                     }else{
 
@@ -1584,7 +1586,7 @@ class ApiJubelioController extends Controller
 
                         $dataCollect =  (object) $dataJubelio;
 
-                        $createData =  $this->createTransaction(Transaction::TYPE_SELL, $dataCollect);
+                        // $createData =  $this->createTransaction(Transaction::TYPE_SELL, $dataCollect);
 
                     
                         if($createData['status'] == "200" ){
@@ -1608,12 +1610,14 @@ class ApiJubelioController extends Controller
 
             }else{
 
-                $logjubelio->update(['run_count' =>  $arrayRunCount, 'error_type' => 1, 'error' =>'Data sync dengan aria tidak ditemukan',  'status' => 1, ] );
+                // $logjubelio->update(['run_count' =>  $arrayRunCount, 'error_type' => 1, 'error' =>'Data sync dengan aria tidak ditemukan',  'status' => 1, ] );
 
                
             }
 
         }
+
+        dd('b');
     }
 
     public function cektrx(){
