@@ -1478,7 +1478,7 @@ class ApiJubelioController extends Controller
 
     public function testCron()
     {
-        $logjubelio = Jubelioorder::where('id','1')->where('type','SELL')->where('status',0)->where('run_count',0)->orderBy('updated_at','asc')->first();
+        $logjubelio = Jubelioorder::where('invoice','SP-250526T20DWH2W')->where('type','SELL')->where('status',0)->where('run_count',0)->orderBy('updated_at','asc')->first();
 
         // $firstDecode = json_decode($logjubelio->payload, true);
         // $finalArray = json_decode($firstDecode, true);
