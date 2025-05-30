@@ -449,7 +449,7 @@
             </section>
 
         
-        @elseif ($data->status == 1)
+        @elseif ($data->status == 0)
             <div class="flex space-x-2 mb-2">
                    <form class="myForm" id="myForm" action="{{ route('jubelio.order.getallreset') }}" method="post" >
 
