@@ -414,7 +414,6 @@ class OrderJubelioToAria extends Command
             //     'url' => route('transaction.getDetail',$transaction->id,$transaction->date),
             // ]);
 
-            break;
         } catch(ModelException $e) {
             
             DB::rollBack();
