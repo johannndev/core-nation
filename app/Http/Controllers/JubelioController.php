@@ -341,6 +341,14 @@ class JubelioController extends Controller
 
                                 if ($createData['status'] == "200") {
 
+                                     $logjubelio->update([
+                                        'run_count' => $arrayRunCount,
+                                        'error_type' => 10,
+                                        'error' => null,
+                                        'execute_by' => 0,
+                                        'status' => 2,
+                                    ]);
+
                                     return redirect()->route('jubelio.webhook.order')->with('success',  'Transaction created');
 
                                 } else {
