@@ -186,4 +186,23 @@ class JubelioGetOrderController extends Controller
 
         return redirect()->route('jubelio.order.getall')->with('success','Order dipindah ke logjubelio');
     }
+
+    public function reset(){
+
+        $data = Crongetorder::withCount('orderDetail')->orderBy('created_at','desc')->first();
+
+        $detail = Crongetorderdetail::where('get_order_id',$data->id)->delete();
+
+        $data->delete();
+
+        $cronStatus = Cronrun::where('name', 'get_order')->first();
+
+        $cronStatus->status = 0;
+
+        $cronStatus->save();
+
+        CronHelper::refreshCronCache();
+
+        return redirect()->route('jubelio.order.getall')->with('success','Reseted');
+    }
 }

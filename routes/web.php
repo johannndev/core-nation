@@ -155,6 +155,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/export/sell/item/build', [ExportController::class, 'exportSellItem'])->name('export.sellItemBuild');
 
     Route::get('/jubelio/order/getall', [JubelioGetOrderController::class, 'index'])->name('jubelio.order.getall');
+    Route::post('/jubelio/order/getall/reset', [JubelioGetOrderController::class, 'reset'])->name('jubelio.order.getallreset');
     Route::post('/jubelio/order/getall/store', [JubelioGetOrderController::class, 'store'])->name('jubelio.order.storegetall');
     Route::post('/jubelio/order/getall/cekTransaksi', [JubelioGetOrderController::class, 'cekTransaction'])->name('jubelio.order.cekTransaction');
     Route::post('/jubelio/order/getall/toLog', [JubelioGetOrderController::class, 'toLog'])->name('jubelio.order.toLog');

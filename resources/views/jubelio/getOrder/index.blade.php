@@ -193,7 +193,7 @@
             </div>
         </section>
 
-         @if ($data->status == 1)
+        @if ($data->status == 1)
 
             <div class="flex space-x-2 mb-2">
 
@@ -448,9 +448,18 @@
                 </div>
             </section>
 
-           
-            
+        
+        @elseif ($data->status == 1)
+            <div class="flex space-x-2 mb-2">
+                   <form class="myForm" id="myForm" action="{{ route('jubelio.order.getallreset') }}" method="post" >
 
+                        @csrf
+
+                        <x-layout.submit-button label="Reset" color="red"  />
+
+                        
+                   </form>
+            </div>
          @endif
         
     @endif
