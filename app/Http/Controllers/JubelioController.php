@@ -155,7 +155,10 @@ class JubelioController extends Controller
         }elseif($request->status == 'error'){
             $dataList = $dataList->where('status',1)->where('error_type',1);
         }else{
-            $dataList = $dataList->where('status',0);
+            if(!$request->invoice){
+                $dataList = $dataList->where('status',0);
+            }
+           
         }
 
         $dataList = $dataList->paginate(200)->withQueryString();
