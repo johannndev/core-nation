@@ -1591,12 +1591,12 @@ class ApiJubelioController extends Controller
                     
                         if($createData['status'] == "200" ){
 
-                            $logjubelio->update(['run_count' => $arrayRunCount, 'error_type' => 10, 'error' =>null,'status' => 2]);
+                            // $logjubelio->update(['run_count' => $arrayRunCount, 'error_type' => 10, 'error' =>null,'status' => 2]);
 
         
                         }else{
 
-                            $logjubelio->update(['cron_run' => $arrayRunCount, 'error_type' => 1, 'error' => $createData['message'],'status' => 1]);
+                            // $logjubelio->update(['cron_run' => $arrayRunCount, 'error_type' => 1, 'error' => $createData['message'],'status' => 1]);
 
                         }
 
