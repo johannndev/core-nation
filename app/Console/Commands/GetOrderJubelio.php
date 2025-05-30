@@ -148,7 +148,7 @@ class GetOrderJubelio extends Command
                 if($data->step == 1){
 
                     Crongetorderdetail::where('get_order_id', $data->id)
-                        ->whereNotIn('status', ['SHIPPED', 'COMPLETED']) 
+                        ->whereNotIn('status', ['SHIPPED', 'COMPLETED', 'RETURNED']) 
                         ->delete();
 
                     Crongetorderdetail::where('get_order_id', $data->id)
