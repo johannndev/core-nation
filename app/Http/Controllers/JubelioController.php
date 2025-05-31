@@ -21,6 +21,34 @@ use Illuminate\Support\Facades\Log;
 
 class JubelioController extends Controller
 {
+    public function cekOrder(Request $request){
+
+        $jsonData = [];
+        if($request->order_id){
+
+            $token = Cache::get('jubelio_data')['token'] ?? null;
+
+
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'authorization' => $token,
+            ])->get('https://api2.jubelio.com/sales/orders/' . $request->order_id);
+
+            if ($response->failed()) {
+                return 'Gagal mengambil data order dari API Jubelio. Status: ' . $response->status();
+            }
+
+            $data = $response->json();
+
+            $jsonData = $data;
+            
+        }
+
+        return view('jubelio.cek.index',compact('jsonData'));
+
+
+    }
+
     public function order(Request $request)
     {
         $secret = 'corenation2025';

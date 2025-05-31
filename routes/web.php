@@ -154,6 +154,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/export/sell/item', [ExportController::class, 'sellItem'])->name('export.sellItem');
     Route::get('/transaction/export/sell/item/build', [ExportController::class, 'exportSellItem'])->name('export.sellItemBuild');
 
+    
     Route::get('/jubelio/order/getall', [JubelioGetOrderController::class, 'index'])->name('jubelio.order.getall');
     Route::post('/jubelio/order/getall/reset', [JubelioGetOrderController::class, 'reset'])->name('jubelio.order.getallreset');
     Route::post('/jubelio/order/getall/store', [JubelioGetOrderController::class, 'store'])->name('jubelio.order.storegetall');
@@ -161,6 +162,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/jubelio/order/getall/toLog', [JubelioGetOrderController::class, 'toLog'])->name('jubelio.order.toLog');
     Route::post('/jubelio/order/getall/deleteAll', [JubelioGetOrderController::class, 'deleteAll'])->name('jubelio.order.deleteAll');
 
+    Route::get('/jubelio/order/cek', [JubelioController::class, 'cekOrder'])->name('jubelio.order.cek');
     Route::get('/jubelio/webhook', [JubelioController::class, 'index'])->name('jubelio.webhook.order');
     Route::get('/jubelio/webhook/{id}/detail', [JubelioController::class, 'detail'])->name('jubelio.webhook.detail');
     Route::get('/jubelio/webhook/{id}/manual/create', [JubelioController::class, 'createManual'])->name('jubelio.webhook.createManual');
