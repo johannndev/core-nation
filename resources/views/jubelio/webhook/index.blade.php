@@ -115,7 +115,7 @@
                                             @endif
                                         </th>
                                         {{-- <th class="px-4 py-3">{{$item->jubelio_order_id}}</th> --}}
-                                        <td class="px-4 py-3">{{$item->invoice}}</td>
+                                        <td class="px-4 py-3"><a target="_blank" href={{ route('transaction.index',['invoice' => $item->invoice, 'type' => 0]) }} class="text-blue-500 hover:text-blue-600 hover:underline">{{$item->invoice}}</a></td>
                                         <td class="px-4 py-3">{{$item->type}}</td>
                                         <td class="px-4 py-3">{{$item->order_status}}</td>
                                     

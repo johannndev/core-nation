@@ -571,7 +571,7 @@ class Transaction extends Model
 			// dd($wi);
 
 		if(!$can_minus && ($wi->quantity - $quantity) < 0) //check if minus is allowed
-			throw new \Exception("{$item->name} cuma ada {$wi->quantity}, mau diambil {$quantity}");
+			throw new \Exception("{$item->code} cuma ada {$wi->quantity}, mau diambil {$quantity}");
 
 		$wi->quantity -= $quantity;
 		if(!$wi->save())
