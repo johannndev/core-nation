@@ -78,21 +78,28 @@ class OrderJubelioToAria extends Command
                     ->first();
 
                 if ($jubelioSync) {
-                    $itemCodes = collect($arrayItems)->pluck('item_code')->unique();
+                    $itemCodes = collect($arrayItems)
+                        ->pluck('item_code')
+                        ->map(fn($code) => strtoupper($code))
+                        ->unique();
 
-                    $existingProducts = Item::whereIn('code', $itemCodes)
+                    $existingProducts = Item::whereIn(DB::raw('UPPER(code)'), $itemCodes)
                         ->get(['id', 'code', 'name'])
-                        ->keyBy('code');
-
+                        ->keyBy(fn($item) => strtoupper($item->code));
+                 
                     $groupedData = collect($arrayItems)->partition(function ($item) use ($existingProducts) {
-                        return isset($existingProducts[$item['item_code']]);
+                        return isset($existingProducts[strtoupper($item['item_code'])]);
                     });
 
+
                     $matched = $groupedData[0]->map(function ($item) use ($existingProducts) {
+                        $upperCode = strtoupper($item['item_code']);
+                        $product = $existingProducts[$upperCode];
+
                         return [
-                            'itemId' => $existingProducts[$item['item_code']]->id,
-                            'code' => $existingProducts[$item['item_code']]->code,
-                            'name' => $existingProducts[$item['item_code']]->name,
+                            'itemId' => $product->id,
+                            'code' => $product->code,
+                            'name' => $product->name,
                             'quantity' => $item['qty'],
                             'price' => $item['price'],
                             'discount' => 0,
