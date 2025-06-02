@@ -15,10 +15,10 @@ class HomeController extends Controller
 	public function index()
 	{
 
+		$user = Auth::user(); // Ambil user yang sedang login
+		$roleName = $user->getRoleNames()->first(); // Ambil nama role pertama
 
-		$user = Auth::getRoleNames()[0];
-
-		$roles=Role::whereIn('name', [$user])->get();
+		$roles = Role::with('permissions')->where('name', $roleName)->get(); // Ambil role beserta permissions
 		dd($user,$roles );
 		// dd('1',Permission::with('roles')->get()->toArray());
 
