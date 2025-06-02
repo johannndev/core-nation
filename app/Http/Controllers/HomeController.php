@@ -13,6 +13,8 @@ class HomeController extends Controller
 {
 	public function index()
 	{
+		// $roles = $user->getRoleNames();
+		dd(auth()->user()->can('jubelio webhook'));
 		// dd('1',Permission::with('roles')->get()->toArray());
 
 		return view('home');
