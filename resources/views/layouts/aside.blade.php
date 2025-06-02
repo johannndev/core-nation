@@ -25,7 +25,7 @@
         </a>
         </li>
 
-        @if(auth()->user()->can('transactions.list') || auth()->user()->can('transactions.cashIn') || auth()->user()->can('transactions.cashOut') || auth()->user()->can('transactions.adjust') || auth()->user()->can('transactions.transfer') || auth()->user()->can('transactions.return') || auth()->user()->can('transactions.returnSuplier') || auth()->user()->can('transactions.deleteList') || auth()->user()->can('cnpo list') || auth()->user()->can('cron runner') || auth()->user()->can('jubelio sync') || auth()->user()->can('jubelio webhook') || auth()->user()->can('jubelio get order') || auth()->user()->can('jubelio cek order') )
+        @if(auth()->user()->can('transactions.list') || auth()->user()->can('transactions.cashIn') || auth()->user()->can('transactions.cashOut') || auth()->user()->can('transactions.adjust') || auth()->user()->can('transactions.transfer') || auth()->user()->can('transactions.return') || auth()->user()->can('transactions.returnSuplier') || auth()->user()->can('transactions.deleteList') || auth()->user()->can('cnpo list')  )
         <li>
 
            
@@ -862,7 +862,7 @@
 
         @endif
 
-        @if(auth()->user()->can('setting edit'))
+        @if(auth()->user()->can('setting edit') || auth()->user()->can('cron runner') || auth()->user()->can('jubelio sync') || auth()->user()->can('jubelio webhook') || auth()->user()->can('jubelio get order') || auth()->user()->can('jubelio cek order'))
 
         <li>
 

@@ -28,7 +28,7 @@ $role = Role::where('name', $roleName)->first();
 $permissionNames = $role->permissions->pluck('name')->toArray();
 
 // Tampilkan dengan dd()
-dd($permissionNames);
+// dd($permissionNames);
 
 
 		return view('home');
