@@ -15,15 +15,22 @@ class HomeController extends Controller
 	public function index()
 	{
 
+		
 		$user = Auth::user();
-		$roleName = $user->getRoleNames()->first(); // Ambil nama role pertama
-		$role = Role::where('name', $roleName)->first();
 
-		$permissions = $role->permissions;
+// Ambil nama role pertama (jika user punya lebih dari satu role)
+$roleName = $user->getRoleNames()->first();
 
-		foreach ($permissions as $permission) {
-			echo $permission->name . '<br>';
-		}
+// Ambil role-nya
+$role = Role::where('name', $roleName)->first();
+
+// Ambil permissions dan ubah ke array nama permission
+$permissionNames = $role->permissions->pluck('name')->toArray();
+
+// Tampilkan dengan dd()
+dd($permissionNames);
+
+
 		return view('home');
 	}
 
