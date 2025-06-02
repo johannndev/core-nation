@@ -168,6 +168,108 @@ class JubelioController extends Controller
         ], 200);
     }
 
+    public function retur(Request $request){
+        $secret = 'corenation2025';
+        $content = trim($request->getContent());
+
+        $sign = hash_hmac('sha256',$content . $secret, $secret, false);
+
+        $signature = $request->header('Sign');
+
+        if ($signature !== $sign) {
+            return response()->json(['error' => 'Invalid signature'], 403);
+        }
+
+        $data = $request->all(); 
+
+        $logStore = [];
+
+        $response = Http::withHeaders([ 
+            'Content-Type'=> 'application/json', 
+            'authorization'=> Cache::get('jubelio_data')['token'], 
+        ]) 
+        ->get('https://api2.jubelio.com/sales/sales-returns/'. $data['return_id']); 
+
+        
+
+        if ($response->failed()) {
+            $statusCode = $response->status();
+            
+            // Tangani kasus jika ID tidak ditemukan (404)
+            if ($statusCode === 404) {
+                return response()->json([
+                    'status' => 'ok',
+                    'pesan' => 'Data retur tidak ditemukan.',
+                    'logStore' => $logStore
+                ], 200);
+                
+            }
+
+            return response()->json([
+                'status' => 'ok',
+                'pesan' => 'Gagal mengambil data dari API. Response: ' . $response->body(),
+                'logStore' => $logStore
+            ], 200);
+    
+            
+        }
+
+        $dataApi = json_decode($response->body(), true);
+        
+
+        $cekTransaksi = Transaction::where('type',Transaction::TYPE_SELL)->where('invoice',$dataApi['salesorder_no'])->first();
+
+        $exists = Jubelioorder::where('invoice',$dataApi['salesorder_no'])
+            ->where('type', 'RETURN')
+            ->where('order_status', 'RETURN')
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'status' => 'ok',
+                'message' => 'Data already exists',
+            ], 200);
+        }else{
+
+            if(!$cekTransaksi){
+
+                return response()->json([
+                    'status' => 'ok',
+                    'message' => 'Transaksi sell tidak ada.',
+                ], 200);
+
+                
+
+            }else{
+
+                DB::table('jubelioorders')->insert([
+                    'jubelio_order_id'  => $dataApi['return_id'],
+                    'source'            => 1,
+                    'invoice'           => $dataApi['return_no'],
+                    'type'              => 'RETURN',
+                    'order_status'      => 'RETURN',
+                    'run_count'         => 0,
+                    'error_type'        => null,
+                    'error'             => null,
+                    'payload'           => $dataApi,
+                    'execute_by'        => null,
+                    'status'            => 0,
+                    'created_at'        => now(),
+                    'updated_at'        => now(),
+                ]);
+
+                return response()->json([
+                    'status' => 'ok',
+                    'message' => 'Data saved successfully',
+                ], 200);
+
+                
+                
+            }
+
+        }
+
+    }
 
     public function index(Request $request){
         $dataList = Jubelioorder::orderBy('updated_at','desc');
