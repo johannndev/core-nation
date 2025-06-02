@@ -15,13 +15,15 @@ class HomeController extends Controller
 	public function index()
 	{
 
-		$user = Auth::user(); // Ambil user yang sedang login
+		$user = Auth::user();
 		$roleName = $user->getRoleNames()->first(); // Ambil nama role pertama
+		$role = Role::where('name', $roleName)->first();
 
-		$roles = Role::with('permissions')->where('name', $roleName)->get(); // Ambil role beserta permissions
-		dd($user,$roles );
-		// dd('1',Permission::with('roles')->get()->toArray());
+		$permissions = $role->permissions;
 
+		foreach ($permissions as $permission) {
+			echo $permission->name . '<br>';
+		}
 		return view('home');
 	}
 
