@@ -89,6 +89,9 @@ class UserRoleController extends Controller
 
             DB::commit();
 
+            app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+
             return redirect()->route('user.list')->with('success',  'User '.$user->username.' created, Password: '.$password);
 
             
@@ -186,6 +189,8 @@ class UserRoleController extends Controller
 
             DB::commit();
 
+            app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
             return redirect()->route('user.list')->with('success', 'User '.$user->username.' edited. '.$password);
 
             
@@ -228,6 +233,8 @@ class UserRoleController extends Controller
 
             DB::commit();
 
+            app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
             return redirect()->route('role.indexRole')->with('success',  'Role '.$role->name.' created');
 
         
@@ -266,6 +273,8 @@ class UserRoleController extends Controller
 
             DB::commit();
 
+            app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
             return redirect()->route('role.indexRole')->with('success',  'Role '.$role->name.' edited');
 
         
@@ -286,6 +295,8 @@ class UserRoleController extends Controller
 
 
         $data->delete();
+
+        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         // dd($data->permissions->pluck('id','name')->toArray());
 
@@ -313,10 +324,6 @@ class UserRoleController extends Controller
             }
 
           
-
-      
-          
-          
         }else{
 
             $roleName = 'ban';
@@ -327,7 +334,7 @@ class UserRoleController extends Controller
             
         }
 
-       
+        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         return redirect()->route('user.list')->with('success', $user->username.' '.$status);
         

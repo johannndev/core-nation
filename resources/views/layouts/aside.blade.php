@@ -137,6 +137,7 @@
                 </li>
                 @endcan
 
+                @can('transactions.jubelio.return')
                 <li>
                     <a
                         href="{{route('jubelio.return.index')}}"
@@ -144,6 +145,7 @@
                         >Return Jubelio</a
                     >
                 </li>
+                @endcan
 
                 @can('cnpo list')
                 <li>
@@ -914,6 +916,7 @@
 
                 @endcan
 
+                @can('cron runner')
                 <li>
                     <a
                         href="{{route('cronrunner.index')}}"
@@ -922,6 +925,9 @@
                     >
                 </li>
 
+                @endcan
+
+                @can('jubelio sync')
                 <li>
 
                     <div class="flex justify-between">
@@ -941,6 +947,9 @@
                     </div>
 
                 </li>
+                @endcan
+
+                @can('jubelio webhook')
 
                 <li>
                     <a
@@ -950,13 +959,9 @@
                     >
                 </li>
 
-                <li>
-                    <a
-                        href="{{route('jubelio.log.index')}}"
-                        class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >Jubelio Log</a
-                    >
-                </li>
+                @endcan
+
+                @can('jubelio get order')
 
                 <li>
                     <a
@@ -966,7 +971,11 @@
                     >
                 </li>
 
-                 <li>
+                @endcan
+
+                @can('jubelio cek order')
+
+                <li>
                     <a
                         href="{{route('jubelio.order.cek')}}"
                         class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
@@ -974,6 +983,15 @@
                     >
                 </li>
 
+                @endcan
+
+                <li>
+                    <a
+                        href="{{route('jubelio.log.index')}}"
+                        class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                        >Jubelio Log</a
+                    >
+                </li>
                
             
             

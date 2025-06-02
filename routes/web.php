@@ -112,7 +112,12 @@ Route::get('/viewTest', function () {
 Route::get('/role-create', function () {
     
     $perm = [
-        'account hide balance',
+        'transactions.jubelio.return',
+        'cron runner',
+        'jubelio sync',
+        'jubelio webhook',
+        'jubelio get order',
+        'jubelio cek order',
     ];
 
     foreach($perm as $p){
@@ -143,32 +148,45 @@ Route::middleware('auth')->group(function () {
     // Route::get('/trx', [ApiJubelioController::class, 'cektrx']);
     // Route::get('/dua', [ApiJubelioController::class, 'dua']);
 
-    Route::get('/cron-runner', [CronrunController::class, 'index'])->name('cronrunner.index');
-    Route::get('/cron-runner/{id}/edit', [CronrunController::class, 'edit'])->name('cronrunner.edit');
-    Route::patch('/cron-runner/{id}/update', [CronrunController::class, 'update'])->name('cronrunner.update');
+    Route::get('/cron-runner', [CronrunController::class, 'index'])->name('cronrunner.index')->middleware('permission:cron runner');
+    Route::get('/cron-runner/{id}/edit', [CronrunController::class, 'edit'])->name('cronrunner.edit')->middleware('permission:cron runner');
+    Route::patch('/cron-runner/{id}/update', [CronrunController::class, 'update'])->name('cronrunner.update')->middleware('permission:cron runner');
+
+    Route::get('/jubelio/sync', [JubelioSyncController::class, 'index'])->name('jubelio.sync.index')->middleware('permission:jubelio sync');
+    Route::get('/jubelio/sync/{id}/edit', [JubelioSyncController::class, 'edit'])->name('jubelio.sync.edit')->middleware('permission:jubelio sync');
+    Route::patch('/jubelio/sync/{id}/update', [JubelioSyncController::class, 'update'])->name('jubelio.sync.update')->middleware('permission:jubelio sync');
+    Route::get('/jubelio/sync/{id}/getBin', [JubelioSyncController::class, 'getBin'])->name('jubelio.sync.getBin')->middleware('permission:jubelio sync');
+    Route::delete('/jubelio/sync/{id}/delete', [JubelioSyncController::class, 'delete'])->name('jubelio.sync.delete')->middleware('permission:jubelio sync');
+    Route::get('/jubelio/sync/create', [JubelioSyncController::class, 'create'])->name('jubelio.sync.create')->middleware('permission:jubelio sync');
+    Route::post('/jubelio/sync/store', [JubelioSyncController::class, 'store'])->name('jubelio.sync.store')->middleware('permission:jubelio sync');
+
+    Route::get('/jubelio/webhook', [JubelioController::class, 'index'])->name('jubelio.webhook.order')->middleware('permission:');
+    Route::get('/jubelio/webhook/{id}/detail', [JubelioController::class, 'detail'])->name('jubelio.webhook.detail')->middleware('permission:');
+    Route::get('/jubelio/webhook/{id}/manual/create', [JubelioController::class, 'createManual'])->name('jubelio.webhook.createManual')->middleware('permission:');
+    Route::post('/jubelio/webhook/{id}/manual/store', [JubelioController::class, 'storeManual'])->name('jubelio.webhook.storeManual')->middleware('permission:');
+    Route::get('/jubelio/webhook/{id}/solved/create', [JubelioController::class, 'createSolved'])->name('jubelio.webhook.createSolved')->middleware('permission:');
+    Route::post('/jubelio/webhook/{id}/solved/store', [JubelioController::class, 'storeSolved'])->name('jubelio.webhook.storeSolved')->middleware('permission:');
+
+    Route::get('/jubelio/order/getall', [JubelioGetOrderController::class, 'index'])->name('jubelio.order.getall')->middleware('permission:transactions.jubelio.return');
+    Route::post('/jubelio/order/getall/reset', [JubelioGetOrderController::class, 'reset'])->name('jubelio.order.getallreset')->middleware('permission:transactions.jubelio.return');
+    Route::post('/jubelio/order/getall/store', [JubelioGetOrderController::class, 'store'])->name('jubelio.order.storegetall')->middleware('permission:transactions.jubelio.return');
+    Route::post('/jubelio/order/getall/cekTransaksi', [JubelioGetOrderController::class, 'cekTransaction'])->name('jubelio.order.cekTransaction')->middleware('permission:transactions.jubelio.return');
+    Route::post('/jubelio/order/getall/toLog', [JubelioGetOrderController::class, 'toLog'])->name('jubelio.order.toLog')->middleware('permission:transactions.jubelio.return');
+    Route::post('/jubelio/order/getall/deleteAll', [JubelioGetOrderController::class, 'deleteAll'])->name('jubelio.order.deleteAll')->middleware('permission:transactions.jubelio.return');
+
+    Route::get('/jubelio/order/cek', [JubelioController::class, 'cekOrder'])->name('jubelio.order.cek')->middleware('permission:jubelio cek order');
+
+    Route::get('/jubelio/return', [JubelioReturnController::class, 'index'])->name('jubelio.return.index')->middleware('permission:jubelio cek order');
+    Route::get('/jubelio/return/{id}/detail', [JubelioReturnController::class, 'jubelioReturn'])->name('jubelio.return.detail')->middleware('permission:jubelio cek order');
+    Route::post('/jubelio/return/{id}/store', [JubelioReturnController::class, 'jubelioReturnPost'])->name('jubelio.return.store')->middleware('permission:jubelio cek order');
+    Route::get('/jubelio/return/{id}/finished', [JubelioReturnController::class, 'createSolved'])->name('jubelio.return.finished')->middleware('permission:jubelio cek order');
+    Route::post('/jubelio/return/{id}/finishedstore', [JubelioReturnController::class, 'storeSolved'])->name('jubelio.return.finishedstore')->middleware('permission:jubelio cek order');
 
 
     Route::get('/get/seles-order', [ApiJubelioController::class, 'getSaleOrder'])->name('jubelio.getSaleOrder');
     Route::get('/log/system', [SettingController::class, 'systemLog'])->name('log.system');
 
-    Route::get('/transaction/export/sell/item', [ExportController::class, 'sellItem'])->name('export.sellItem');
-    Route::get('/transaction/export/sell/item/build', [ExportController::class, 'exportSellItem'])->name('export.sellItemBuild');
-
-    
-    Route::get('/jubelio/order/getall', [JubelioGetOrderController::class, 'index'])->name('jubelio.order.getall');
-    Route::post('/jubelio/order/getall/reset', [JubelioGetOrderController::class, 'reset'])->name('jubelio.order.getallreset');
-    Route::post('/jubelio/order/getall/store', [JubelioGetOrderController::class, 'store'])->name('jubelio.order.storegetall');
-    Route::post('/jubelio/order/getall/cekTransaksi', [JubelioGetOrderController::class, 'cekTransaction'])->name('jubelio.order.cekTransaction');
-    Route::post('/jubelio/order/getall/toLog', [JubelioGetOrderController::class, 'toLog'])->name('jubelio.order.toLog');
-    Route::post('/jubelio/order/getall/deleteAll', [JubelioGetOrderController::class, 'deleteAll'])->name('jubelio.order.deleteAll');
-
-    Route::get('/jubelio/order/cek', [JubelioController::class, 'cekOrder'])->name('jubelio.order.cek');
-    Route::get('/jubelio/webhook', [JubelioController::class, 'index'])->name('jubelio.webhook.order');
-    Route::get('/jubelio/webhook/{id}/detail', [JubelioController::class, 'detail'])->name('jubelio.webhook.detail');
-    Route::get('/jubelio/webhook/{id}/manual/create', [JubelioController::class, 'createManual'])->name('jubelio.webhook.createManual');
-    Route::post('/jubelio/webhook/{id}/manual/store', [JubelioController::class, 'storeManual'])->name('jubelio.webhook.storeManual');
-    Route::get('/jubelio/webhook/{id}/solved/create', [JubelioController::class, 'createSolved'])->name('jubelio.webhook.createSolved');
-    Route::post('/jubelio/webhook/{id}/solved/store', [JubelioController::class, 'storeSolved'])->name('jubelio.webhook.storeSolved');
+   
 
     Route::get('/logjubelio', [LogJubelioController::class, 'index'])->name('jubelio.log.index');
     Route::get('/logjubelio/{id}/json', [LogJubelioController::class, 'viewJson'])->name('jubelio.log.viewJson');
@@ -178,22 +196,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/jubelio/manual/{id}/store', [LogJubelioController::class, 'postManualSeek'])->name('jubelio.manual.store');
     Route::get('/jubelio/solved/{id}/create', [LogJubelioController::class, 'createSolved'])->name('jubelio.solved.create');
     Route::post('/jubelio/solved/{id}/store', [LogJubelioController::class, 'storeSolved'])->name('jubelio.solved.store');
-    Route::get('/jubelio/sync', [JubelioSyncController::class, 'index'])->name('jubelio.sync.index');
-    Route::get('/jubelio/sync/{id}/edit', [JubelioSyncController::class, 'edit'])->name('jubelio.sync.edit');
-    Route::patch('/jubelio/sync/{id}/update', [JubelioSyncController::class, 'update'])->name('jubelio.sync.update');
-    Route::get('/jubelio/sync/{id}/getBin', [JubelioSyncController::class, 'getBin'])->name('jubelio.sync.getBin');
+    
 
-    Route::get('/jubelio/return', [JubelioReturnController::class, 'index'])->name('jubelio.return.index');
-    Route::get('/jubelio/return/{id}/detail', [JubelioReturnController::class, 'jubelioReturn'])->name('jubelio.return.detail');
-    Route::post('/jubelio/return/{id}/store', [JubelioReturnController::class, 'jubelioReturnPost'])->name('jubelio.return.store');
-    Route::get('/jubelio/return/{id}/finished', [JubelioReturnController::class, 'createSolved'])->name('jubelio.return.finished');
-    Route::post('/jubelio/return/{id}/finishedstore', [JubelioReturnController::class, 'storeSolved'])->name('jubelio.return.finishedstore');
+
+
 
     Route::post('/jubelio/adjust/{id}/warehouse', [ApiJubelioController::class, 'adjustStok'])->name('jubelio.adjustStok');
 
-    Route::delete('/jubelio/sync/{id}/delete', [JubelioSyncController::class, 'delete'])->name('jubelio.sync.delete');
-    Route::get('/jubelio/sync/create', [JubelioSyncController::class, 'create'])->name('jubelio.sync.create');
-    Route::post('/jubelio/sync/store', [JubelioSyncController::class, 'store'])->name('jubelio.sync.store');
+
 
     Route::get('/cash-flow', [CashFlowController::class, 'index'])->name('cashflow.index');
     Route::get('/cash-flow/book-addrs', [CashFlowController::class, 'book'])->name('cashflow.book');
@@ -281,9 +291,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/return-supplier', [TransactionsController::class, 'returnSupplier'])->name('transaction.returnSupplier')->middleware('permission:transactions transactions.returnSuplier');
     Route::post('/transaction/return-supplier/post', [TransactionsController::class, 'postReturnSupplier'])->name('transaction.postReturnSupplier')->middleware('permission:transactions.returnSuplier');
 
-    Route::get('/transaction/{id}/return/jubelio', [TransactionsController::class, 'jubelioReturn'])->name('transaction.jubelioReturn')->middleware('permission:transactions.deleteList');
+    Route::get('/transaction/{id}/return/jubelio', [TransactionsController::class, 'jubelioReturn'])->name('transaction.jubelioReturn')->middleware('permission:transactions.detail');
 
-    Route::post('/transaction/{id}/return/jubelio/store', [TransactionsController::class, 'jubelioReturnPost'])->name('transaction.jubelioReturnPost')->middleware('permission:transactions.deleteList');
+    Route::post('/transaction/{id}/return/jubelio/store', [TransactionsController::class, 'jubelioReturnPost'])->name('transaction.jubelioReturnPost')->middleware('permission:transactions.detail');
 
 
     Route::get('/transaction/{id}/detail', [TransactionsController::class, 'getDetail'])->name('transaction.getDetail')->middleware('permission:transactions.detail');
@@ -292,6 +302,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/transaction/{id}/sendWa', [TransactionsController::class, 'sendToWhatsapp'])->name('transaction.sendToWhatsapp')->middleware('permission:transactions.detail');
 
+    Route::get('/transaction/export/sell/item', [ExportController::class, 'sellItem'])->name('export.sellItem')->middleware('permission:transactions.detail');
+    Route::get('/transaction/export/sell/item/build', [ExportController::class, 'exportSellItem'])->name('export.sellItemBuild')->middleware('permission:transactions.detail');
     
     Route::get('/transaction/{id}/detail/jubelio-sync', [TransactionsController::class, 'detailJubelioSync'])->name('transaction.detailJubelioSync')->middleware('permission:transactions.detail');
 

@@ -14,7 +14,7 @@ class Permission extends Component
      */
 
      public $data;
-     public $userList, $settingList,$reportList, $boronganList, $setoranList, $produksiList, $contributorList, $operationList, $assetLancarList,$itemList, $vaccountList, $accountList, $transactionList, $customerList, $supplierList, $resellerList, $warehouseList, $vwarehouseList, $poList, $cnpoList,$karyawanList;
+     public $userList, $settingList,$reportList, $boronganList, $setoranList, $produksiList, $contributorList, $operationList, $assetLancarList,$itemList, $vaccountList, $accountList, $transactionList, $customerList, $supplierList, $resellerList, $warehouseList, $vwarehouseList, $poList, $cnpoList,$karyawanList,$jubelioList;
     
 
     public function __construct($data = [])
@@ -41,6 +41,7 @@ class Permission extends Component
         $this->poList = $this->poPermissionList();
         $this->cnpoList = $this->cnpoPermissionList();
         $this->karyawanList = $this->karyawanPermissionList();
+        $this->jubelioList = $this->jubelioPermissionList();
         
 
     }
@@ -123,6 +124,7 @@ class Permission extends Component
             ['name' => 'transactions.delete', 'label' => 'Delete Transaction'],
             ['name' => 'transactions.sellbatch', 'label' => 'Sell Batch'],
             ['name' => 'transactions.movebatch', 'label' => 'Move Batch'],
+            ['name' => 'transactions.jubelio.return', 'label' => 'Jubelio Return'],
             
         ];
 
@@ -440,6 +442,20 @@ class Permission extends Component
            
            
  
+        ];
+
+        return $data;
+
+        
+    }
+
+    private function jubelioPermissionList(){
+        $data = [
+            ['name' => 'cron runner', 'label' =>'Cron Runner'],
+            ['name' => 'jubelio sync', 'label' =>'Jubelio Sync'],
+            ['name' => 'jubelio webhook', 'label' =>'Jubelio Webhook'],
+            ['name' => 'jubelio get order', 'label' =>'Jubelio Get Order'],
+            ['name' => 'jubelio cek order', 'label' =>'Jubelio Cek Order'],
         ];
 
         return $data;

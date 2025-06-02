@@ -674,6 +674,39 @@
 
     </div>
 
+    <div class="mb-8">
+
+        <div>
+            <p class="font-medium mb-2">Jubelio</p>
+        </div>
+        <div>
+            <div class="mb-4">
+                <div class="flex items-center">
+                    <input id="checkbox-all-jubelio" type="checkbox" value="1" class="checkbox-role checkbox-all-jubelio w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="checkbox-role" class="ms-2 text-sm text-gray-900 dark:text-gray-300">Semua</label>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-5 gap-4">
+
+                @foreach ($jubelioList as $item)
+
+                <div>
+                    <div class="flex items-center">
+                        <input @if($permissionsArray) @if(array_key_exists($item['name'],$permissionsArray)) checked @endif @endif   id="checkbox-role" name="permissions[]" type="checkbox" value="{{$item['name']}}" class="checkbox-role checkbox-jubelio w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="checkbox-role" class="ms-2 text-sm text-gray-900 dark:text-gray-300">{{$item['label']}}</label>
+                    </div>
+                </div>
+                    
+                @endforeach
+
+                
+            </div>
+
+            
+        </div>
+
+    </div>
+
     @push('jsBody')
 
     <script>
@@ -716,6 +749,7 @@
         var allpoChecked = 0;
         var allpo = 0;
         var allKaryawan = 0;
+        var allJubelio = 0;
 
 
         function cekChecked(){
@@ -1070,6 +1104,24 @@
 
         }
 
+        function cekJubelio(){
+            allUserChecked = $('.checkbox-jubelio').not(':checked').length;
+            allUser = $('.checkbox-jubelio').length;
+
+            if(allUserChecked == 0){
+                $('.checkbox-all-jubelio').prop('indeterminate', false);
+                $('.checkbox-all-jubelio').prop('checked', true);
+
+            }else if(allUserChecked < allUser && allUserChecked > 0){
+                $('.checkbox-all-jubelio').prop('indeterminate', true);
+            }else{
+                $('.checkbox-all-jubelio').prop('indeterminate', false);
+                $('.checkbox-all-jubelio').prop('checked', false);
+
+            }
+
+        }
+
         $(function(){
 
             cekChecked()
@@ -1091,6 +1143,7 @@
             cekcnpo();
             cekpo();
             cekKaryawan();
+            cekJubelio();
 
             $(".checkbox-role").click(function(){cekChecked();})
             
@@ -1112,6 +1165,7 @@
             $(".checkbox-role.checkbox-cnpo").click(function(){cekcnpo(); })
             $(".checkbox-role.checkbox-po").click(function(){cekpo(); })
             $(".checkbox-role.checkbox-karyawan").click(function(){cekpo(); })
+            $(".checkbox-role.checkbox-jubelio").click(function(){cekpo(); })
             
             
 
@@ -1301,6 +1355,16 @@
                     $('.checkbox-role.checkbox-karyawan').prop('checked', true);
                 }else{
                     $('.checkbox-role.checkbox-karyawan').prop('checked', false);
+                }
+
+                cekChecked();
+            })
+
+            $("#checkbox-all-jubelio").click(function(){
+                if((this).checked == true){
+                    $('.checkbox-role.checkbox-jubelio').prop('checked', true);
+                }else{
+                    $('.checkbox-role.checkbox-jubelio').prop('checked', false);
                 }
 
                 cekChecked();
