@@ -8,13 +8,18 @@ use App\Models\WarehouseItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class HomeController extends Controller
 {
 	public function index()
 	{
-		// $roles = $user->getRoleNames();
-		dd(auth()->user()->can('jubelio webhook'));
+
+
+		$user = Auth::getRoleNames()[0];
+
+		$roles=Role::whereIn('name', [$user])->get();
+		dd($user,$roles );
 		// dd('1',Permission::with('roles')->get()->toArray());
 
 		return view('home');
