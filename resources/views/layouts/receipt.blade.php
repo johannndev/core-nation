@@ -25,7 +25,7 @@
         margin: 0;
         padding: 0;
         font-family: 'Courier New', Courier, monospace;
-        font-size: 11px;
+        font-size: 6px;     /* ~1.6mm height */
         line-height: 1.1;
         color: #000;
         background: #fff;
@@ -44,53 +44,53 @@
     .bold { font-weight: bold; }
     
     .title-main { 
-        font-size: 14px;
+        font-size: 8px;     /* ~2.1mm height */
         font-weight: bold;
-        margin-bottom: 2px;
+        margin-bottom: 1px;
     }
     
     .title-sub { 
-        font-size: 10px;
-        line-height: 1.2;
-        margin-bottom: 4px;
+        font-size: 5px;     /* ~1.3mm height */
+        line-height: 1.1;
+        margin-bottom: 2px;
     }
     
     .invoice-label {
-        font-size: 12px;
-        margin: 4px 0;
+        font-size: 7px;     /* ~1.8mm height */
+        margin: 2px 0;
     }
 
     /* Horizontal rule */
     hr {
         border: none;
         border-top: 1px dashed #000;
-        margin: 3px 0;
+        margin: 2px 0;
     }
 
     /* Meta info */
     .meta {
-        font-size: 11px;
-        line-height: 1.3;
-        margin: 3px 0;
+        font-size: 6px;     /* ~1.6mm height */
+        line-height: 1.2;
+        margin: 2px 0;
     }
 
     /* Table */
     table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 11px;
-        margin: 2px 0;
+        font-size: 6px;     /* ~1.6mm height */
+        margin: 1px 0;
     }
 
     th, td {
-        padding: 1px 0;
+        padding: 0.5px 0;
         vertical-align: top;
     }
 
     th {
         font-weight: bold;
         text-align: left;
-        padding-bottom: 2px;
+        padding-bottom: 1px;
     }
 
     .item { width: 50%; text-align: left; }
@@ -99,18 +99,18 @@
 
     /* Footer row */
     tfoot td {
-        padding-top: 3px;
+        padding-top: 2px;
         font-weight: bold;
     }
 
     /* Totals section */
     .totals {
-        margin: 3px 0;
-        font-size: 11px;
+        margin: 2px 0;
+        font-size: 6px;     /* ~1.6mm height */
     }
 
     .totals tr {
-        line-height: 1.3;
+        line-height: 1.2;
     }
 
     .totals .label {
@@ -125,15 +125,15 @@
 
     .totals .total-row {
         font-weight: bold;
-        font-size: 12px;
+        font-size: 7px;     /* ~1.8mm height */
     }
 
     /* Footer */
     .thankyou {
         text-align: center;
-        font-size: 10px;
-        margin-top: 5px;
-        padding-bottom: 3mm;
+        font-size: 5px;     /* ~1.3mm height */
+        margin-top: 3px;
+        padding-bottom: 2mm;
     }
 
     /* Print specific */
@@ -163,6 +163,7 @@
             margin: 0 auto;
         }
     }
+
 </style>
 </head>
 <body>
@@ -243,5 +244,3 @@ $discount = abs($data->total) - $subtotal;
 </div>
 </body>
 </html>
-
-
