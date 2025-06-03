@@ -26,7 +26,7 @@
         margin: 0;
         padding: 0;
         font-family: 'Courier New', Courier, monospace;
-        font-size: 6px;     /* ~1.6mm height */
+        font-size: 9px;     /* ~1.6mm height */
         line-height: 1.1;
         color: #000;
     }
@@ -43,19 +43,19 @@
     .bold { font-weight: bold; }
     
     .title-main { 
-        font-size: 8px;     /* ~2.1mm height */
+        font-size: 11px;     /* ~2.1mm height */
         font-weight: bold;
         margin-bottom: 1px;
     }
     
     .title-sub { 
-        font-size: 5px;     /* ~1.3mm height */
+        font-size: 8px;     /* ~1.3mm height */
         line-height: 1.1;
         margin-bottom: 2px;
     }
     
     .invoice-label {
-        font-size: 7px;     /* ~1.8mm height */
+        font-size: 9px;     /* ~1.8mm height */
         margin: 2px 0;
     }
 
@@ -68,7 +68,7 @@
 
     /* Meta info */
     .meta {
-        font-size: 6px;     /* ~1.6mm height */
+        font-size: 8px;     /* ~1.6mm height */
         line-height: 1.2;
         margin: 2px 0;
     }
@@ -77,7 +77,7 @@
     table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 6px;     /* ~1.6mm height */
+        font-size: 8px;     /* ~1.6mm height */
         margin: 1px 0;
     }
 
@@ -105,7 +105,7 @@
     /* Totals section */
     .totals {
         margin: 2px 0;
-        font-size: 6px;     /* ~1.6mm height */
+        font-size: 8px;     /* ~1.6mm height */
     }
 
     .totals tr {
@@ -124,13 +124,13 @@
 
     .totals .total-row {
         font-weight: bold;
-        font-size: 7px;     /* ~1.8mm height */
+        font-size: 9px;     /* ~1.8mm height */
     }
 
     /* Footer */
     .thankyou {
         text-align: center;
-        font-size: 5px;     /* ~1.3mm height */
+        font-size: 7px;     /* ~1.3mm height */
         margin-top: 3px;
         padding-bottom: 2mm;
     }
