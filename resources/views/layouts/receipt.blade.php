@@ -14,11 +14,12 @@
     }
 
     * { 
+        color: #000 !important;
         box-sizing: border-box; 
         margin: 0; 
         padding: 0;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 
     body {
@@ -28,7 +29,6 @@
         font-size: 6px;     /* ~1.6mm height */
         line-height: 1.1;
         color: #000;
-        background: #fff;
     }
 
     .receipt {
@@ -36,7 +36,6 @@
         width: 57mm;
         /* Reduced padding to maximize usable width: 2mm each side = 53mm content */
         padding: 2mm 2mm;
-        background: #fff;
     }
 
     /* Typography */
@@ -146,12 +145,14 @@
         .receipt {
             page-break-after: always;
         }
+        * {
+            color: #000 !important;
+        }
     }
 
     /* Hide screen elements */
     @media screen {
         body {
-            background: #f0f0f0;
             display: flex;
             justify-content: center;
             padding: 20px;
