@@ -18,13 +18,30 @@ class HomeController extends Controller
 
 		
 		$onlineStat = Customer::selectRaw("
-			SUM(CASE WHEN is_online = 1 AND type = ".Customer::TYPE_CUSTOMER." THEN 1 ELSE 0 END) as online_customer,
-			SUM(CASE WHEN is_online = 1 AND type = ".Customer::TYPE_WAREHOUSE." THEN 1 ELSE 0 END) as online_warehouse,
-    		SUM(CASE WHEN is_online = 1 AND type IN (".Customer::TYPE_CUSTOMER.", ".Customer::TYPE_WAREHOUSE.") THEN 1 ELSE 0 END) as online_total,
-			SUM(CASE WHEN is_online = 0 AND type = ".Customer::TYPE_CUSTOMER." THEN 1 ELSE 0 END) as offline_customer,
-			SUM(CASE WHEN is_online = 0 AND type = ".Customer::TYPE_WAREHOUSE." THEN 1 ELSE 0 END) as offline_warehouse,
-    		SUM(CASE WHEN is_online = 0 AND type IN (".Customer::TYPE_CUSTOMER.", ".Customer::TYPE_WAREHOUSE.") THEN 1 ELSE 0 END) as offline_total,
-		")->first()->toArray();
+			SUM(CASE WHEN is_online = 1 AND type = ? THEN 1 ELSE 0 END) as online_customer,
+			SUM(CASE WHEN is_online = 1 AND type = ? THEN 1 ELSE 0 END) as online_warehouse,
+			SUM(CASE WHEN is_online = 1 AND type IN (?, ?) THEN 1 ELSE 0 END) as online_total,
+
+			SUM(CASE WHEN is_online = 0 AND type = ? THEN 1 ELSE 0 END) as offline_customer,
+			SUM(CASE WHEN is_online = 0 AND type = ? THEN 1 ELSE 0 END) as offline_warehouse,
+			SUM(CASE WHEN is_online = 0 AND type IN (?, ?) THEN 1 ELSE 0 END) as offline_total,
+
+			SUM(CASE WHEN type = ? THEN 1 ELSE 0 END) as type_customer_total,
+			SUM(CASE WHEN type = ? THEN 1 ELSE 0 END) as type_warehouse_total
+		", [
+			Customer::TYPE_CUSTOMER,  // online_customer
+			Customer::TYPE_WAREHOUSE, // online_warehouse
+			Customer::TYPE_CUSTOMER,  // online_total IN
+			Customer::TYPE_WAREHOUSE, // online_total IN
+
+			Customer::TYPE_CUSTOMER,  // offline_customer
+			Customer::TYPE_WAREHOUSE, // offline_warehouse
+			Customer::TYPE_CUSTOMER,  // offline_total IN
+			Customer::TYPE_WAREHOUSE, // offline_total IN
+
+			Customer::TYPE_CUSTOMER,  // type_customer_total
+			Customer::TYPE_WAREHOUSE, // type_warehouse_total
+		])->first()->toArray();
 
 
 		return view('home',compact('onlineStat'));
