@@ -7,215 +7,163 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-@page { 
-    size: 57mm auto; 
-    margin: 0;
-}
+    @page { 
+        /* ISO C8 is 57mm × 81mm */
+        size: 57mm auto; 
+        margin: 0;
+    }
 
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    background: #fff;
-}
-
-.receipt {
-    width: 57mm;
-    padding: 2mm 2mm;
-    font-family: Arial Black, Gadget, sans-serif; /* Thickest font */
-    font-size: 10px;
-    line-height: 1.3;
-    color: #000;
-    font-weight: 900;
-    
-    /* Multiple text shadows for thickness */
-    text-shadow: 
-        0 0 0.5px #000,
-        0 0 0.5px #000,
-        0 0 0.5px #000,
-        0.3px 0 0 #000,
-        -0.3px 0 0 #000,
-        0 0.3px 0 #000,
-        0 -0.3px 0 #000;
-}
-
-/* Force webkit to render thicker */
-* {
-    -webkit-text-stroke: 0.3px #000;
-    text-stroke: 0.3px #000;
-    -webkit-font-smoothing: none;
-    font-smoothing: none;
-}
-
-/* Typography */
-.center { text-align: center; }
-.bold { 
-    font-weight: 900;
-    -webkit-text-stroke: 0.5px #000;
-}
-
-/* Headers with extra thickness */
-.title-main { 
-    font-size: 14px;
-    font-weight: 900;
-    margin-bottom: 3px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    -webkit-text-stroke: 0.8px #000;
-    text-shadow: 
-        0 0 1px #000,
-        0 0 1px #000,
-        0.5px 0 0 #000,
-        -0.5px 0 0 #000,
-        0 0.5px 0 #000,
-        0 -0.5px 0 #000;
-}
-
-.title-sub { 
-    font-size: 9px;
-    line-height: 1.3;
-    margin-bottom: 3px;
-    font-weight: 900;
-    -webkit-text-stroke: 0.4px #000;
-}
-
-.invoice-label {
-    font-size: 11px;
-    margin: 4px 0;
-    font-weight: 900;
-    -webkit-text-stroke: 0.5px #000;
-}
-
-/* Make HR much thicker */
-hr {
-    border: none;
-    height: 2px;
-    background-color: #000;
-    margin: 4px 0;
-}
-
-/* Table with thicker text */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 10px;
-    margin: 3px 0;
-    font-weight: 900;
-}
-
-th, td {
-    padding: 2px 0;
-    vertical-align: top;
-    -webkit-text-stroke: 0.3px #000;
-}
-
-th {
-    font-weight: 900;
-    padding-bottom: 3px;
-    -webkit-text-stroke: 0.5px #000;
-}
-
-/* Column widths */
-.item { width: 50%; text-align: left; }
-.qty { width: 15%; text-align: center; }
-.amt { width: 35%; text-align: right; }
-
-/* Footer row extra bold */
-tfoot td {
-    padding-top: 4px;
-    font-weight: 900;
-    -webkit-text-stroke: 0.5px #000;
-}
-
-/* Totals section */
-.totals {
-    width: 100%;
-    margin: 4px 0;
-    font-size: 10px;
-}
-
-.totals td {
-    padding: 2px 0;
-    font-weight: 900;
-    -webkit-text-stroke: 0.3px #000;
-}
-
-.totals .label {
-    text-align: left;
-    width: 60%;
-}
-
-.totals .value {
-    text-align: right;
-    width: 40%;
-}
-
-/* Total row extra thick */
-.totals tr.bold td {
-    font-size: 12px;
-    font-weight: 900;
-    -webkit-text-stroke: 0.6px #000;
-    text-shadow: 
-        0 0 0.5px #000,
-        0.3px 0 0 #000,
-        -0.3px 0 0 #000;
-}
-
-/* Footer */
-.thankyou {
-    text-align: center;
-    font-size: 9px;
-    margin-top: 5px;
-    padding-bottom: 3mm;
-    font-weight: 900;
-    -webkit-text-stroke: 0.3px #000;
-}
-
-/* Aggressive print styles for low-res thermal */
-@media print {
-    * {
+    * { 
         color: #000 !important;
+        box-sizing: border-box; 
+        margin: 0; 
+        padding: 0;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
-    
-    /* Force maximum thickness */
-    .receipt * {
-        text-rendering: geometricPrecision !important;
-        filter: contrast(500%) brightness(0.6) !important;
-        -webkit-filter: contrast(500%) brightness(0.6) !important;
-    }
-    
-    /* Double the strokes for print */
-    .title-main {
-        -webkit-text-stroke: 1px #000 !important;
-    }
-    
-    .bold, th, tfoot td, .totals tr.bold td {
-        -webkit-text-stroke: 0.8px #000 !important;
-    }
-    
+
     body {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        margin: 0;
+        padding: 0;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 9px;     /* ~1.6mm height */
+        line-height: 1.1;
+        color: #000;
     }
-}
 
-/* Alternative: Use pseudo elements for extra thickness */
-.title-main::before {
-    content: attr(data-text);
-    position: absolute;
-    left: 0.2px;
-    top: 0.2px;
-    color: #000;
-    z-index: -1;
-}
+    .receipt {
+        /* Adjusted for ISO C8: 57mm total width */
+        width: 57mm;
+        /* Reduced padding to maximize usable width: 2mm each side = 53mm content */
+        padding: 2mm 2mm;
+    }
 
+    /* Typography */
+    .center { text-align: center; }
+    .bold { font-weight: bold; }
+    
+    .title-main { 
+        font-size: 11px;     /* ~2.1mm height */
+        font-weight: bold;
+        margin-bottom: 1px;
+    }
+    
+    .title-sub { 
+        font-size: 8px;     /* ~1.3mm height */
+        line-height: 1.1;
+        margin-bottom: 2px;
+    }
+    
+    .invoice-label {
+        font-size: 9px;     /* ~1.8mm height */
+        margin: 2px 0;
+    }
+
+    /* Horizontal rule */
+    hr {
+        border: none;
+        border-top: 1px dashed #000;
+        margin: 2px 0;
+    }
+
+    /* Meta info */
+    .meta {
+        font-size: 8px;     /* ~1.6mm height */
+        line-height: 1.2;
+        margin: 2px 0;
+    }
+
+    /* Table */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 8px;     /* ~1.6mm height */
+        margin: 1px 0;
+    }
+
+    th, td {
+        padding: 0.5px 0;
+        vertical-align: top;
+    }
+
+    th {
+        font-weight: bold;
+        text-align: left;
+        padding-bottom: 1px;
+    }
+
+    .item { width: 50%; text-align: left; }
+    .qty { width: 15%; text-align: center; }
+    .amt { width: 35%; text-align: right; }
+
+    /* Footer row */
+    tfoot td {
+        padding-top: 2px;
+        font-weight: bold;
+    }
+
+    /* Totals section */
+    .totals {
+        margin: 2px 0;
+        font-size: 8px;     /* ~1.6mm height */
+    }
+
+    .totals tr {
+        line-height: 1.2;
+    }
+
+    .totals .label {
+        text-align: left;
+        width: 60%;
+    }
+
+    .totals .value {
+        text-align: right;
+        width: 40%;
+    }
+
+    .totals .total-row {
+        font-weight: bold;
+        font-size: 9px;     /* ~1.8mm height */
+    }
+
+    /* Footer */
+    .thankyou {
+        text-align: center;
+        font-size: 7px;     /* ~1.3mm height */
+        margin-top: 3px;
+        padding-bottom: 2mm;
+    }
+
+    /* Print specific */
+    @media print {
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .receipt {
+            page-break-after: always;
+        }
+        * {
+            color: #000 !important;
+        }
+    }
+
+    /* Hide screen elements */
+    @media screen {
+        body {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .receipt {
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 0 auto;
+        }
+    }
 </style>
 </head>
 <body>
