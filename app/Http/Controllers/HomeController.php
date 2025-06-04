@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\WarehouseItem;
@@ -16,22 +17,17 @@ class HomeController extends Controller
 	{
 
 		
-		$user = Auth::user();
-
-// Ambil nama role pertama (jika user punya lebih dari satu role)
-$roleName = $user->getRoleNames()->first();
-
-// Ambil role-nya
-$role = Role::where('name', $roleName)->first();
-
-// Ambil permissions dan ubah ke array nama permission
-$permissionNames = $role->permissions->pluck('name')->toArray();
-
-// Tampilkan dengan dd()
-// dd($permissionNames);
+		$onlineStat = Customer::selectRaw("
+			SUM(CASE WHEN is_online = 1 AND type = ".Customer::TYPE_CUSTOMER." THEN 1 ELSE 0 END) as online_customer,
+			SUM(CASE WHEN is_online = 1 AND type = ".Customer::TYPE_WAREHOUSE." THEN 1 ELSE 0 END) as online_warehouse,
+			SUM(CASE WHEN is_online = 1 THEN 1 ELSE 0 END) as online_total,
+			SUM(CASE WHEN is_online = 0 AND type = ".Customer::TYPE_CUSTOMER." THEN 1 ELSE 0 END) as offline_customer,
+			SUM(CASE WHEN is_online = 0 AND type = ".Customer::TYPE_WAREHOUSE." THEN 1 ELSE 0 END) as offline_warehouse,
+			SUM(CASE WHEN is_online = 0 THEN 1 ELSE 0 END) as offline_total
+		")->first()->toArray();
 
 
-		return view('home');
+		return view('home',compact('onlineStat'));
 	}
 
     public function getIndex()

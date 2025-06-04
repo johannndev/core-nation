@@ -77,6 +77,10 @@ class AddrbookController extends Controller
             $customer->ppn = 1;
         }
 
+		if($request->is_online){
+            $customer->is_online = 1;
+        }
+
 		$customer->name = ucfirst(trim($request->name));
 		$customer->type = $request->type;
 
@@ -146,7 +150,7 @@ class AddrbookController extends Controller
         $rules = [
             'address'  => [Rule::requiredIf($requiredProp == 'y')],
             'name'  => 'required',
-            'description' => 'required',
+            // 'description' => 'required',
            
             
 		];
@@ -190,6 +194,12 @@ class AddrbookController extends Controller
         }else{
             $customer->ppn = 0;
         }
+
+		if($request->is_online){
+            $customer->is_online = 1;
+        }else{
+			$customer->is_online = 0;
+		}
 
 		$customer->name = ucfirst(trim($request->name));
 		$customer->type = $typeCustomer;

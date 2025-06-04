@@ -29,11 +29,16 @@ class Edit extends Component
         $data = Customer::findOrFail($this->cid);
 
         $hideProp = "show";
+        $onlineProp = "hidden";
 
         if($data->type == Customer::TYPE_VWAREHOUSE || $data->type == Customer::TYPE_VACCOUNT){
             $hideProp = "hidden";
         }
 
-        return view('components.customer.edit',compact('data','hideProp'));
+        if($data->type == Customer::TYPE_WAREHOUSE || $data->type == Customer::TYPE_CUSTOMER){
+            $onlineProp = "show";
+        }
+
+        return view('components.customer.edit',compact('data','hideProp','onlineProp'));
     }
 }

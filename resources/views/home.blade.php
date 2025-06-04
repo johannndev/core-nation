@@ -36,6 +36,52 @@
 
     <div class="mb-8">
 
+        <div class="grid md:grid-cols-3 gap-4">
+
+
+          <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
+
+            <p class="font-medium">Online</p>
+            <p class=" font-bold text-2xl">{{$onlineStat['online_total']}}</p>
+
+            <div class="grid grid-cols-2 gap-4 text-sm mt-2 text-gray-500">
+
+              <div class="flex">
+                <p>Customer:</p>
+                <p class="ml-2 font-medium">{{$onlineStat['online_customer']}}</p>
+              </div>
+
+              <div class="flex">
+                <p>Warehouse:</p>
+                <p class="ml-2 font-medium">{{$onlineStat['online_warehouse']}}</p>
+              </div>
+
+            </div>
+
+          </div>
+
+           <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
+
+            <p class="font-medium">Offline</p>
+            <p class=" font-bold text-2xl">{{$onlineStat['offline_total']}}</p>
+
+            <div class="grid grid-cols-2 gap-4 text-sm mt-2 text-gray-500">
+
+              <div class="flex">
+                <p>Customer:</p>
+                <p class="ml-2 font-medium">{{$onlineStat['offline_customer']}}</p>
+              </div>
+
+              <div class="flex">
+                <p>Warehouse:</p>
+                <p class="ml-2 font-medium">{{$onlineStat['offline_warehouse']}}</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
 
         <section class="bg-gray-50 dark:bg-gray-900 ">
           <p>welcome</p>

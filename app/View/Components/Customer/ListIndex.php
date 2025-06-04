@@ -39,9 +39,14 @@ class ListIndex extends Component
     {
         
         $hidePropBalance = "show";
+        $onlineProp = "hidden";
 
         if($this->type == Customer::TYPE_VWAREHOUSE || $this->type == Customer::TYPE_WAREHOUSE){
             $hidePropBalance = "hidden";
+        }
+
+        if($this->type == Customer::TYPE_WAREHOUSE || $this->type == Customer::TYPE_CUSTOMER){
+            $onlineProp = "show";
         }
 
         $dataList = Customer::with('stat','locations')->where('type',$this->type);
@@ -79,6 +84,6 @@ class ListIndex extends Component
 
         // dd($dataList);
         
-        return view('components.customer.list-index',compact('dataList','hidePropBalance'));
+        return view('components.customer.list-index',compact('dataList','hidePropBalance','onlineProp'));
     }
 }
