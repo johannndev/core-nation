@@ -1799,7 +1799,11 @@ class TransactionsController extends Controller
 		// // Kirim ke WhatsApp
 		// $this->sendToWhatsapp($invoice->phone, $url);
 
-		return redirect($filePath);
+		$url = env('INVOICE_URL', 'https://invoice.corenationactive.com/');
+		
+		$fileUrl = $url.$fileName;
+
+		return redirect($fileUrl);
 	}
 
 	public function sendToWhatsapp($id,Request $request)
