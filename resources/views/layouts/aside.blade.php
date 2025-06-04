@@ -3,7 +3,7 @@
     aria-label="Sidenav"
     id="drawer-navigation"
 >
-    <div class="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800 mt-10 md:mt-0">
+    <div class="overflow-y-scroll py-5 px-3 h-full bg-white dark:bg-gray-800 mt-10 md:mt-0">
 
     <ul class="space-y-2">
         <li>
