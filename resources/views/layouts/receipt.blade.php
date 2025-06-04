@@ -7,240 +7,133 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-    @page { 
-        /* ISO C8 is 57mm × 81mm */
-        size: 57mm auto; 
-        margin: 0;
-    }
+/* Thermal Printer Compatible CSS */
+@page {
+    size: 58mm auto;
+    margin: 0;
+}
 
-    * { 
-        color: #000 !important;
-        box-sizing: border-box; 
-        margin: 0; 
-        padding: 0;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
+body {
+    margin: 0;
+    padding: 2mm;
+    width: 58mm;
+    font-family: monospace;
+    font-size: 12px;
+    line-height: 1.4;
+}
 
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 9px;     /* ~1.6mm height */
-        line-height: 1.1;
-        color: #000;
-    }
+/* IMPORTANT: Use single words to avoid spacing issues */
+.subtotal { /* NOT "Sub Total" */
+    font-weight: bold;
+}
 
-    .receipt {
-        /* Adjusted for ISO C8: 57mm total width */
-        width: 57mm;
-        /* Reduced padding to maximize usable width: 2mm each side = 53mm content */
-        padding: 2mm 2mm;
-    }
+/* Use monospace formatting for alignment */
+.receipt-line {
+    font-family: monospace;
+    white-space: pre;
+}
 
-    /* Typography */
-    .center { text-align: center; }
-    .bold { font-weight: bold; }
-    
-    .title-main { 
-        font-size: 11px;     /* ~2.1mm height */
-        font-weight: bold;
-        margin-bottom: 1px;
-    }
-    
-    .title-sub { 
-        font-size: 8px;     /* ~1.3mm height */
-        line-height: 1.1;
-        margin-bottom: 2px;
-    }
-    
-    .invoice-label {
-        font-size: 9px;     /* ~1.8mm height */
-        margin: 2px 0;
-    }
+/* Simple center alignment */
+.center { 
+    text-align: center;
+    margin: 0 auto;
+}
 
-    /* Horizontal rule */
-    hr {
-        border: none;
-        border-top: 1px dashed #000;
-        margin: 2px 0;
-    }
+/* Avoid complex table structures */
+.item-row {
+    clear: both;
+    font-family: monospace;
+}
 
-    /* Meta info */
-    .meta {
-        font-size: 8px;     /* ~1.6mm height */
-        line-height: 1.2;
-        margin: 2px 0;
-    }
+/* Use floats instead of table cells */
+.item-name {
+    float: left;
+    width: 50%;
+}
 
-    /* Table */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 8px;     /* ~1.6mm height */
-        margin: 1px 0;
-    }
+.item-qty {
+    float: left;
+    width: 20%;
+    text-align: right;
+}
 
-    th, td {
-        padding: 0.5px 0;
-        vertical-align: top;
-    }
+.item-amt {
+    float: right;
+    width: 30%;
+    text-align: right;
+}
 
-    th {
-        font-weight: bold;
-        text-align: left;
-        padding-bottom: 1px;
-    }
+/* Clear floats */
+.clear {
+    clear: both;
+}
 
-    .item { width: 50%; text-align: left; }
-    .qty { width: 15%; text-align: center; }
-    .amt { width: 35%; text-align: right; }
+/* Simple line */
+hr {
+    border: 0;
+    border-top: 1px solid #000;
+    margin: 2px 0;
+}
 
-    /* Footer row */
-    tfoot td {
-        padding-top: 2px;
-        font-weight: bold;
+@media print {
+    * {
+        font-family: monospace !important;
     }
-
-    /* Totals section */
-    .totals {
-        margin: 2px 0;
-        font-size: 8px;     /* ~1.6mm height */
-    }
-
-    .totals tr {
-        line-height: 1.2;
-    }
-
-    .totals .label {
-        text-align: left;
-        width: 60%;
-    }
-
-    .totals .value {
-        text-align: right;
-        width: 40%;
-    }
-
-    .totals .total-row {
-        font-weight: bold;
-        font-size: 9px;     /* ~1.8mm height */
-    }
-
-    /* Footer */
-    .thankyou {
-        text-align: center;
-        font-size: 7px;     /* ~1.3mm height */
-        margin-top: 3px;
-        padding-bottom: 2mm;
-    }
-
-    /* Print specific */
-    @media print {
-        body {
-            margin: 0;
-            padding: 0;
-        }
-        
-        .receipt {
-            page-break-after: always;
-        }
-        * {
-            color: #000 !important;
-        }
-    }
-
-    /* Hide screen elements */
-    @media screen {
-        body {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .receipt {
-            background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin: 0 auto;
-        }
-    }
+}
 </style>
 </head>
 <body>
+<!-- In your receipt.blade.php -->
 <div class="receipt">
-    <!-- Header -->
-    <div class="center title-main">CORENATION</div>
-    <div class="center title-sub">
-        CILANDAK TOWN SQUARE no.171<br>
-        FX SUDIRMAN lt.4<br>
-        BSD MAGGIORE GRANDE G50
-    </div>
-    
-    <div class="center invoice-label">Retail Invoice</div>
-    
-    <!-- Meta -->
-    <div class="meta">
-  Date : {{\Carbon\Carbon::parse($data->date)->format('d/m/Y')}}<br>
-  Bill No: {{ $data->id }}<br>
-    </div>
-    
+    <div class="center">CORENATION</div>
+    <div class="center">CILANDAK TOWN SQUARE no.171</div>
+    <div class="center">FX SUDIRMAN lt.4</div>
+    <div class="center">BSD MAGGIORE GRANDE G50</div>
+    <br>
+    <div class="center">Retail Invoice</div>
+    <br>
+    <div>Date : {{ \Carbon\Carbon::parse($data->date)->format('d/m/Y') }}</div>
+    <div>Bill No: {{ $data->id }}</div>
     <hr>
     
-    <!-- Items -->
-    <table>
-        <thead>
-            <tr>
-                <th class="item">Item</th>
-                <th class="qty">Qty</th>
-                <th class="amt">Amt</th>
-            </tr>
-        </thead>
-        <tbody>
-@php
-	$subtotal =0;
+    <!-- Header with monospace alignment -->
+    <div class="receipt-line">Item              Qty      Amt</div>
+    <hr>
+    
+    @php
+    $subtotal = 0;
     $subq = 0;
-@endphp
-@foreach($data->transactionDetail as $d)
-    <tr>
-      <td class="item">{{ $d->item->getItemName() }}</td>
-      <td class="qty">{{ $d->quantity }}</td>
-      <td class="amt">{{ Number::format($d->total) }}</td>
-    </tr>
-@php
-    $subtotal += $d->total;
-    $subq += $d->quantity;
-@endphp
-@endforeach
-        </tbody>
-        <tfoot>
-            <tr>
-                <td class="item">Sub Total</td>
-                <td class="qty">{{ $subq }}</td>
-                <td class="amt">{{ Number::format($subtotal) }}</td>
-            </tr>
-        </tfoot>
-    </table>
+    @endphp
+    
+    @foreach($data->transactionDetail as $d)
+    @php
+        // Format with fixed width
+        $item = str_pad(substr($d->item->getItemName(), 0, 18), 18);
+        $qty = str_pad($d->quantity, 3, ' ', STR_PAD_LEFT);
+        $amt = str_pad(number_format($d->total, 0, ',', '.'), 9, ' ', STR_PAD_LEFT);
+        $subtotal += $d->total;
+        $subq += $d->quantity;
+    @endphp
+    <div class="receipt-line">{{ $item }}{{ $qty }}{{ $amt }}</div>
+    @endforeach
     
     <hr>
-@php
-$discount = abs($data->total) - $subtotal;
-@endphp    
-    <!-- Totals -->
-    <table class="totals">
-        <tr>
-            <td class="label">Discount :</td>
-            <td class="value">{{ Number::format($discount); }}</td>
-        </tr>
-        <tr class="total-row">
-            <td class="label">TOTAL</td>
-            <td class="value">{{ Number::format(abs($data->total)); }}</td>
-        </tr>
-    </table>
+    @php
+        $st_text = str_pad('SubTotal', 18);
+        $st_qty = str_pad($subq, 3, ' ', STR_PAD_LEFT);
+        $st_amt = str_pad(number_format($subtotal, 0, ',', '.'), 9, ' ', STR_PAD_LEFT);
+    @endphp
+    <div class="receipt-line">{{ $st_text }}{{ $st_qty }}{{ $st_amt }}</div>
+    <hr>
     
-    <!-- Footer -->
-    <div class="thankyou">
-        @corenationactive phone: 082244226656
-    </div>
+    @php
+    $discount = abs($data->total) - $subtotal;
+    @endphp
+    
+    <div>Discount : {{ number_format($discount, 0, ',', '.') }}</div>
+    <div><strong>TOTAL : {{ number_format(abs($data->total), 0, ',', '.') }}</strong></div>
+    <br>
+    <div class="center">@corenationactive 082244226656</div>
 </div>
 </body>
 </html>
