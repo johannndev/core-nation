@@ -37,7 +37,7 @@ class AddrbookController extends Controller
 		}
 
         $rules = [
-            'address'  => [Rule::requiredIf($requiredProp == 'y')],
+//            'address'  => [Rule::requiredIf($requiredProp == 'y')],
             'name'  => 'required',
            
             'initial' => [Rule::requiredIf($requiredProp == 'y')],
@@ -148,7 +148,7 @@ class AddrbookController extends Controller
 
 
         $rules = [
-            'address'  => [Rule::requiredIf($requiredProp == 'y')],
+//            'address'  => [Rule::requiredIf($requiredProp == 'y')],
             'name'  => 'required',
             // 'description' => 'required',
            
