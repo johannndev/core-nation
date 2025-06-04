@@ -20,10 +20,10 @@ class HomeController extends Controller
 		$onlineStat = Customer::selectRaw("
 			SUM(CASE WHEN is_online = 1 AND type = ".Customer::TYPE_CUSTOMER." THEN 1 ELSE 0 END) as online_customer,
 			SUM(CASE WHEN is_online = 1 AND type = ".Customer::TYPE_WAREHOUSE." THEN 1 ELSE 0 END) as online_warehouse,
-			SUM(CASE WHEN is_online = 1 THEN 1 ELSE 0 END) as online_total,
+    		SUM(CASE WHEN is_online = 1 AND type IN (".Customer::TYPE_CUSTOMER.", ".Customer::TYPE_WAREHOUSE.") THEN 1 ELSE 0 END) as online_total,
 			SUM(CASE WHEN is_online = 0 AND type = ".Customer::TYPE_CUSTOMER." THEN 1 ELSE 0 END) as offline_customer,
 			SUM(CASE WHEN is_online = 0 AND type = ".Customer::TYPE_WAREHOUSE." THEN 1 ELSE 0 END) as offline_warehouse,
-			SUM(CASE WHEN is_online = 0 THEN 1 ELSE 0 END) as offline_total
+    		SUM(CASE WHEN is_online = 0 AND type IN (".Customer::TYPE_CUSTOMER.", ".Customer::TYPE_WAREHOUSE.") THEN 1 ELSE 0 END) as offline_total,
 		")->first()->toArray();
 
 
