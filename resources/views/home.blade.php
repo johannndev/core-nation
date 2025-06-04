@@ -83,11 +83,6 @@
 
         </div>
 
-        <section class="bg-gray-50 dark:bg-gray-900 ">
-          <p>welcome</p>
-        </section>
-       
-
     </div>
 
 </x-layouts.layout>
