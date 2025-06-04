@@ -1756,6 +1756,52 @@ class TransactionsController extends Controller
 		return redirect()->route('transaction.getDetail',$invoice->id)->with('success', 'Transaction # ' . $invoice->id. ' PDF created.');
 	}
 
+	public function generateReceipt($id)
+	{
+		$data = Transaction::with(['receiver','sender','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+
+
+		$folderPath = public_path('receipts');
+		if (!file_exists($folderPath)) {
+			mkdir($folderPath, 0777, true);
+		}
+	
+		// Nama file statis berdasarkan ID
+		$fileName = 'receipt_' . $data->id . '.pdf';
+		// $fullPath = $folderPath . '/' . $fileName;
+		// $url = asset('invoices/' . $fileName);
+
+		$path = env('INVOICE_PATH', '/laragon/www/core-nation/public/asset/inv/');
+		$filePath = $path . $fileName;
+
+		// Buat direktori jika belum ada
+		if (!File::exists($path)) {
+			File::makeDirectory($path, 0755, true); // Membuat direktori dengan izin 755
+		}
+
+		if (File::exists($filePath)) {
+			unlink($filePath); // Membuat direktori dengan izin 755
+		}
+
+		$view = view('pdf.receipt', compact('data'))->render();
+
+		// preg_match('/name="docHeight" value="(\d+)"/', $view, $matches);
+		// $docHeight = isset($matches[1]) ? (int)$matches[1] : 842; // default A4 height kalau gagal
+
+		$pdf = Pdf::loadView('pdf.receipt', compact('data'))->setPaper('A4','portrait')
+		->setOptions([
+			'isHtml5ParserEnabled' => true,
+			'isRemoteEnabled' => true,
+			'isPhpEnabled' => true,
+		]);
+		$pdf->save($filePath);
+		
+		// // Kirim ke WhatsApp
+		// $this->sendToWhatsapp($invoice->phone, $url);
+
+		return redirect($filePath);
+	}
+
 	public function sendToWhatsapp($id,Request $request)
 	{
 

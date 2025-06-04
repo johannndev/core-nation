@@ -300,6 +300,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/transaction/{id}/invoice', [TransactionsController::class, 'generateInvoice'])->name('transaction.genereteInvoice')->middleware('permission:transactions.detail');
 
+    Route::get('/transaction/{id}/receipt', [TransactionsController::class, 'generateReceipt'])->name('transaction.generateReceipt')->middleware('permission:transactions.detail');
+
     Route::post('/transaction/{id}/sendWa', [TransactionsController::class, 'sendToWhatsapp'])->name('transaction.sendToWhatsapp')->middleware('permission:transactions.detail');
 
     Route::get('/transaction/export/sell/item', [ExportController::class, 'sellItem'])->name('export.sellItem')->middleware('permission:transactions.detail');
