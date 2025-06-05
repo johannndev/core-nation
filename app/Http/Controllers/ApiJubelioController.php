@@ -863,7 +863,7 @@ class ApiJubelioController extends Controller
                 $transaction->adjustment	 = $dataJubelio->adjustment;
                 $transaction->user_id =-100;
 
-                $transaction->description = $dataJubelio->description ?? '';
+                $transaction->description = $dataJubelio->description;
                 $transaction->invoice = $dataJubelio->invoice;
 
                 $transaction->submit_type = 2;

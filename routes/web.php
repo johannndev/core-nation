@@ -309,6 +309,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/transaction/{id}/detail/jubelio-sync/clear', [TransactionsController::class, 'clearWarning'])->name('transaction.clearWarningJubelioSync')->middleware('permission:transactions.detail');
 
+    
+    Route::get('/transaction/{id}/edit/note', [TransactionsController::class, 'editNote'])->name('transaction.editNote')->middleware('permission:transactions.detail');
+    Route::patch('/transaction/{id}/update/note', [TransactionsController::class, 'updateNote'])->name('transaction.updateNote')->middleware('permission:transactions.detail');
 
     Route::get('/transaction/delete', [DeletedController::class, 'index'])->name('transaction.delete')->middleware('permission:transactions.deleteList');
     Route::get('/transaction/delete/filter', [FilterQueryController::class, 'transactionFilterDelete'])->name('transaction.deletefilter')->middleware('permission:transactions.deleteList');

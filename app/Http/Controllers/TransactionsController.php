@@ -1694,10 +1694,6 @@ class TransactionsController extends Controller
 
 		return redirect()->route('transaction.index')->with('success', 'Return created.');
 
-		
-
-		
-		
 
 	}
 
@@ -1866,6 +1862,44 @@ class TransactionsController extends Controller
 			return redirect()->route('transaction.detailJubelioSync', $id)->with('success', 'Jubelio adjustment warning cleared');
 
 	}
+
+	public function editNote($id){
+
+		$data = Transaction::find($id);
+
+		return view('transactions.edit-desc',compact('data'));
+
+	}
+
+	
+    public function updateNote(Request $request,$id){
+
+    
+        try{
+            DB::beginTransaction();
+
+			$data = Transaction::find($id);
+
+			$data->description = $request->note ?? " ";
+
+			$data->save();
+
+            DB::commit();
+
+
+            return redirect()->route('transaction.getDetail',$id)->with('success',  'Note updated');
+
+        
+
+        } catch(ModelException $e) {
+            DB::rollBack();
+			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+        } catch(\Exception $e) {
+            DB::rollBack();
+			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+        }
+    }
+
 
 
 	
