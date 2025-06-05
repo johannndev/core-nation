@@ -144,7 +144,7 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/test-running', [ApiJubelioController::class, 'testCron']);
+    Route::get('/test-running', [ApiJubelioController::class, 'testApi']);
     // Route::get('/trx', [ApiJubelioController::class, 'cektrx']);
     // Route::get('/dua', [ApiJubelioController::class, 'dua']);
 
@@ -197,13 +197,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/jubelio/solved/{id}/create', [LogJubelioController::class, 'createSolved'])->name('jubelio.solved.create');
     Route::post('/jubelio/solved/{id}/store', [LogJubelioController::class, 'storeSolved'])->name('jubelio.solved.store');
     
-
-
-
-
     Route::post('/jubelio/adjust/{id}/warehouse', [ApiJubelioController::class, 'adjustStok'])->name('jubelio.adjustStok');
-
-
 
     Route::get('/cash-flow', [CashFlowController::class, 'index'])->name('cashflow.index');
     Route::get('/cash-flow/book-addrs', [CashFlowController::class, 'book'])->name('cashflow.book');

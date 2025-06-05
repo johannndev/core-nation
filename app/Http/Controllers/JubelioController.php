@@ -251,7 +251,7 @@ class JubelioController extends Controller
                     'run_count'         => 0,
                     'error_type'        => null,
                     'error'             => null,
-                    'payload'           => $dataApi,
+                    'payload'           => json_encode($dataApi),
                     'execute_by'        => null,
                     'status'            => 0,
                     'created_at'        => now(),
