@@ -402,14 +402,8 @@ class OrderJubelioToAria extends Command
             $transaction->adjustment	 = $dataJubelio->adjustment;
             $transaction->user_id =-100;
             $transaction->submit_type = 2;
+            $transaction->description = $dataJubelio->description ?? '';
 
-            //    if($dataJubelio->note){
-            //        $transaction->description = $dataJubelio->note;
-            //    }else{
-                
-            //    }
-
-            $transaction->description = " ";
             $transaction->invoice = $dataJubelio->invoice;
 
             if($dataJubelio->due){
