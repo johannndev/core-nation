@@ -1665,11 +1665,11 @@ class ApiJubelioController extends Controller
             ], 200);
         }else{
 
-            if($cekTransaksi){
+            if(!$cekTransaksi){
 
                 return response()->json([
                     'status' => 'ok',
-                    'message' => 'Transaksi sell tidak ada.',
+                    'message' => 'Transaksi sell tidak ada. '.$dataApi['salesorder_no'],
                 ], 200);
 
                 
