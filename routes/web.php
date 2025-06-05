@@ -144,7 +144,7 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/test-running', [ApiJubelioController::class, 'testApi']);
+    Route::get('/test-running/{id}', [ApiJubelioController::class, 'testApi']);
     // Route::get('/trx', [ApiJubelioController::class, 'cektrx']);
     // Route::get('/dua', [ApiJubelioController::class, 'dua']);
 

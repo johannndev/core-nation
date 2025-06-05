@@ -1639,13 +1639,13 @@ class ApiJubelioController extends Controller
         dd($duplicates);
     }
 
-    public function testApi(){
+    public function testApi($id){
        
         $response = Http::withHeaders([ 
             'Content-Type'=> 'application/json', 
             'authorization'=> Cache::get('jubelio_data')['token'], 
         ]) 
-        ->get('https://api2.jubelio.com/sales/sales-returns/748'); 
+        ->get('https://api2.jubelio.com/sales/sales-returns/'.$id); 
 
         
         $dataApi = json_decode($response->body(), true);
