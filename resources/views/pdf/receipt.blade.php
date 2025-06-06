@@ -122,7 +122,7 @@
                 <tr>
                     <td>{{ $item->item->getItemName() }}</td>
                     <td class="text-right">{{ $item->quantity }}</td>
-                    <td class="text-right">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
+                    <td class="text-right">Rp{{ number_format(abs($item->price), 0, ',', '.') }}</td>
                 </tr>
             @endforeach
         </tbody>
