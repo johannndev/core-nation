@@ -122,7 +122,7 @@
                 <tr>
                     <td>{{ $item->item->getItemName() }}</td>
                     <td class="text-right">{{ number_format($item->quantity) }}</td>
-                    <td class="text-right">Rp{{ number_format(abs($item->price),',','.') }}</td>
+                    <td class="text-right">Rp{{ number_format(abs($item->price),0,',','.') }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -136,15 +136,15 @@
         </tr>
         <tr>
             <td class="label">Total Before Discount:</td>
-            <td class="text-right">Rp{{number_format($data->real_total,',','.')}}</td>
+            <td class="text-right">Rp{{number_format($data->real_total,0,',','.')}}</td>
         </tr>
         <tr>
             <td class="label">Discount:</td>
-            <td class="text-right">(Rp{{number_format($data->real_total - $data->total,',','.')}})</td>
+            <td class="text-right">(Rp{{number_format($data->real_total - $data->total,0,',','.')}})</td>
         </tr>
         <tr>
             <td class="label"><strong>Grand Total:</strong></td>
-            <td class="text-right"><strong>Rp{{number_format(abs($data->total),',','.')}}</strong></td>
+            <td class="text-right"><strong>Rp{{number_format(abs($data->total),0,',','.')}}</strong></td>
         </tr>
     </table>
 
