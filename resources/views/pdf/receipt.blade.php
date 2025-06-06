@@ -1,148 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<title>CORENATION</title>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>Invoice #{{ $invoice->invoice }}</title>
+    <style>
 
-<style>
-@page {
-    size: 58mm auto;
-    margin: 0;
-}
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
 
-body {
-    margin: 0;
-    padding: 2mm;
-    width: 58mm;
-    font-family: monospace;
-    font-size: 12px;
-    line-height: 1.4;
-}
+        html, body {
+            margin: 0;
+            padding: 20mm; /* ✅ Padding di semua sisi */
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #333;
+        }
+        
+        
+        .header, .footer {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .header h2 {
+            margin: 0;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: avoid; /* <-- penting supaya tidak potong tabel */
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ccc;
+            text-align: left;
+            word-wrap: break-word;
+        }
 
-.center {
-    text-align: center;
-    margin: 0 auto;
-}
+        tr, td, th {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
 
-hr {
-    border: 0;
-    border-top: 1px solid #000;
-    margin: 2px 0;
-}
+        .text-right {
+            text-align: right;
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    font-family: monospace;
-    font-size: 12px;
-    padding: 0;
-}
-
-.item-table td {
-    padding: 1px 0;
-}
-
-.item-name {
-    width: 50%;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.item-qty {
-    width: 20%;
-    text-align: right;
-}
-
-.item-amt {
-    width: 30%;
-    text-align: right;
-}
-
-.total-label {
-    text-align: left;
-    font-weight: bold;
-}
-
-.total-value {
-    text-align: right;
-    font-weight: bold;
-}
-
-@media print {
-    * {
-        font-family: monospace !important;
-    }
-}
-</style>
+        .bold {
+            font-weight: bold;
+        }
+        .totals {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .totals td {
+            padding: 5px;
+        }
+        .totals .label {
+            text-align: right;
+            font-weight: bold;
+        }
+        .footer-note {
+            margin-top: 30px;
+            font-size: 10px;
+            color: #777;
+        }
+    </style>
 </head>
 <body>
-<div class="receipt">
-    <div class="center">CORENATION</div>
-    <div class="center">CILANDAK TOWN SQUARE no.171</div>
-    <div class="center">FX SUDIRMAN lt.4</div>
-    <div class="center">BSD MAGGIORE GRANDE G50</div>
-    <br>
-    <div class="center">Retail Invoice</div>
-    <br>
-    <div>Date : {{ \Carbon\Carbon::parse($data->date)->format('d/m/Y') }}</div>
-    <div>Bill No: {{ $data->id }}</div>
-    <hr>
-    
-    <table class="item-table">
+
+    {{-- Header --}}
+    <div class="header">
+        <div class="">
+            <table style="border: none;">
+                <tr>
+                    <td style="border: none; white-space: nowrap;  width: 30px; ">
+                        <img
+                            src="{{asset('img/logo.png')}}"
+                            style="width: auto;"
+                            alt="Flowbite Logo"
+                        />
+                    </td>
+                    <td style="border: none;">
+                        <h2 style="margin: 0;">CoreNation Active</h2>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <p><strong>Invoice : </strong>{{ $invoice->invoice }}</p>
+        <p><strong>Date: </strong>{{ \Carbon\Carbon::parse($invoice->date)->format('d M Y') }}</p>
+    </div>
+
+    {{-- From & To --}}
+    <div class="section">
+        <table style="border: none;">
+            <tr>
+                <td style="border: none;">
+                    {{$invoice->sender->name}}<br>
+                    {{-- {{ $invoice->from_address }}<br>
+                    {{ $invoice->from_phone }} --}}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    {{-- Product Table --}}
+    <table>
         <thead>
             <tr>
-                <th class="item-name">Item</th>
-                <th class="item-qty">Qty</th>
-                <th class="item-amt">Amt</th>
+                <th>Item Name</th>
+                <th class="text-right">Quantity</th>
+                <th class="text-right">Amt</th>
             </tr>
         </thead>
         <tbody>
-            @php
-            $subtotal = 0;
-            $subq = 0;
-            @endphp
-            @foreach($data->transactionDetail as $d)
-            @php
-                $subtotal += $d->total;
-                $subq += $d->quantity;
-            @endphp
-            <tr>
-                <td class="item-name">{{ Str::limit($d->item->getItemName(), 18, '') }}</td>
-                <td class="item-qty">{{ $d->quantity }}</td>
-                <td class="item-amt">{{ number_format($d->total, 0, ',', '.') }}</td>
-            </tr>
+            @foreach ($invoice->transactionDetail as $index => $item)
+                <tr>
+                    <td>{{ $item->item->getItemName() }}</td>
+                    <td class="text-right">{{ $item->quantity }}</td>
+                    <td class="text-right">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
 
-    <hr>
-
-    <table>
+    {{-- Totals --}}
+    <table class="totals">
         <tr>
-            <td class="total-label">SubTotal ({{ $subq }} items)</td>
-            <td class="total-value">{{ number_format($subtotal, 0, ',', '.') }}</td>
-        </tr>
-        @php
-            $discount = abs($data->total) - $subtotal;
-        @endphp
-        <tr>
-            <td class="total-label">Discount</td>
-            <td class="total-value">{{ number_format($discount, 0, ',', '.') }}</td>
+            <td class="label">Total Items:</td>
+            <td class="text-right">{{$invoice->total_items}}</td>
         </tr>
         <tr>
-            <td class="total-label">TOTAL</td>
-            <td class="total-value">{{ number_format(abs($data->total), 0, ',', '.') }}</td>
+            <td class="label">Total Before Discount:</td>
+            <td class="text-right">Rp{{number_format($invoice->real_total,2)}}</td>
+        </tr>
+        <tr>
+            <td class="label">Discount:</td>
+            <td class="text-right">(Rp{{number_format($invoice->real_total - $invoice->total,2)}})</td>
+        </tr>
+        <tr>
+            <td class="label"><strong>Grand Total:</strong></td>
+            <td class="text-right"><strong>Rp{{number_format($invoice->total,2)}}</strong></td>
         </tr>
     </table>
 
-    <br>
-    <div class="center">@corenationactive 082244226656</div>
-</div>
+    {{-- Footer --}}
+    <div class="footer-note">
+        @corenationactive 082244226656
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Ambil tinggi konten di pixel
+            const contentHeightPx = document.body.scrollHeight;
+    
+            // Konversi pixel ke points (1pt = 1.333px)
+            const contentHeightPt = contentHeightPx * 0.75;
+    
+            // Kirim tinggi ke PHP lewat hidden element
+            const heightInput = document.createElement('input');
+            heightInput.type = 'hidden';
+            heightInput.name = 'docHeight';
+            heightInput.value = Math.ceil(contentHeightPt);
+    
+            document.body.appendChild(heightInput);
+        });
+    </script>
+
 </body>
 </html>
