@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Invoice #{{ $invoice->invoice }}</title>
+    <title>Invoice #{{ $data->invoice }}</title>
     <style>
 
         @page {
@@ -91,8 +91,8 @@
                 </tr>
             </table>
         </div>
-        <p><strong>Invoice : </strong>{{ $invoice->invoice }}</p>
-        <p><strong>Date: </strong>{{ \Carbon\Carbon::parse($invoice->date)->format('d M Y') }}</p>
+        <p><strong>Invoice : </strong>{{ $data->invoice }}</p>
+        <p><strong>Date: </strong>{{ \Carbon\Carbon::parse($data->date)->format('d M Y') }}</p>
     </div>
 
     {{-- From & To --}}
@@ -100,9 +100,9 @@
         <table style="border: none;">
             <tr>
                 <td style="border: none;">
-                    {{$invoice->sender->name}}<br>
-                    {{-- {{ $invoice->from_address }}<br>
-                    {{ $invoice->from_phone }} --}}
+                    {{$data->sender->name}}<br>
+                    {{-- {{ $data->from_address }}<br>
+                    {{ $data->from_phone }} --}}
                 </td>
             </tr>
         </table>
@@ -118,7 +118,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($invoice->transactionDetail as $index => $item)
+            @foreach ($data->transactionDetail as $index => $item)
                 <tr>
                     <td>{{ $item->item->getItemName() }}</td>
                     <td class="text-right">{{ $item->quantity }}</td>
@@ -132,19 +132,19 @@
     <table class="totals">
         <tr>
             <td class="label">Total Items:</td>
-            <td class="text-right">{{$invoice->total_items}}</td>
+            <td class="text-right">{{$data->total_items}}</td>
         </tr>
         <tr>
             <td class="label">Total Before Discount:</td>
-            <td class="text-right">Rp{{number_format($invoice->real_total,2)}}</td>
+            <td class="text-right">Rp{{number_format($data->real_total,2)}}</td>
         </tr>
         <tr>
             <td class="label">Discount:</td>
-            <td class="text-right">(Rp{{number_format($invoice->real_total - $invoice->total,2)}})</td>
+            <td class="text-right">(Rp{{number_format($data->real_total - $data->total,2)}})</td>
         </tr>
         <tr>
             <td class="label"><strong>Grand Total:</strong></td>
-            <td class="text-right"><strong>Rp{{number_format($invoice->total,2)}}</strong></td>
+            <td class="text-right"><strong>Rp{{number_format($data->total,2)}}</strong></td>
         </tr>
     </table>
 
