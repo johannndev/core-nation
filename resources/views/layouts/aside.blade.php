@@ -1,16 +1,14 @@
 <aside
-    class="overflow-scroll print:hidden print:w-0 fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform pb-10 -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+    class="print:hidden print:w-0 fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
     aria-label="Sidenav"
-    id="drawer-navigation"
->
-    <div class="overflow-y-scroll py-5 px-3 h-full bg-white dark:bg-gray-800 mt-10 md:mt-0">
+    id="drawer-navigation" style="overflow:scroll;padding-bottom:10px;">
+    <div class="py-5 px-3 h-full bg-white dark:bg-gray-800 mt-10 md:mt-0" style="overflow:scroll;padding-bottom:10px;">
 
-    <ul class="space-y-2">
+    <ul class="space-y-2" style="overflow:scroll;padding-bottom:10px;">
         <li>
         <a
             href="{{route('dashboard')}}"
-            class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-        >
+            class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
             <svg
             aria-hidden="true"
             class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
