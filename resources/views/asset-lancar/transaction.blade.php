@@ -96,8 +96,8 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-4 py-3">Date</th>
-                                    <th scope="col" class="px-4 py-3">Type</th>
                                     <th scope="col" class="px-4 py-3">Invoice</th>
+                                    <th scope="col" class="px-4 py-3">Type</th>
                                     <th scope="col" class="px-4 py-3">Description</th>
                                     <th scope="col" class="px-4 py-3">Quantity</th>
                                     <th scope="col" class="px-4 py-3">Sender</th>
@@ -126,12 +126,12 @@
                                     <td class="px-4 py-3">{{$item->quantity}}</td>
                                     <td class="px-4 py-3">
                                         @isset($item->transaction->sender)
-                                            {{$item->transaction->sender->name}}
+                                            <a href="{{$item->sender->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->transaction->sender->name}}</a>
                                         @endisset
                                     </td>
                                     <td class="px-4 py-3">
                                         @isset($item->transaction->receiver)
-                                            {{$item->transaction->receiver->name}}
+                                            <a href="{{$item->receiver->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->transaction->receiver->name}}</a>
                                         @endisset
                                     </td>
                                   
