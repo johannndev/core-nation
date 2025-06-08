@@ -49,7 +49,7 @@ class Items extends Component
             $name = Request('name');
 
 			$query = $query->whereHas('item', function($query) use($name) {
-				$query->where('code','LIKE', "%$name%");
+				$query->where('code','LIKE', "%$name%")->orWhere('name','LIKE',"%$name%");
 			});
 		}
 
