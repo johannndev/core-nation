@@ -125,12 +125,12 @@
                                     <td class="px-4 py-3">{{$item->quantity}}</td>
                                     <td class="px-4 py-3">
                                         @isset($item->transaction->sender)
-                                            {{$item->transaction->sender->name}}
+                                            <a href="{{$item->sender->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->transaction->sender->name}}</a>
                                         @endisset
                                     </td>
                                     <td class="px-4 py-3">
                                         @isset($item->transaction->receiver)
-                                            {{$item->transaction->receiver->name}}
+                                            <a href="{{$item->receiver->getDetailLink()}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->transaction->receiver->name}}</a>
                                         @endisset
                                     </td>
                                   
