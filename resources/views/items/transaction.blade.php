@@ -95,8 +95,8 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-4 py-3">Date</th>
-                                    <th scope="col" class="px-4 py-3">Type</th>
                                     <th scope="col" class="px-4 py-3">Invoice</th>
+                                    <th scope="col" class="px-4 py-3">Type</th>
                                     <th scope="col" class="px-4 py-3">Description</th>
                                     <th scope="col" class="px-4 py-3">Quantity</th>
                                     <th scope="col" class="px-4 py-3">Sender</th>
