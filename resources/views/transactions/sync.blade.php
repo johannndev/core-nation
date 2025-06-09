@@ -106,6 +106,7 @@
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
+                                        <th scope="col" class="px-4 py-3">Date</th>
                                         <th scope="col" class="px-4 py-3">Invoice</th>
                                         <th scope="col" class="px-4 py-3">Type</th>
                                         {{-- <th scope="col" class="px-4 py-3">Order ID</th> --}}
@@ -116,7 +117,7 @@
                                 <tbody>
                                     @forelse ( $transactions as $item)
                                         
-                                  
+                                    <td class="px-4 py-3">{{$item->date}}</td>
                     
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                         <th class="px-4 py-3">
