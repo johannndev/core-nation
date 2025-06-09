@@ -1915,7 +1915,7 @@ class TransactionsController extends Controller
 
 
 		if($request->date){
-			$transactions = $transactions->whereDate('date','=',$request->from);
+			$transactions = $transactions->whereDate('date','=',$request->date);
 		}
 		
 		if($request->type){
