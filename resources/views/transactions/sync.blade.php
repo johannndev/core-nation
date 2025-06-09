@@ -117,9 +117,8 @@
                                 <tbody>
                                     @forelse ( $transactions as $item)
                                         
-                                    <td class="px-4 py-3">{{$item->date}}</td>
-                    
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
+                                         <td class="px-4 py-3">{{$item->date}}</td>
                                         <th class="px-4 py-3">
                                          
                                             <a target="_blank" href={{ route('transaction.index',['invoice' => $item->invoice, 'type' => 0]) }} class="text-blue-500 hover:text-blue-600 hover:underline">{{$item->invoice}}</a>
