@@ -1912,6 +1912,11 @@ class TransactionsController extends Controller
 
 		$transactions = Transaction::with(['sender', 'receiver'])
 			->where('submit_type', 1);
+
+
+		if($request->date){
+			$transactions = $transactions->whereDate('date','=',$request->from);
+		}
 		
 		if($request->type){
 			$transactions =	$transactions->where('type',$request->type);
