@@ -102,8 +102,28 @@
                                         
                                         {{-- <th class="px-4 py-3">{{$item->jubelio_order_id}}</th> --}}
                                         <td class="px-4 py-3">{{$item->type_name}}</td>
-                                        <td class="px-4 py-3">{{$item->sender->name}}</td>
-                                        <td class="px-4 py-3">{{$item->receiver->name}}</td>
+                                        <td class="px-4 py-3">
+                                             <span class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-sm me-2 dark:bg-green-700 dark:text-green-400 border border-green-500 ">
+                                                        
+                                                <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"  stroke-width="2" stroke="currentColor">
+                                                    <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd" />
+                                                </svg>
+
+                                                  {{$item->sender->name}}
+                                            </span>
+                                          
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <span class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-sm me-2 dark:bg-green-700 dark:text-green-400 border border-green-500 ">
+                                                        
+                                                <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"  stroke-width="2" stroke="currentColor">
+                                                    <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd" />
+                                                </svg>
+
+                                                  {{$item->receiver->name}}
+                                            </span>    
+                                            
+                                        </td>
                                 
                                         
                                         
