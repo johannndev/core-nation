@@ -136,6 +136,47 @@ class Transaction extends Model
  
     }
 
+	public function getSyncCekAttribute()
+	{
+		$result = [
+			'adjustTypeA' => null,
+			'adjustTypeB' => null,
+			'jubelioA' => null,
+			'jubelioB' => null,
+			'whA' => null,
+			'whB' => null,
+			'whAName' => null,
+			'whBName' => null,
+		];
+
+		if ($this->type == self::TYPE_SELL || $this->type == self::TYPE_RETURN_SUPPLIER) {
+
+			$sync = 'S';
+
+
+		} elseif ($this->type == self::TYPE_BUY || $this->type == self::TYPE_RETURN) {
+
+			$sync = 'R';
+
+		} elseif ($this->type == self::TYPE_MOVE) {
+
+			$sjbA = Jubeliosync::with('warehouse')->where('warehouse_id', $this->sender_id)->first();
+			$sjbB = Jubeliosync::with('warehouse')->where('warehouse_id', $this->receiver_id)->first();
+
+			if ($sjbA && $sjbB) {
+				$sync = 'B';
+
+			} elseif ($sjbA && is_null($sjbB)) {
+				$sync = 'S';
+
+			} elseif (is_null($sjbA) && $sjbB) {
+				$sync = 'R';
+			}
+		}
+
+		return $sync;
+	}
+
 	public function getReceiverBalanceFilterAttribute()
     {
 		
