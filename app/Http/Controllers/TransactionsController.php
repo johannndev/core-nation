@@ -1907,6 +1907,7 @@ class TransactionsController extends Controller
 			Transaction::TYPE_RETURN_SUPPLIER => 'RETURN SUPLIER',
 			Transaction::TYPE_BUY => 'BUY',
 			Transaction::TYPE_RETURN => 'RETURN',
+			Transaction::TYPE_MOVE => 'MOVE',
 		];
 
 		$transactions = Transaction::with(['sender', 'receiver'])
