@@ -1900,11 +1900,36 @@ class TransactionsController extends Controller
         }
     }
 
-	public function transactionSync(){
+	public function transactionSync(Request $request){
+
+		$types = [
+			Transaction::TYPE_SELL => 'SELL',
+			Transaction::TYPE_RETURN_SUPPLIER => 'RETURN SUPLIER',
+			Transaction::TYPE_BUY => 'BUY',
+			Transaction::TYPE_RETURN => 'RETURN',
+		];
 
 		$transactions = Transaction::with(['sender', 'receiver'])
-			->where('submit_type', 1)
-			->where(function ($query) {
+			->where('submit_type', 1);
+		
+		if($request->type){
+			$transactions =	$transactions->where('type',$request->type);
+		}
+
+		if($request->sender == 'success'){
+			$transactions =	$transactions->whereNotNull('a_submit_by');
+		}else{
+			$transactions =	$transactions->whereNull('a_submit_by');
+		}
+
+		if($request->receiver == 'success'){
+			$transactions =	$transactions->whereNotNull('b_submit_by');
+		}else{
+			$transactions =	$transactions->whereNull('b_submit_by');
+		}
+
+
+		$transactions =	$transactions->where(function ($query) {
             $query
                 // TYPE_SELL atau TYPE_RETURN_SUPPLIER → cocokkan dengan sender_id di warehouse_id
 			->where(function ($q) {
@@ -1944,7 +1969,7 @@ class TransactionsController extends Controller
 			->orderBy('id', 'desc')
 			->paginate(200);
 
-		return view('transactions.sync',compact('transactions'));
+		return view('transactions.sync',compact('transactions','types'));
 
 	}
 

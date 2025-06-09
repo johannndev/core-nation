@@ -2,7 +2,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">Webhook History</p>
+        <p class="text-2xl font-bold">Transaction sync</p>
 
        
     </div>
@@ -18,7 +18,7 @@
                 <!-- Start coding here -->
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
 
-                    <form action="{{route('filter.get',['action' =>'jubelio.webhook.order'])}}" method="post">
+                    <form action="{{route('filter.get',['action' =>'transaction.transactionSync'])}}" method="post">
                         @csrf
 
                         <div class="flex flex-col md:flex-row items-end justify-between p-4">
@@ -33,13 +33,33 @@
                                     </div>
 
                                     <div>
-                                        <label for="status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                                        <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type</label>
+                                        <select id="type" name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                             <option value ="">All</option>
-                                            <option  {{Request('status') == 'warning' ? 'selected' : ''}} value="warning">Warning</option>
-                                            <option  {{Request('status') == 'error' ? 'selected' : ''}} value="error">Error</option>
-                                            <option  {{Request('status') == 'success' ? 'selected' : ''}} value="success">Success</option>
-                                          </select>
+                                            @foreach ($types as $index => $item)
+                                                 <option  {{Request('type') == $index ? 'selected' : ''}} value="{{ $index }}">{{ $item }}</option>
+                                            @endforeach
+                                           
+
+                                        </select>
+                                    </div>
+
+                                     <div>
+                                        <label for="sender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sender</label>
+                                        <select id="sender" name="sender" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option value ="">All</option>
+                                            <option  {{Request('sender') == 'pending' ? 'selected' : ''}} value="pending">Pending</option>
+                                            <option  {{Request('sender') == 'success' ? 'selected' : ''}} value="success">Success</option>
+                                        </select>
+                                    </div>
+
+                                     <div>
+                                        <label for="receiver" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Receiver</label>
+                                        <select id="receiver" name="receiver" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option value ="">All</option>
+                                            <option  {{Request('receiver') == 'pending' ? 'selected' : ''}} value="pending">Pending</option>
+                                            <option  {{Request('receiver') == 'success' ? 'selected' : ''}} value="success">Success</option>
+                                        </select>
                                     </div>
 
                                 </div>
@@ -55,7 +75,7 @@
                                     Filter
                                 </button>
 
-                                <a href="{{route('jubelio.webhook.order')}}" class="flex items-center justify-center py-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                <a href="{{route('transaction.transactionSync')}}" class="flex items-center justify-center py-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
 
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
