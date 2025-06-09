@@ -1904,18 +1904,43 @@ class TransactionsController extends Controller
 
 		$transactions = Transaction::with(['sender', 'receiver'])
 			->where('submit_type', 1)
-			->whereIn('type', [
-				Transaction::TYPE_BUY,
-				Transaction::TYPE_MOVE,
-				Transaction::TYPE_RETURN
-			])
 			->where(function ($query) {
-				$query->whereIn('sender_id', function ($q) {
-					$q->select('warehouse_id')->from('jubeliosyncs');
-				})->orWhereIn('receiver_id', function ($q) {
-					$q->select('customer_id')->from('jubeliosyncs');
+            $query
+                // TYPE_SELL atau TYPE_RETURN_SUPPLIER → cocokkan dengan sender_id di warehouse_id
+			->where(function ($q) {
+				$q->whereIn('type', [
+					Transaction::TYPE_SELL,
+					Transaction::TYPE_RETURN_SUPPLIER
+				])
+				->whereIn('sender_id', function ($sub) {
+					$sub->select('warehouse_id')->from('jubeliosyncs');
 				});
 			})
+
+			// TYPE_BUY atau TYPE_RETURN → cocokkan dengan receiver_id di warehouse_id
+			->orWhere(function ($q) {
+				$q->whereIn('type', [
+					Transaction::TYPE_BUY,
+					Transaction::TYPE_RETURN
+				])
+				->whereIn('receiver_id', function ($sub) {
+					$sub->select('warehouse_id')->from('jubeliosyncs');
+				});
+			})
+
+			// TYPE_MOVE → cocokkan sender_id atau receiver_id di warehouse_id
+			->orWhere(function ($q) {
+				$q->where('type', Transaction::TYPE_MOVE)
+				->where(function ($qq) {
+					$qq->whereIn('sender_id', function ($sub) {
+						$sub->select('warehouse_id')->from('jubeliosyncs');
+					})->orWhereIn('receiver_id', function ($sub) {
+						$sub->select('warehouse_id')->from('jubeliosyncs');
+					});
+				});
+			});
+        })
+        ->orderBy('id', 'desc')
 			->orderBy('id', 'desc')
 			->paginate(200);
 
