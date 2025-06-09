@@ -1902,14 +1902,22 @@ class TransactionsController extends Controller
 
 	public function transactionSync(){
 
-		// Cara 1: Menggunakan whereHas dan orWhereHas
-		$transactions = Transaction::with(['sender','receiver'])->where('submit_type',1)->whereIn('type',[Transaction::TYPE_BUY,Transaction::TYPE_MOVE,Transaction::TYPE_RETURN])->whereIn('sender_id', function ($q) {
-			$q->select('warehouse_id')->from('jubeliosyncs');
-		})
-		->orWhereIn('receiver_id', function ($q) {
-			$q->select('customer_id')->from('jubeliosyncs');
-		})
-		->orderBy('id','desc')->paginate(200);
+		$transactions = Transaction::with(['sender', 'receiver'])
+			->where('submit_type', 1)
+			->whereIn('type', [
+				Transaction::TYPE_BUY,
+				Transaction::TYPE_MOVE,
+				Transaction::TYPE_RETURN
+			])
+			->where(function ($query) {
+				$query->whereIn('sender_id', function ($q) {
+					$q->select('warehouse_id')->from('jubeliosyncs');
+				})->orWhereIn('receiver_id', function ($q) {
+					$q->select('customer_id')->from('jubeliosyncs');
+				});
+			})
+			->orderBy('id', 'desc')
+			->paginate(200);
 
 		return view('transactions.sync',compact('transactions'));
 
