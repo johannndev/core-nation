@@ -73,6 +73,10 @@
                 <li>
                     <a href="{{route('export.sellItem')}}" class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Export Sell</a>
                 </li>
+
+                <li>
+                    <a href="{{route('transaction.transactionSync')}}" class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Transaction sync</a>
+                </li>
             </ul>
         </li>
         @endif

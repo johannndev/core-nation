@@ -191,6 +191,11 @@
                             
                         @endif
 
+                        <a href="{{ route('transaction.poMove',$data->id) }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                           Move
+                        </a>
+
+
                         <button type="button" id="deleteButton" data-modal-target="deleteModal" data-modal-toggle="deleteModal" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 rounded-lg">
                             
 

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ModelException;
 use App\Helpers\StockManagerHelpers;
+use App\Models\Customer;
 use App\Models\Po;
 use App\Models\PoDetail;
+use App\Models\Transaction;
+use App\Models\WarehouseItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
@@ -212,4 +215,143 @@ class PoController extends Controller
         }
 
     }
+
+    public function poMove($id, Request $request){
+
+        $data = Po::with(['customer','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+
+		$dataListPropSender = [
+			"label" => "Sender",
+			"id" => "sender",
+			"idList" => "datalistSender",
+			"idOption" => "datalistOptionsSender",
+			"type" => Customer::TYPE_WAREHOUSE.",".Customer::TYPE_VWAREHOUSE,
+            "default" => $request->sender,
+			
+		];
+
+        $dataListPropRecaiver = [
+			"label" => "Receiver",
+			"id" => "recaiver",
+			"idList" => "datalistRecaiver",
+			"idOption" => "datalistOptionsRecaiver",
+			"type" => Customer::TYPE_WAREHOUSE.",".Customer::TYPE_VWAREHOUSE,
+            "default" => $request->recaiver,
+			
+		];
+
+        $whItem = [];
+        $zeroCount = 0;
+
+        if($request->sender){
+
+            $item = $data->transactionDetail->pluck('item_id')->toArray();
+
+            $whItem = WarehouseItem::where('warehouse_id',$request->sender)->whereIn('item_id',$item)->pluck('quantity','item_id')->toArray();
+
+            $whItem = WarehouseItem::where('warehouse_id', $request->sender)
+                ->whereIn('item_id', $item)
+                ->pluck('quantity', 'item_id')
+                ->toArray();
+
+            // Isi item yang tidak ditemukan dengan 0
+            foreach ($item as $id) {
+                if (!isset($whItem[$id])) {
+                    $whItem[$id] = 0;
+                }
+            }
+
+            // Hitung jumlah item yang quantity-nya 0
+            $zeroCount = collect($whItem)->filter(fn($qty) => $qty == 0)->count();
+
+        }
+
+    
+
+        return view('transactions.po-move',compact('data','dataListPropSender','whItem','dataListPropRecaiver'));
+
+
+    }
+
+    public function postMove(Request $request,$id)
+	{
+		try {
+
+        $data = Po::with(['customer','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+
+		$input = $request->query();
+		$sender = Customer::find($request->sender);
+		$receiver = Customer::find($request->recaiver);
+
+		DB::beginTransaction();
+
+		$transaction = new Transaction();
+        $transaction->date = $data->date;
+        $transaction->type = Transaction::TYPE_MOVE;
+		$transaction->submit_type = 1;
+        $transaction->invoice = $data->invoice ?? ' ';
+        $transaction->description = $data->description ?? '';
+		
+
+		$transaction->detail_ids = ' ';
+		$transaction->due = '0000-00-00';
+        $transaction->save();
+
+		$transaction->sender_id = $sender->id;
+		$transaction->receiver_id = $receiver->id;
+
+		//start transaction
+
+        $detail = [];
+
+        foreach ($data->transactionDetail as $item) {
+            $detail[] = [
+                'itemId'   => $item->item_id,
+                'code'     => $item->item->code,
+                'name'     => $item->item->name,
+                'quantity' => $item->quantity,
+                'price'    => $item->price,
+                'discount' => 0,
+                'subtotal' => $item->quantity*$item->price,
+            ];
+        }
+   
+		
+
+		//gets the transaction id
+		if(!$transaction->save())
+			throw new ModelException($transaction->getErrors(), __LINE__);
+
+		if(!$transaction->createDetails($detail))
+			throw new ModelException($transaction->getErrors(), __LINE__);
+        if(empty(trim($transaction->invoice)))
+            $transaction->invoice = $transaction->id;
+		//update the transaction
+		if(!$transaction->save())
+			throw new ModelException($transaction->getErrors(), __LINE__);
+
+        PoDetail::where('transaction_id',$id)->delete();
+        $data->delete();
+        
+		//commit db transaction
+		DB::commit();
+
+		return redirect()->route('transaction.getDetail',$transaction->id)->with('success', 'Transaction # ' . $transaction->id. ' created.');
+
+		} catch(ModelException $e) {
+			DB::rollBack();
+
+          
+
+			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+
+		} catch(\Exception $e) {
+			DB::rollBack();
+
+          
+
+			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+		}
+	}
+
 }
