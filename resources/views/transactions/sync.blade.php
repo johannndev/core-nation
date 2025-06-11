@@ -109,6 +109,7 @@
                                         <th scope="col" class="px-4 py-3">Date</th>
                                         <th scope="col" class="px-4 py-3">Invoice</th>
                                         <th scope="col" class="px-4 py-3">Type</th>
+                                        <th scope="col" class="px-4 py-3">Description</th>
                                         {{-- <th scope="col" class="px-4 py-3">Order ID</th> --}}
                                         <th scope="col" class="px-4 py-3">Sender</th>
                                         <th scope="col" class="px-4 py-3">Receiver</th>
@@ -120,14 +121,12 @@
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                          <td class="px-4 py-3">{{$item->date}}</td>
                                         <th class="px-4 py-3">
-                                         
                                             <a target="_blank" href={{ route('transaction.index',['invoice' => $item->invoice, 'type' => 0]) }} class="text-blue-500 hover:text-blue-600 hover:underline">{{$item->invoice}}</a>
-                                           
                                         </th>
                                         
                                         {{-- <th class="px-4 py-3">{{$item->jubelio_order_id}}</th> --}}
                                         <td class="px-4 py-3">{{$item->type_name}}</td>
-
+                                        <td class="px-4 py-3">{{$item->description}}</td>
                                         @if ($item->sync_cek == 'S')
 
                                             <td class="px-4 py-3">
