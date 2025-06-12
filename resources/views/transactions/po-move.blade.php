@@ -259,7 +259,13 @@
                             
                                     <th scope="row" id="" class="image-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class=" mr-3">
-                                            <x-partial.image type="h-20 w-20 print:h-10 print:w-10" :url="$url" />
+                                            <img 
+                                                src="{{ $url }}" 
+                                                alt="Gambar" 
+                                                class="w-20 h-auto print:w-10 print:h-auto object-contain rounded" 
+                                                onerror="this.onerror=null; this.src='{{ asset('img/noimg.jpg') }}';"
+                                            />
+                                           
                                         </div>
 
                                     </th>
