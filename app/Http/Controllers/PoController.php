@@ -309,6 +309,14 @@ class PoController extends Controller
         }
     }
 
+    public function batchDelete(Request $request)
+    {
+        
+        PoDetail::whereIn('id', $request->item_id)->delete();
+
+        return response()->json(['message' => 'Produk berhasil dihapus']);
+    }
+
     public function postMove(Request $request,$id)
 	{
 		try {

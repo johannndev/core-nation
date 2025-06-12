@@ -202,7 +202,8 @@
                     </div>
                     <div class="flex items-center  justify-end">
 
-                       
+                       <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 me-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" onclick="submitBatchDelete()">Hapus Terpilih</button>
+
 
                         <form action="{{route('transaction.poMovePost',['id'=>$data->id,'sender'=>Request('sender'),'recaiver'=>Request('recaiver')])}}" method="post">
 
@@ -231,6 +232,7 @@
                         <table class="w-full print:table-fixed text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs print:text-[10px] text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
+                                    <th></th>
                                     <th scope="col" class="image-col  px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">Image</th>
                                     <th scope="col" class="barcode-col  px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">Barcode</th>
                                     <th scope="col" class="sku-col hidden px-4 py-3 print:px-0 print:py-0 print:break-words print:text-wrap">SKU</th>
@@ -256,6 +258,9 @@
                                 
                             
                                 <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <td class="pl-4 py-2">
+                                        <input  value="{{ $itemTd->id }}" id="checked-checkbox" type="checkbox" value="" class="produk-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    </td>
                             
                                     <th scope="row" id="" class="image-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class=" mr-3">
@@ -384,89 +389,45 @@
       @push('jsBody')
 
       <script>
-
-        var formKosong = document.getElementById("form-kosong");
-
-        document.getElementById("btn-kosong").addEventListener("click", function () {
-            formKosong.submit();
-        });
-
-        var formUpdate = document.getElementById("form-update");
-
-        document.getElementById("btn-update").addEventListener("click", function () {
-            formUpdate.submit();
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var toggleNamaImage = document.getElementById('image-checkbox');
-            var namaColumnImage = document.querySelectorAll('.image-col');
-            var toggleNamaBarcode = document.getElementById('barcode-checkbox');
-            var namaColumnBarcode = document.querySelectorAll('.barcode-col');
-            var toggleNamaSku = document.getElementById('sku-checkbox');
-            var namaColumnSku = document.querySelectorAll('.sku-col');
-            var toggleNamaWh = document.getElementById('wh-checkbox');
-            var namaColumnWh = document.querySelectorAll('.wh-col');
-
-            toggleNamaImage.addEventListener('change', function() {
-                if (toggleNamaImage.checked) {
-                    namaColumnImage.forEach(function(barcode) {
-                        barcode.classList.remove('hidden');
-                    });
-                } else {
-                    namaColumnImage.forEach(function(image) {
-                        image.classList.add('hidden');
-                    });
-                }
-            });
-
-            toggleNamaBarcode.addEventListener('change', function() {
-                if (toggleNamaBarcode.checked) {
-                    namaColumnBarcode.forEach(function(barcode) {
-                        barcode.classList.remove('hidden');
-                    });
-                } else {
-                    namaColumnBarcode.forEach(function(barcode) {
-                        barcode.classList.add('hidden');
-                    });
-                }
-            });
-
-            toggleNamaSku.addEventListener('change', function() {
-                if (toggleNamaSku.checked) {
-                    namaColumnSku.forEach(function(sku) {
-                        sku.classList.remove('hidden');
-                    });
-                } else {
-                    namaColumnSku.forEach(function(sku) {
-                        sku.classList.add('hidden');
-                    });
-                }
-            });
-
-            toggleNamaWh.addEventListener('change', function() {
-                if (toggleNamaWh.checked) {
-                    namaColumnWh.forEach(function(wh) {
-                        wh.classList.remove('hidden');
-                    });
-                } else {
-                    namaColumnWh.forEach(function(wh) {
-                        wh.classList.add('hidden');
-                    });
-                }
-            });
-        });
-
-        // $('#image-checkbox').change(function(){
-        //     if (this.checked) {
-        //        console.log('cek')
-              
-        //        document.getElementById("image-col").classList.remove("hidden");
+            function submitBatchDelete() {
                
-        //     } else {
-        //         document.getElementById("image-col").classList.add("hidden");
-        //     }
-        // });
-      </script>
+                let ids = [];
+
+                $('.produk-checkbox:checked').each(function() {
+                    ids.push(parseInt($(this).val()));
+                });
+
+                console.log(ids); // hasil: [1, 2, 4, 6]
+
+                if (ids.length === 0) {
+                    alert('Pilih produk yang ingin dihapus.');
+                    return;
+                }
+
+                if (!confirm('Yakin ingin menghapus produk terpilih?')) {
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route("transaction.poBatchDelete") }}',
+                    type: 'POST',
+                    data:  {
+                        item_id: ids,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        alert(response.message);
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        alert('Terjadi kesalahan saat menghapus.');
+                    }
+                });
+            }
+            </script>
+        
           
       @endpush
 
