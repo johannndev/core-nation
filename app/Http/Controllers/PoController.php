@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Po;
 use App\Models\PoDetail;
 use App\Models\Transaction;
+use App\Models\TransactionDetail;
 use App\Models\WarehouseItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -271,6 +272,41 @@ class PoController extends Controller
         return view('transactions.po-move',compact('data','dataListPropSender','whItem','dataListPropRecaiver'));
 
 
+    }
+
+    public function updateQty($id, Request $request)
+    {
+
+        $details = $request->input('detail');
+
+        // dd($details);
+        
+
+        try {
+            DB::transaction(function () use ($details) {
+                $ids = collect($details)->pluck('id')->unique()->toArray();
+
+                // Ambil ID yang tersedia di database
+                $existingIds = PoDetail::whereIn('id', $ids)->pluck('id')->toArray();
+
+                // Cek jika ada ID yang tidak ditemukan
+                $missing = array_diff($ids, $existingIds);
+                if (!empty($missing)) {
+                    throw new \Exception('Beberapa ID tidak ditemukan: ' . implode(', ', $missing));
+                }
+
+                // Lanjutkan upsert jika semua ID valid
+                PoDetail::upsert(
+                    $details,
+                    ['id'],   // kolom untuk pencocokan (update berdasarkan id)
+                    ['quantity']   // kolom yang akan diupdate
+                );
+            });
+
+            return back()->with('success', 'Qty berhasil diupdate.');
+        } catch (\Exception $e) {
+            return back()->with('errorMessage', 'Gagal update: ' . $e->getMessage());
+        }
     }
 
     public function postMove(Request $request,$id)

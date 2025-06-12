@@ -227,6 +227,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/po/{id}/detail', [PoController::class, 'getDetail'])->name('transaction.Podetail')->middleware('permission:cnpo detail');
     Route::get('/transaction/po/{id}/move', [PoController::class, 'poMove'])->name('transaction.poMove')->middleware('permission:cnpo detail');
     Route::post('/transaction/po/{id}/move/store', [PoController::class, 'postMove'])->name('transaction.poMovePost')->middleware('permission:cnpo detail');
+    Route::patch('/transaction/po/{id}/update/qty', [PoController::class, 'updateQty'])->name('transaction.poUpdateQty')->middleware('permission:cnpo detail');
 
 
 
