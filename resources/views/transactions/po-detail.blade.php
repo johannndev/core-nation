@@ -498,7 +498,26 @@
 
                                 @else
 
-                                    <td colspan="3" class="text-center text-red-500">Item tidak ada</td>
+                                    <th scope="row" id="" class="image-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <div class=" mr-3">
+                                            <img 
+                                                src="{{ $url }}" 
+                                                alt="Gambar" 
+                                                class="w-20 h-auto print:w-10 print:h-auto object-contain rounded" 
+                                                onerror="this.onerror=null; this.src='{{ asset('img/noimg.jpg') }}';"
+                                            />
+                                        </div>
+
+                                    </th>
+
+                                
+
+                                    <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-red-500 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
+                                        {{$itemTd->item_id }}
+                                    </td>
+
+
+                                    <td colspan="20" class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-red-500 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">Item tidak ada</td>
                                     
                                 @endif
                           
@@ -506,26 +525,7 @@
                                 
                             @empty
 
-                                <th scope="row" id="" class="image-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    <div class=" mr-3">
-                                        <img 
-                                            src="{{ $url }}" 
-                                            alt="Gambar" 
-                                            class="w-20 h-auto print:w-10 print:h-auto object-contain rounded" 
-                                            onerror="this.onerror=null; this.src='{{ asset('img/noimg.jpg') }}';"
-                                        />
-                                    </div>
-
-                                </th>
-
-                               
-
-                                <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-red-500 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                    {{$itemTd->item_id }}
-                                </td>
-
-
-                                <td colspan="3" class="px-4 py-2 print:px-0 print:py-0 font-medium text-red-500 whitespace-nowrap dark:text-white">Item tidak ada</td>
+                                <td colspan="3" class="text-center text-red-500">Item tidak ada</td>
                                 
                             @endforelse
                             
