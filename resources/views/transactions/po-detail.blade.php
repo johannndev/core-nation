@@ -329,20 +329,20 @@
                                 </th>
 
                                 <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                    {{$itemTd->item->id}}
+                                    {{$itemTd->item->id ?? ''}}
                                 </td>
 
                                 <td class="sku-col hidden px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                    <a href="{{ $itemTd->item->getLink() }}"></a>{{$itemTd->item->code}}</a>
+                                    <a href="{{ $itemTd->item->getLink() ?? '' }}"></a>{{$itemTd->item->code ?? ''}}</a>
                                 </td>
 
 
                                 <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                    {{$itemTd->item->getItemCode()}}
+                                    {{$itemTd->item->getItemCode() ?? ''}}
                                 </td>
                                
                                 <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-normal max-w-40 dark:text-white">
-                                    <p class="min-w-40 print:min-w-0 print:whitespace-normal print:break-words ">{{$itemTd->item->getItemName()}}</p>
+                                    <p class="min-w-40 print:min-w-0 print:whitespace-normal print:break-words ">{{$itemTd->item->getItemName() ?? ''}}</p>
                                 </td>
 
                                 <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900  whitespace-normal dark:text-white">
