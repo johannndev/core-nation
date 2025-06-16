@@ -330,7 +330,7 @@
 
                                 @isset($itemTd->item)
 
-                                  <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
+                                <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
                                     {{$itemTd->item->id ?? ''}}
                                 </td>
 
@@ -382,7 +382,7 @@
                                                          <!-- Modal header -->
                                                          <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                                              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                                 Update <span class="font-bold">{{$itemTd->item->code}}</span>
+                                                                 Update <span class="font-bold">{{$itemTd->item->code ?? ''}}</span>
                                                              </h3>
                                                              <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="invoice-model-{{$itemTd->id}}">
                                                                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
