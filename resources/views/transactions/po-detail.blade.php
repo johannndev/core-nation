@@ -332,20 +332,20 @@
                                
 
                                 <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                    {{$itemTd->item->id ?? ''}}
+                                    {{$itemTd->item->id }}
                                 </td>
 
                                 <td class="sku-col hidden px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                    <a href="{{ $itemTd->item->getLink() ?? '' }}"></a>{{$itemTd->item->code ?? ''}}</a>
+                                    <a href="{{ $itemTd->item->getLink()  }}"></a>{{$itemTd->item->code ?? ''}}</a>
                                 </td>
 
 
                                 <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                    {{$itemTd->item->getItemCode() ?? ''}}
+                                    {{$itemTd->item->getItemCode() }}
                                 </td>
                                
                                 <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-normal max-w-40 dark:text-white">
-                                    <p class="min-w-40 print:min-w-0 print:whitespace-normal print:break-words ">{{$itemTd->item->getItemName() ?? ''}}</p>
+                                    <p class="min-w-40 print:min-w-0 print:whitespace-normal print:break-words ">{{$itemTd->item->getItemName()}}</p>
                                 </td>
 
                                 <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900  whitespace-normal dark:text-white">
@@ -383,7 +383,7 @@
                                                          <!-- Modal header -->
                                                          <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                                              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                                 Update <span class="font-bold">{{$itemTd->item->code ?? ''}}</span>
+                                                                 Update <span class="font-bold">{{$itemTd->item->code }}</span>
                                                              </h3>
                                                              <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="invoice-model-{{$itemTd->id}}">
                                                                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -498,7 +498,7 @@
 
                                 @else
 
-                                <td colspan="3" class="text-center text-red-500">Item tidak ada</td>
+                                    <td colspan="3" class="text-center text-red-500">Item tidak ada</td>
                                     
                                 @endif
                           
@@ -506,7 +506,26 @@
                                 
                             @empty
 
-                                <td colspan="3" class="text-center text-red-500">Item tidak ada</td>
+                                <th scope="row" id="" class="image-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <div class=" mr-3">
+                                        <img 
+                                            src="{{ $url }}" 
+                                            alt="Gambar" 
+                                            class="w-20 h-auto print:w-10 print:h-auto object-contain rounded" 
+                                            onerror="this.onerror=null; this.src='{{ asset('img/noimg.jpg') }}';"
+                                        />
+                                    </div>
+
+                                </th>
+
+                               
+
+                                <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-red-500 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
+                                    {{$itemTd->item_id }}
+                                </td>
+
+
+                                <td colspan="3" class="px-4 py-2 print:px-0 print:py-0 font-medium text-red-500 whitespace-nowrap dark:text-white">Item tidak ada</td>
                                 
                             @endforelse
                             
