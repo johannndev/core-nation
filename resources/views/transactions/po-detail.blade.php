@@ -502,7 +502,7 @@
                              
 
                                 <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                   
+                                   item tidak ada
                                 </td>
 
                                 <td class="sku-col hidden px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
