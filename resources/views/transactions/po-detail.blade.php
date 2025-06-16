@@ -306,8 +306,8 @@
 
                             @forelse ($data->transactionDetail as $itemTd)
                             @php
-                                $idItem = $itemTd->item->id;
-                                $url = $itemTd->item->getImageUrl();
+                                $idItem = $itemTd->item->id ?? '';
+                                $url = $itemTd->item->getImageUrl()?? '';
                             @endphp
                             
                            

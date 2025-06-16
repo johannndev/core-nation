@@ -16,6 +16,7 @@ class Tag extends Model
 	const TYPE_JAHIT = 2;
 	const TYPE_MATERIAL = 9;
 	const TYPE_VARIATION = 10;
+	const TYPE_WARNA = 20;
 
 	protected $fillable = array('name', 'code', 'type', 'price');
 
@@ -23,11 +24,14 @@ class Tag extends Model
 		'name' => 'required'
 	);
 
+	public $timestamps = false;
+
 	public static $types = array(
 //		self::TYPE_NORMAL => 'Normal',
 		self::TYPE_JAHIT => 'Jahit',
 		self::TYPE_TYPE => 'Type',
 		self::TYPE_SIZE => 'Size',
+		self::TYPE_WARNA => 'Warna',
 //		self::TYPE_COMPONENT => 'Komponen',
 //		self::TYPE_VARIATION => 'Variasi',
 	);
@@ -36,7 +40,13 @@ class Tag extends Model
 		array('id' => self::TYPE_JAHIT,'name' => 'Jahit'),
 		array('id' => self::TYPE_TYPE,'name' => 'Type'),
 		array('id' => self::TYPE_SIZE,'name' => 'Size'),
+		array('id' => self::TYPE_WARNA,'name' => 'Warna'),
 	);
+
+	public function getTypeNameAttribute()
+	{
+		return self::$types[$this->type];
+	}
 
 	public static function loadSizes()
 	{

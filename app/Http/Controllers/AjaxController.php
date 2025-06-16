@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Item;
 use App\Models\Produksi;
+use App\Models\Tag;
 use App\Models\WarehouseItem;
 use Exception;
 use Illuminate\Http\Request;
@@ -39,6 +40,19 @@ class AjaxController extends Controller
 
         // $customer = $customer->get(['id', 'name']);
         return response()->json($customer, 200);
+    }
+
+    public function getWarna(Request $request)
+    {
+        $search = $request->search;
+
+        $warna = Tag::where('type',Tag::TYPE_WARNA)->where('name','like','%'.$search.'%')->orWhere('code','like','%'.$search.'%');
+        
+        
+        $warna = $warna->paginate();
+
+        // $customer = $customer->get(['id', 'name']);
+        return response()->json($warna, 200);
     }
 
     public function getCostumerCash(Request $request)

@@ -37,6 +37,7 @@ use App\Http\Controllers\SetoranController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatSellController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\VAccountController;
@@ -148,6 +149,10 @@ Route::middleware('auth')->group(function () {
     // Route::get('/trx', [ApiJubelioController::class, 'cektrx']);
     // Route::get('/dua', [ApiJubelioController::class, 'dua']);
 
+    Route::get('/tag', [TagController::class, 'index'])->name('tag.index');
+    Route::get('/tag/create', [TagController::class, 'create'])->name('tag.create');
+    Route::post('/tag/store', [TagController::class, 'store'])->name('tag.store');
+
     Route::get('/cron-runner', [CronrunController::class, 'index'])->name('cronrunner.index')->middleware('permission:cron runner');
     Route::get('/cron-runner/{id}/edit', [CronrunController::class, 'edit'])->name('cronrunner.edit')->middleware('permission:cron runner');
     Route::patch('/cron-runner/{id}/update', [CronrunController::class, 'update'])->name('cronrunner.update')->middleware('permission:cron runner');
@@ -248,6 +253,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/getItemName', [AjaxController::class, 'getItem'])->name('ajax.getitemName');
     Route::get('/getInvoice', [AjaxController::class, 'getInvoice'])->name('ajax.getInvoice');
     Route::post('/scan-barcode', [AjaxController::class, 'processBarcode']);
+    Route::get('/ajax/getWarna', [AjaxController::class, 'getWarna'])->name('ajax.getWarna');
 
 
     Route::get('/transaction', [TransactionsController::class, 'index'])->name('transaction.index')->middleware('permission:transactions.list');
