@@ -328,7 +328,7 @@
 
                                 </th>
 
-                                @isset($itemTd->item->id)
+                                @if($itemTd->item->id != null)
 
                                 <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
                                     {{$itemTd->item->id ?? ''}}
@@ -495,7 +495,7 @@
 
                                 <x-transaction.warehouse-item  :idItem="$idItem"/>
                                     
-                                @endisset
+                                @endif
 
                                 @empty($itemTd->item)
                                     
