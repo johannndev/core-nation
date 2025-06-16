@@ -120,7 +120,7 @@
         <tbody>
             @foreach ($data->transactionDetail as $index => $item)
                 <tr>
-                    <td>{{ $item->item->getItemName() }}</td>
+                    <td>{{ $item->item->getItemName() }}<br/>{{ $item->item->code }}</td>
                     <td class="text-right">{{ number_format($item->quantity) }}</td>
                     <td class="text-right">Rp{{ number_format(abs($item->price),0,',','.') }}</td>
                 </tr>
@@ -140,7 +140,7 @@
         </tr>
         <tr>
             <td class="label">Discount:</td>
-            <td class="text-right">(Rp{{number_format($data->real_total - $data->total,0,',','.')}})</td>
+            <td class="text-right">(Rp{{number_format(abs($data->real_total) - abs($data->total),0,',','.')}})</td>
         </tr>
         <tr>
             <td class="label"><strong>Grand Total:</strong></td>
