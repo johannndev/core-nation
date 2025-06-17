@@ -36,6 +36,12 @@ class Tag extends Model
 //		self::TYPE_VARIATION => 'Variasi',
 	);
 
+	public static $typesCreate = array(
+		self::TYPE_JAHIT => 'Jahit',
+		self::TYPE_TYPE => 'Type',
+		self::TYPE_SIZE => 'Size',
+	);
+
 	public static $typesJSON = array(
 		array('id' => self::TYPE_JAHIT,'name' => 'Jahit'),
 		array('id' => self::TYPE_TYPE,'name' => 'Type'),

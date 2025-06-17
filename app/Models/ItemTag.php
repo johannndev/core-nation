@@ -10,7 +10,8 @@ class ItemTag extends Model
     use HasFactory;
 
     protected $table = 'item_tag';
-	public $timestamps = false;
+	protected $guarded = [];
+	// public $timestamps = false;
 
 	public static function table()
 	{

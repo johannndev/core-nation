@@ -95,7 +95,7 @@
 
                                 <div class="">
                                     <div class="relative mb-4">
-                                        <select class="warna" name="warna" id="warna">
+                                        <select class="warna" name="tags[20][]" id="warna">
                                             <option ></option>
                                         </select>
 

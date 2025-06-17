@@ -9,6 +9,7 @@ use App\Libraries\ItemsManager;
 use App\Models\Customer;
 use App\Models\Item;
 use App\Models\ItemGroup;
+use App\Models\ItemTag;
 use App\Models\Tag;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
@@ -64,7 +65,7 @@ class ItemsController extends Controller
 
 	public function create()
 	{
-		$tags = ItemsManagerHelper::loadTagsJSON(Tag::$types);
+		$tags = ItemsManagerHelper::loadTagsJSON(Tag::$typesCreate);
 
 		return view('items.create',compact('tags'));
 	}
@@ -74,6 +75,8 @@ class ItemsController extends Controller
 		try {
 		$input = $request;
 		$tags = $request->tags;
+
+		
 		
 
 		DB::beginTransaction();
@@ -176,14 +179,16 @@ class ItemsController extends Controller
 
 	public function edit($id)
 	{
-		$item = Item::with('group')->where('id',$id)->first();
+		$item = Item::with('group','tags')->where('id',$id)->first();
+
+		$dataWarna = $item->tags->where('type',Tag::TYPE_WARNA)->first();
 
 		$tags = ItemsManagerHelper::loadTagsJSON(Tag::$types);
 
 		// dd($tags);
 
 		foreach($tags as $key => $value) {
-			if($value['type_id'] == Tag::TYPE_SIZE || $value['type_id'] == Tag::TYPE_TYPE){
+			if($value['type_id'] == Tag::TYPE_SIZE || $value['type_id'] == Tag::TYPE_TYPE || $value['type_id'] == Tag::TYPE_WARNA){
 				unset($tags[$key]);
 				// $tags[$key] = array();
 			}
@@ -201,11 +206,13 @@ class ItemsController extends Controller
 		// dd($tags, $selected);
 
 
-		return view('items.edit',compact('tags','selected','item'));
+		return view('items.edit',compact('tags','selected','item','dataWarna'));
 	}
 
 	public function postEdit($id,Request $request)
 	{
+		
+		
 		try{
 
 		$input = $request;
@@ -214,6 +221,8 @@ class ItemsController extends Controller
 		DB::beginTransaction();
 
 		$itemManager = new ItemsManagerHelper;
+
+		
 
 		if(!$item = $itemManager->updateItem($id, $input, $tags, $request->file))
 			throw new ModelException($itemManager->getError(), __LINE__);

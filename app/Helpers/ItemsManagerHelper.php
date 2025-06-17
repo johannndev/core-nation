@@ -189,6 +189,15 @@ class ItemsManagerHelper
 
 		// $types = array_filter(array_keys(array_intersect_key($tags,static::$_tags[Tag::TYPE_TYPE])));
 		
+		if (array_key_exists(Tag::TYPE_WARNA,$tags))
+		{
+			$warna = $tags[Tag::TYPE_WARNA];
+		}
+		else
+		{
+			$warna = [];
+		}
+
 
 		if (array_key_exists(Tag::TYPE_TYPE,$tags))
 		{
@@ -220,6 +229,7 @@ class ItemsManagerHelper
 			$jahit = $jahit[0];
 
 		return array(
+			'warna' => $warna,
 			'types' => $types,
 			'sizes' => $sizes,
 			'jahit' => $jahit
@@ -228,17 +238,17 @@ class ItemsManagerHelper
 
 	protected function createCrystalItem($group, $input, $tags, $type_id, $size_id, $item = false, $action = 'store')
 	{
-		if(!$item)
+		
 
-			// dd($input);
+		if(!$item){
 
 			$item = new Item();
 			$item->pcode = $input->pcode; 
 			$item->price = $input->price;
 			$item->description = $input->description;
-		
-
 			$item->save();
+
+		}
 
 		$item->pcode = strtoupper(trim($item->pcode));
 		$item->type = Item::TYPE_ITEM;
@@ -246,14 +256,18 @@ class ItemsManagerHelper
 		$item->group_id = $group->id;
 		$item->variant = $group->variant;
 
+
 		//combine the tags
 		if($action == 'store'){
-			$tag_ids = array_filter(array($tags['jahit'],$type_id,$size_id));
+			$tag_ids = array_filter(array($tags['jahit'],$type_id,$size_id,$tags['warna'][0]));
 		}else{
-			$tag_ids = array_filter(array($tags['jahit'][0],$type_id,$size_id));
+			$tag_ids = array_filter(array($tags['jahit'][0],$type_id,$size_id,$tags['warna'][0]));
 		}
+
+		
 	
 
+	
 		// dd(implode(',',$tag_ids));
 		asort($tag_ids);
 		$item->tag_ids = implode(',',$tag_ids);
@@ -286,7 +300,23 @@ class ItemsManagerHelper
 			return $this->error($item->getErrors());
 
 		//sync
-		$item->tags()->sync($tag_ids);
+
+		
+
+		
+		if($action == 'store'){
+
+			$item->tags()->sync($tag_ids);
+
+		}else{
+
+			ItemTag::where('item_id', $item->id)->delete();
+
+			Item::find($item->id)->tags()->attach($tag_ids);
+
+		}
+
+	
 
 		return $item;
 	}
@@ -303,6 +333,7 @@ class ItemsManagerHelper
 
 		$item = Item::with('group')->findOrFail($id);
 
+
 		$arrayTag = explode(',', $item->tag_ids);
 
 		$typeTag = Tag::whereIn('id',$arrayTag)->where('type',Tag::TYPE_TYPE)->pluck('id')->toArray();
@@ -310,6 +341,7 @@ class ItemsManagerHelper
 
 		$inputTags = Arr::add($inputTags, 'types', $typeTag);
 		$inputTags = Arr::add($inputTags, 'sizes', $typeSize);
+		$inputTags = Arr::add($inputTags, 'warna', $inputTags['warna'][0]);
 
 		$type_id = $inputTags['types'][0];
 		$size_id = $inputTags['sizes'][0];

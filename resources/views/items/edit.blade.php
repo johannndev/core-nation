@@ -2,7 +2,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">New Buy</p>
+        <p class="text-2xl font-bold">Item Edit</p>
 
        
     </div>
@@ -89,6 +89,28 @@
                           
                         </div>
 
+                         <div class="col-span-2">
+                            <div >
+                                <label for="warna" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Warna</label>
+
+                                <div class="">
+                                    <div class="relative mb-4">
+                                        <select class="warna" name="tags[warna][]" id="warna">
+                                            <option ></option>
+                                        </select>
+
+                                        @error('')
+                                            <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                        @enderror
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+
+                        </div>
+
                         <div>
                             @foreach ($tags as $type)
 
@@ -128,6 +150,52 @@
         </section>
 
     </form>
+
+     @push('jsBody')
+
+        <script>
+        $(document).ready(function() {
+
+            $('.warna').select2({
+                width: '100%',
+                placeholder: "Pilih Warna",
+                minimumInputLength:2,
+                ajax: {
+                    url: '{{ route("ajax.getWarna") }}',
+                    dataType: "json",
+                    data: (params) => {
+                        console.log(params);
+                        
+                        let query = {
+                            search: params.term,
+                            page: params.page || 1,
+                        };
+                        return query;
+                    },
+                    processResults: data => {
+                        return {
+                            results: data.data.map((row) => {
+                                return { text: row.name, id: row.id };
+                            }),
+                            pagination: {
+                                more: data.current_page < data.last_page,
+                            },
+                        };
+                    },
+                },
+            });
+
+            @isset ($dataWarna)
+
+                var blueOption = new Option('{{$dataWarna->name}}',{{$dataWarna->id}}, true, true);
+                $('.warna').append(blueOption).trigger('change');
+
+            @endisset
+
+        })
+        </script>
+
+    @endpush
 
 
     
