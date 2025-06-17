@@ -122,7 +122,12 @@
                 <tr>
                     <td>{{ $item->item->getItemName() }}<br/>{{ $item->item->code }}</td>
                     <td class="text-right">{{ number_format($item->quantity) }}</td>
-                    <td class="text-right">Rp{{ number_format(abs($item->price),0,',','.') }}</td>
+                    <td class="text-right">
+                        Rp{{ number_format(abs($item->price),0,',','.') }}
+                    @if($item->discount > 0)
+                        <br/>({{ $item->discount }}%)
+                    @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>
@@ -134,14 +139,18 @@
             <td class="label">Total Items:</td>
             <td class="text-right">{{$data->total_items}}</td>
         </tr>
-        <tr>
-            <td class="label">Total Before Discount:</td>
-            <td class="text-right">Rp{{number_format($data->real_total,0,',','.')}}</td>
-        </tr>
+@if($data->discount > 0)
         <tr>
             <td class="label">Discount:</td>
-            <td class="text-right">(Rp{{number_format(abs($data->real_total) - abs($data->total),0,',','.')}})</td>
+            <td class="text-right">{{ $data->discount }}%</td>
         </tr>
+@endif
+@if($data->adjustment != 0)
+        <tr>
+            <td class="label">Adjustment:</td>
+            <td class="text-right">(Rp{{number_format(abs($data->adjustment),0,',','.')}})</td>
+        </tr>
+@endif
         <tr>
             <td class="label"><strong>Grand Total:</strong></td>
             <td class="text-right"><strong>Rp{{number_format(abs($data->total),0,',','.')}}</strong></td>
