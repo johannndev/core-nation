@@ -49,6 +49,12 @@
 
 }
 
+.filterSelect .select2-selection.select2-selection--single{
+
+    @apply !pb-8
+
+}
+
 .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable{
     @apply !rounded-lg !p-2.5 !text-sm
 }

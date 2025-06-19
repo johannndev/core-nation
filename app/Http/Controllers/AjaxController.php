@@ -42,6 +42,18 @@ class AjaxController extends Controller
         return response()->json($customer, 200);
     }
 
+    public function getTag(Request $request)
+    {
+        $search = str_replace(' ', '%', $request->search);
+
+        $tag = Tag::where('name','like','%'.$search.'%')->where('type',$request->type);
+        
+        $tag = $tag->paginate();
+
+        // $tag = $tag->get(['id', 'name']);
+        return response()->json($tag, 200);
+    }
+
     public function getWarna(Request $request)
     {
         $search = $request->search;

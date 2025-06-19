@@ -190,6 +190,11 @@ class Item extends Model
 		return $this->belongsToMany('App\Models\Tag','item_tag','item_id');
 	}
 
+	public function itemTags()
+	{
+		return $this->hasMany(ItemTag::class,'item_id','id');
+	}
+
 	public function sizeTag()
 	{
 		return $this->belongsTo('App\Models\Tag', 'size');

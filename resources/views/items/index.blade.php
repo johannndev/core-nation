@@ -39,6 +39,22 @@
                                         <input type="text" id="desc" name="desc" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{Request('desc')}}" />
                                     </div>
 
+                                    <div>
+                                        <x-partial.select-tag :dataProp='$tagJahit' />
+                                    </div>
+
+                                    <div>
+                                        <x-partial.select-tag :dataProp='$tagType' />
+                                    </div>
+
+                                    <div>
+                                        <x-partial.select-tag :dataProp='$tagSize' />
+                                    </div>
+
+                                    <div>
+                                        <x-partial.select-tag :dataProp='$tagWarna' />
+                                    </div>
+
                                    
 
                                 </div>

@@ -244,6 +244,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/transaction/po/item/{id}/success', [PoController::class, 'success'])->name('transaction.poSuccess')->middleware('permission:cnpo update');
 
     Route::get('/ajax/getCustomer', [AjaxController::class, 'getCostumer'])->name('ajax.getCostumer');
+    Route::get('/ajax/getTag', [AjaxController::class, 'getTag'])->name('ajax.getTag');
     Route::get('/ajax/getItemSetoran', [AjaxController::class, 'getItemSetoran'])->name('ajax.getItemSetoran');
     Route::get('/ajax/getCustomerCash', [AjaxController::class, 'getCostumerCash'])->name('ajax.getCostumerCash');
     Route::get('/ajax/getCustomerSingle', [AjaxController::class, 'getCostumerSingle'])->name('ajax.getCostumerSingle');

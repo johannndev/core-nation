@@ -26,7 +26,11 @@ class ItemsController extends Controller
     public function index(Request $request)
     {
 
-        $dataList = Item::with('group')->where('type',Item::TYPE_ITEM)->orderBy('id','desc');
+		$tagValue = array_values(array_filter(request()->only(['jahit', 'type', 'size', 'warna'])));
+
+
+
+        $dataList = Item::with(['group'])->where('type',Item::TYPE_ITEM)->orderBy('id','desc');
 
         if($request->code){
 
@@ -37,6 +41,14 @@ class ItemsController extends Controller
             }
 
         }
+
+		if($tagValue){
+
+			 $dataList = $dataList->whereHas('itemTags', function ($q) use ($tagValue) {
+				$q->whereIn('tag_id', $tagValue);
+			});
+
+		}
 
         if($request->name) {
 			$name = str_replace(' ', '%', $request->name);
@@ -58,9 +70,40 @@ class ItemsController extends Controller
 
         $dataList = $dataList->paginate(20)->withQueryString();
 
+
+
+		$tagJahit = [
+			"label" => "Jahit",
+			"id" => "jahit",
+			"type" => Tag::TYPE_JAHIT,
+			"default" => $request->jahit ?? null,
+		];
+
+		$tagType = [
+			"label" => "type",
+			"id" => "type",
+			"type" => Tag::TYPE_TYPE,
+			"default" => $request->type ?? null,
+		];
+
+		$tagSize = [
+			"label" => "size",
+			"id" => "size",
+			"type" => Tag::TYPE_SIZE,
+			"default" => $request->size ?? null,
+		];
+
+		$tagWarna = [
+			"label" => "warna",
+			"id" => "warna",
+			"type" => Tag::TYPE_WARNA,
+			"default" => $request->warna ?? null,
+		];
+
+
 		// dd($dataList);
 
-        return view('items.index',compact('dataList'));
+        return view('items.index',compact('dataList','tagJahit','tagType','tagSize','tagWarna'));
     }
 
 	public function create()
