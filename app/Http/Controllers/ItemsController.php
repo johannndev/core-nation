@@ -23,55 +23,69 @@ use Illuminate\Support\Facades\Http;
 
 class ItemsController extends Controller
 {
-    public function index(Request $request)
-    {
+   public function index(Request $request)
+	{
+		$tagFilters = collect([
+			$request->jahit,
+			$request->type,
+			$request->size,
+			$request->warna,
+		])->filter()->values()->all(); // Ambil semua tag yang tidak null
 
-		$tagValue = array_values(array_filter(request()->only(['jahit', 'type', 'size', 'warna'])));
+		$dataList = Item::with(['group:id,description,alias'])
+			->where('type', Item::TYPE_ITEM)
+			->orderByDesc('id');
 
-
-
-        $dataList = Item::with(['group'])->where('type',Item::TYPE_ITEM)->orderBy('id','desc');
-
-        if($request->code){
-
-            if(is_numeric($request->code)){
-                $dataList = $dataList->where('id','=', $request->code);
-            }else{
-                $dataList = $dataList->where('code','LIKE',"%$request->code%");
-            }
-
-        }
-
-		if($tagValue){
-
-			 $dataList = $dataList->whereHas('itemTags', function ($q) use ($tagValue) {
-				$q->whereIn('tag_id', $tagValue);
-			});
-
+		// Filter code
+		if ($request->code) {
+			if (is_numeric($request->code)) {
+				$dataList->where('id', $request->code);
+			} else {
+				$dataList->where('code', 'like', '%' . $request->code . '%');
+			}
 		}
 
-        if($request->name) {
+		// Filter name
+		if ($request->name) {
 			$name = str_replace(' ', '%', $request->name);
-			$dataList = $dataList->where('name','LIKE',"%$name%");
+			$dataList->where('name', 'like', "%$name%");
 		}
-		if($request->desc) {
+
+		// Filter description dari relasi group
+		if ($request->desc) {
 			$desc = str_replace(' ', '%', $request->desc);
-			$dataList = $dataList->whereHas('group', function($q) use($desc) {
-				$q->where('description','LIKE',"%$desc%");
+			$dataList->whereHas('group', function ($q) use ($desc) {
+				$q->where('description', 'like', "%$desc%");
 			});
 		}
-		if($request->alias) {
+
+		// Filter alias dari relasi group
+		if ($request->alias) {
 			$alias = str_replace(' ', '%', $request->alias);
-			$dataList = $dataList->whereHas('group', function($q) use($alias) {
-				$q->where('alias','LIKE',"%$alias%");
+			$dataList->whereHas('group', function ($q) use ($alias) {
+				$q->where('alias', 'like', "%$alias%");
 			});
 		}
 
+		// Filter berdasarkan tag (hanya tampil item yang memiliki SEMUA tag)
+		if (!empty($tagFilters)) {
+			$tagCount = count($tagFilters);
 
-        $dataList = $dataList->paginate(20)->withQueryString();
+			$dataList = $dataList
+				->whereHas('itemTags', function ($q) use ($tagFilters) {
+					$q->whereIn('tag_id', $tagFilters);
+				})
+				->withCount([
+					'itemTags as matched_tag_count' => function ($q) use ($tagFilters) {
+						$q->whereIn('tag_id', $tagFilters);
+					}
+				])
+				->having('matched_tag_count', '=', $tagCount);
+		}
 
+		$dataList = $dataList->paginate(20)->withQueryString();
 
-
+		// Untuk filter di view
 		$tagJahit = [
 			"label" => "Jahit",
 			"id" => "jahit",
@@ -100,11 +114,8 @@ class ItemsController extends Controller
 			"default" => $request->warna ?? null,
 		];
 
-
-		// dd($dataList);
-
-        return view('items.index',compact('dataList','tagJahit','tagType','tagSize','tagWarna'));
-    }
+		return view('items.index', compact('dataList', 'tagJahit', 'tagType', 'tagSize', 'tagWarna'));
+	}
 
 	public function create()
 	{

@@ -263,10 +263,6 @@ class ItemsManagerHelper
 		}else{
 			$tag_ids = array_filter(array($tags['jahit'][0],$type_id,$size_id,$tags['warna'][0]));
 		}
-
-		
-	
-
 	
 		// dd(implode(',',$tag_ids));
 		asort($tag_ids);
@@ -302,21 +298,8 @@ class ItemsManagerHelper
 		//sync
 
 		
-
+		$item->tags()->sync($tag_ids);
 		
-		if($action == 'store'){
-
-			$item->tags()->sync($tag_ids);
-
-		}else{
-
-			ItemTag::where('item_id', $item->id)->delete();
-
-			Item::find($item->id)->tags()->attach($tag_ids);
-
-		}
-
-	
 
 		return $item;
 	}
@@ -381,7 +364,7 @@ class ItemsManagerHelper
 				//skip same id
 				if($update->id == $item->id) continue;
 
-				$new_tags = array_filter(array($inputTags['jahit'][0],$update->genre,$update->size));
+				$new_tags = array_filter(array($inputTags['jahit'][0],$update->genre,$update->size,$inputTags['warna'][0]));
 				$update->tag_ids = implode(',',$new_tags);
 				$update->save();
 				$update->tags()->sync($new_tags);
