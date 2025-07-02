@@ -78,6 +78,7 @@
                                         <th scope="col" class="px-4 py-3">Name</th>
                                         <th scope="col" class="px-4 py-3">Code</th>
                                         <th scope="col" class="px-4 py-3">Type</th>
+                                        <th scope="col" class="px-4 py-3">Item Type</th>
                                         <th scope="col" class="px-4 py-3">Actions</th>
                                         
                                     </tr>
@@ -90,17 +91,23 @@
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
 
                                         <th class="px-4 py-3">{{$item->name}}</th>
-                                        <th class="px-4 py-3">
+                                        <td class="px-4 py-3">
 
                                            {{ $item->code }}
                                             
-                                        </th>
+                                        </td>
 
-                                        <th class="px-4 py-3">
+                                        <td class="px-4 py-3">
 
                                             {{ $item->type_name }}
 
-                                        </th>
+                                        </td>
+
+                                         <td class="px-4 py-3">
+
+                                            {{ $item->item_type_text }}
+
+                                        </td>
                                      
                                         <td class="px-4 py-3 flex">
                                             <a href="{{route('user.edit',$item->id)}}" class=" items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-primary-800">

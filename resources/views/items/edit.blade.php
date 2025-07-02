@@ -38,6 +38,8 @@
     <form action="{{route('item.update',$item->id)}}" method="post" enctype="multipart/form-data">
 
         @csrf
+        
+        <input type="text" name="type" value="{{ $type }}" hidden>
 
         <section class="bg-gray-50 dark:bg-gray-900 mb-8">
             <div class="mx-auto  ">

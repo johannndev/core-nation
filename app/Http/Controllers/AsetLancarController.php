@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ModelException;
+use App\Helpers\ItemsManagerHelper;
 use App\Models\Customer;
 use App\Models\Item;
+use App\Models\Tag;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Models\WarehouseItem;
+use App\View\Components\Customer\Items;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -220,10 +223,50 @@ class AsetLancarController extends Controller
 
 	public function create()
 	{
-		return view('asset-lancar.create');
+		$tags = ItemsManagerHelper::loadTagsJSON(Item::TYPE_ASSET_LANCAR,Tag::$asetLancarCreate);
+
+		$type = Item::TYPE_ASSET_LANCAR;
+		
+		return view('asset-lancar.create',compact('tags','type'));
 	}
 
 	public function postCreate(Request $request)
+	{
+
+		try {
+			$input = $request;
+			$tags = $request->tags;
+
+
+			DB::beginTransaction();
+
+			$itemManager = new ItemsManagerHelper;
+
+			// dd($request->tags);
+
+			if(!$itemManager->createItems($input, $tags, $request->file))
+				throw new ModelException($itemManager->getErrors(), __LINE__);
+
+			DB::commit();
+
+			return redirect()->route('asetLancar.index')->with('success', 'Item(s) created.');
+
+			
+
+		} catch(ModelException $e) {
+			DB::rollBack();
+
+			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+		} catch(\Exception $e) {
+			DB::rollBack();
+
+			dd($e);
+
+			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+		}
+	}
+
+	public function postsCreate(Request $request)
 	{
 		try {
 		DB::beginTransaction();
@@ -336,13 +379,6 @@ class AsetLancarController extends Controller
 		}
 	}
 
-	public function edit($id)
-	{
-		$item = Item::find($id);
-
-		return view('asset-lancar.edit',compact('item'));
-	}
-
 	public function duplicate($id)
 	{
 		$item = Item::find($id);
@@ -350,53 +386,96 @@ class AsetLancarController extends Controller
 		return view('asset-lancar.duplicate',compact('item'));
 	}
 
+
+	public function edit($id)
+	{
+		$item = Item::find($id);
+
+		$dataWarna = $item->tags->where('type',Tag::TYPE_WARNA)->first();
+
+		$type = Item::TYPE_ASSET_LANCAR;
+
+
+		return view('asset-lancar.edit',compact('item','dataWarna','type'));
+	}
+
+	
 	public function postEdit(Request $request, $id)
 	{
-		try {
-		DB::beginTransaction();
+		try{
 
-		
-		$item = Item::find($id);
-		$item->name = $request->name;
-		$item->code = $request->code;
-		$item->pcode = strtoupper($item->code); 
-		$item->price = $request->price;
-		$item->cost = $request->cost;
-		$item->description = $request->description;
-		$item->description2 = $request->description2;
+			$input = $request;
+			$tags = $request->tags;
 
-		$item->code = $item->pcode = strtoupper($item->code);
-		$item->name = strtoupper($item->name);
+			DB::beginTransaction();
 
-		if(!$item->save())
-			throw new ModelException($item->getErrors(), __LINE__);
+			$itemManager = new ItemsManagerHelper;
 
-		$file = $request->file;
-		if(!empty($file))
-		{
-			$file = $file->move($item->getUploadPath(), $item->id.'.jpg');
-			Image::read($file)->resize(300, null, function($constraint) {
-				$constraint->aspectRatio();
-			});
-		}
+			if(!$item = $itemManager->updateItem($id, $input, $tags, $request->file))
+				throw new ModelException($itemManager->getError(), __LINE__);
 
-		DB::commit();
+			DB::commit();
 
-		return redirect()->route('asetLancar.detail',$id)->with('success', 'Asset edited.');
-
-		
+			return redirect()->route('asetLancar.detail',$id)->with('success', 'Item edited.');
 
 		} catch(ModelException $e) {
 			DB::rollBack();
 
 			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
 		} catch(\Exception $e) {
+			
 			DB::rollBack();
 
 			dd($e);
 
 			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
 		}
+
+		// try {
+		// DB::beginTransaction();
+
+		
+		// $item = Item::find($id);
+		// $item->name = $request->name;
+		// $item->code = $request->code;
+		// $item->pcode = strtoupper($item->code); 
+		// $item->price = $request->price;
+		// $item->cost = $request->cost;
+		// $item->description = $request->description;
+		// $item->description2 = $request->description2;
+
+		// $item->code = $item->pcode = strtoupper($item->code);
+		// $item->name = strtoupper($item->name);
+
+		// if(!$item->save())
+		// 	throw new ModelException($item->getErrors(), __LINE__);
+
+		// $file = $request->file;
+		// if(!empty($file))
+		// {
+		// 	$file = $file->move($item->getUploadPath(), $item->id.'.jpg');
+		// 	Image::read($file)->resize(300, null, function($constraint) {
+		// 		$constraint->aspectRatio();
+		// 	});
+		// }
+
+		// DB::commit();
+
+		// return redirect()->route('asetLancar.detail',$id)->with('success', 'Asset edited.');
+
+		
+
+		// } catch(ModelException $e) {
+		// 	DB::rollBack();
+
+		// 	return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+		// } catch(\Exception $e) {
+		// 	DB::rollBack();
+
+		// 	dd($e);
+
+		// 	return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+		// }
 	}
 
 }

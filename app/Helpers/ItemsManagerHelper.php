@@ -25,11 +25,17 @@ class ItemsManagerHelper
 
 		
 
-		if(!isset($input->pcode) || empty($input->pcode))
-			return $this->error('pcode is required','code');
-		if(!preg_match("/([a-zA-Z]{2})([0-9]{5})\/([0-9]{2})/",$input->pcode))
-			return $this->error('pcode salah format','code');
+		if (!isset($input->pcode) || empty($input->pcode)) {
+        	throw new \Exception('pcode is required');
+		}
 
+		if($input->type == Item::TYPE_ITEM){
+			if (!preg_match("/([a-zA-Z]{2})([0-9]{5})\/([0-9]{2})/", $input->pcode)) {
+				throw new \Exception('pcode salah format');
+			}
+		}
+
+		
 			
 
 		static::loadTags();
@@ -66,6 +72,8 @@ class ItemsManagerHelper
 
 	
 		$total = 0;
+
+		
 		foreach($inputTags['types'] as $key => $type_id)
 		{
 			foreach($inputTags['sizes'] as $key => $size_id)
@@ -79,7 +87,7 @@ class ItemsManagerHelper
 		$this->saveImage($group,$file);
 
 		if($total < 1)
-			return $this->error('TYPE + SIZE harus ada');
+			throw new \Exception('TYPE + SIZE harus ada');
 
 		return true;
 	}
@@ -238,6 +246,7 @@ class ItemsManagerHelper
 
 	protected function createCrystalItem($group, $input, $tags, $type_id, $size_id, $item = false, $action = 'store')
 	{
+
 		
 
 		if(!$item){
@@ -246,12 +255,15 @@ class ItemsManagerHelper
 			$item->pcode = $input->pcode; 
 			$item->price = $input->price;
 			$item->description = $input->description;
+			$item->cost = $input->cost ?? "";
+			$item->description = $input->description ?? "";
+			$item->description2 = $input->description2 ?? "";
 			$item->save();
 
 		}
 
 		$item->pcode = strtoupper(trim($item->pcode));
-		$item->type = Item::TYPE_ITEM;
+		$item->type = $input->type;
 
 		$item->group_id = $group->id;
 		$item->variant = $group->variant;
@@ -273,7 +285,13 @@ class ItemsManagerHelper
 		$item->code = $item->code.static::$_tags[Tag::TYPE_SIZE][$size_id]->code;
         $item->code = strtoupper($item->code);
 
-		$item->name = static::$_tags[Tag::TYPE_TYPE][$type_id]->code.' '.$item->pcode.' '.static::$_tags[Tag::TYPE_SIZE][$size_id]->name;
+		if($input->type == Item::TYPE_ITEM){
+			$item->name = static::$_tags[Tag::TYPE_TYPE][$type_id]->code.' '.$item->pcode.' '.static::$_tags[Tag::TYPE_SIZE][$size_id]->name;
+		}else{
+			$item->name = $item->pcode.'-'.static::$_tags[Tag::TYPE_WARNA][$tags['warna'][0]]->code.'-'.static::$_tags[Tag::TYPE_SIZE][$size_id]->name;
+		}
+		
+
         $item->name = strtoupper($item->name);
 
 		//NEW: catch for contributor data
@@ -307,9 +325,9 @@ class ItemsManagerHelper
 	public function updateItem($id, $input, $inputTags, $file = null)
 	{
 		if(!isset($input->pcode) || empty($input->pcode))
-			return $this->error('pcode is required');
+			throw new \Exception('pcode is required');
 		if(!preg_match("/([a-zA-Z]{2})([0-9]{5})\/([0-9]{2})/",$input->pcode))
-			return $this->error('pcode salah format','code');
+			throw new \Exception('pcode salah format');
 
 		static::loadTags();
 		$inputTags = $inputTags;
@@ -413,21 +431,45 @@ class ItemsManagerHelper
 		return $total;
 	}
 
-	public static function loadTags()
+	public static function loadTags($itemType = null)
 	{
-		Cache::forget('item_tags');
-		static::$_tags = Cache::remember('item_tags', 300, function () {
-			$tags = array();
+		Cache::forget('item_tags_' . ($itemType ?? '0'));
+		// static::$_tags = Cache::remember('item_tags_' . ($itemType ?? '0'), 300, function () {
+		// 	$tags = array();
 
-			//initialize the tag types
-			foreach(Tag::$types as $type => $val)
-			{
-				$tags[$type] = array();
+		// 	//initialize the tag types
+		// 	foreach(Tag::$types as $type => $val)
+		// 	{
+		// 		$tags[$type] = array();
+		// 	}
+
+		// 	$tags_db = Tag::orderBy('type')->orderBy('code','asc')->get();
+		// 	foreach($tags_db as $t)
+		// 	{
+		// 		$tags[$t->type][$t->id] = $t;
+		// 	}
+
+		// 	return $tags;
+		// });
+
+		static::$_tags = Cache::remember('item_tags_' . ($itemType ?? '0'), 300, function () use ($itemType) {
+			$tags = [];
+
+			// initialize tag types
+			foreach (Tag::$types as $type => $val) {
+				$tags[$type] = [];
 			}
 
-			$tags_db = Tag::orderBy('type')->orderBy('code','asc')->get();
-			foreach($tags_db as $t)
-			{
+			$query = Tag::orderBy('type')->orderBy('code', 'asc');
+
+			// filter by model type (e.g., App\Models\Item or App\Models\Aset)
+			if ($itemType) {
+				$query->whereIn('item_type', [0,$itemType]); // Sesuaikan nama kolom jika beda
+			}
+
+			$tags_db = $query->get();
+
+			foreach ($tags_db as $t) {
 				$tags[$t->type][$t->id] = $t;
 			}
 
@@ -437,11 +479,11 @@ class ItemsManagerHelper
 	}
 
 	//TODO: clean this up, make a universal function
-	public static function loadTagsJSON($types)
+	public static function loadTagsJSON($itemType = null,$types)
 	{
-		if(empty(static::$_tags)) static::loadTags();
-		Cache::forget('item_tags_json');
-		static::$_json = Cache::remember('item_tags_json', 300, function () use($types) {
+		if(empty(static::$_tags)) static::loadTags($itemType);
+		Cache::forget('item_tags_json_'. ($itemType ?? '0'));
+		static::$_json = Cache::remember('item_tags_json_'. ($itemType ?? '0'), 300, function () use($types) {
 			$data = array();
 
 			$count = 0;

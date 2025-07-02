@@ -34,6 +34,9 @@
 
         @csrf
 
+        <input type="text" name="type" value="{{ $type }}" hidden>
+        <input type="text" name="tags[jahit][]" hidden>
+
         <section class="bg-gray-50 dark:bg-gray-900 mb-8">
             <div class="mx-auto  ">
                 <!-- Start coding here -->
@@ -44,8 +47,8 @@
                         <div class="grid grid-cols-2 gap-4 mb-8">
 
                             <div class="col-span-2">
-                                <label for="code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code</label>
-                                <input type="text" name="code" id="code" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{old('code',$item->code)}}">
+                                <label for="pcode" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code</label>
+                                <input type="text" name="pcode" id="pcode" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{old('pcode',$item->pcode)}}">
 
                             </div>
 
@@ -87,6 +90,28 @@
                                 <input name="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
 
                             </div>
+
+                            <div class="col-span-2">
+                                <div >
+                                    <label for="warna" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Warna</label>
+
+                                    <div class="">
+                                        <div class="relative mb-4">
+                                            <select class="warna" name="tags[warna][]" id="warna">
+                                                <option ></option>
+                                            </select>
+
+                                            @error('')
+                                                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                            @enderror
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
                           
                         </div>
 
@@ -107,7 +132,52 @@
 
 
     
-   
+    @push('jsBody')
+
+        <script>
+        $(document).ready(function() {
+
+            $('.warna').select2({
+                width: '100%',
+                placeholder: "Pilih Warna",
+                minimumInputLength:2,
+                ajax: {
+                    url: '{{ route("ajax.getWarna") }}',
+                    dataType: "json",
+                    data: (params) => {
+                        console.log(params);
+                        
+                        let query = {
+                            search: params.term,
+                            page: params.page || 1,
+                        };
+                        return query;
+                    },
+                    processResults: data => {
+                        return {
+                            results: data.data.map((row) => {
+                                return { text: row.name, id: row.id };
+                            }),
+                            pagination: {
+                                more: data.current_page < data.last_page,
+                            },
+                        };
+                    },
+                },
+            });
+
+            @isset ($dataWarna)
+
+                var blueOption = new Option('{{$dataWarna->name}}',{{$dataWarna->id}}, true, true);
+                $('.warna').append(blueOption).trigger('change');
+
+            @endisset
+
+        })
+        </script>
+
+    @endpush
+
 
 
 </x-layouts.layout>

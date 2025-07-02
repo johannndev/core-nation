@@ -119,46 +119,48 @@ class ItemsController extends Controller
 
 	public function create()
 	{
-		$tags = ItemsManagerHelper::loadTagsJSON(Tag::$typesCreate);
+		$tags = ItemsManagerHelper::loadTagsJSON(Item::TYPE_ITEM,Tag::$typesCreate);
 
-		return view('items.create',compact('tags'));
+		$type = Item::TYPE_ITEM;
+
+		return view('items.create',compact('tags','type'));
 	}
 
 	public function postCreate(Request $request)
 	{
 		try {
-		$input = $request;
-		$tags = $request->tags;
+			$input = $request;
+			$tags = $request->tags;
 
-		
-		
+			
+			
 
-		DB::beginTransaction();
+			DB::beginTransaction();
 
-		$itemManager = new ItemsManagerHelper;
+			$itemManager = new ItemsManagerHelper;
 
-		// dd($request->tags);
+			// dd($request->tags);
 
-		if(!$itemManager->createItems($input, $tags, $request->file))
-			throw new ModelException($itemManager->getErrors(), __LINE__);
+			if(!$itemManager->createItems($input, $tags, $request->file))
+				throw new ModelException($itemManager->getErrors(), __LINE__);
 
-		DB::commit();
+			DB::commit();
 
-		return redirect()->route('item.index')->with('success', 'Item(s) created.');
+			return redirect()->route('item.index')->with('success', 'Item(s) created.');
 
-		
+			
 
-		} catch(ModelException $e) {
-			DB::rollBack();
+			} catch(ModelException $e) {
+				DB::rollBack();
 
-			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
-		} catch(\Exception $e) {
-			DB::rollBack();
+				return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+			} catch(\Exception $e) {
+				DB::rollBack();
 
-			dd($e);
+				dd($e);
 
-			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
-		}
+				return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+			}
 	}
 	
 
@@ -237,9 +239,10 @@ class ItemsController extends Controller
 
 		$dataWarna = $item->tags->where('type',Tag::TYPE_WARNA)->first();
 
-		$tags = ItemsManagerHelper::loadTagsJSON(Tag::$types);
+		$tags = ItemsManagerHelper::loadTagsJSON(Item::TYPE_ITEM,Tag::$types);
 
 		// dd($tags);
+		$type = Item::TYPE_ITEM;
 
 		foreach($tags as $key => $value) {
 			if($value['type_id'] == Tag::TYPE_SIZE || $value['type_id'] == Tag::TYPE_TYPE || $value['type_id'] == Tag::TYPE_WARNA){
@@ -260,32 +263,27 @@ class ItemsController extends Controller
 		// dd($tags, $selected);
 
 
-		return view('items.edit',compact('tags','selected','item','dataWarna'));
+		return view('items.edit',compact('tags','selected','item','dataWarna','type'));
 	}
 
 	public function postEdit($id,Request $request)
 	{
 		
-		
 		try{
 
-		$input = $request;
-		$tags = $request->tags;
+			$input = $request;
+			$tags = $request->tags;
 
-		DB::beginTransaction();
+			DB::beginTransaction();
 
-		$itemManager = new ItemsManagerHelper;
+			$itemManager = new ItemsManagerHelper;
 
-		
+			if(!$item = $itemManager->updateItem($id, $input, $tags, $request->file))
+				throw new ModelException($itemManager->getError(), __LINE__);
 
-		if(!$item = $itemManager->updateItem($id, $input, $tags, $request->file))
-			throw new ModelException($itemManager->getError(), __LINE__);
+			DB::commit();
 
-		DB::commit();
-
-		return redirect()->route('item.detail',$id)->with('success', 'Item edited.');
-
-		
+			return redirect()->route('item.detail',$id)->with('success', 'Item edited.');
 
 		} catch(ModelException $e) {
 			DB::rollBack();

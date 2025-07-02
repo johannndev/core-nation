@@ -42,6 +42,11 @@ class Tag extends Model
 		self::TYPE_SIZE => 'Size',
 	);
 
+	public static $asetLancarCreate = array(
+		self::TYPE_TYPE => 'Type',
+		self::TYPE_SIZE => 'Size',
+	);
+
 	public static $typesJSON = array(
 		array('id' => self::TYPE_JAHIT,'name' => 'Jahit'),
 		array('id' => self::TYPE_TYPE,'name' => 'Type'),
@@ -52,6 +57,15 @@ class Tag extends Model
 	public function getTypeNameAttribute()
 	{
 		return self::$types[$this->type];
+	}
+
+	public function getItemTypeTextAttribute()
+	{
+		if ($this->item_type > 0) {
+			return Item::$types[$this->item_type] ?? 'Unknown';
+		}
+
+		return 'All';
 	}
 
 	public static function loadSizes()
