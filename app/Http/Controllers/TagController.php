@@ -34,13 +34,54 @@ class TagController extends Controller
 
     }
 
-     public function store(Request $request){
+    public function store(Request $request){
 
         try
 		{
             DB::beginTransaction();
 
             $data = new Tag;
+            $data->name = $request->name;
+            $data->code = $request->code;
+            $data->type = $request->type;
+            $data->item_type = $request->item_type;
+    
+            $data->save();
+     
+
+            DB::commit();
+
+        
+            return redirect()->route('tag.index')->with('success',  'Tag '.$data->name.' created');
+
+            
+		} catch(ModelException $e) {
+			DB::rollBack();
+			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+		} catch(\Exception $e) {
+			DB::rollBack();
+			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+		}
+	}
+
+    public function edit(Request $request,$id)
+    {
+        $data = Tag::find($id);
+
+        $typeList = Tag::$types; 
+        $itemType = Item::$types;
+
+        return view('tag.edit',compact('typeList','itemType','data'));
+
+    }
+
+    public function update(Request $request,$id){
+
+        try
+		{
+            DB::beginTransaction();
+
+            $data = Tag::find($id);
             $data->name = $request->name;
             $data->code = $request->code;
             $data->type = $request->type;

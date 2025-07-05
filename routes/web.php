@@ -152,6 +152,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/tag', [TagController::class, 'index'])->name('tag.index');
     Route::get('/tag/create', [TagController::class, 'create'])->name('tag.create');
     Route::post('/tag/store', [TagController::class, 'store'])->name('tag.store');
+    Route::get('/tag/{id}/edit', [TagController::class, 'edit'])->name('tag.edit');
+    Route::patch('/tag/{id}/update', [TagController::class, 'update'])->name('tag.update');
 
     Route::get('/cron-runner', [CronrunController::class, 'index'])->name('cronrunner.index')->middleware('permission:cron runner');
     Route::get('/cron-runner/{id}/edit', [CronrunController::class, 'edit'])->name('cronrunner.edit')->middleware('permission:cron runner');
