@@ -33,6 +33,8 @@
     <form action="{{route('asetLancar.postCreate')}}" method="post" enctype="multipart/form-data">
 
         @csrf
+        <input type="text" name="type" value="{{ $type }}" hidden>
+        <input type="text" name="tags[2][]" hidden>
 
         <section class="bg-gray-50 dark:bg-gray-900 mb-8">
             <div class="mx-auto  ">
@@ -44,8 +46,8 @@
                         <div class="grid grid-cols-2 gap-4 mb-8">
 
                             <div class="col-span-2">
-                                <label for="code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code</label>
-                                <input type="text" name="code" id="code" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{old('code',$item->code)}}">
+                                <label for="pcode" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code</label>
+                                <input type="text" name="pcode" id="pcode" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{old('pcode',$item->pcode)}}">
 
                             </div>
 
@@ -87,6 +89,53 @@
                                 <input name="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
 
                             </div>
+
+                            <div class="col-span-2">
+                                <div >
+                                    <label for="warna" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Warna</label>
+
+                                    <div class="">
+                                        <div class="relative mb-4">
+                                            <select class="warna" name="tags[20][]" id="warna">
+                                                <option ></option>
+                                            </select>
+
+                                            @error('')
+                                                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                            @enderror
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+
+                            <div class="col-span-2">
+                                @foreach ($tags as $type)
+                                    <div class="mb-6">
+                                        <p class="font-bold text-lg mb-4">{{$type['name']}} </p>
+                                        <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+
+                                            @foreach ($type['data'] as $item)
+                                                <div>
+                                                    <div class="flex items-start md:items-center  mb-4">
+                                                        <input id="default-radio-1" type="{{ $type['type_id'] == 7 ? 'checkbox' : 'radio' }}" value="{{ $item['id'] }}" name="tags[{{ $type['type_id'] }}][]" class="mt-1 md:mt-0 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                        <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"> {{$item['name']}}</label>
+                                                    </div>
+
+                                                
+                                                </div>
+                                            @endforeach
+
+                                        </div>
+                                    
+                                    </div>
+                                    
+                                @endforeach
+                            </div>
+                          
                           
                         </div>
 
@@ -104,6 +153,52 @@
         </section>
 
     </form>
+
+    @push('jsBody')
+
+        <script>
+        $(document).ready(function() {
+
+            $('.warna').select2({
+                width: '100%',
+                placeholder: "Pilih Warna",
+                minimumInputLength:2,
+                ajax: {
+                    url: '{{ route("ajax.getWarna") }}',
+                    dataType: "json",
+                    data: (params) => {
+                        console.log(params);
+                        
+                        let query = {
+                            search: params.term,
+                            page: params.page || 1,
+                        };
+                        return query;
+                    },
+                    processResults: data => {
+                        return {
+                            results: data.data.map((row) => {
+                                return { text: row.name, id: row.id };
+                            }),
+                            pagination: {
+                                more: data.current_page < data.last_page,
+                            },
+                        };
+                    },
+                },
+            });
+
+            // @isset ($dataProp['default'])
+
+            //     var blueOption = new Option('{{$defaultWH->name}}',{{$defaultWH->id}}, true, true);
+            //     $('.{{$dataProp["id"]}}').append(blueOption).trigger('change');
+
+            // @endisset
+
+        })
+        </script>
+
+    @endpush
 
 
     
