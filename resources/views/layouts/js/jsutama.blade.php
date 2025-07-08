@@ -787,7 +787,7 @@
 
             <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField`+i+` "id="gridItem`+i+`">
                 <div class="">
-                    <input type="checkbox" id="myCheckbox`+i+`" hidden>
+                    <input type="checkbox" id="myCheckbox`+i+`" hidden class="hidden">
                     <input type="text" name="addMoreInputFields[`+i+`][itemId]"  id="id`+i+`"  placeholder=""  aria-valuetext="`+i+`" aria-label="id" hidden/>
 
                     <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
@@ -988,7 +988,7 @@
                     <div class="flex items-end w-full ">
 
                         <div class="w-full">
-                            <input type="checkbox" id="myCheckbox`+i+`" hidden>
+                            <input type="checkbox" id="myCheckbox`+i+`" hidden class="hidden">
 
                             <input type="text" name="addMoreInputFields[`+i+`][itemId]"  id="id`+i+`"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
                 
