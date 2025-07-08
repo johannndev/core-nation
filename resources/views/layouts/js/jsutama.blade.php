@@ -14,7 +14,7 @@
 
     var isMobile = Math.min(window.screen.width, window.screen.height) < 768 || navigator.userAgent.indexOf("Mobi") > -1;
 
-    console.log(isMobile);
+    // console.log(isMobile);
 
 </script>
 
@@ -50,7 +50,7 @@
 
     function startScan(id){
 
-        console.log(id);
+        // console.log(id);
         
         scanId = id;
      
@@ -126,7 +126,7 @@
 
 
     $(document).on("keypress", function(e){
-        console.log(e)
+        // console.log(e)
 
         if(e.which == 13){e.preventDefault();}
     })
@@ -175,7 +175,7 @@
     
             var dataId = $('#name'+lineC).attr('data-customId');
     
-            console.log('data ini '+dataId);
+            // console.log('data ini '+dataId);
     
             var wh= $('#warehouse').val();
             var se = $('#sender').val();
@@ -187,7 +187,7 @@
                 whId = se;
             }
     
-            console.log(whId);
+            // console.log(whId);
     
             getItem(valCode,dataId,whId)
     
@@ -201,18 +201,33 @@
         
     }
 
+    function centangCheckbox(id) {
+        $('#myCheckbox' + id).prop('checked', true);
+    }
+
+    
+
     function handleCode(event, id,get=null) {
         // console.log(event.key);
 
-        console.log(event);
+        let lid = lineC;
 
-      
+        if ($('#myCheckbox'+id).is(':checked')) {
+            lid = id;
+            console.log('Checkbox diceklis');
+        }
+
+        // console.log(event);
+        // console.log(lineC);
+
         if(event.key === "Enter" ){
 
+           
             // var price = $('#code'+id).val();
             // alert('Function called without submitting the form! '+price);
+           
 
-            var valCode = $('#code'+id).val()
+            var valCode = $('#code'+lid).val()
 
             // const goBtn = document.getElementById('btncode'+id);
 
@@ -230,7 +245,7 @@
 
             }
 
-            console.log(wh);
+            // console.log(wh);
 
             var whId = 0;
 
@@ -240,14 +255,14 @@
                 whId = se;
             }
 
-            console.log(whId);
+            // console.log(valCode,lid,whId);
 
-            getItem(valCode,id,whId)
+            getItem(valCode,lid,whId)
 
             
            
 
-            document.getElementById("quantity"+id).focus();
+            document.getElementById("quantity"+lid).focus();
 
             // event.preventDefault(); // Mencegah form dari submitting
             // codeFunction(id);
@@ -261,7 +276,14 @@
     }
 
     function handleScan(scanId,valCode) {
-        console.log('halo');
+        // console.log('halo');
+
+        let lid = lineC;
+
+        if ($('#myCheckbox'+scanId).is(':checked')) {
+            lid = scanId;
+            console.log('Checkbox diceklis');
+        }
         
 
         var wh= $('#warehouse').val();
@@ -276,12 +298,12 @@
            
         }
 
-        console.log(valCode+" "+scanId+" "+whId);
+        // console.log(valCode+" "+scanId+" "+whId);
 
-        getItem(valCode,scanId,whId)
+        getItem(valCode,lid,whId)
 
         
-        document.getElementById("quantity"+scanId).focus();
+        document.getElementById("quantity"+lid).focus();
 
          
         
@@ -294,7 +316,15 @@
 
     function handleQty(event, id,get=null) {
 
-        getTotalItem(1,id);
+        let lid = lineC;
+
+        if ($('#myCheckbox'+id).is(':checked')) {
+            lid = scanId;
+            console.log('Checkbox diceklis');
+        }
+        
+
+        getTotalItem(1,lid);
 
         totalQty()
 
@@ -304,9 +334,9 @@
 
         // goBtn.classList.add('hidden');
 
-        console.log('dienter')
+        // console.log('dienter')
 
-        document.getElementById("price"+id).focus();
+        document.getElementById("price"+lid).focus();
 
         // event.preventDefault(); // Mencegah form dari submitting
         // codeFunction(id);
@@ -321,32 +351,58 @@
 
     function handlePrice(event, id,get=null) {
 
-        getTotalItem(1,id,0);
+        let lid = lineC;
+
+        
+
+
+        getTotalItem(1,lid,0);
 
 
 
         if ( event.key === "Enter") {
 
-            console.log('dienter')
+            // console.log('dienter')
 
-            
+           
 
             // const goBtn = document.getElementById('btnprice'+id);
 
             // goBtn.classList.add('hidden');
 
             if( "{{$trType}}" == "move" ||  "{{$trType}}" == "use"){
+            
+                centangCheckbox(id)
+
+                // if ($('#myCheckbox'+id).is(':checked')) {
+                //     lid = lineC;
+                //     console.log('Checkbox diceklis');
+                // }
+                // console.log(lineC)
+
+              
+
                 ++id 
                 ++lineC
 
-                console.log(id)
+                console.log(lineC)
 
-                newLine2(id);
+               
 
-                document.getElementById("code"+id).focus();
+                newLine2(lineC);
+
+              
+
+                document.getElementById("code"+lineC).focus();
             }else{
 
-                document.getElementById("discount"+id).focus();
+                if ($('#myCheckbox'+id).is(':checked')) {
+                    lid = lineC;
+                    console.log('Checkbox diceklis');
+                }
+                console.log(lineC)
+
+                document.getElementById("discount"+lid).focus();
 
             }
 
@@ -366,9 +422,16 @@
 
     function handleDisc(event, id,get=null) {
         
-        var discVal = $('#discount'+id).val()
+        let lid = lineC;
 
-        getTotalItem(2,id,discVal);
+        if ($('#myCheckbox'+id).is(':checked')) {
+            lid = scanId;
+            console.log('Checkbox diceklis');
+        }
+
+        var discVal = $('#discount'+lid).val()
+
+        getTotalItem(2,lid,discVal);
 
 
 
@@ -378,16 +441,18 @@
 
             // goBtn.classList.add('hidden');
 
-            console.log('dienter')
+            // console.log('dienter')
 
             ++id
             ++lineC 
 
-            console.log(id)
+            // console.log(id)
+
+
 
             newLine(id);
 
-            document.getElementById("code"+id).focus();
+            document.getElementById("code"+lineC).focus();
             // event.preventDefault(); // Mencegah form dari submitting
             // codeFunction(id);
             return false; // Mengembalikan false untuk mencegah aksi default
@@ -416,7 +481,7 @@
             dataType: 'json',
             success: function (res) {
 
-                console.log(res);
+                // console.log(res);
                 var errorCode = res['error'];
             
                 if(errorCode === 0 ){
@@ -487,12 +552,12 @@
             
         }
 
-        console.log(subtotal);
-        console.log(diskon);
+        // console.log(subtotal);
+        // console.log(diskon);
 
         var total = subtotal-diskon;
 
-        console.log(total);
+        // console.log(total);
 
         $('#subtotal'+itemLineId).val(total);
 
@@ -527,14 +592,14 @@
 
         $('#totqty').val(cqty)
 
-        console.log(arrayQty)
+        // console.log(arrayQty)
 
     }
 
     $('#disc').keyup(function () {
         var getDiscAll = $('#disc').val()
 
-        console.log(getDiscAll);
+        // console.log(getDiscAll);
 
         getOverAll(adjustment,getDiscAll,tbc)
 
@@ -603,7 +668,7 @@
 
     function remove(val) {
 
-        console.log(val)
+        // console.log(val)
 
         if(val == 0){
 
@@ -722,6 +787,7 @@
 
             <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField`+i+` "id="gridItem`+i+`">
                 <div class="">
+                    <input type="checkbox" id="myCheckbox`+i+`" hidden>
                     <input type="text" name="addMoreInputFields[`+i+`][itemId]"  id="id`+i+`"  placeholder=""  aria-valuetext="`+i+`" aria-label="id" hidden/>
 
                     <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
@@ -788,7 +854,7 @@
                 </div> 
 
                 <div class="">
-                    <button  onclick="remove('`+i+`')" type="button" class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                    <button  onclick="remove('`+i+`')" type="button" class="text-red-500 inline-flex items-center hover:text-white border border-red-500 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-500 dark:focus:ring-red-900">
 
                         <svg class="mr-1 -ml-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -820,6 +886,7 @@
         const newRow = `
 
                 <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField0 hidden" id="gridItemLoading`+i+`">
+                    
                     <div>
                         <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code </label>
                         <div class="relative">
@@ -921,6 +988,7 @@
                     <div class="flex items-end w-full ">
 
                         <div class="w-full">
+                            <input type="checkbox" id="myCheckbox`+i+`" hidden>
 
                             <input type="text" name="addMoreInputFields[`+i+`][itemId]"  id="id`+i+`"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
                 
@@ -1024,7 +1092,7 @@
                     </div> 
                 
                     <div class="">
-                        <button  onclick="remove(`+i+`)" type="button" class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                        <button  onclick="remove(`+i+`)" type="button" class="text-red-500 inline-flex items-center hover:text-white border border-red-500 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-500 dark:focus:ring-red-900">
                 
                             <svg class="mr-1 -ml-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
