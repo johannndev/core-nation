@@ -7,9 +7,28 @@
        
     </div>
 
+    <div id="error-global"></div>
+
     <div id="alert-border-2">
 
-    @if ((session('errorMessage')))
+
+    <div  class="error-wrapper hidden items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800" role="alert">
+        <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+        </svg>
+        <div class="ms-3 text-sm font-medium error-text">
+           
+        </div>
+        <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-2" aria-label="Close">
+          <span class="sr-only">Dismiss</span>
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+          </svg>
+        </button>
+    </div> 
+        
+
+    {{-- @if ((session('errorMessage')))
 
     <div  class="flex items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800" role="alert">
         <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -24,9 +43,11 @@
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
           </svg>
         </button>
-    </div>
+    </div> @endif --}}
         
-    @endif
+    
+
+
 
 </div>
 
@@ -35,7 +56,7 @@
    
 
 
-    <form class="myForm" id="myForm" action="{{route('transaction.postMove')}}" method="post" >
+    <form class="myForm" id="myForm"  >
 
         @csrf
 
@@ -48,8 +69,8 @@
 
                         <div class="grid grid-cols-2 gap-4 mb-8">
                             <div>
-                                <label for="date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date</label>
-                                <input type="date" name="date" id="date" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{date('Y-m-d')}}">
+                                <label for="date" class="date block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date</label>
+                                <input type="date" name="date" id="date" aria-describedby="helper-text-explanation" class="date bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{date('Y-m-d')}}">
 
                             </div>
 
@@ -61,12 +82,12 @@
 
                             <div class="col-span-2">
                                 <label for="invoice" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Invoice</label>
-                                <input type="text" name="invoice" id="invoice" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{old('invoice')}}">
+                                <input type="text" name="invoice" id="invoice" aria-describedby="helper-text-explanation" class="invoice bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{old('invoice')}}">
 
                             </div>
                             <div class="col-span-2">
                                 <label for="note" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Note</label>
-                                <textarea name="note" id="note" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >{{old('note')}}</textarea>
+                                <textarea name="note" id="note" rows="4" class="note block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >{{old('note')}}</textarea>
 
 
                             </div>
@@ -281,6 +302,137 @@
         </section>
 
     </form>
+
+    @push('jsBody')
+
+   <script>
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // gunakan 'auto' jika tidak ingin animasi
+        });
+    }
+
+    $(document).ready(function () {
+        $('#myForm').on('submit', function (e) {
+            e.preventDefault();
+
+            
+            let date= $('#date').val();
+            let sender= $('#sender').val();
+            let recaiver= $('#recaiver').val();
+            let invoice= $('#invoice').val();
+            let note= $('#note').val();
+            let dataItems = [];
+
+            $('input[name^="addMoreInputFields"], select[name^="addMoreInputFields"]').each(function () {
+                let nameAttr = $(this).attr('name'); // contoh: addMoreInputFields[0][code]
+                let matches = nameAttr.match(/addMoreInputFields\[(\d+)\]\[(\w+)\]/);
+
+                if (matches) {
+                    let index = matches[1];  // ambil index 0, 1, dst
+                    let field = matches[2];  // ambil nama field: itemId, code, etc
+
+                    if (!dataItems[index]) {
+                        dataItems[index] = {};
+                    }
+
+                    dataItems[index][field] = $(this).val();
+                }
+            });
+
+            console.log(dataItems);
+                        
+        
+            
+
+            // Bersihkan error sebelumnya
+            $('.text-red-600').remove();
+            $('#error-global').html('');
+
+            $.ajax({
+                url: "{{route('transaction.postMove')}}",
+                type: "POST",
+                data: {
+                    date:date,
+                    sender:sender,
+                    recaiver:recaiver,
+                    invoice:invoice,
+                    note:note,
+                    addMoreInputFields:dataItems,
+                    _token: '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success: function (res) {
+
+                    if(res.status == 'error'){
+
+                        scrollToTop();
+
+                        $('.error-wrapper')
+                            .removeClass('hidden')
+                            .addClass('flex');
+
+                        $('.error-text')
+                            .text(res.message);
+
+                        $(".submit-btn").removeClass('hidden');
+                        $(".loading-btn").addClass('hidden');
+                       
+
+                    }
+
+                    if(res.status == 'ok'){
+
+                        let redirectUrl = "{{ route('transaction.success', ':id') }}".replace(':id', res.trx);
+                        window.location.href = redirectUrl;
+
+                    }
+                    console.log(res);
+                
+                },
+            
+            });
+
+            // $.ajax({
+            //     url: "{{ route('transaction.postMove') }}",
+            //     type: "POST",
+            //     data: formData,
+            //     processData: false,
+            //     contentType: false,
+            //     dataType: 'json',
+            //     success: function (response) {
+            //         window.location.href = "{{ route('transaction.move') }}";
+            //     },
+            //     error: function (xhr) {
+            //         if (xhr.status === 422) {
+            //             let errors = xhr.responseJSON.errors;
+            //             for (let field in errors) {
+            //                 let input = $('[name="' + field + '"]');
+            //                 if (input.length) {
+            //                     let errorText = $('<p class="mt-2 text-sm text-red-600"></p>').text(errors[field].join(', '));
+            //                     input.closest('div').append(errorText);
+            //                 }
+            //             }
+            //         }
+
+            //         if (xhr.responseJSON?.error) {
+            //             $('#error-global').html(
+            //                 `<p class="text-sm text-red-600 mb-4">${xhr.responseJSON.error}</p>`
+            //             );
+            //         } else {
+            //             $('#error-global').html(
+            //                 `<p class="text-sm text-red-600 mb-4">Terjadi kesalahan pada server.</p>`
+            //             );
+            //         }
+            //     }
+            // });
+        });
+    });
+</script>
+
+            
+    @endpush
 
 
    

@@ -883,7 +883,7 @@ class TransactionsController extends Controller
 		$trType = 'sell';
 
 		$dataListPropRecaiver = [
-			"label" => "Receiver",
+			"label" => "Recaiver",
 			"id" => "recaiver",
 			"idList" => "datalistRecaiver",
 			"idOption" => "datalistOptionsRecaiver",
@@ -907,11 +907,15 @@ class TransactionsController extends Controller
 
 	public function postMove(Request $request)
 	{
+
 		try {
 
 		$input = $request->query();
 		$sender = Customer::find($request->sender);
 		$receiver = Customer::find($request->recaiver);
+
+	
+		
 
 		DB::beginTransaction();
 
@@ -929,13 +933,17 @@ class TransactionsController extends Controller
 
 		$transaction->detail_ids = ' ';
 		$transaction->due = '0000-00-00';
-        $transaction->save();
+       
 
 		$transaction->sender_id = $sender->id;
 		$transaction->receiver_id = $receiver->id;
 
+		 $transaction->save();
+
 		//start transaction
+
 		
+	
 
 		//gets the transaction id
 		if(!$transaction->save())
@@ -952,17 +960,22 @@ class TransactionsController extends Controller
 		//commit db transaction
 		DB::commit();
 
-		return redirect()->route('transaction.getDetail',$transaction->id)->with('success', 'Transaction # ' . $transaction->id. ' created.');
+		return response()->json(['status' => 'ok','message' => 'Data berhasil disimpan', 'trx' =>$transaction->id]);
+		// return redirect()->route('transaction.getDetail',$transaction->id)->with('success', 'Transaction # ' . $transaction->id. ' created.');
 
 		} catch(ModelException $e) {
 			DB::rollBack();
 
-			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+			return response()->json(['status' => 'error', 'message' => $e->getErrors()['error'][0]], 200);
+
+			// return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
 
 		} catch(\Exception $e) {
 			DB::rollBack();
 
-			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+			return response()->json(['status' => 'error', 'message' => $e->getMessage()], 200);
+
+			// return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
 		}
 	}
 
