@@ -424,7 +424,6 @@ class TransactionsController extends Controller
  	{
 		try {
 
-	
 		$class = array();
 
 		

@@ -438,12 +438,21 @@
                 let warehouse= $('#warehouse').val();
                 let invoice= $('#invoice').val();
                 let note= $('#note').val();
-                let paid= $('#paid').val();
-                let account= $('#account').val();
+                let account= null;
+                let paid = null;
                 let ongkir= $('#ongkir').val();
                 let disc= $('#disc').val();
                 let adjustment= $('#adjustment').val();
                 let dataItems = [];
+
+                const paidCheck = document.getElementById('paid');
+
+                if (paidCheck.checked) {
+                    paid = paidCheck.value;
+                    account= $('#account').val()
+                 
+                }
+
 
                 $('input[name^="addMoreInputFields"], select[name^="addMoreInputFields"]').each(function () {
                     let nameAttr = $(this).attr('name'); // contoh: addMoreInputFields[0][code]
