@@ -9,33 +9,29 @@
 
     <div id="alert-border-2">
 
-    @if ((session('errorMessage')))
+        <div  class="error-wrapper hidden items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800" role="alert">
+            <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <div class="ms-3 text-sm font-medium error-text">
+            
+            </div>
+            <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-2" aria-label="Close">
+            <span class="sr-only">Dismiss</span>
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+            </svg>
+            </button>
+        </div> 
 
-    <div  class="flex items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800" role="alert">
-        <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-        </svg>
-        <div class="ms-3 text-sm font-medium">
-            {{session('errorMessage')}}
-        </div>
-        <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-2" aria-label="Close">
-          <span class="sr-only">Dismiss</span>
-          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-          </svg>
-        </button>
     </div>
-        
-    @endif
-
-</div>
 
    
 
    
 
 
-    <form class="myForm" id="myForm" action="{{route('transaction.postBuy')}}" method="post" >
+    <form class="myForm" id="myForm">
 
         @csrf
 
@@ -190,6 +186,8 @@
                                 
                                 <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-9 items-end addField0 "id="gridItem0">
                                     <div class="">
+                                        <input type="checkbox" id="myCheckbox0" hidden class="hidden">
+
                                         <input type="text" name="addMoreInputFields[0][itemId]"  id="id0"  placeholder=""  aria-valuetext="0" aria-label="id" hidden/>
                                 
                                         <label for="code" class="block mb-2 text-sm font-medium text-gray-900 ">Code</label>
@@ -254,7 +252,7 @@
                                     </div> 
                                 
                                     <div class="">
-                                        <button  onclick="remove('0')" type="button" class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                        <button  onclick="remove('0')" type="button" class="text-red-500 inline-flex items-center hover:text-white border border-red-500 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-500 dark:focus:ring-red-900">
                                 
                                             <svg class="mr-1 -ml-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -328,6 +326,110 @@
 
     </form>
 
+    @push('jsBody')
+
+    <script>
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // gunakan 'auto' jika tidak ingin animasi
+            });
+        }
+
+        $(document).ready(function () {
+            $('#myForm').on('submit', function (e) {
+                e.preventDefault();
+
+                
+                let date= $('#date').val();
+                let due= $('#due').val();
+                let customer= $('#customer').val();
+                let warehouse= $('#warehouse').val();
+                let invoice= $('#invoice').val();
+                let note= $('#note').val();
+                let disc= $('#disc').val();
+                let adjustment= $('#adjustment').val();
+                let dataItems = [];
+
+                $('input[name^="addMoreInputFields"], select[name^="addMoreInputFields"]').each(function () {
+                    let nameAttr = $(this).attr('name'); // contoh: addMoreInputFields[0][code]
+                    let matches = nameAttr.match(/addMoreInputFields\[(\d+)\]\[(\w+)\]/);
+
+                    if (matches) {
+                        let index = matches[1];  // ambil index 0, 1, dst
+                        let field = matches[2];  // ambil nama field: itemId, code, etc
+
+                        if (!dataItems[index]) {
+                            dataItems[index] = {};
+                        }
+
+                        dataItems[index][field] = $(this).val();
+                    }
+                });
+
+                console.log(dataItems);
+                            
+            
+                
+
+                // Bersihkan error sebelumnya
+                $('.text-red-600').remove();
+                $('#error-global').html('');
+
+                $.ajax({
+                    url: "{{route('transaction.postBuy')}}",
+                    type: "POST",
+                    data: {
+                        date:date,
+                        due:due
+                        customer:customer,
+                        warehouse:warehouse,
+                        invoice:invoice,
+                        note:note,
+                        disc:disc,
+                        adjustment:adjustment,
+                        addMoreInputFields:dataItems,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+
+                        if(res.status == 'error'){
+
+                            scrollToTop();
+
+                            $('.error-wrapper')
+                                .removeClass('hidden')
+                                .addClass('flex');
+
+                            $('.error-text')
+                                .text(res.message);
+
+                            $(".submit-btn").removeClass('hidden');
+                            $(".loading-btn").addClass('hidden');
+                        
+
+                        }
+
+                        if(res.status == 'ok'){
+
+                            let redirectUrl = "{{ route('transaction.success', ':id') }}".replace(':id', res.trx);
+                            window.location.href = redirectUrl;
+
+                        }
+                        console.log(res);
+                    
+                    },
+                
+                });
+
+            
+            });
+        });
+    </script>
+
+            
+    @endpush
 
     @include('layouts.js.jsutama')
    

@@ -597,7 +597,9 @@ class TransactionsController extends Controller
 
         // $request->session()->flash('success', 'Transaction # ' . $transaction->id. ' created.');
 
-		return redirect()->route('transaction.getDetail',$transaction->id)->with('success', 'Transaction # ' . $transaction->id. ' created.');
+		// return redirect()->route('transaction.getDetail',$transaction->id)->with('success', 'Transaction # ' . $transaction->id. ' created.');
+
+		return response()->json(['status' => 'ok','message' => 'Data berhasil disimpan', 'trx' =>$transaction->id]);
 		
         // return response()->json([
         //     'url' => route('transaction.getDetail',$transaction->id,$transaction->date),
@@ -608,15 +610,19 @@ class TransactionsController extends Controller
 			
             DB::rollBack();
 
-			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+			return response()->json(['status' => 'error', 'message' => $e->getErrors()['error'][0]], 200);
+
+			// return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
             // return response()->json($e->getErrors(), 500);
 		
 		} catch(\Exception $e) {
             DB::rollBack();
 
-			dd($e);
+			// dd($e);
 
-			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+			return response()->json(['status' => 'error', 'message' => $e->getMessage()], 200);
+
+			// return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
 
             // return response()->json($e->getMessage(), 500);
 			

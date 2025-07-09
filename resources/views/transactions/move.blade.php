@@ -306,131 +306,99 @@
 
     @push('jsBody')
 
-   <script>
-    function scrollToTop() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // gunakan 'auto' jika tidak ingin animasi
-        });
-    }
-
-    $(document).ready(function () {
-        $('#myForm').on('submit', function (e) {
-            e.preventDefault();
-
-            
-            let date= $('#date').val();
-            let sender= $('#sender').val();
-            let recaiver= $('#recaiver').val();
-            let invoice= $('#invoice').val();
-            let note= $('#note').val();
-            let dataItems = [];
-
-            $('input[name^="addMoreInputFields"], select[name^="addMoreInputFields"]').each(function () {
-                let nameAttr = $(this).attr('name'); // contoh: addMoreInputFields[0][code]
-                let matches = nameAttr.match(/addMoreInputFields\[(\d+)\]\[(\w+)\]/);
-
-                if (matches) {
-                    let index = matches[1];  // ambil index 0, 1, dst
-                    let field = matches[2];  // ambil nama field: itemId, code, etc
-
-                    if (!dataItems[index]) {
-                        dataItems[index] = {};
-                    }
-
-                    dataItems[index][field] = $(this).val();
-                }
+    <script>
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // gunakan 'auto' jika tidak ingin animasi
             });
+        }
 
-            console.log(dataItems);
-                        
-        
-            
+        $(document).ready(function () {
+            $('#myForm').on('submit', function (e) {
+                e.preventDefault();
 
-            // Bersihkan error sebelumnya
-            $('.text-red-600').remove();
-            $('#error-global').html('');
-
-            $.ajax({
-                url: "{{route('transaction.postMove')}}",
-                type: "POST",
-                data: {
-                    date:date,
-                    sender:sender,
-                    recaiver:recaiver,
-                    invoice:invoice,
-                    note:note,
-                    addMoreInputFields:dataItems,
-                    _token: '{{csrf_token()}}'
-                },
-                dataType: 'json',
-                success: function (res) {
-
-                    if(res.status == 'error'){
-
-                        scrollToTop();
-
-                        $('.error-wrapper')
-                            .removeClass('hidden')
-                            .addClass('flex');
-
-                        $('.error-text')
-                            .text(res.message);
-
-                        $(".submit-btn").removeClass('hidden');
-                        $(".loading-btn").addClass('hidden');
-                       
-
-                    }
-
-                    if(res.status == 'ok'){
-
-                        let redirectUrl = "{{ route('transaction.success', ':id') }}".replace(':id', res.trx);
-                        window.location.href = redirectUrl;
-
-                    }
-                    console.log(res);
                 
-                },
+                let date= $('#date').val();
+                let sender= $('#sender').val();
+                let recaiver= $('#recaiver').val();
+                let invoice= $('#invoice').val();
+                let note= $('#note').val();
+                let dataItems = [];
+
+                $('input[name^="addMoreInputFields"], select[name^="addMoreInputFields"]').each(function () {
+                    let nameAttr = $(this).attr('name'); // contoh: addMoreInputFields[0][code]
+                    let matches = nameAttr.match(/addMoreInputFields\[(\d+)\]\[(\w+)\]/);
+
+                    if (matches) {
+                        let index = matches[1];  // ambil index 0, 1, dst
+                        let field = matches[2];  // ambil nama field: itemId, code, etc
+
+                        if (!dataItems[index]) {
+                            dataItems[index] = {};
+                        }
+
+                        dataItems[index][field] = $(this).val();
+                    }
+                });
+
+                console.log(dataItems);
+                            
+            
+                
+
+                // Bersihkan error sebelumnya
+                $('.text-red-600').remove();
+                $('#error-global').html('');
+
+                $.ajax({
+                    url: "{{route('transaction.postMove')}}",
+                    type: "POST",
+                    data: {
+                        date:date,
+                        sender:sender,
+                        recaiver:recaiver,
+                        invoice:invoice,
+                        note:note,
+                        addMoreInputFields:dataItems,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+
+                        if(res.status == 'error'){
+
+                            scrollToTop();
+
+                            $('.error-wrapper')
+                                .removeClass('hidden')
+                                .addClass('flex');
+
+                            $('.error-text')
+                                .text(res.message);
+
+                            $(".submit-btn").removeClass('hidden');
+                            $(".loading-btn").addClass('hidden');
+                        
+
+                        }
+
+                        if(res.status == 'ok'){
+
+                            let redirectUrl = "{{ route('transaction.success', ':id') }}".replace(':id', res.trx);
+                            window.location.href = redirectUrl;
+
+                        }
+                        console.log(res);
+                    
+                    },
+                
+                });
+
             
             });
-
-            // $.ajax({
-            //     url: "{{ route('transaction.postMove') }}",
-            //     type: "POST",
-            //     data: formData,
-            //     processData: false,
-            //     contentType: false,
-            //     dataType: 'json',
-            //     success: function (response) {
-            //         window.location.href = "{{ route('transaction.move') }}";
-            //     },
-            //     error: function (xhr) {
-            //         if (xhr.status === 422) {
-            //             let errors = xhr.responseJSON.errors;
-            //             for (let field in errors) {
-            //                 let input = $('[name="' + field + '"]');
-            //                 if (input.length) {
-            //                     let errorText = $('<p class="mt-2 text-sm text-red-600"></p>').text(errors[field].join(', '));
-            //                     input.closest('div').append(errorText);
-            //                 }
-            //             }
-            //         }
-
-            //         if (xhr.responseJSON?.error) {
-            //             $('#error-global').html(
-            //                 `<p class="text-sm text-red-600 mb-4">${xhr.responseJSON.error}</p>`
-            //             );
-            //         } else {
-            //             $('#error-global').html(
-            //                 `<p class="text-sm text-red-600 mb-4">Terjadi kesalahan pada server.</p>`
-            //             );
-            //         }
-            //     }
-            // });
         });
-    });
-</script>
+    </script>
 
             
     @endpush

@@ -425,7 +425,7 @@
         let lid = lineC;
 
         if ($('#myCheckbox'+id).is(':checked')) {
-            lid = scanId;
+            lid = id;
             console.log('Checkbox diceklis');
         }
 
@@ -450,7 +450,7 @@
 
 
 
-            newLine(id);
+            newLine(lineC);
 
             document.getElementById("code"+lineC).focus();
             // event.preventDefault(); // Mencegah form dari submitting
@@ -670,7 +670,9 @@
 
         // console.log(val)
 
-        if(val == 0){
+         const totalRows = $('[name^="addMoreInputFields["][name$="[itemId]"]').length;
+
+        if(totalRows <= 1){
 
             $('#name'+val).val(null).trigger('change.select2');
 
