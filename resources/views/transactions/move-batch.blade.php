@@ -34,7 +34,7 @@
 
 
 
-    <form action="{{route('transaction.moveBatchStore')}}" method="post" >
+    <form action="{{route('transaction.moveBatchStore')}}" method="post" id="myForm" class="myForm">
 
         @csrf
 
@@ -72,11 +72,17 @@
 
                             </div>
 
-                            <div class="col-span-2">
-                                <label for="csv" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">CSV</label>
-                                <textarea name="csv" id="csv" onkeyup="fetchSell()" rows="4" class=" block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >{{old('csv')}}</textarea>
+                           <div class="col-span-2">
+                              
+                                
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
+                                <input  name="csv_file" id="csvFile" accept=".csv" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
 
 
+                            </div>
+
+                            <div id="loading-item" class="mt-2 transition font-medium transform duration-300 ease-in-out opacity-0 -translate-y-4 text-sm text-yellow-500">
+                                Tunggu sebentar, data sedang dimuat...
                             </div>
                         </div>
 
@@ -132,7 +138,7 @@
                         </div>
 
                         
-                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
+                         <x-layout.submit-button />
 
                     </div>
                 </div>

@@ -2,6 +2,20 @@
 
 <script>
 
+    const loader = document.getElementById('loading-item');
+
+    function showLoader() {
+        loader.classList.remove('opacity-0', '-translate-y-4');
+        loader.classList.add('opacity-100', 'translate-y-0');
+        
+    }
+
+    function hideLoader() {
+        loader.classList.remove('opacity-100', 'translate-y-0');
+        loader.classList.add('opacity-0', '-translate-y-4');
+        
+    }
+
     var qtySum = 0;
     var qtyPrice = 0;
     var adjs = 0;
@@ -12,6 +26,8 @@
         formData.append('_token', document.querySelector('input[name="_token"]').value);
         formData.append('whId', $('#warehouse').val()); // Menambahkan whid ke FormData
 
+        showLoader()
+
         fetch('{{ route("ajax.sellBatch") }}', {
             method: 'POST',
             body: formData,
@@ -21,6 +37,8 @@
         })
         .then(response => response.json())
         .then(data => {
+
+            hideLoader()
 
             console.log(data.length);
             
@@ -39,6 +57,9 @@
            
         })
         .catch(error => {
+
+            hideLoader()
+            
             console.error('Error:', error);
             // document.getElementById('uploadResult').innerText = 'Terjadi kesalahan saat meng-upload CSV.';
         });

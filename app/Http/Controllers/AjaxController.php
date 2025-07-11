@@ -251,7 +251,7 @@ class AjaxController extends Controller
     {
         $whid = $request->whId;
 
-        // dd($request);
+        
 
         // Validate and store the uploaded file
         $request->validate([

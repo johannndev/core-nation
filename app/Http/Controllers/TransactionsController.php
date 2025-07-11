@@ -38,8 +38,6 @@ class TransactionsController extends Controller
 	public function index(Request $request)
 	{
 
-	
-		
 		$allType = Transaction::$typesJSON;
 
 		$dataList = Transaction::with('receiver','sender');
@@ -224,6 +222,8 @@ class TransactionsController extends Controller
 	public function postSellBatch(Request $request)
  	{
 		try {
+
+		
 		//start transaction
 		DB::beginTransaction();
 
@@ -539,14 +539,6 @@ class TransactionsController extends Controller
 			if(!empty($ongkir))
 				$transaction->attachOngkir($transaction->date, $payment->receiver_id, abs($ongkir), $settingApp->getAppSettings('ongkir') );
 		}
-
-		
-
-
-		
-
-		
-		
 
 		if($type == Transaction::TYPE_SELL || $type == Transaction::TYPE_RETURN){
 
