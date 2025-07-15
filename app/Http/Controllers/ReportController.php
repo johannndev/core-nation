@@ -391,7 +391,7 @@ class ReportController extends Controller
 					'cash_out_journal' => $cashOutJournal,
 					'cash_out_supplier' => $cashOutSupplier,
 					'nett_cash_out' =>  $totalCashOut,
-					'nett_cash' => $totalCashIn + $totalCashOut,
+					'nett_cash' => $totalCashIn - $totalCashOut,
 				];
 			}
 
