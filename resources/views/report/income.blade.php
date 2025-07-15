@@ -282,6 +282,10 @@
                                                 {{ number_format($item['cash_out_journal'],2) }}
                                             </div>
 
+                                             <div class="p-1 w-32 text-right border-b">
+                                                {{ number_format($item['cash_out_supplier'],2) }}
+                                            </div>
+
                                              <div class="p-1 w-32 text-right border-b font-bold">
                                                 {{ number_format($item['nett_cash_out'],2) }}
                                             </div>
