@@ -159,16 +159,22 @@ class ReportController extends Controller
 	
     }
 
-	public function income(){
-		// Ubah ini sesuai kebutuhan
-		$startMonth = 1; // Oktober
-		$startYear = 2023;
-		$endMonth = 12;    // Maret
-		$endYear = 2023;
+	public function income(Request $request){
+		 // Ambil input dari request atau pakai default
+		$month = $request->input('bulan');
+		$year = $request->input('tahun');
+		$periode = $request->input('type'); // 6 atau 12
 
-		// Hitung rentang tanggal
-		$startDate = Carbon::create($startYear, $startMonth, 1)->startOfMonth();
-		$endDate = Carbon::create($endYear, $endMonth, 1)->endOfMonth();
+		// Jika ada filter bulan & tahun, hitung ke depan
+		if ($month && $year && $periode) {
+			$startDate = Carbon::create($year, $month, 1)->startOfMonth();
+			$endDate = Carbon::create($year, $month, 1)->addMonths($periode - 1)->endOfMonth();
+		} else {
+			// Default: 12 bulan ke belakang dari bulan ini
+			$endDate = Carbon::now()->endOfMonth();
+			$startDate = Carbon::now()->subMonths(11)->startOfMonth();
+		}
+
 
 		// Nilai constant
 		$typeSell = Transaction::TYPE_SELL;
@@ -342,8 +348,61 @@ class ReportController extends Controller
 				];
 			}
 
-			// dd($results);
+			$dateList = [];
+			foreach($results as $key => $row){
 
-		return view('report.income',compact('results'));
+				$dateList[$key] = [
+					'date' => $key,
+				];
+
+			}
+
+			$income = [];
+			foreach($results as $key => $row){
+
+				$income[$key] = [
+					'sell_offline' => $row['sell_offline'],
+					'sell_online' => $row['sell_online'],
+					'return_offline' => $row['return_offline'],
+					'return_online' => $row['return_online'],
+					'nett_revenue' => $row['nett_revenue']
+				];
+
+			}
+
+			$cashIn = [];
+			foreach($results as $key => $row){
+
+				$cashIn[$key] = [
+					'cash_in_offline' => $row['cash_in_offline'],
+					'cash_in_online' => $row['cash_in_online'],
+					'cash_in_journal' => $row['cash_in_journal'],
+					'nett_cash_in' => $row['nett_cash_in'],
+				];
+
+			}
+
+			$cashOut = [];
+			foreach($results as $key => $row){
+
+				$cashOut[$key] = [
+					'cash_out_offline' => $row['cash_out_offline'],
+					'cash_out_online' => $row['cash_out_online'],
+					'cash_out_journal' => $row['cash_out_journal'],
+					'nett_cash_out' => $row['nett_cash_out'],
+				];
+
+			}
+
+			$cashTotal = [];
+			foreach($results as $key => $row){
+
+				$cashTotal[$key] = [
+					'nett_cash' => $row['nett_cash'],
+				];
+
+			}
+
+		return view('report.income',compact('results','dateList','income','cashIn','cashOut','cashTotal'));
 	}	
 }
