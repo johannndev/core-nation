@@ -236,7 +236,7 @@ class ReportController extends Controller
 
 				SUM(CASE 
 						WHEN transactions.type = ? 
-							AND transactions.receiver_type IN (?, ?) 
+							AND transactions.sender_type IN (?, ?) 
 							AND customers.is_online = 0 
 						THEN transactions.total 
 						ELSE 0 
@@ -244,7 +244,7 @@ class ReportController extends Controller
 
 				SUM(CASE 
 						WHEN transactions.type = ? 
-							AND transactions.receiver_type IN (?, ?) 
+							AND transactions.sender_type IN (?, ?) 
 							AND customers.is_online = 1 
 						THEN transactions.total 
 						ELSE 0 
@@ -252,14 +252,14 @@ class ReportController extends Controller
 
 				SUM(CASE 
 						WHEN transactions.type = ? 
-							AND transactions.receiver_type IN (?, ?) 
+							AND transactions.sender_type IN (?, ?) 
 						THEN transactions.total 
 						ELSE 0 
 					END) as cashin_total,
 
 				SUM(CASE 
 						WHEN transactions.type = ? 
-							AND transactions.receiver_type = ? 
+							AND transactions.sender_type = ? 
 						THEN transactions.total 
 						ELSE 0 
 					END) as cashin_journal,
