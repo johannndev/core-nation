@@ -126,6 +126,10 @@
                                 </div>
 
                                 <div class="p-1 w-32 border-b ">
+                                    Total Sell 
+                                </div>
+
+                                <div class="p-1 w-32 border-b ">
                                     Return Offline
                                 </div>
 
@@ -152,6 +156,9 @@
                                             </div>
                                             <div class="p-1 w-32 text-right border-b">
                                                 {{ number_format($item['sell_online'],2) }}
+                                            </div>
+                                            <div class="p-1 w-32 text-right border-b">
+                                                {{ number_format($item['sell_total'],2) }}
                                             </div>
                                             <div class="p-1 w-32 text-right border-b">
                                                 {{ number_format($item['return_offline'],2) }}
@@ -193,6 +200,10 @@
                                     Cash In Online
                                 </div>
 
+                                <div class="p-1 w-32 border-b ">
+                                    Total Cash In
+                                </div>
+
                                  <div class="p-1 w-32 border-b ">
                                    Cash In Journal
                                 </div>
@@ -215,6 +226,10 @@
 
                                             <div class="p-1 w-32 text-right border-b">
                                                 {{ number_format($item['cash_in_online'],2) }}
+                                            </div>
+
+                                            <div class="p-1 w-32 text-right border-b">
+                                                {{ number_format($item['cash_in_total'],2) }}
                                             </div>
 
                                             <div class="p-1 w-32 text-right border-b">
@@ -245,8 +260,12 @@
                                     Cash Out Offline
                                 </div>
 
-                                 <div class="p-1 w-32 border-b">
+                                <div class="p-1 w-32 border-b">
                                     Cash Out Online
+                                </div>
+
+                                <div class="p-1 w-32 border-b">
+                                    Total Cash Out
                                 </div>
 
                                  <div class="p-1 w-32 border-b">
@@ -278,6 +297,10 @@
                                                 {{ number_format($item['cash_out_online'],2) }}
                                             </div>
 
+                                            <div class="p-1 w-32 text-right border-b">
+                                                {{ number_format($item['cash_out_total'],2) }}
+                                            </div>
+
                                              <div class="p-1 w-32 text-right border-b">
                                                 {{ number_format($item['cash_out_journal'],2) }}
                                             </div>
@@ -306,9 +329,7 @@
                                 <div class="pb-4 px-1 w-32 border-b font-bold">
                                    Total
                                 </div>
-                                <div class="pb-4 px-1 w-32 border-b font-bold">
-                                   Sum
-                                </div>
+                              
 
                                  
 
@@ -323,9 +344,7 @@
                                             <div class="pb-4 px-1 w-32 text-right border-b font-bold text-sm">
                                                 {{ number_format($item['nett_cash'],2) }}
                                             </div>
-                                            <div class="pb-4 px-1 w-32 text-right border-b font-bold text-sm">
-                                                {{ number_format($item['sum'],2) }}
-                                            </div>
+                                            
                                         </div>
                                     @endforeach
 

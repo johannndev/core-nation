@@ -209,6 +209,15 @@ class ReportController extends Controller
 						ELSE 0 
 					END) as sell_online,
 
+					
+				SUM(CASE 
+						WHEN transactions.type = ? 
+							AND transactions.receiver_type IN (?, ?) 
+						THEN transactions.total 
+						ELSE 0 
+					END) as sell_total,
+					
+
 				SUM(CASE 
 						WHEN transactions.type = ? 
 							AND transactions.receiver_type IN (?, ?) 
@@ -243,6 +252,13 @@ class ReportController extends Controller
 
 				SUM(CASE 
 						WHEN transactions.type = ? 
+							AND transactions.receiver_type IN (?, ?) 
+						THEN transactions.total 
+						ELSE 0 
+					END) as cashin_total,
+
+				SUM(CASE 
+						WHEN transactions.type = ? 
 							AND transactions.receiver_type = ? 
 						THEN transactions.total 
 						ELSE 0 
@@ -262,6 +278,12 @@ class ReportController extends Controller
 						THEN transactions.total 
 						ELSE 0 
 					END) as cashout_online,
+				SUM(CASE 
+						WHEN transactions.type = ? 
+							AND transactions.receiver_type IN (?, ?) 
+						THEN transactions.total 
+						ELSE 0 
+					END) as cashout_total,
 
 				SUM(CASE 
 						WHEN transactions.type = ? 
@@ -278,11 +300,14 @@ class ReportController extends Controller
 			", [
 				$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
 				$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
+				$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
 				$typeReturn, $receiverTypeCustomer, $receiverTypeReseller,
 				$typeReturn, $receiverTypeCustomer, $receiverTypeReseller,
+				$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
 				$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
 				$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
 				$typeCashIn, $receiverTypeAccount,
+				$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
 				$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
 				$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
 				$typeCashOut, $receiverTypeAccount,
@@ -304,20 +329,23 @@ class ReportController extends Controller
 				$results[$key] = [
 					'sell_offline' => 0,
 					'sell_online' => 0,
+					'sell_total' => 0,
 					'return_offline' => 0,
 					'return_online' => 0,
 					'nett_revenue' => 0,
 					'cash_in_offline' => 0,
 					'cash_in_online' => 0,
+					'cash_in_total' => 0,
 					'cash_in_journal' => 0,
 					'nett_cash_in' => 0,
 					'cash_out_offline' => 0,
 					'cash_out_online' => 0,
+					'cash_out_total' => 0,
 					'cash_out_journal' => 0,
 					'cash_out_supplier' => 0,
 					'nett_cash_out' => 0,
 					'nett_cash' => 0,
-					'sum' => 0,
+				
 				];
 				$period->addMonth();
 			}
@@ -327,13 +355,16 @@ class ReportController extends Controller
 
 				$sellOffline = (float) abs($row->sell_offline);
 				$sellOnline = (float) abs($row->sell_online);
+				$sellTotal = (float) abs($row->sell_total);
 				$returnOffline = (float) abs($row->return_offline);
 				$returnOnline = (float) abs($row->return_online);
 				$cashInOffline = (float) abs($row->cashin_offline);
 				$cashInOnline = (float) abs($row->cashin_online);
+				$cashInTotal = (float) abs($row->cashin_total);
 				$cashInJournal = (float) abs($row->cashin_journal);
 				$cashOutOffline = (float) abs($row->cashout_offline);
 				$cashOutOnline = (float) abs($row->cashout_online);
+				$cashOutTotal = (float) abs($row->cashout_total);
 				$cashOutJournal = (float) abs($row->cashout_journal);
 				$cashOutSupplier = (float) abs($row->cashout_supplier);
 
@@ -345,20 +376,22 @@ class ReportController extends Controller
 				$results[$key] = [
 					'sell_offline' => $sellOffline,
 					'sell_online' => $sellOnline,
+					'sell_total' => $sellTotal,
 					'return_offline' => $returnOffline,
 					'return_online' => $returnOnline,
 					'nett_revenue' => $totalIncome,
 					'cash_in_offline' => $cashInOffline,
 					'cash_in_online' => $cashInOnline ,
+					'cash_in_total' => $cashInTotal ,
 					'cash_in_journal' => $cashInJournal,
 					'nett_cash_in' =>  $totalCashIn,
 					'cash_out_offline' => $cashOutOffline,
 					'cash_out_online' => $cashOutOnline ,
+					'cash_out_total' => $cashOutTotal ,
 					'cash_out_journal' => $cashOutJournal,
 					'cash_out_supplier' => $cashOutSupplier,
 					'nett_cash_out' =>  $totalCashOut,
 					'nett_cash' => $totalCashIn + $totalCashOut,
-					'sum' => $totalIncome + $totalCashIn + $totalCashOut
 				];
 			}
 
@@ -377,6 +410,7 @@ class ReportController extends Controller
 				$income[$key] = [
 					'sell_offline' => $row['sell_offline'],
 					'sell_online' => $row['sell_online'],
+					'sell_total' => $row['sell_total'],
 					'return_offline' => $row['return_offline'],
 					'return_online' => $row['return_online'],
 					'nett_revenue' => $row['nett_revenue']
@@ -390,6 +424,7 @@ class ReportController extends Controller
 				$cashIn[$key] = [
 					'cash_in_offline' => $row['cash_in_offline'],
 					'cash_in_online' => $row['cash_in_online'],
+					'cash_in_total' => $row['cash_in_total'],
 					'cash_in_journal' => $row['cash_in_journal'],
 					'nett_cash_in' => $row['nett_cash_in'],
 				];
@@ -402,6 +437,7 @@ class ReportController extends Controller
 				$cashOut[$key] = [
 					'cash_out_offline' => $row['cash_out_offline'],
 					'cash_out_online' => $row['cash_out_online'],
+					'cash_out_total' => $row['cash_out_total'],
 					'cash_out_journal' => $row['cash_out_journal'],
 					'cash_out_supplier' => $row['cash_out_supplier'],
 					'nett_cash_out' => $row['nett_cash_out'],
@@ -414,7 +450,6 @@ class ReportController extends Controller
 
 				$cashTotal[$key] = [
 					'nett_cash' => $row['nett_cash'],
-					'sum' => $row['sum'],
 				];
 
 			}
