@@ -130,7 +130,7 @@
                                 </div>
 
                                 <div class="p-1 w-32 border-b ">
-                                    Return online
+                                    Return Online
                                 </div>
 
                                 <div class="p-1 w-32 border-b  font-bold">
@@ -217,7 +217,7 @@
                                                 {{ number_format($item['cash_in_online'],2) }}
                                             </div>
 
-                                             <div class="p-1 w-32 text-right border-b">
+                                            <div class="p-1 w-32 text-right border-b">
                                                 {{ number_format($item['cash_in_journal'],2) }}
                                             </div>
 
@@ -251,6 +251,10 @@
 
                                  <div class="p-1 w-32 border-b">
                                    Cash Out Journal
+                                </div>
+
+                                <div class="p-1 w-32 border-b">
+                                   Cash Out Supplier
                                 </div>
 
                                 <div class="p-1 w-32 border-b font-bold">
@@ -298,6 +302,9 @@
                                 <div class="pb-4 px-1 w-32 border-b font-bold">
                                    Total
                                 </div>
+                                <div class="pb-4 px-1 w-32 border-b font-bold">
+                                   Sum
+                                </div>
 
                                  
 
@@ -311,6 +318,9 @@
                                         <div class="">
                                             <div class="pb-4 px-1 w-32 text-right border-b font-bold text-sm">
                                                 {{ number_format($item['nett_cash'],2) }}
+                                            </div>
+                                            <div class="pb-4 px-1 w-32 text-right border-b font-bold text-sm">
+                                                {{ number_format($item['sum'],2) }}
                                             </div>
                                         </div>
                                     @endforeach
