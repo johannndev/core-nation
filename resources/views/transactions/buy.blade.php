@@ -381,7 +381,7 @@
                     type: "POST",
                     data: {
                         date:date,
-                        due:due
+                        due:due,
                         customer:customer,
                         warehouse:warehouse,
                         invoice:invoice,
