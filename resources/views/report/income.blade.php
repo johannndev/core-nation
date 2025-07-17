@@ -119,22 +119,24 @@
                             <div class="">
                                 
                                 <div class="p-1 w-32 border-b ">
-                                    Sell Offline
+                                    <a href="{{ route('report.incomeBook',['id' => 'sell-offline', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline">Sell Offline</a>
                                 </div>
                                 <div class="p-1 w-32 border-b ">
-                                    Sell Online
-                                </div>
-
-                                <div class="p-1 w-32 border-b ">
-                                    Total Sell 
+                                    <a href="{{ route('report.incomeBook',['id' => 'sell-online', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline"> Sell Online</a>
                                 </div>
 
                                 <div class="p-1 w-32 border-b ">
-                                    Return Offline
+                                    <a href="{{ route('report.incomeBook',['id' => 'sell-all', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline">Total Sell </a>
                                 </div>
 
                                 <div class="p-1 w-32 border-b ">
-                                    Return Online
+                                    <a href="{{ route('report.incomeBook',['id' => 'return-offline', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline">Return Offline</a>
+                                    
+                                </div>
+
+                                <div class="p-1 w-32 border-b ">
+                                    <a href="{{ route('report.incomeBook',['id' => 'return-online', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline">Return Online</a>
+                                   
                                 </div>
 
                                 <div class="p-1 w-32 border-b  font-bold">
@@ -193,19 +195,22 @@
                                 
 
                                 <div class="p-1 w-32 border-b ">
-                                    Cash In Offline
+                                   
+                                    <a href="{{ route('report.incomeBook',['id' => 'cash-in-offline', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline">Cash In Offline</a>
                                 </div>
 
                                 <div class="p-1 w-32 border-b ">
-                                    Cash In Online
+                                    <a href="{{ route('report.incomeBook',['id' => 'cash-in-online', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline"> Cash In Online</a>
+                                   
                                 </div>
 
                                 <div class="p-1 w-32 border-b ">
-                                    Total Cash In
+                                    <a href="{{ route('report.incomeBook',['id' => 'cash-in-all', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline"> Total Cash In</a>
+                                    
                                 </div>
 
                                  <div class="p-1 w-32 border-b ">
-                                   Cash In Journal
+                                    <a href="{{ route('report.incomeBook',['id' => 'cash-in-journal', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline">  Cash In Journal</a>
                                 </div>
 
                                  <div class="p-1 w-32 border-b font-bold">
@@ -257,23 +262,27 @@
                                
 
                                 <div class="p-1 w-32 border-b">
-                                    Cash Out Offline
+                                    <a href="{{ route('report.incomeBook',['id' => 'cash-out-offline', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline"> Cash Out Offline</a>
+                                   
                                 </div>
 
                                 <div class="p-1 w-32 border-b">
-                                    Cash Out Online
+                                    <a href="{{ route('report.incomeBook',['id' => 'cash-out-online', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline"> Cash Out Online</a>
+                                    
                                 </div>
 
                                 <div class="p-1 w-32 border-b">
-                                    Total Cash Out
+                                     <a href="{{ route('report.incomeBook',['id' => 'cash-out-all', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline">Total Cash Out</a>
+                                   
                                 </div>
 
                                  <div class="p-1 w-32 border-b">
-                                   Cash Out Journal
+                                    <a href="{{ route('report.incomeBook',['id' => 'cash-out-journal', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline"> Cash Out Journal</a>
                                 </div>
 
                                 <div class="p-1 w-32 border-b">
-                                   Cash Out Supplier
+                                    <a href="{{ route('report.incomeBook',['id' => 'cash-out-supplier', 'startDate' => $startDateString, 'endDate' =>$endDateString]) }}" class="text-blue-500 hover:underline">  Cash Out Supplier</a>
+                                  
                                 </div>
 
                                 <div class="p-1 w-32 border-b font-bold">

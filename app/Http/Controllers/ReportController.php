@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 
 class ReportController extends Controller
@@ -175,6 +176,8 @@ class ReportController extends Controller
 			$startDate = Carbon::now()->subMonths(11)->startOfMonth();
 		}
 
+		$startDateString = $startDate->toDateString();
+		$endDateString = $endDate->toDateString();
 
 		// Nilai constant
 		$typeSell = Transaction::TYPE_SELL;
@@ -454,6 +457,140 @@ class ReportController extends Controller
 
 			}
 
-		return view('report.income',compact('results','dateList','income','cashIn','cashOut','cashTotal'));
+		return view('report.income',compact('results','dateList','income','cashIn','cashOut','cashTotal','startDateString','endDateString'));
+	}	
+
+	public function incomeBook(Request $request,$id){
+		// // 1. Ambil parameter tanggal
+		// $month = $request->input('bulan');
+		// $year = $request->input('tahun');
+		// $periode = $request->input('type', 12); // default 12 bulan
+
+		// // 2. Tentukan periode tanggal
+		// if ($month && $year) {
+		// 	$startDate = Carbon::create($year, $month, 1)->startOfMonth();
+		// 	$endDate = (clone $startDate)->addMonths($periode - 1)->endOfMonth();
+		// } else {
+		// 	$endDate = Carbon::now()->endOfMonth();
+		// 	$startDate = (clone $endDate)->subMonths($periode - 1)->startOfMonth();
+		// }
+
+		$startDate = $request->startDate;
+		$endDate = $request->endDate;
+
+		// 3. Siapkan konstan
+		
+
+		// 4. Buat array bulan
+		$period = Carbon::parse($startDate);
+		$allMonths = [];
+		while ($period <= $endDate) {
+			$allMonths[] = $period->format('M-y'); // Jan-24, dst
+			$period->addMonth();
+		}
+
+		$isOnline = 0;
+		$type = 'transactions.receiver_id';
+		$whereType = 'transactions.receiver_type';
+		$groupType = 'transactions.receiver_id'; 
+		$all = 'n';
+		$label = $id;
+		$customerTypes = [Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER];
+
+		if($id == 'sell-offline' || $id == 'sell-online' || $id == 'sell-all'){
+			$typeSell = Transaction::TYPE_SELL;
+			
+		}else if($id == 'return-offline' || $id == 'return-online'){
+			$typeSell = Transaction::TYPE_RETURN;
+			
+		}else if($id == 'cash-in-offline' || $id == 'cash-in-online' || $id == 'cash-in-all'  || $id == 'cash-in-journal'){
+			$typeSell = Transaction::TYPE_CASH_IN;
+		}else if($id == 'cash-out-offline' || $id == 'cash-out-online' || $id == 'cash-out-all' || $id == 'cash-out-journal' 
+		|| $id == 'cash-out-supplier'){
+			$typeSell = Transaction::TYPE_CASH_OUT;
+		}
+
+		if($id == 'cash-in-offline' || $id == 'cash-in-online' || $id == 'cash-in-all' || $id == 'cash-in-journal'){
+			
+			$type = 'transactions.sender_id';
+			$whereType = 'transactions.sender_type';
+			$groupType = 'transactions.sender_id'; 
+		}
+
+		if($id == 'sell-online' || $id == 'return-online' || $id == 'cash-in-online' || $id == 'cash-out-online'){
+			$isOnline = 1;
+		}
+
+		if($id == 'cash-in-journal' || $id == 'cash-out-journal'){
+			$customerTypes = [Customer::TYPE_ACCOUNT];
+		}else if($id == 'cash-out-supplier'){
+			$customerTypes = [Customer::TYPE_SUPPLIER];
+		}
+
+		if($id == 'sell-all' || $id == 'cash-in-all' || $id == 'cash-in-journal' || $id == 'cash-out-all' || $id == 'cash-out-journal' 
+		|| $id == 'cash-out-supplier'){
+			$all = 'y';
+		}
+
+		// 5. Ambil data dalam 1 query
+		$rawData = DB::table('transactions')
+			->join('customers', function ($join) use ($isOnline, $type, $all) {
+				$join->on($type, '=', 'customers.id');
+				if($all == 'n'){
+					$join = $join->where('customers.is_online',$isOnline); // Tambahkan kondisi ini
+				}
+				
+			})
+			->selectRaw("
+				customers.name as customer_name,
+				transactions.receiver_id,
+				DATE_FORMAT(transactions.date, '%b-%y') as bulan,
+				SUM(transactions.total) as total
+			")
+			->where('transactions.type', $typeSell)
+			->whereIn($whereType, $customerTypes)
+			->whereBetween('transactions.date', [$startDate, $endDate])
+			->groupBy($groupType, 'customers.name', 'bulan')
+			->orderBy('customers.name')
+			->get();
+
+
+
+		// 6. Format jadi pivot
+		$customerTotals = [];
+		$grandTotalPerMonth = array_fill_keys($allMonths, 0);
+		$grandTotalOverall = 0;
+
+		foreach ($rawData as $row) {
+			$name = $row->customer_name;
+			$bulan = $row->bulan;
+			$total = (float)$row->total;
+
+			if (!isset($customerTotals[$name])) {
+				$customerTotals[$name] = array_fill_keys($allMonths, 0);
+			}
+
+			$customerTotals[$name][$bulan] = $total;
+			$grandTotalPerMonth[$bulan] += $total;
+			$grandTotalOverall += $total;
+		}
+
+		// 7. Pagination manual (setelah pivot)
+		$page = request('page', 1);
+		$perPage = 50;
+		$offset = ($page - 1) * $perPage;
+		$pagedData = array_slice($customerTotals, $offset, $perPage, true);
+
+		// 8. Paginator
+		$paginator = new LengthAwarePaginator(
+			$pagedData,
+			count($customerTotals),
+			$perPage,
+			$page,
+			['path' => request()->url(), 'query' => request()->query()]
+		);
+
+
+		return view('report.incomeBook',compact('paginator', 'allMonths', 'grandTotalPerMonth', 'grandTotalOverall','label'));
 	}	
 }
