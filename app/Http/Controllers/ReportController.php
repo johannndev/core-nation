@@ -321,6 +321,8 @@ class ReportController extends Controller
 			->orderByRaw('YEAR(transactions.date), MONTH(transactions.date)')
 			->get();
 
+			dd($rawData);
+
 			$results = [];
 
 			// Inisialisasi seluruh bulan dari startDate ke endDate
@@ -353,7 +355,7 @@ class ReportController extends Controller
 				$period->addMonth();
 			}
 
-			dd($rawData);
+			
 
 			// Isi data dari query
 			foreach ($rawData as $row) {
