@@ -238,8 +238,8 @@ class ReportController extends Controller
 					END) as return_online,
 
 				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.sender_type IN (?, ?) 
+						WHEN transactions.type = 9 
+							AND transactions.sender_type IN (1, 7) 
 							AND customers.is_online = 0 
 						THEN transactions.total 
 						ELSE 0 
