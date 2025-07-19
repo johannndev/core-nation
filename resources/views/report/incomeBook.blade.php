@@ -13,59 +13,72 @@
         <section class="bg-gray-50 dark:bg-gray-900 ">
             <div class="mx-auto  ">
                 <!-- Start coding here -->
-                <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+                <div class="bg-white font-semibold  relative shadow-md sm:rounded-lg overflow-hidden">
                     
                     
                     <div class="overflow-auto max-h-[600px] relative" id="scrollWrapper">
                         <table class="min-w-max w-full text-left text-xs">
-                            <thead id="stickyHeader" class="sticky top-0 z-20 bg-white dark:bg-gray-800 transition-shadow">
-                                <tr class="bg-white dark:bg-gray-800">
-                                    <th id="customerColumnHeader" class="sticky top-0 left-0 z-30 bg-white dark:bg-gray-800  w-48 text-green-600 text-xs  border-b">
+                            <thead id="stickyHeader" class="sticky top-0 z-20 bg-white font-semibold  transition-shadow">
+                                <tr class="bg-white font-semibold ">
+                                    <th id="customerColumnHeader" class="sticky top-0 left-0 z-30 bg-white font-semibold   w-48 text-green-600 text-xs  border-b">
                                         <div class="border-e px-4 py-2">
                                              Nama Customer
                                         </div>
                                        
                                     </th>
                                     @foreach ($allMonths as $month)
-                                        <th class="sticky top-0 z-20 bg-white dark:bg-gray-800 px-4 py-2 w-32 text-xs text-green-600 text-right border-b">
+                                        <th class="sticky top-0 z-20 bg-white font-semibold  px-4 py-2 w-32 text-xs text-green-600 text-right border-b">
                                             {{ $month }}
                                         </th>
                                     @endforeach
-                                    <th class="sticky top-0 z-20 bg-white dark:bg-gray-800 px-4 py-2 w-32 text-xs text-green-600 text-right border-b">
+                                    <th class="sticky top-0 z-20 bg-white font-semibold  px-4 py-2 w-32 text-xs text-green-600 text-right border-b">
                                         Total
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($paginator as $customer => $months)
+                                @foreach ($customerTotals as $customer => $totals)
                                     <tr class="border-b ">
-                                        <td id="customerColumn" class=" shadow-lg sticky left-0 bg-white dark:bg-gray-800 z-10  w-48 font-semibold ">
+                                        <td id="customerColumn" class=" shadow-lg sticky left-0 bg-white font-semibold  z-10  w-48 font-semibold ">
                                             <div class="border-e px-4 py-2">
                                                 {{ $customer }}
                                             </div>
                                             
                                           
                                         </td>
-                                        @php $rowTotal = 0; @endphp
-                                        @foreach ($allMonths as $month)
-                                            @php $val = $months[$month] ?? 0; $rowTotal += $val; @endphp
-                                            <td class="px-4 py-2 w-32 text-right">{{ number_format(abs($val), 0) }}</td>
+                        
+                                        @foreach($allMonths as $bulan)
+                                            <td class="px-4 py-2 w-32 text-right">
+                                                {{ number_format(abs($totals[$bulan]), 2) }}
+                                            </td>
                                         @endforeach
                                         <td class="px-4 py-2 w-32 text-right text-blue-500 font-bold">
-                                            {{ number_format(abs($rowTotal), 0) }}
+                                            {{ number_format(abs($totals['Total']), 2) }}
                                         </td>
                                     </tr>
                                 @endforeach
+                                 {{-- Total per bulan --}}
+                                    <tr class="border-b">
+                                        <td id="customerColumnHeader" class="sticky top-0 left-0 z-30 bg-white font-bold   w-48 text-xs  border-b">
+                                        <div class="border-e px-4 py-2">
+                                            Total
+                                        </div>
+                                       
+                                        </td>
+                                        @foreach($allMonths as $bulan)
+                                            <td class="px-4 py-2 w-32 text-right font-bold  ">
+                                                {{ number_format(abs($grandTotalPerMonth[$bulan]), 2) }}
+                                            </td>
+                                        @endforeach
+                                        <td class="px-4 py-2 w-32 text-right font-bold  text-blue-500">
+                                            {{ number_format(abs($grandTotalOverall), 2) }}
+                                        </td>
+                                    </tr>
                             </tbody>
                         </table>
                     </div>
 
 
-
-                    {{-- Pagination Links --}}
-                    <div class="mt-3">
-                        {{ $paginator->links() }}
-                    </div>
 
                   
                    
