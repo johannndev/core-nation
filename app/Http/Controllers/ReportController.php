@@ -238,16 +238,16 @@ class ReportController extends Controller
 					END) as return_online,
 
 				SUM(CASE 
-						WHEN transactions.type = ".Transaction::TYPE_CASH_IN." 
-							AND transactions.sender_type IN (".Customer::TYPE_CUSTOMER.", ".Customer::TYPE_RESELLER.") 
+						WHEN transactions.type = ? 
+							AND transactions.sender_type IN (?, ?) 
 							AND customers.is_online = 0 
 						THEN transactions.total 
 						ELSE 0 
 					END) as cashin_offline,
 
 				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.sender_type IN (?, ?) 
+						WHEN transactions.type = 9 
+							AND transactions.sender_type IN (1, 7) 
 							AND customers.is_online = 1 
 						THEN transactions.total 
 						ELSE 0 
@@ -321,7 +321,7 @@ class ReportController extends Controller
 			->orderByRaw('YEAR(transactions.date), MONTH(transactions.date)')
 			->get();
 
-			dd($rawData);
+			
 
 			$results = [];
 
