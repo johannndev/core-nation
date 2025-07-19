@@ -353,6 +353,8 @@ class ReportController extends Controller
 				$period->addMonth();
 			}
 
+			dd($rawData);
+
 			// Isi data dari query
 			foreach ($rawData as $row) {
 
