@@ -293,6 +293,7 @@ class ReportController extends Controller
 			->groupByRaw('YEAR(transactions.date), MONTH(transactions.date)')
 			->orderByRaw('YEAR(transactions.date), MONTH(transactions.date)')
 			->get();
+			
 			$results = [];
 
 			// Inisialisasi seluruh bulan dari startDate ke endDate
