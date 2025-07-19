@@ -323,22 +323,17 @@ class ReportController extends Controller
 
 		$rawData = DB::table('transactions')
 			->join('customers', 'transactions.sender_id', '=', 'customers.id')
-			->selectRaw("
+			 ->selectRaw("
 				YEAR(transactions.date) as year,
 				MONTH(transactions.date) as month,
-
-				
-
 				SUM(CASE 
-						WHEN transactions.type = 9 
-							AND transactions.sender_type IN (1, 7) 
-							AND customers.is_online = 0 
-						THEN transactions.total 
-						ELSE 0 
-					END) as cashin_offline,
-
-				
-			", )
+					WHEN transactions.type = 9 
+						AND transactions.sender_type IN (1, 7) 
+						AND customers.is_online = 0 
+					THEN transactions.total 
+					ELSE 0 
+				END) as cashin_offline
+			")
 			->whereBetween('transactions.date', [$startDate, $endDate])
 			->groupByRaw('YEAR(transactions.date), MONTH(transactions.date)')
 			->orderByRaw('YEAR(transactions.date), MONTH(transactions.date)')
