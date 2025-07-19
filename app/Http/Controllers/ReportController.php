@@ -190,52 +190,144 @@ class ReportController extends Controller
 		$receiverTypeSupplier = Customer::TYPE_SUPPLIER;
 
 		// Query
+		// $rawData = DB::table('transactions')
+		// 	->join('customers', 'transactions.receiver_id', '=', 'customers.id')
+		// 	->selectRaw("
+		// 		YEAR(transactions.date) as year,
+		// 		MONTH(transactions.date) as month,
+
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.receiver_type IN (?, ?) 
+		// 					AND customers.is_online = 0 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as sell_offline,
+
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.receiver_type IN (?, ?) 
+		// 					AND customers.is_online = 1 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as sell_online,
+
+					
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.receiver_type IN (?, ?) 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as sell_total,
+					
+
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.receiver_type IN (?, ?) 
+		// 					AND customers.is_online = 0 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as return_offline,
+
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.receiver_type IN (?, ?) 
+		// 					AND customers.is_online = 1 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as return_online,
+
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = 9 
+		// 					AND transactions.sender_type IN (1, 7) 
+		// 					AND customers.is_online = 0 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as cashin_offline,
+
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.sender_type IN (?, ?) 
+		// 					AND customers.is_online = 1 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as cashin_online,
+
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.sender_type IN (?, ?) 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as cashin_total,
+
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.sender_type = ? 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as cashin_journal,
+		// 			SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.receiver_type IN (?, ?) 
+		// 					AND customers.is_online = 0 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as cashout_offline,
+
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.receiver_type IN (?, ?) 
+		// 					AND customers.is_online = 1 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as cashout_online,
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.receiver_type IN (?, ?) 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as cashout_total,
+
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.receiver_type = ? 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as cashout_journal,
+		// 		SUM(CASE 
+		// 				WHEN transactions.type = ? 
+		// 					AND transactions.receiver_type = ? 
+		// 				THEN transactions.total 
+		// 				ELSE 0 
+		// 			END) as cashout_supplier
+		// 	", [
+		// 		$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
+		// 		$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
+		// 		$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
+		// 		$typeReturn, $receiverTypeCustomer, $receiverTypeReseller,
+		// 		$typeReturn, $receiverTypeCustomer, $receiverTypeReseller,
+		// 		$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
+		// 		$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
+		// 		$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
+		// 		$typeCashIn, $receiverTypeAccount,
+		// 		$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
+		// 		$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
+		// 		$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
+		// 		$typeCashOut, $receiverTypeAccount,
+		// 		$typeCashOut, $receiverTypeSupplier,
+		// 	])
+		// 	->whereBetween('transactions.date', [$startDate, $endDate])
+		// 	->groupByRaw('YEAR(transactions.date), MONTH(transactions.date)')
+		// 	->orderByRaw('YEAR(transactions.date), MONTH(transactions.date)')
+		// 	->get();
+
 		$rawData = DB::table('transactions')
 			->join('customers', 'transactions.receiver_id', '=', 'customers.id')
 			->selectRaw("
 				YEAR(transactions.date) as year,
 				MONTH(transactions.date) as month,
 
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.receiver_type IN (?, ?) 
-							AND customers.is_online = 0 
-						THEN transactions.total 
-						ELSE 0 
-					END) as sell_offline,
-
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.receiver_type IN (?, ?) 
-							AND customers.is_online = 1 
-						THEN transactions.total 
-						ELSE 0 
-					END) as sell_online,
-
-					
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.receiver_type IN (?, ?) 
-						THEN transactions.total 
-						ELSE 0 
-					END) as sell_total,
-					
-
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.receiver_type IN (?, ?) 
-							AND customers.is_online = 0 
-						THEN transactions.total 
-						ELSE 0 
-					END) as return_offline,
-
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.receiver_type IN (?, ?) 
-							AND customers.is_online = 1 
-						THEN transactions.total 
-						ELSE 0 
-					END) as return_online,
+				
 
 				SUM(CASE 
 						WHEN transactions.type = 9 
@@ -245,77 +337,8 @@ class ReportController extends Controller
 						ELSE 0 
 					END) as cashin_offline,
 
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.sender_type IN (?, ?) 
-							AND customers.is_online = 1 
-						THEN transactions.total 
-						ELSE 0 
-					END) as cashin_online,
-
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.sender_type IN (?, ?) 
-						THEN transactions.total 
-						ELSE 0 
-					END) as cashin_total,
-
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.sender_type = ? 
-						THEN transactions.total 
-						ELSE 0 
-					END) as cashin_journal,
-					SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.receiver_type IN (?, ?) 
-							AND customers.is_online = 0 
-						THEN transactions.total 
-						ELSE 0 
-					END) as cashout_offline,
-
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.receiver_type IN (?, ?) 
-							AND customers.is_online = 1 
-						THEN transactions.total 
-						ELSE 0 
-					END) as cashout_online,
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.receiver_type IN (?, ?) 
-						THEN transactions.total 
-						ELSE 0 
-					END) as cashout_total,
-
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.receiver_type = ? 
-						THEN transactions.total 
-						ELSE 0 
-					END) as cashout_journal,
-				SUM(CASE 
-						WHEN transactions.type = ? 
-							AND transactions.receiver_type = ? 
-						THEN transactions.total 
-						ELSE 0 
-					END) as cashout_supplier
-			", [
-				$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeReturn, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeReturn, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashIn, $receiverTypeAccount,
-				$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashOut, $receiverTypeAccount,
-				$typeCashOut, $receiverTypeSupplier,
-			])
+				
+			", )
 			->whereBetween('transactions.date', [$startDate, $endDate])
 			->groupByRaw('YEAR(transactions.date), MONTH(transactions.date)')
 			->orderByRaw('YEAR(transactions.date), MONTH(transactions.date)')
