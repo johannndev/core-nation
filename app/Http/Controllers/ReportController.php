@@ -246,8 +246,8 @@ class ReportController extends Controller
 					END) as cashin_offline,
 
 				SUM(CASE 
-						WHEN transactions.type = 9 
-							AND transactions.sender_type IN (1, 7) 
+						WHEN transactions.type = ? 
+							AND transactions.sender_type IN (?, ?) 
 							AND customers.is_online = 1 
 						THEN transactions.total 
 						ELSE 0 
@@ -321,8 +321,6 @@ class ReportController extends Controller
 			->orderByRaw('YEAR(transactions.date), MONTH(transactions.date)')
 			->get();
 
-			
-
 			$results = [];
 
 			// Inisialisasi seluruh bulan dari startDate ke endDate
@@ -354,8 +352,6 @@ class ReportController extends Controller
 				];
 				$period->addMonth();
 			}
-
-			
 
 			// Isi data dari query
 			foreach ($rawData as $row) {
