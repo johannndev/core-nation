@@ -322,7 +322,7 @@ class ReportController extends Controller
 		// 	->get();
 
 		$rawData = DB::table('transactions')
-			->join('customers', 'transactions.receiver_id', '=', 'customers.id')
+			->join('customers', 'transactions.sender_id', '=', 'customers.id')
 			->selectRaw("
 				YEAR(transactions.date) as year,
 				MONTH(transactions.date) as month,
