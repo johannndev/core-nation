@@ -324,7 +324,7 @@
         }
         
 
-        getTotalItem(1,lid);
+        getTotalItem(1,id);
 
         totalQty()
 
@@ -356,7 +356,7 @@
         
 
 
-        getTotalItem(1,lid,0);
+        getTotalItem(1,id,0);
 
 
 
@@ -431,7 +431,7 @@
 
         var discVal = $('#discount'+lid).val()
 
-        getTotalItem(2,lid,discVal);
+        getTotalItem(2,id,discVal);
 
 
 
