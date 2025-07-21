@@ -252,92 +252,118 @@
 
                                 @forelse ($data->transactionDetail as $index => $itemTd)
                                 @php
-                                    $idItem = $itemTd->item->id;
-                                    $url = $itemTd->item->getImageUrl();
+                                     $idItem = $itemTd->item?->id ?? '';
+                                    $url = $itemTd->item?->getImageUrl() ?? '';
                                 @endphp
                                 
                             
                                 <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td class="pl-4 py-2">
-                                        <input  value="{{ $itemTd->id }}" id="checked-checkbox" type="checkbox" value="" class="produk-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    </td>
-                            
-                                    <th scope="row" id="" class="image-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class=" mr-3">
-                                            <img 
-                                                src="{{ $url }}" 
-                                                alt="Gambar" 
-                                                class="w-20 h-auto print:w-10 print:h-auto object-contain rounded" 
-                                                onerror="this.onerror=null; this.src='{{ asset('img/noimg.jpg') }}';"
-                                            />
-                                           
-                                        </div>
-
-                                    </th>
-
-                                    <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                        {{$itemTd->item->id}}
-                                    </td>
-
-                                    <td class="sku-col hidden px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                        <a href="{{ $itemTd->item->getLink() }}"></a>{{$itemTd->item->code}}</a>
-                                    </td>
-
-
-                                    <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
-                                        {{$itemTd->item->getItemCode()}}
-                                    </td>
+                                    @if($itemTd->item)
+                                        <td class="pl-4 py-2">
+                                            <input  value="{{ $itemTd->id }}" id="checked-checkbox" type="checkbox" value="" class="produk-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        </td>
                                 
-                                    <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-normal max-w-40 dark:text-white">
-                                        <p class="min-w-40 print:min-w-0 print:whitespace-normal print:break-words ">{{$itemTd->item->getItemName()}}</p>
-                                    </td>
-
-
-                                    <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{-- {{$itemTd->quantity}} --}}
-                                        <input type="text" name="detail[{{ $index }}][id]" value="{{ $itemTd->id }}" hidden>
-                                        <div class="relative flex items-center">
-                                            <button type="button" id="decrement-button" data-input-counter-decrement="counter-input-{{ $itemTd->id }}" class="shrink-0 bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 inline-flex items-center justify-center border border-gray-300 rounded-md h-5 w-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                                <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
-                                                </svg>
-                                            </button>
+                                        <th scope="row" id="" class="image-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <div class=" mr-3">
+                                                <img 
+                                                    src="{{ $url }}" 
+                                                    alt="Gambar" 
+                                                    class="w-20 h-auto print:w-10 print:h-auto object-contain rounded" 
+                                                    onerror="this.onerror=null; this.src='{{ asset('img/noimg.jpg') }}';"
+                                                />
                                             
-                                            <input type="text" name="detail[{{ $index }}][quantity]" data-input-counter data-input-counter-min="1" id="counter-input-{{ $itemTd->id }}" data-input-counter class="shrink-0 text-gray-900 dark:text-white border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center" placeholder="" value="{{$itemTd->quantity}}"  required />
-                                            <button type="button" id="increment-button" data-input-counter-increment="counter-input-{{ $itemTd->id }}" class="shrink-0 bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 inline-flex items-center justify-center border border-gray-300 rounded-md h-5 w-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                                <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                                                </svg>
-                                            </button>
-                                        </div>
+                                            </div>
 
-                                    </td>
+                                        </th>
 
-                                    <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        
-                                        @if (array_key_exists($itemTd->item_id, $whItem))
+                                        <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
+                                            {{$itemTd->item->id}}
+                                        </td>
 
-                                        {{ $whItem[$itemTd->item_id] }}
-    
-                                        @else
+                                        <td class="sku-col hidden px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
+                                            <a href="{{ $itemTd->item->getLink() }}"></a>{{$itemTd->item->code}}</a>
+                                        </td>
 
-                                        N/A
+
+                                        <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
+                                            {{$itemTd->item->getItemCode()}}
+                                        </td>
+                                    
+                                        <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 print:whitespace-normal print:break-words  whitespace-normal max-w-40 dark:text-white">
+                                            <p class="min-w-40 print:min-w-0 print:whitespace-normal print:break-words ">{{$itemTd->item->getItemName()}}</p>
+                                        </td>
+
+
+                                        <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{-- {{$itemTd->quantity}} --}}
+                                            <input type="text" name="detail[{{ $index }}][id]" value="{{ $itemTd->id }}" hidden>
+                                            <div class="relative flex items-center">
+                                                <button type="button" id="decrement-button" data-input-counter-decrement="counter-input-{{ $itemTd->id }}" class="shrink-0 bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 inline-flex items-center justify-center border border-gray-300 rounded-md h-5 w-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                                    <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                                                    </svg>
+                                                </button>
+                                                
+                                                <input type="text" name="detail[{{ $index }}][quantity]" data-input-counter data-input-counter-min="1" id="counter-input-{{ $itemTd->id }}" data-input-counter class="shrink-0 text-gray-900 dark:text-white border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center" placeholder="" value="{{$itemTd->quantity}}"  required />
+                                                <button type="button" id="increment-button" data-input-counter-increment="counter-input-{{ $itemTd->id }}" class="shrink-0 bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 inline-flex items-center justify-center border border-gray-300 rounded-md h-5 w-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                                    <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                        </td>
+
+                                        <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             
-                                        @endif
-                                    
-                                    
+                                            @if (array_key_exists($itemTd->item_id, $whItem))
+
+                                            {{ $whItem[$itemTd->item_id] }}
+        
+                                            @else
+
+                                            N/A
+                                                
+                                            @endif
                                         
-                                    </td>
+                                        
+                                            
+                                        </td>
 
-                                    <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{Number::format($itemTd->price)}}
-                                    </td>
+                                        <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{Number::format($itemTd->price)}}
+                                        </td>
 
-                                
+                                    
 
-                                    <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{Number::format($itemTd->total)}}
-                                    </td>
+                                        <td class="px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{Number::format($itemTd->total)}}
+                                        </td>
+
+                                    @else
+
+                                        <th scope="row" id="" class="image-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <div class=" mr-3">
+                                                <img 
+                                                    src="{{ $url }}" 
+                                                    alt="Gambar" 
+                                                    class="w-20 h-auto print:w-10 print:h-auto object-contain rounded" 
+                                                    onerror="this.onerror=null; this.src='{{ asset('img/noimg.jpg') }}';"
+                                                />
+                                            </div>
+
+                                        </th>
+
+                                    
+
+                                        <td class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-red-500 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">
+                                            {{$itemTd->item_id }}
+                                        </td>
+
+
+                                        <td colspan="20" class="barcode-col  px-4 py-2 print:px-0 print:py-0 font-medium text-red-500 print:whitespace-normal print:break-words  whitespace-nowrap dark:text-white">Item tidak ada</td>
+                                        
+                                    @endif
 
                 
 
