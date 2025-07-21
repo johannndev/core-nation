@@ -341,6 +341,9 @@
                                         </td>
 
                                     @else
+                                        <td class="pl-4 py-2">
+                                          
+                                        </td>
 
                                         <th scope="row" id="" class="image-col  px-4 py-2 print:px-0 print:py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <div class=" mr-3">
