@@ -34,7 +34,7 @@ class Po extends Model
 
 	public function customer(): HasOne
     {
-        return $this->hasOne(User::class, 'id','receiver_id');
+        return $this->hasOne(User::class, 'id','user_id');
     }
 
 	public function lokasi(): HasOne

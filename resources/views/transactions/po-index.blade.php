@@ -130,7 +130,7 @@
 
                                     </th>
                                   
-                                    <td class="px-4 py-3">{{$item->customer->username}}</td>
+                                    <td class="px-4 py-3">{{$item->customer->username ?? '-'}}</td>
                                     <td class="px-4 py-3">{{$item->invoice}}</td>
                                     <td class="px-4 py-3">
                                         @if ($item->location_id > 0)

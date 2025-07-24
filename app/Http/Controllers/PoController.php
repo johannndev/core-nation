@@ -59,7 +59,7 @@ class PoController extends Controller
     public function getDetail($id, Request $request)
     {
 
-		$data = Po::with(['customer','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+		$data = Po::with(['customer','sender','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
 
         $detailC = PoDetail::where('transaction_id',$id)->where('status','=',1)->count();
 
@@ -219,7 +219,7 @@ class PoController extends Controller
 
     public function poMove($id, Request $request){
 
-        $data = Po::with(['customer','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
+        $data = Po::with(['customer','sender','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
 
 		$dataListPropSender = [
 			"label" => "Sender",
@@ -244,28 +244,26 @@ class PoController extends Controller
         $whItem = [];
         $zeroCount = 0;
 
-        if($request->sender){
+        $item = $data->transactionDetail->pluck('item_id')->toArray();
 
-            $item = $data->transactionDetail->pluck('item_id')->toArray();
+        $whItem = WarehouseItem::where('warehouse_id',$data->sender_id)->whereIn('item_id',$item)->pluck('quantity','item_id')->toArray();
 
-            $whItem = WarehouseItem::where('warehouse_id',$request->sender)->whereIn('item_id',$item)->pluck('quantity','item_id')->toArray();
+        $whItem = WarehouseItem::where('warehouse_id', $data->sender_id)
+            ->whereIn('item_id', $item)
+            ->pluck('quantity', 'item_id')
+            ->toArray();
 
-            $whItem = WarehouseItem::where('warehouse_id', $request->sender)
-                ->whereIn('item_id', $item)
-                ->pluck('quantity', 'item_id')
-                ->toArray();
-
-            // Isi item yang tidak ditemukan dengan 0
-            foreach ($item as $id) {
-                if (!isset($whItem[$id])) {
-                    $whItem[$id] = 0;
-                }
+        // Isi item yang tidak ditemukan dengan 0
+        foreach ($item as $id) {
+            if (!isset($whItem[$id])) {
+                $whItem[$id] = 0;
             }
-
-            // Hitung jumlah item yang quantity-nya 0
-            $zeroCount = collect($whItem)->filter(fn($qty) => $qty == 0)->count();
-
         }
+
+        // Hitung jumlah item yang quantity-nya 0
+        $zeroCount = collect($whItem)->filter(fn($qty) => $qty == 0)->count();
+
+        
 
     
 
@@ -323,8 +321,11 @@ class PoController extends Controller
 
         $data = Po::with(['customer','user','transactionDetail','transactionDetail.item','transactionDetail.item.group'])->where('id',$id)->first();
 
+        if(!$request->recaiver)
+			throw new \Exception('Recaiver harus diisi');
+
 		$input = $request->query();
-		$sender = Customer::find($request->sender);
+		$sender = Customer::find($data->sender_id);
 		$receiver = Customer::find($request->recaiver);
 
 		DB::beginTransaction();

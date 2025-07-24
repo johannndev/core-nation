@@ -47,13 +47,28 @@
                         <div>
                             <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
                                 <div class="col-span-2">
-                                    <p class="font-bold">Customer</p>
+                                    <p class="font-bold">User</p>
                                 </div>
                                 <div class="col-span-3">
                                   @isset($data->customer)
 
                                    
                                     <p class="font-medium text-blue-600 dark:text-blue-500"> {{$data->customer->username}}</p>
+                                  @endisset
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="grid grid-cols-5 p-4 print:p-0 text-sm">
+                                <div class="col-span-2">
+                                    <p class="font-bold">Werehouse</p>
+                                </div>
+                                <div class="col-span-3">
+                                  @isset($data->sender)
+
+                                   
+                                    <p class="font-medium text-blue-600 dark:text-blue-500"> {{$data->sender->name}}</p>
                                   @endisset
                                 </div>
                             </div>
