@@ -331,9 +331,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/transaction/{id}/update/note', [TransactionsController::class, 'updateNote'])->name('transaction.updateNote')->middleware('permission:transactions.detail');
 
     Route::get('/transaction/delete', [DeletedController::class, 'index'])->name('transaction.delete')->middleware('permission:transactions.deleteList');
+
     Route::get('/transaction/delete/filter', [FilterQueryController::class, 'transactionFilterDelete'])->name('transaction.deletefilter')->middleware('permission:transactions.deleteList');
     Route::get('/transaction/{id}/delete/detail', [DeletedController::class, 'getDetailDelete'])->name('transaction.getDetailDelete')->middleware('permission:transactions.deleteList');
-    Route::delete('/transaction/{id}/destroy', [TransactionsController::class, 'postDelete'])->name('transaction.destroy')->middleware('permission:transactions.deleteList');
+    Route::delete('/transaction/{id}/destroy', [TransactionsController::class, 'postDelete'])->name('transaction.destroy')->middleware('permission:transactions.delete');
 
     Route::get('/transaction/{id}/success', function($id){
         return redirect()->route('transaction.getDetail',$id)->with('success', 'Transaction # ' . $id. ' created.');
