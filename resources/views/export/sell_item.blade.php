@@ -19,13 +19,12 @@
     </thead>
     <tbody>
 @php
-      $currentInvoice = 0;
         $currentId = 0;
 @endphp
         @forelse ( $dataList as $item)
         <tr>
             <td>{{$item->transaction->invoice ?? ''}}</td>
-@if($currentInvoice != $item->transaction->invoice && $currentInvoice != $item->transaction->id)
+@if($currentId != $item->transaction->id)
             <td>{{\Carbon\Carbon::parse($item->date)->format('d/m/Y')}}</td>
             <td>
                 @isset($item->sender)
@@ -46,7 +45,7 @@
             <td >{{number_format($item->quantity,2)}}</td>
             <td >{{number_format($item->discount,2)}}</td>
             <td >{{number_format($item->total,2)}}</td>
-@if($currentInvoice != $item->transaction->invoice && $currentInvoice != $item->transaction->id)
+@if($currentId != $item->transaction->id)
         <td>{{number_format($item->transaction->discount,2)}}</td>
         <td>{{number_format($item->transaction->adjustment,2)}}</td>
         <td>{{number_format(abs($item->transaction->total),2)}}</td>
@@ -56,8 +55,7 @@
 @endif
     </tr>
 @php
-      $currentInvoice = $item->transaction->invoice;
-        $currentId = $item->transaction->id;
+      $currentId = $item->transaction->id;
 @endphp
         @empty
         @endforelse
