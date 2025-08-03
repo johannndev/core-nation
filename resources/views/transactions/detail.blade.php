@@ -482,6 +482,77 @@
                         </div>
                     </div>
                 </div>
+
+                 <form action="{{route('filter.get',['action' =>'transaction.getDetail'])}}" method="post">
+
+                    @csrf
+
+                    <div class="flex flex-col md:flex-row items-end justify-between p-4">
+                    
+                        <input type="text" name="id" value="{{$data->id}}" hidden>
+                        
+                        <div class="w-full md:w-4/6">
+                        
+                            <div class="grid gap-4 md:grid-cols-5">
+                                
+
+                                <div>
+                                    <label for="kolom" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kolom</label>
+                                    <select id="kolom" name="kolom" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option value ="">Choose a kolom</option>
+                                       
+                                            <option  {{Request('kolom') == 'id' ? 'selected' : ''}} value="id">Barcode</option>
+                                            <option  {{Request('kolom') == 'code' ? 'selected' : ''}} value="code">code</option>
+                                        
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="order" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Order</label>
+                                    <select id="order" name="order" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                                        <option value ="">Choose a Order</option>
+
+                                        <option  {{Request('order') == 'asc' ? 'selected' : ''}} value="asc">Ascending</option>
+                                        <option  {{Request('order') == 'desc' ? 'selected' : ''}} value="desc">Descending</option>
+                                   
+                                    </select>
+                                </div>
+
+                            </div>
+
+                                
+                            
+                        </div>
+                        <div class=" mt-4 md:mt-0 w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                            <button type="submit" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-4 w-4 mr-2 " viewbox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                                </svg>
+                                Filter
+                            </button>
+
+                            <a href="{{route('transaction.index')}}" class="flex items-center justify-center py-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" >
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+
+                                    
+                                {{-- <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" c viewbox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                                </svg> --}}
+
+                                Clear
+                            </a>
+
+                        
+                        </div>
+
+                        
+                    </div>
+                </form>
+
                 <div class="overflow-x-auto">
                     <table class="w-full print:table-fixed text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs print:text-[10px] text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
@@ -506,7 +577,7 @@
                         </thead>
                         <tbody  id="accordion-collapse" data-accordion="collapse" class="print:text-[10px]">
 
-                            @forelse ($data->transactionDetail as $itemTd)
+                            @forelse ($details as $itemTd)
                             @php
                                 $idItem = $itemTd->item->id;
                                 $url = $itemTd->item->getImageUrl();

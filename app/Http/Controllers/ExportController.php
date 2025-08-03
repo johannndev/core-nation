@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Database\Eloquent\Builder;
 
 class ExportController extends Controller
 {
@@ -19,11 +20,22 @@ class ExportController extends Controller
         $tanggalAwal = $request->from; // format: Y-m-d
         $tanggalAkhir = $request->to; // format: Y-m-d
         $whId = $request->whId;
+        $type = request('type', Transaction::TYPE_SELL);
+        $invoice = $request->invoice; 
 
-        $dataList = TransactionDetail::where('transaction_type',Transaction::TYPE_SELL)->with('transaction','item','receiver','sender')->orderBy('date','desc');
+        $typeList = Transaction::$types;
+
+        $dataList = TransactionDetail::where('transaction_type',$type)->with('transaction','item','receiver','sender')->orderBy('date','desc');
        
         if ($tanggalAwal && $tanggalAkhir) {
             $dataList = $dataList->whereDate('date','>=',$tanggalAwal)->whereDate('date','<=',$tanggalAkhir);
+        }
+
+         if ($invoice) {
+            $dataList = $dataList->whereHas('transaction', function (Builder $query) use($invoice) {
+                $query->where('invoice', $invoice);
+            });
+
         }
 
         if ($whId) {
@@ -37,14 +49,16 @@ class ExportController extends Controller
 
 		// dd($dataList);
 
-		return view('transactions.export.sellItem',compact('dataList','allWh'));
+		return view('transactions.export.sellItem',compact('dataList','allWh','typeList'));
 	}
 
     public function exportSellItem(Request $request) 
 	{
         // dd($request);
 
-		return Excel::download(new SellItemExport($request->from,$request->to,$request->whId), 'sell_item.csv');
+        $type = request('type', Transaction::TYPE_SELL);
+
+		return Excel::download(new SellItemExport($request->from,$request->to,$request->whId, $type, $request->invoice), 'sell_item.csv');
 	}
 
 }

@@ -726,15 +726,29 @@ class TransactionsController extends Controller
 
 		}
 
+		$sortBy = request('kolom', 'id');   // default code
+		$sortType = request('order', 'desc'); // default asc
+		$transactionId = $data->id;
+
 		$nameWh = StockManagerHelpers::$names;
+
+		 $details = TransactionDetail::query()
+            ->join('items', 'items.id', '=', 'transaction_details.item_id')
+            ->with('item')
+            ->when($transactionId, function($query) use ($transactionId) {
+                $query->where('transaction_details.transaction_id', $transactionId);
+            })
+            ->orderBy('items.'.$sortBy, $sortType) // urutkan sesuai query string
+            ->get();
+
 
 		if($request->receipt == 1){
 
-			return view('layouts.receipt',compact('data','nameWh'));
+			return view('layouts.receipt',compact('data','nameWh','details'));
 			
 
 		}else{
-			return view('transactions.detail',compact('data','nameWh','cekJubelio','countAll','limitShow','notNullCount','submitBy','pdfFile'));
+			return view('transactions.detail',compact('details','data','nameWh','cekJubelio','countAll','limitShow','notNullCount','submitBy','pdfFile'));
 		}
 
 		

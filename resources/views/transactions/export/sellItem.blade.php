@@ -50,6 +50,10 @@
                             
                                 <div class="grid gap-4 md:grid-cols-5">
                                     <div>
+                                        <label for="invoice" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Invoice</label>
+                                        <input type="text" id="invoice" name="invoice" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  value="{{Request('invoice')}}"/>
+                                    </div>
+                                    <div>
                                         <label for="from" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">From</label>
                                         <input type="date" id="from" name="from" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  value="{{Request('from')}}"/>
                                     </div>
@@ -65,6 +69,18 @@
                                             <option value="">Choose a Warehouse</option>
                                             @foreach ($allWh as $item)
                                                 <option {{Request('whId') == $item->id ? 'selected' : 'null'}} value="{{$item->id}}">{{$item->name}}</option>
+                                            @endforeach
+                                           
+                                           
+                                          </select>
+                                    </div>
+
+                                    <div>
+                                        <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type</label>
+                                        <select id="type" name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option value="">Choose a Warehouse</option>
+                                            @foreach ($typeList as $index => $item)
+                                                <option {{Request('type',2) == $index ? 'selected' : ''}} value="{{$index}}">{{$item}}</option>
                                             @endforeach
                                            
                                            
