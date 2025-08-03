@@ -34,7 +34,7 @@
 
         @csrf
 
-        <input type="text" name="type" value="{{ $type }}" hidden>
+        <input type="text" name="type" value="" hidden>
         <input type="text" name="tags[jahit][]" hidden>
 
         <section class="bg-gray-50 dark:bg-gray-900 mb-8">
