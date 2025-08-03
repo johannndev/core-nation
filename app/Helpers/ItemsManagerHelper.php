@@ -326,14 +326,13 @@ class ItemsManagerHelper
 	{
 		if(!isset($input->pcode) || empty($input->pcode))
 			throw new \Exception('pcode is required');
-		if(!preg_match("/([a-zA-Z]{2})([0-9]{5})\/([0-9]{2})/",$input->pcode))
-			throw new \Exception('pcode salah format');
 
 		static::loadTags();
 		$inputTags = $inputTags;
 
 		$item = Item::with('group')->findOrFail($id);
-
+		if($item->type == Item::TYPE_ITEM && !preg_match("/([a-zA-Z]{2})([0-9]{5})\/([0-9]{2})/",$input->pcode))
+			throw new \Exception('pcode salah format');
 
 		$arrayTag = explode(',', $item->tag_ids);
 
