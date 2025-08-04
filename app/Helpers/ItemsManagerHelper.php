@@ -75,13 +75,11 @@ class ItemsManagerHelper
             if(isset($alias[0]))
                 $group->alias = strtoupper($alias[0]);
         }
-			if(!$group->save())
-				return $this->error($group->getErrors());
+		if(!$group->save())
+			return $this->error($group->getErrors());
             
 
 		//then create the items
-
-	
 		$total = 0;
 		foreach($inputTags['types'] as $key => $type_id)
 		{
