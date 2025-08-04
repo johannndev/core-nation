@@ -401,10 +401,7 @@ class AsetLancarController extends Controller
 
 	
 	public function postEdit(Request $request, $id)
-	{
-		
-
-		
+	{		
 		try{
 
 			$input = $request;
@@ -416,7 +413,7 @@ class AsetLancarController extends Controller
 
 			$item = Item::find($id);
 			$item->name = $request->name;
-			$item->pcode = strtoupper($request->pcode); 
+			$item->pcode = $item->code = strtoupper($request->pcode); 
 			$item->price = $request->price;
 			$item->description = $input->description;
 			$item->cost = $input->cost;
