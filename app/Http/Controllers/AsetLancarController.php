@@ -236,7 +236,7 @@ class AsetLancarController extends Controller
 		try {
 			$input = $request;
 			$tags = $request->tags;
-
+            $input->type = ITEM::TYPE_ASSET_LANCAR;
 
 			DB::beginTransaction();
 
