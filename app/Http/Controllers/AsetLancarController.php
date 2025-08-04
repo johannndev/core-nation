@@ -373,8 +373,9 @@ class AsetLancarController extends Controller
 		$item = Item::find($id);
 		$type = Item::TYPE_ASSET_LANCAR;
 		$tags = ItemsManagerHelper::loadTagsJSON(Item::TYPE_ASSET_LANCAR,Tag::$asetLancarCreate);
+		$dataType = $item->tags->where('type',Tag::TYPE_TYPE)->first();
 
-		return view('asset-lancar.duplicate',compact('item','type','tags'));
+		return view('asset-lancar.duplicate',compact('item','type','tags','dataType'));
 	}
 
 

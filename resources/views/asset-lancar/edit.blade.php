@@ -91,6 +91,28 @@
 
                             <div class="col-span-2">
                                 <div >
+                                    <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Type</label>
+
+                                    <div class="">
+                                        <div class="relative mb-4">
+                                            <select class="type" name="tags[types][]" id="type">
+                                                <option ></option>
+                                            </select>
+
+                                            @error('')
+                                                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                            @enderror
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+
+                            <div class="col-span-2">
+                                <div >
                                     <label for="warna" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Warna</label>
 
                                     <div class="">
@@ -111,27 +133,7 @@
 
                             </div>
 
-                            <div class="col-span-2">
-                                <div >
-                                    <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Type</label>
-
-                                    <div class="">
-                                        <div class="relative mb-4">
-                                            <select class="type" name="tags[types][]" id="type">
-                                                <option ></option>
-                                            </select>
-
-                                            @error('')
-                                                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
-                                            @enderror
-                                            
-                                        </div>
-                                        
-                                    </div>
-                                    
-                                </div>
-
-                            </div>
+                            
 
                             <div class="col-span-2">
                                 @foreach ($tags as $type)

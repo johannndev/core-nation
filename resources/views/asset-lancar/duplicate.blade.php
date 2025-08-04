@@ -90,6 +90,28 @@
 
                             </div>
 
+                             <div class="col-span-2">
+                                <div >
+                                    <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Type</label>
+
+                                    <div class="">
+                                        <div class="relative mb-4">
+                                            <select class="type" name="tags[3][]" id="type">
+                                                <option ></option>
+                                            </select>
+
+                                            @error('')
+                                                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                            @enderror
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+
                             <div class="col-span-2">
                                 <div >
                                     <label for="warna" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Warna</label>
@@ -111,6 +133,8 @@
                                 </div>
 
                             </div>
+
+                           
 
                             <div class="col-span-2">
                                 @foreach ($tags as $type)
@@ -194,6 +218,43 @@
             //     $('.{{$dataProp["id"]}}').append(blueOption).trigger('change');
 
             // @endisset
+
+                $('.type').select2({
+                width: '100%',
+                placeholder: "Pilih type",
+                minimumInputLength:2,
+                ajax: {
+                    url: '{{ route("ajax.getType") }}',
+                    dataType: "json",
+                    data: (params) => {
+                        console.log(params);
+                        
+                        let query = {
+                            search: params.term,
+                            typeItem: 2,
+                            page: params.page || 1,
+                        };
+                        return query;
+                    },
+                    processResults: data => {
+                        return {
+                            results: data.data.map((row) => {
+                                return { text: row.name, id: row.id };
+                            }),
+                            pagination: {
+                                more: data.current_page < data.last_page,
+                            },
+                        };
+                    },
+                },
+            });
+
+            @isset ($dataType)
+
+                var blueOption = new Option('{{$dataType->name}}',{{$dataType->id}}, true, true);
+                $('.type').append(blueOption).trigger('change');
+
+            @endisset
 
         })
         </script>
