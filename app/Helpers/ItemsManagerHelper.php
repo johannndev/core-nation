@@ -41,7 +41,7 @@ class ItemsManagerHelper
 		// dd($inputTags);
 		//create group
 		$group = ItemGroup::where('name', '=', $input->pcode)->first();
-		if(!$group)
+		if(!$group && $input->type == Item::TYPE_ITEM)
 		{
 			$group = new ItemGroup;
 			$group->name = $input->pcode;
@@ -51,7 +51,18 @@ class ItemsManagerHelper
 			if(isset($code[1]))
 				$group->variant = $code[1];
 		}
-		if(isset($input->description))
+		if(!$group && $input->type == Item::TYPE_ASSET_LANCAR)
+		{
+			$group = new ItemGroup;
+			$group->name = $input->pcode;
+			$code = explode('-', $input->pcode);
+			if(isset($code[0]))
+				$group->master = $code[0];
+			if(isset($code[1]))
+				$group->variant = $code[1];
+		}
+
+        if(isset($input->description))
 			$group->description = strtoupper($input->description);
 		if(isset($input->description2))
 			$group->description2 = strtoupper($input->description2);
@@ -245,7 +256,6 @@ class ItemsManagerHelper
 			$item->description = $input->description ?? "";
 			$item->description2 = $input->description2 ?? "";
 			$item->save();
-
 		}
 
 		$item->pcode = strtoupper(trim($item->pcode));
@@ -316,7 +326,6 @@ class ItemsManagerHelper
 		$inputTags = $inputTags;
 
 		$item = Item::with('group')->findOrFail($id);
-
 
 		$arrayTag = explode(',', $item->tag_ids);
 
