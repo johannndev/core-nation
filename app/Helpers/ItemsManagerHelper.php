@@ -41,45 +41,29 @@ class ItemsManagerHelper
 		// dd($inputTags);
 		//create group
 		$group = ItemGroup::where('name', '=', $input->pcode)->first();
-		if(!$group && $input->type == Item::TYPE_ITEM)
+		if($input->type == Item::TYPE_ITEM)
 		{
-			$group = new ItemGroup;
-			$group->name = $input->pcode;
+            if(!$group)
+    			$group = new ItemGroup;
+
+            $group->name = $input->pcode;
 			$code = explode('/', $input->pcode);
 			if(isset($code[0]))
 				$group->master = $code[0];
 			if(isset($code[1]))
 				$group->variant = $code[1];
-		}
-		if(!$group && $input->type == Item::TYPE_ASSET_LANCAR)
-		{
-			$group = new ItemGroup;
-			$group->name = $input->pcode;
-			$code = explode('-', $input->pcode);
-			if(isset($code[0]))
-				$group->master = $code[0];
-			if(isset($code[1]))
-				$group->variant = $code[1];
-		}
 
-        if(isset($input->description))
-			$group->description = strtoupper($input->description);
-		if(isset($input->description2))
-			$group->description2 = strtoupper($input->description2);
-		if(!isset($input->alias)) $input->alias = '';
-        if($input->type == Item::TYPE_ITEM)
+            if(isset($input->description))
+    			$group->description = strtoupper($input->description);
+    		if(isset($input->description2))
+    			$group->description2 = strtoupper($input->description2);
+    		if(!isset($input->alias)) $input->alias = '';
             $group->alias = strtoupper($input->alias);
-        else
-        {
-            $alias = explode('-',$input->name);
-            if(isset($alias[0]))
-                $group->alias = strtoupper($alias[0]);
+    		if(!$group->save())
+    			return $this->error($group->getErrors());
         }
-		if(!$group->save())
-			return $this->error($group->getErrors());
-            
 
-		//then create the items
+        //then create the items
 		$total = 0;
 		foreach($inputTags['types'] as $key => $type_id)
 		{
@@ -199,11 +183,7 @@ class ItemsManagerHelper
 			return array('types' => array(),'sizes' => array(),'jahit' => array());
 
 		//get the item types
-
-		
-
 		// $types = array_filter(array_keys(array_intersect_key($tags,static::$_tags[Tag::TYPE_TYPE])));
-		
 		if (array_key_exists(Tag::TYPE_WARNA,$tags))
 		{
 			$warna = $tags[Tag::TYPE_WARNA];
@@ -251,25 +231,27 @@ class ItemsManagerHelper
 		);
 	}
 
-	protected function createCrystalItem($group, $input, $tags, $type_id, $size_id, $item = false, $action = 'store')
+	protected function createCrystalItem($group = null, $input, $tags, $type_id, $size_id, $item = false, $action = 'store')
 	{
-		if(!$item){
+		if(!$item)
+        {
 			$item = new Item();
-			$item->pcode = $input->pcode; 
+    		$item->pcode = strtoupper(trim($input->pcode));
 			$item->price = $input->price;
 			$item->description = $input->description;
 			$item->cost = $input->cost ?? "";
 			$item->description = $input->description ?? "";
 			$item->description2 = $input->description2 ?? "";
 			$item->save();
-		}
+    		$item->type = $input->type;
+            $item->name = strtoupper($item->name);
+        }
 
-		$item->pcode = strtoupper(trim($item->pcode));
-		$item->type = $input->type;
-
-		$item->group_id = $group->id;
-		$item->variant = $group->variant;
-
+        if($group)
+        {
+    		$item->group_id = $group->id;
+	    	$item->variant = $group->variant;
+        }
 
 		//combine the tags
 		if($action == 'store'){
@@ -288,11 +270,7 @@ class ItemsManagerHelper
     		$item->code = $item->code.static::$_tags[Tag::TYPE_SIZE][$size_id]->code;
             $item->code = strtoupper($item->code);
             $item->name = static::$_tags[Tag::TYPE_TYPE][$type_id]->code.' '.$item->pcode.' '.static::$_tags[Tag::TYPE_SIZE][$size_id]->name;
-		}else{
-			$item->code = $item->pcode.'-'.static::$_tags[Tag::TYPE_WARNA][$tags['warna'][0]]->code.'-'.static::$_tags[Tag::TYPE_SIZE][$size_id]->name;
 		}
-
-        $item->name = strtoupper($item->name);
 
 		//NEW: catch for contributor data
 		$item->genre = $type_id;
@@ -346,8 +324,6 @@ class ItemsManagerHelper
 		$size_id = $inputTags['sizes'][0];
 		$jahit_id = $inputTags['jahit'];
 		
-		$item->pcode = $input->pcode;
-		$item->price = $input->price;
 		$old_tags = explode(',', $item->tag_ids);
 		$group_id = $item->group_id;
 
@@ -356,15 +332,19 @@ class ItemsManagerHelper
 			return $this->error('error creating item');
 
 		//update group
-		$group = ItemGroup::findOrFail($item->group_id);
-		if(isset($input->description))
-			$group->description = strtoupper($input->description);
-		if(isset($input->description2))
-			$group->description2 = strtoupper($input->description2);
-		if(!isset($input->alias)) $input->alias = '';
-			$group->alias = strtoupper($input->alias);
-		if(!$group->save())
-			return $this->error($group->getErrors());
+        if(item->type == Item::TYPE_ITEM)
+        {
+    		$group = ItemGroup::findOrFail($item->group_id);
+            if($group && $item->type )
+    		if(isset($input->description))
+    			$group->description = strtoupper($input->description);
+    		if(isset($input->description2))
+    			$group->description2 = strtoupper($input->description2);
+    		if(!isset($input->alias)) $input->alias = '';
+    			$group->alias = strtoupper($input->alias);
+    		if(!$group->save())
+    			return $this->error($group->getErrors());
+        }
 
 		if(!empty($file))
 			$this->saveImage($item->group, $file);
