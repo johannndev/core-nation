@@ -236,17 +236,17 @@ class ItemsManagerHelper
 		if(!$item)
         {
 			$item = new Item();
-    		$item->pcode = strtoupper(trim($input->pcode));
-            $item->code = $item->pcode; //buat edit
-			$item->price = $input->price;
-			$item->description = $input->description;
-			$item->cost = $input->cost ?? "";
-			$item->description = $input->description ?? "";
-			$item->description2 = $input->description2 ?? "";
-			$item->save();
-    		$item->type = $input->type;
-            $item->name = strtoupper($item->name);
         }
+        $item->pcode = strtoupper(trim($input->pcode));
+        $item->code = $item->pcode; //untuk edit
+        $item->price = $input->price;
+        $item->description = $input->description;
+        $item->cost = $input->cost ?? "";
+        $item->description = $input->description ?? "";
+        $item->description2 = $input->description2 ?? "";
+        $item->save();
+        $item->type = $input->type;
+        $item->name = strtoupper($item->name);
 
         if($group)
         {
