@@ -484,6 +484,8 @@ class ItemsManagerHelper
 	//TODO: clean this up, make a universal function
 	public static function loadTagsJSON($itemType = null,$types)
 	{
+		
+
 		if(empty(static::$_tags)) static::loadTags($itemType);
 		Cache::forget('item_tags_json_'. ($itemType ?? '0'));
 		static::$_json = Cache::remember('item_tags_json_'. ($itemType ?? '0'), 300, function () use($types) {
@@ -493,7 +495,8 @@ class ItemsManagerHelper
 			foreach($types as $type => $val)
 			{
 				$data[$count] = array();
-				$data[$count]['name'] = $val;
+				$data[$count]['name_input'] = $val['name_input'];
+				$data[$count]['name'] = $val['name'];
 				$data[$count]['type_id'] = $type;
 				$data[$count]['data'] = array();
 				foreach (static::$_tags[$type] as $value) {
@@ -505,6 +508,8 @@ class ItemsManagerHelper
 
 			return $data;
 		});
+
+		
 
 		return static::$_json;
 	}

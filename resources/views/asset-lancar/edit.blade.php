@@ -33,8 +33,6 @@
     <form action="{{route('asetLancar.update',$item->id)}}" method="post" enctype="multipart/form-data">
 
         @csrf
-
-        <input type="text" name="type" value="" hidden>
         <input type="text" name="tags[jahit][]" hidden>
 
         <section class="bg-gray-50 dark:bg-gray-900 mb-8">
@@ -112,6 +110,52 @@
                                 </div>
 
                             </div>
+
+                            <div class="col-span-2">
+                                <div >
+                                    <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Type</label>
+
+                                    <div class="">
+                                        <div class="relative mb-4">
+                                            <select class="type" name="tags[types][]" id="type">
+                                                <option ></option>
+                                            </select>
+
+                                            @error('')
+                                                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                            @enderror
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+
+                            <div class="col-span-2">
+                                @foreach ($tags as $type)
+                                    <div class="mb-6">
+                                        <p class="font-bold text-lg mb-4">{{$type['name']}} </p>
+                                        <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+
+                                            @foreach ($type['data'] as $item)
+                                                <div>
+                                                    <div class="flex items-start md:items-center  mb-4">
+                                                        <input {{ array_key_exists($item['id'], $tagSize) ? 'checked' : '' }} id="default-radio-1" type="{{ $type['type_id'] == 7 ? 'checkbox' : 'radio' }}" value="{{ $item['id'] }}" name="tags[{{ $type['name_input'] }}][]" class="mt-1 md:mt-0 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                        <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"> {{ $item['id'] }} {{$item['name']}}</label>
+                                                    </div>
+
+                                                
+                                                </div>
+                                            @endforeach
+
+                                        </div>
+                                    
+                                    </div>
+                                    
+                                @endforeach
+                            </div>
                           
                         </div>
 
@@ -170,6 +214,43 @@
 
                 var blueOption = new Option('{{$dataWarna->name}}',{{$dataWarna->id}}, true, true);
                 $('.warna').append(blueOption).trigger('change');
+
+            @endisset
+
+            $('.type').select2({
+                width: '100%',
+                placeholder: "Pilih type",
+                minimumInputLength:2,
+                ajax: {
+                    url: '{{ route("ajax.getType") }}',
+                    dataType: "json",
+                    data: (params) => {
+                        console.log(params);
+                        
+                        let query = {
+                            search: params.term,
+                            typeItem: 2,
+                            page: params.page || 1,
+                        };
+                        return query;
+                    },
+                    processResults: data => {
+                        return {
+                            results: data.data.map((row) => {
+                                return { text: row.name, id: row.id };
+                            }),
+                            pagination: {
+                                more: data.current_page < data.last_page,
+                            },
+                        };
+                    },
+                },
+            });
+
+            @isset ($dataType)
+
+                var blueOption = new Option('{{$dataType->name}}',{{$dataType->id}}, true, true);
+                $('.type').append(blueOption).trigger('change');
 
             @endisset
 

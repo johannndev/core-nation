@@ -6,6 +6,7 @@ use App\Exceptions\ModelException;
 use App\Helpers\ItemsManagerHelper;
 use App\Models\Customer;
 use App\Models\Item;
+use App\Models\ItemTag;
 use App\Models\Tag;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
@@ -394,27 +395,49 @@ class AsetLancarController extends Controller
 		$item = Item::find($id);
 
 		$dataWarna = $item->tags->where('type',Tag::TYPE_WARNA)->first();
+		$dataType = $item->tags->where('type',Tag::TYPE_TYPE)->first();
 
 		$type = Item::TYPE_ASSET_LANCAR;
 
+		$tags = ItemsManagerHelper::loadTagsJSON(Item::TYPE_ASSET_LANCAR,Tag::$asetLancarCreate);
 
-		return view('asset-lancar.edit',compact('item','dataWarna','type'));
+		$tagSize = ItemTag::with('tag')->whereHas('tag', function (Builder $query) {
+			$query->where('type', Tag::TYPE_SIZE);
+		})->where('item_id',$id)->pluck('id','tag_id')->toArray();
+
+
+
+
+		return view('asset-lancar.edit',compact('item','dataWarna','type','tags','dataType','tagSize'));
 	}
 
 	
 	public function postEdit(Request $request, $id)
 	{
+		
+
+		
 		try{
 
 			$input = $request;
-			$tags = $request->tags;
+			$tags = array_values(array_filter(array_merge(...array_values($request->tags))));
 
 			DB::beginTransaction();
 
 			$itemManager = new ItemsManagerHelper;
 
-			if(!$item = $itemManager->updateItem($id, $input, $tags, $request->file))
-				throw new ModelException($itemManager->getError(), __LINE__);
+
+			$item = Item::find($id);
+			$item->pcode = $input->pcode; 
+			$item->price = $input->price;
+			$item->description = $input->description;
+			$item->cost = $input->cost;
+			$item->description = $input->description;
+			$item->description2 = $input->description2;
+			$item->save();
+
+			$item->tags()->sync($tags);
+
 
 			DB::commit();
 

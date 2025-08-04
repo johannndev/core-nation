@@ -43,8 +43,7 @@ class Tag extends Model
 	);
 
 	public static $asetLancarCreate = array(
-		self::TYPE_TYPE => 'Type',
-		self::TYPE_SIZE => 'Size',
+		self::TYPE_SIZE =>['name'=>'Size','name_input'=>'sizes'],
 	);
 
 	public static $typesJSON = array(

@@ -67,6 +67,20 @@ class AjaxController extends Controller
         return response()->json($warna, 200);
     }
 
+     public function getType(Request $request)
+    {
+        $search = $request->search;
+        $typeItem = $request->typeItem;
+
+        $type = Tag::where('type',Tag::TYPE_TYPE)->where('item_type',$typeItem)->where('name','like','%'.$search.'%')->orWhere('code','like','%'.$search.'%');
+        
+        
+        $type = $type->paginate();
+
+        // $customer = $customer->get(['id', 'name']);
+        return response()->json($type, 200);
+    }
+
     public function getCostumerCash(Request $request)
     {
         $search = str_replace(' ', '%', $request->search);

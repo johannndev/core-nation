@@ -241,6 +241,8 @@ class ItemsController extends Controller
 
 		$tags = ItemsManagerHelper::loadTagsJSON(Item::TYPE_ITEM,Tag::$types);
 
+	
+
 		// dd($tags);
 		$type = Item::TYPE_ITEM;
 
@@ -269,10 +271,12 @@ class ItemsController extends Controller
 	public function postEdit($id,Request $request)
 	{
 		
+		
 		try{
 
 			$input = $request;
 			$tags = $request->tags;
+				
 
 			DB::beginTransaction();
 

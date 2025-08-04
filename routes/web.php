@@ -257,6 +257,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/getInvoice', [AjaxController::class, 'getInvoice'])->name('ajax.getInvoice');
     Route::post('/scan-barcode', [AjaxController::class, 'processBarcode']);
     Route::get('/ajax/getWarna', [AjaxController::class, 'getWarna'])->name('ajax.getWarna');
+    Route::get('/ajax/getType', [AjaxController::class, 'getType'])->name('ajax.getType');
 
 
     Route::get('/transaction', [TransactionsController::class, 'index'])->name('transaction.index')->middleware('permission:transactions.list');
