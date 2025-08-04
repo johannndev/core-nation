@@ -237,6 +237,7 @@ class ItemsManagerHelper
         {
 			$item = new Item();
     		$item->pcode = strtoupper(trim($input->pcode));
+            $item->code = $item->pcode; //buat edit
 			$item->price = $input->price;
 			$item->description = $input->description;
 			$item->cost = $input->cost ?? "";
@@ -332,7 +333,7 @@ class ItemsManagerHelper
 			return $this->error('error creating item');
 
 		//update group
-        if(item->type == Item::TYPE_ITEM)
+        if($item->type == Item::TYPE_ITEM)
         {
     		$group = ItemGroup::findOrFail($item->group_id);
             if($group && $item->type )
