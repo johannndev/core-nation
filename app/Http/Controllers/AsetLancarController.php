@@ -233,30 +233,20 @@ class AsetLancarController extends Controller
 
 	public function postCreate(Request $request)
 	{
-
 		try {
 			$input = $request;
 			$tags = $request->tags;
-
+            $input->type = ITEM::TYPE_ASSET_LANCAR;
 
 			DB::beginTransaction();
-
 			$itemManager = new ItemsManagerHelper;
-
-			// dd($request->tags);
-
 			if(!$itemManager->createItems($input, $tags, $request->file))
 				throw new ModelException($itemManager->getErrors(), __LINE__);
 
 			DB::commit();
-
 			return redirect()->route('asetLancar.index')->with('success', 'Item(s) created.');
-
-			
-
 		} catch(ModelException $e) {
 			DB::rollBack();
-
 			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
 		} catch(\Exception $e) {
 			DB::rollBack();
@@ -271,12 +261,10 @@ class AsetLancarController extends Controller
 	{
 		try {
 		DB::beginTransaction();
-
 		
 		$item = new Item();
 		$item->name = $request->name;
-		$item->code = $request->code;
-		$item->pcode = strtoupper($item->code); 
+		$item->pcode = $item->code = strtoupper($request->code); 
 		$item->price = $request->price;
 		$item->cost = $request->cost;
 		$item->description = $request->description ?? "";
@@ -423,7 +411,6 @@ class AsetLancarController extends Controller
 			$tags = array_values(array_filter(array_merge(...array_values($request->tags))));
 
 			DB::beginTransaction();
-
 			$itemManager = new ItemsManagerHelper;
 
 
