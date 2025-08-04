@@ -22,9 +22,6 @@ class ItemsManagerHelper
 
 	public function createItems($input, $inputTags, $file)
 	{
-
-		
-
 		if (!isset($input->pcode) || empty($input->pcode)) {
         	throw new \Exception('pcode is required');
 		}
@@ -35,18 +32,13 @@ class ItemsManagerHelper
 			}
 		}
 
-		
-			
-
 		static::loadTags();
-
 	
 		//find the tags
 		$inputTags =$inputTags;
 		$inputTags = static::sortTags($inputTags);
 
 		// dd($inputTags);
-
 		//create group
 		$group = ItemGroup::where('name', '=', $input->pcode)->first();
 		if(!$group)
@@ -72,8 +64,6 @@ class ItemsManagerHelper
 
 	
 		$total = 0;
-
-		
 		foreach($inputTags['types'] as $key => $type_id)
 		{
 			foreach($inputTags['sizes'] as $key => $size_id)
@@ -246,11 +236,7 @@ class ItemsManagerHelper
 
 	protected function createCrystalItem($group, $input, $tags, $type_id, $size_id, $item = false, $action = 'store')
 	{
-
-		
-
 		if(!$item){
-
 			$item = new Item();
 			$item->pcode = $input->pcode; 
 			$item->price = $input->price;
@@ -281,16 +267,14 @@ class ItemsManagerHelper
 		$item->tag_ids = implode(',',$tag_ids);
 
 		//1. generate the item code
-		$item->code = static::$_tags[Tag::TYPE_TYPE][$type_id]->code.str_replace('/','', $item->pcode); //add type
-		$item->code = $item->code.static::$_tags[Tag::TYPE_SIZE][$size_id]->code;
-        $item->code = strtoupper($item->code);
-
 		if($input->type == Item::TYPE_ITEM){
-			$item->name = static::$_tags[Tag::TYPE_TYPE][$type_id]->code.' '.$item->pcode.' '.static::$_tags[Tag::TYPE_SIZE][$size_id]->name;
+    		$item->code = static::$_tags[Tag::TYPE_TYPE][$type_id]->code.str_replace('/','', $item->pcode); //add type
+    		$item->code = $item->code.static::$_tags[Tag::TYPE_SIZE][$size_id]->code;
+            $item->code = strtoupper($item->code);
+            $item->name = static::$_tags[Tag::TYPE_TYPE][$type_id]->code.' '.$item->pcode.' '.static::$_tags[Tag::TYPE_SIZE][$size_id]->name;
 		}else{
-			$item->name = $item->pcode.'-'.static::$_tags[Tag::TYPE_WARNA][$tags['warna'][0]]->code.'-'.static::$_tags[Tag::TYPE_SIZE][$size_id]->name;
+			$item->code = $item->pcode.'-'.static::$_tags[Tag::TYPE_WARNA][$tags['warna'][0]]->code.'-'.static::$_tags[Tag::TYPE_SIZE][$size_id]->name;
 		}
-		
 
         $item->name = strtoupper($item->name);
 
@@ -314,11 +298,7 @@ class ItemsManagerHelper
 			return $this->error($item->getErrors());
 
 		//sync
-
-		
 		$item->tags()->sync($tag_ids);
-		
-
 		return $item;
 	}
 
