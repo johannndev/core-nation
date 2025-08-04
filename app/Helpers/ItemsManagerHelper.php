@@ -238,7 +238,6 @@ class ItemsManagerHelper
 			$item = new Item();
         }
         $item->pcode = strtoupper(trim($input->pcode));
-        $item->code = $item->pcode; //untuk edit
         $item->price = $input->price;
         $item->description = $input->description;
         $item->cost = $input->cost ?? "";
@@ -246,8 +245,12 @@ class ItemsManagerHelper
         $item->description2 = $input->description2 ?? "";
         $item->save();
         $item->type = $input->type;
-        $item->name = strtoupper($item->name);
-dd($item);
+        if($item->type = Item::TYPE_ASSET_LANCAR)
+        {
+            $item->name = strtoupper($input->name); //utk asset lancar
+            $item->code = $item->pcode; //untuk edit
+        }
+        
         if($group)
         {
     		$item->group_id = $group->id;
@@ -288,7 +291,6 @@ dd($item);
 			$item->brand = $brand;
 		else
 			$item->brand = 0;
-dd($items);exit;
         if(!$item->save())
 			return $this->error($item->getErrors());
 
