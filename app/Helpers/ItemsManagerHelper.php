@@ -323,9 +323,9 @@ class ItemsManagerHelper
 		$inputTags = Arr::add($inputTags, 'sizes', $typeSize);
 		$inputTags = Arr::add($inputTags, 'warna', $inputTags['warna'][0]);
 
-		$type_id = $inputTags['types'][0];
-		$size_id = $inputTags['sizes'][0];
-		$jahit_id = $inputTags['jahit'];
+		$type_id = isset($inputTags['types'][0])?$inputTags['types'][0]:0;
+		$size_id = isset($inputTags['sizes'][0])?$inputTags['sizes'][0]:0;
+		$jahit_id = isset($inputTags['jahit'])?$inputTags['jahit']:0;
 		
 		$old_tags = explode(',', $item->tag_ids);
 		$group_id = $item->group_id;
