@@ -327,7 +327,7 @@ class ItemsManagerHelper
 		$old_tags = explode(',', $item->tag_ids);
 		$group_id = $item->group_id;
 
-        dd($item);
+        dd($item);exit;
         
         //then create the items
 		if(!$item = $this->createCrystalItem($item->group, $input, $inputTags, $type_id, $size_id, $item,'update'))
