@@ -354,7 +354,8 @@ class ItemsManagerHelper
 
 		//NEXT, update jahit for other items
 		//1. find if jahit has been modified
-		if(!in_array($jahit_id, $old_tags)) { //not in array, modified
+        //SKIP IF ASET LANCAR
+		if($item->type == Item::TYPE_ITEM && !in_array($jahit_id, $old_tags)) { //not in array, modified
 			//2. find other items in the same group, with the same type, but different size
 			$itemTable = Item::table();
 			$updates = Item::with('tags')->where('group_id','=',$group_id)->where('genre', '=', $type_id)->get();
