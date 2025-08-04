@@ -265,7 +265,7 @@ class ItemsManagerHelper
 		$item->tag_ids = implode(',',$tag_ids);
 
 		//1. generate the item code
-		if($input->type == Item::TYPE_ITEM){
+		if($item->type == Item::TYPE_ITEM){
     		$item->code = static::$_tags[Tag::TYPE_TYPE][$type_id]->code.str_replace('/','', $item->pcode); //add type
     		$item->code = $item->code.static::$_tags[Tag::TYPE_SIZE][$size_id]->code;
             $item->code = strtoupper($item->code);
