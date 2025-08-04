@@ -247,7 +247,7 @@ class ItemsManagerHelper
         $item->save();
         $item->type = $input->type;
         $item->name = strtoupper($item->name);
-
+dd($item);
         if($group)
         {
     		$item->group_id = $group->id;
@@ -266,7 +266,7 @@ class ItemsManagerHelper
 		$item->tag_ids = implode(',',$tag_ids);
 
 		//1. generate the item code
-		if($item->type == Item::TYPE_ITEM){
+		if($item->type == Item::TYPE_ITEM) {
     		$item->code = static::$_tags[Tag::TYPE_TYPE][$type_id]->code.str_replace('/','', $item->pcode); //add type
     		$item->code = $item->code.static::$_tags[Tag::TYPE_SIZE][$size_id]->code;
             $item->code = strtoupper($item->code);
@@ -288,8 +288,8 @@ class ItemsManagerHelper
 			$item->brand = $brand;
 		else
 			$item->brand = 0;
-
-		if(!$item->save())
+dd($items);exit;
+        if(!$item->save())
 			return $this->error($item->getErrors());
 
 		//sync
