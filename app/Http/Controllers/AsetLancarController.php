@@ -416,7 +416,7 @@ class AsetLancarController extends Controller
 
 			$item = Item::find($id);
 			$item->name = $request->name;
-			$item->pcode = $item->code = strtoupper($request->code); 
+			$item->pcode = strtoupper($request->pcode); 
 			$item->price = $request->price;
 			$item->description = $input->description;
 			$item->cost = $input->cost;
