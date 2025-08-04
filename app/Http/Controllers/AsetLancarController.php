@@ -398,7 +398,6 @@ class AsetLancarController extends Controller
 			$tags = $request->tags;
 
 			DB::beginTransaction();
-dd($input);
 			$itemManager = new ItemsManagerHelper;
 			if(!$item = $itemManager->updateItem($id, $input, $tags, $request->file))
 				throw new ModelException($itemManager->getError(), __LINE__);
