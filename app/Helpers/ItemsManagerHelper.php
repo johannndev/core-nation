@@ -67,9 +67,17 @@ class ItemsManagerHelper
 		if(isset($input->description2))
 			$group->description2 = strtoupper($input->description2);
 		if(!isset($input->alias)) $input->alias = '';
-		$group->alias = strtoupper($input->alias);
+        if($input->type == Item::TYPE_ITEM)
+            $group->alias = strtoupper($input->alias);
+        else
+        {
+            $alias = explode('-',$input->name);
+            if(isset($alias[0]))
+                $group->alias = strtoupper($alias[0]);
+        }
 			if(!$group->save())
 				return $this->error($group->getErrors());
+            
 
 		//then create the items
 
