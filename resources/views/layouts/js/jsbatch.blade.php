@@ -26,6 +26,11 @@
         formData.append('_token', document.querySelector('input[name="_token"]').value);
         formData.append('whId', $('#warehouse').val()); // Menambahkan whid ke FormData
 
+        const errorDiv = document.getElementById('errorWrap');
+        const errorText = document.getElementById('errorMessage');
+        errorDiv.style.display = 'none';
+        errorText.innerText = '';
+
         showLoader()
 
         fetch('{{ route("ajax.sellBatch") }}', {
@@ -43,7 +48,11 @@
                 const errorData = await response.json().catch(() => ({}));
                 // Tampilkan pesan error dari server jika ada
                 let message = errorData.error || 'Terjadi kesalahan saat membaca file CSV.';
-                alert(message); // Bisa diganti dengan Swal.fire jika pakai SweetAlert
+                
+                 // Tampilkan pesan error di div
+                errorText.innerText = message;
+                errorDiv.style.display = 'block';
+
                 throw new Error(message);
             }
 
@@ -69,8 +78,12 @@
         })
         .catch(error => {
             hideLoader();
-            console.error('Error:', error);
-            alert('Upload gagal: ' + error.message);
+          
+            if (!errorDiv.innerText) {
+                errorText.innerText = error.message;
+                errorDiv.style.display = 'block';
+            }
+
         });
     });
 
