@@ -35,10 +35,21 @@
                 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
             }
         })
-        .then(response => response.json())
-        .then(data => {
+        .then(async response => {
+            hideLoader();
 
-            hideLoader()
+            // Jika response bukan 200 OK
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                // Tampilkan pesan error dari server jika ada
+                let message = errorData.error || 'Terjadi kesalahan saat membaca file CSV.';
+                alert(message); // Bisa diganti dengan Swal.fire jika pakai SweetAlert
+                throw new Error(message);
+            }
+
+            return response.json();
+        })
+        .then(data => {
 
             console.log(data.length);
             
@@ -57,11 +68,9 @@
            
         })
         .catch(error => {
-
-            hideLoader()
-            
+            hideLoader();
             console.error('Error:', error);
-            // document.getElementById('uploadResult').innerText = 'Terjadi kesalahan saat meng-upload CSV.';
+            alert('Upload gagal: ' + error.message);
         });
     });
 
