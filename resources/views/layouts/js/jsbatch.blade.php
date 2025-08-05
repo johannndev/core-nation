@@ -10,7 +10,9 @@
         loader.classList.remove('opacity-0', '-translate-y-4');
         loader.classList.add('opacity-100', 'translate-y-0');
 
-        errorDiv.style.display = 'none';
+        errorDiv.classList.remove('block');
+        errorDiv.classList.add('hidden');
+
         errorText.innerText = '';
         
     }
@@ -32,8 +34,6 @@
         formData.append('whId', $('#warehouse').val()); // Menambahkan whid ke FormData
 
        
-        errorDiv.style.display = 'none';
-        errorText.innerText = '';
 
         showLoader()
 
@@ -55,7 +55,9 @@
                 
                  // Tampilkan pesan error di div
                 errorText.innerText = message;
-                errorDiv.style.display = 'block';
+                
+                errorDiv.classList.remove('hidden');
+                errorDiv.classList.add('block');
 
                 throw new Error(message);
             }
@@ -85,7 +87,8 @@
           
             if (!errorDiv.innerText) {
                 errorText.innerText = error.message;
-                errorDiv.style.display = 'block';
+                errorDiv.classList.remove('hidden');
+                errorDiv.classList.add('block');
             }
 
         });
