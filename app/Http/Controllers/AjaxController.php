@@ -378,7 +378,7 @@ class AjaxController extends Controller
         $dataArray = [];
 
         if (($handle = fopen($filePath, 'r')) !== false) {
-            while (($row = fgetcsv($handle, 1000, ';')) !== false) {
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
                 $dataArray[] = [
                     'id' => $row[0],
                     'qty' => $row[1],
