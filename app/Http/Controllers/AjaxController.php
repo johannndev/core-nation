@@ -332,8 +332,18 @@ class AjaxController extends Controller
     {
         $dataArray = [];
 
+        if (!file_exists($filePath) || !is_readable($filePath)) {
+            return null;
+        }
+
         if (($handle = fopen($filePath, 'r')) !== false) {
             while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                // ✅ Cek apakah jumlah kolom 3 sesuai format
+                if (count($row) < 3) {
+                    fclose($handle);
+                    return null; // Format salah (misal CSV pakai ; )
+                }
+
                 $dataArray[] = [
                     'id' => $row[0],
                     'qty' => $row[1],
@@ -342,8 +352,6 @@ class AjaxController extends Controller
             }
             fclose($handle);
         }
-
-   
 
         return $dataArray;
     }
