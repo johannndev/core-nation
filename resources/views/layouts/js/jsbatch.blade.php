@@ -3,10 +3,15 @@
 <script>
 
     const loader = document.getElementById('loading-item');
+    const errorDiv = document.getElementById('errorWrap');
+    const errorText = document.getElementById('errorMessage');
 
     function showLoader() {
         loader.classList.remove('opacity-0', '-translate-y-4');
         loader.classList.add('opacity-100', 'translate-y-0');
+
+        errorDiv.style.display = 'none';
+        errorText.innerText = '';
         
     }
 
@@ -26,8 +31,7 @@
         formData.append('_token', document.querySelector('input[name="_token"]').value);
         formData.append('whId', $('#warehouse').val()); // Menambahkan whid ke FormData
 
-        const errorDiv = document.getElementById('errorWrap');
-        const errorText = document.getElementById('errorMessage');
+       
         errorDiv.style.display = 'none';
         errorText.innerText = '';
 
