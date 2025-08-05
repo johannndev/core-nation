@@ -85,6 +85,9 @@
 
 
                             </div>
+                             <div id="loading-item" class="mt-2 transition font-medium transform duration-300 ease-in-out opacity-0 -translate-y-4 text-sm text-yellow-500">
+                                Tunggu sebentar, data sedang dimuat...
+                            </div>
                         </div>
 
                        
