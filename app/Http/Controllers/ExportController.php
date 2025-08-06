@@ -56,7 +56,7 @@ class ExportController extends Controller
 	{
         // dd($request);
 
-        $type = request('type', Transaction::TYPE_SELL);
+        $type = request('type', $request->type);
 
 		return Excel::download(new SellItemExport($request->from,$request->to,$request->whId, $type, $request->invoice), 'sell_item.csv');
 	}
