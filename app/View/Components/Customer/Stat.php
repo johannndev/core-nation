@@ -159,8 +159,8 @@ class Stat extends Component
                 'customer' => $data->cash_in_customer,
                 'reseller' => $data->cash_in_reseller,
                 'journal' => $data->cash_in_account,
-                'other' => $data->cash_out_other,
-                'total' => $data->cash_in_customer + $data->cash_in_reseller + $data->cash_in_account + $data->cash_out_other
+                'other' => $data->cash_in_other,
+                'total' => $data->cash_in_customer + $data->cash_in_reseller + $data->cash_in_account + $data->cash_in_other
             ],
             'cash_out' => [
                 'customer' => $data->cash_out_customer,
