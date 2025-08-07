@@ -79,70 +79,106 @@ class Stat extends Component
 
         
         $data = DB::table('transactions')
-            ->selectRaw("
-                SUM(CASE 
-                    WHEN type = ? AND receiver_id = ? AND sender_type = ? THEN total 
-                    ELSE 0 
-                END) as cash_in_customer,
-                SUM(CASE 
-                    WHEN type = ? AND receiver_id = ? AND sender_type = ? THEN total 
-                    ELSE 0 
-                END) as cash_in_reseller,
+        ->selectRaw("
+            -- Cash In
+            SUM(CASE 
+                WHEN type = ? AND receiver_id = ? AND sender_type = ? THEN total 
+                ELSE 0 
+            END) as cash_in_customer,
+            SUM(CASE 
+                WHEN type = ? AND receiver_id = ? AND sender_type = ? THEN total 
+                ELSE 0 
+            END) as cash_in_reseller,
+            SUM(CASE 
+                WHEN type = ? AND receiver_id = ? AND sender_type = ? THEN total 
+                ELSE 0 
+            END) as cash_in_account,
+            SUM(CASE 
+                WHEN type = ? AND receiver_id = ? AND sender_type NOT IN (?, ?, ?) THEN total 
+                ELSE 0 
+            END) as cash_in_other,
 
-                SUM(CASE 
-                    WHEN type = ? AND sender_id = ? AND receiver_type = ? THEN total 
-                    ELSE 0 
-                END) as cash_out_customer,
-                SUM(CASE 
-                    WHEN type = ? AND sender_id = ? AND receiver_type = ? THEN total 
-                    ELSE 0 
-                END) as cash_out_reseller,
+            -- Cash Out
+            SUM(CASE 
+                WHEN type = ? AND sender_id = ? AND receiver_type = ? THEN total 
+                ELSE 0 
+            END) as cash_out_customer,
+            SUM(CASE 
+                WHEN type = ? AND sender_id = ? AND receiver_type = ? THEN total 
+                ELSE 0 
+            END) as cash_out_reseller,
+            SUM(CASE 
+                WHEN type = ? AND sender_id = ? AND receiver_type = ? THEN total 
+                ELSE 0 
+            END) as cash_out_account,
+            SUM(CASE 
+                WHEN type = ? AND sender_id = ? AND receiver_type NOT IN (?, ?, ?) THEN total 
+                ELSE 0 
+            END) as cash_out_other,
 
-                SUM(CASE 
-                    WHEN type = ? AND sender_id = ? THEN total 
-                    ELSE 0 
-                END) as sell_total,
+            -- Sell & Return
+            SUM(CASE 
+                WHEN type = ? AND sender_id = ? THEN total 
+                ELSE 0 
+            END) as sell_total,
+            SUM(CASE 
+                WHEN type = ? AND receiver_id = ? THEN total 
+                ELSE 0 
+            END) as return_total
+        ", [
+            // cash_in_customer
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER,
+            // cash_in_reseller
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_RESELLER,
+            // cash_in_account
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_ACCOUNT,
+            // cash_in_other
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT,
 
-                SUM(CASE 
-                    WHEN type = ? AND receiver_id = ? THEN total 
-                    ELSE 0 
-                END) as return_total
-            ", [
-                // cash_in_customer
-                Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER,
-                // cash_in_reseller
-                Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_RESELLER,
-                // cash_out_customer
-                Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER,
-                // cash_out_reseller
-                Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_RESELLER,
-                // sell_total
-                Transaction::TYPE_SELL, $customer->id,
-                // return_total
-                Transaction::TYPE_RETURN, $customer->id,
-            ])
-            ->whereBetween('date', [$startDate, $endDate])
-            ->first();
+            // cash_out_customer
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER,
+            // cash_out_reseller
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_RESELLER,
+            // cash_out_account
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_ACCOUNT,
+            // cash_out_other
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT,
+
+            // sell_total
+            Transaction::TYPE_SELL, $customer->id,
+            // return_total
+            Transaction::TYPE_RETURN, $customer->id,
+        ])
+        ->whereBetween('date', [$startDate, $endDate])
+        ->first();
 
         $dataStat = [
             'cash_in' => [
                 'customer' => $data->cash_in_customer,
                 'reseller' => $data->cash_in_reseller,
-                'total' => $data->cash_in_customer + $data->cash_in_reseller
+                'journal' => $data->cash_in_account,
+                'other' => $data->cash_out_other,
+                'total' => $data->cash_in_customer + $data->cash_in_reseller + $data->cash_in_account + $data->cash_out_other
             ],
             'cash_out' => [
                 'customer' => $data->cash_out_customer,
                 'reseller' => $data->cash_out_reseller,
-                'total' => $data->cash_out_customer + $data->cash_out_reseller
+                'journal' => $data->cash_out_account,
+                'other' => $data->cash_out_other,
+                'total' => $data->cash_out_customer + $data->cash_out_reseller + $data->cash_out_account + $data->cash_out_other
             ],
             'sell' => [
                 'customer' => null,
                 'reseller' => null,
+                'journal' => null,
+                'other' => null,
                 'total' => $data->sell_total
             ],
             'return' => [
                 'customer' => null,
                 'reseller' => null,
+                'journal' => null,
+                'other' => null,
                 'total' => $data->return_total
             ]
         ];

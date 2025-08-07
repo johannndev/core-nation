@@ -29,6 +29,22 @@
                 </tr>
 
                 <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
+                    <td class="px-4 py-3">Journal</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['cash_in']['journal']) }}</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['cash_out']['journal']) }}</td>
+                    <td class="px-4 py-3">-</td>
+                    <td class="px-4 py-3">-</td>
+                </tr>
+
+                <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
+                    <td class="px-4 py-3">Lainnya</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['cash_in']['other']) }}</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['cash_out']['other']) }}</td>
+                    <td class="px-4 py-3">-</td>
+                    <td class="px-4 py-3">-</td>
+                </tr>
+
+                <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                     <th class="px-4 py-3">Total</th>
                     <th class="px-4 py-3">{{ number_format($dataStat['cash_in']['total']) }}</th>
                     <th class="px-4 py-3">{{ number_format($dataStat['cash_out']['total']) }}</th>
