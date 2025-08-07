@@ -63,14 +63,14 @@ class Stat extends Component
         $startDate = Carbon::createFromDate($year,$month,'1')->firstOfMonth()->toDateString();
         $endDate =Carbon::createFromDate($year,$month,'1')->endOfMonth()->toDateString();
 
-        $dataCashInCustomer = DB::table('transactions')
-            ->where('date','>=',$startDate)->where('date','<=',$endDate)
-            ->where("type",'=',Transaction::TYPE_CASH_OUT)
-            ->where("sender_id",'=',$customer->id)
-            ->where("receiver_type",'=',Customer::TYPE_ACCOUNT)
-            ->sum('total');
+        // $dataCashInCustomer = DB::table('transactions')
+        //     ->where('date','>=',$startDate)->where('date','<=',$endDate)
+        //     ->where("type",'=',Transaction::TYPE_CASH_OUT)
+        //     ->where("sender_id",'=',$customer->id)
+        //     ->where("receiver_type",'=',Customer::TYPE_ACCOUNT)
+        //     ->sum('total');
 
-            dd($dataCashInCustomer);
+        //     dd($dataCashInCustomer);
 
         // $dataCashOutCustomer = DB::table('transactions')
         //     ->where('date','>=',$startDate)->where('date','<=',$endDate)
@@ -138,13 +138,13 @@ class Stat extends Component
             Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT,
 
             // cash_out_customer
-            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER,
+            Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_CUSTOMER,
             // cash_out_reseller
-            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_RESELLER,
+            Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_RESELLER,
             // cash_out_account
-            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_ACCOUNT,
+            Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_ACCOUNT,
             // cash_out_other
-            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT,
+            Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT,
 
             // sell_total
             Transaction::TYPE_SELL, $customer->id,
