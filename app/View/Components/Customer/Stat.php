@@ -63,12 +63,14 @@ class Stat extends Component
         $startDate = Carbon::createFromDate($year,$month,'1')->firstOfMonth()->toDateString();
         $endDate =Carbon::createFromDate($year,$month,'1')->endOfMonth()->toDateString();
 
-        // $dataCashInCustomer = DB::table('transactions')
-        //     ->where('date','>=',$startDate)->where('date','<=',$endDate)
-        //     ->where("type",'=',Transaction::TYPE_CASH_IN)
-        //     ->where("receiver_id",'=',$customer->id)
-        //     ->where("sender_type",'=',Customer::TYPE_CUSTOMER)
-        //     ->sum('total');
+        $dataCashInCustomer = DB::table('transactions')
+            ->where('date','>=',$startDate)->where('date','<=',$endDate)
+            ->where("type",'=',Transaction::TYPE_CASH_OUT)
+            ->where("sender_id",'=',$customer->id)
+            ->where("receiver_type",'=',Customer::TYPE_ACCOUNT)
+            ->sum('total');
+
+            dd($dataCashInCustomer);
 
         // $dataCashOutCustomer = DB::table('transactions')
         //     ->where('date','>=',$startDate)->where('date','<=',$endDate)
