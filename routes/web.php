@@ -484,7 +484,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/produksi/{id}/detail/updatewc', [ProduksiController::class, 'postEdit'])->name('produksi.postEdit')->middleware('permission:produksi edit');
     Route::post('/produksi/{id}/detail/split', [ProduksiController::class, 'postPisahJahit'])->name('produksi.postPisahJahit')->middleware('permission:produksi edit');
     Route::patch('/produksi/{id}/detail/gantiJahit', [ProduksiController::class, 'postGantiJahit'])->name('produksi.postGantiJahit')->middleware('permission:produksi edit');
-    Route::patch('/produksi/{id}/detail/gantiQc', [ProduksiController::class, 'postGantiQc'])->name('produksi.postGantiQc')->middleware('permission:produksi edit');
+    
     Route::patch('/produksi/{id}/setor', [ProduksiController::class, 'postSetor'])->name('produksi.postSetor')->middleware('permission:produksi setor');
 
     Route::get('/produksi/potong/list', [ProduksiController::class, 'getPotongList'])->name('produksi.getPotongList')->middleware('permission:produksi potong');
@@ -517,6 +517,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/setoran/{id}/detail/gantiJahit', [SetoranController::class, 'postGantiJahit'])->name('setoran.postGantiJahit')->middleware('permission:setoran edit jahit');
     Route::patch('/setoran/{id}/detail/gantiStatus', [SetoranController::class, 'postEditStatus'])->name('setoran.postEditStatus')->middleware('permission:setoran edit status');
     Route::patch('/setoran/{id}/detail/postGudang', [SetoranController::class, 'postGudang'])->name('setoran.postGudang')->middleware('permission:setoran ke gudang');
+    Route::patch('/setoran/{id}/detail/gantiQc', [SetoranController::class, 'postGantiQc'])->name('setoran.postGantiQc')->middleware('permission:setoran edit jahit');
 
     Route::get('/borongan', [BoronganController::class, 'index'])->name('borongan.index')->middleware('permission:borongan list');
     Route::get('/borongan/ajax', [BoronganController::class, 'getAjaxBorongan'])->name('borongan.ajax')->middleware('permission:borongan create');

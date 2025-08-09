@@ -199,6 +199,7 @@
                                     <th scope="col" class="px-4 py-3">Warna</th>
                                     <th scope="col" class="px-4 py-3">Costumer</th>
                                     <th scope="col" class="px-4 py-3">Jahit</th>
+                                     <th scope="col" class="px-4 py-3 ">QC</th>
                                     <th scope="col" class="px-4 py-3 w-40">Invoice</th>
                                     {{-- <th scope="col" class="px-4 py-3"></th> --}}
                                     
@@ -380,6 +381,14 @@
                                             <hr class="h-px my-1 bg-gray-400 border-0 dark:bg-gray-700">
                                             <p>{{$row->jahit->name}}</p>
                                         @endisset
+                                    </td>
+                                    <td class="px-4 py-3">
+                                    
+                                        @if ($row->qc_id == 0)
+                                            0
+                                        @else
+                                            {{ $row->qc->name }}
+                                        @endif
                                     </td>
                                     <td class="px-4 py-3">
 

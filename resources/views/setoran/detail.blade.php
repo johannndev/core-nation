@@ -239,6 +239,61 @@
       </form>
      
 
-  </div>
+    </div>
+
+     <div class="mb-8">
+
+        <form action="{{route('setoran.postGantiQc',$data->id)}}" method="post">
+
+          @csrf
+
+          @method('PATCH')
+
+        <section class="bg-gray-50 dark:bg-gray-900 ">
+            <div class="mx-auto  ">
+                <!-- Start coding here -->
+                <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden  p-4">
+                  
+                    <div class="">
+                        <div class="px-4 sm:px-0">
+                          <h3 class="text-base font-semibold leading-7 text-gray-900">Edit QC
+                        </h3>
+                          {{-- <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Personal details and application.</p> --}}
+                        </div>
+                        <div class="mt-6 border-t border-gray-100">
+                          <dl class="divide-y divide-gray-100">
+                           
+
+                           
+
+                            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt class="text-sm font-medium leading-6 text-gray-900">Edit QC</dt>
+                                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                    <select id="qc" name="qc_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option value="">Choose</option>
+                                       
+                                        @foreach ($QcList as $item)
+                                            <option {{$data->qc_id == $item->id ? "selected" : ""}} value="{{$item->id}}">{{$item->name}}</option>
+                                        @endforeach
+                                       
+                                      </select>
+                                 </dd>
+                            </div>
+
+                           
+                           
+                          </dl>
+                        </div>
+                      </div>
+                      <button type="submit" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mt-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Save</button>
+                   
+                </div>
+            </div>
+        </section>
+
+        </form>
+       
+
+    </div>
 
 </x-layouts.layout>

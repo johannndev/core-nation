@@ -99,9 +99,9 @@ class ProduksiController extends Controller
 		$data = Produksi::findOrFail($id);
 
 		$jahitList = Worker::jahit()->get();
-		$QcList = Worker::qc()->get();
+		
 
-		return view('produksi.detail',compact('data','jahitList','QcList'));
+		return view('produksi.detail',compact('data','jahitList'));
 
 	}
 
@@ -309,44 +309,7 @@ class ProduksiController extends Controller
 		return redirect()->route('produksi.index')->with('success', 'produksi edited.');
 	}
 
-	public function postGantiQc($id, Request $request)
-	{
-		$produksi = Produksi::findOrFail($id);
-
-		// dd($produksi);
-
-		$qc_id = $request->qc_id;
-		if(!$qc_id || empty($qc_id)) {
-			
-			return redirect()->route('produksi.detail',$id)->with('error', 'bukan QC 1.');
-		}
-
-		//check if valid QC
-		$valid = Worker::where('type', '=', Worker::TYPE_QC)->where('id', '=', $qc_id)->first();
-		if(!$valid) {
-
-			return redirect()->route('produksi.detail',$id)->with('error', 'bukan QC 1.');
-			
-			
-		}
-
-		DB::beginTransaction();
-
-		$produksi->qc_id = $qc_id;
-		if(!$produksi->save()) {
-			DB::rollBack();
-
-			return redirect()->route('produksi.detail',$id)->with('error', 'error saving old produksi');
-			
-			
-		}
-
-
-		
-		DB::commit();
-
-		return redirect()->route('produksi.index')->with('success', 'produksi edited.');
-	}
+	
 
 	public function postSetor($id)
 	{

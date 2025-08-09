@@ -34,7 +34,7 @@ class SetoranController extends Controller
         $defaultStatus = Produksi::STATUS_SETOR;
 
 		//init the query
-		$query = Produksi::with('item','potong','size','jahit');
+		$query = Produksi::with('item','potong','size','jahit','qc');
 		//dates are set!
 		if($from && $to)
 		{
@@ -182,8 +182,9 @@ class SetoranController extends Controller
 		$data = Produksi::findOrFail($id);
 
 		$jahitList = Worker::jahit()->get();
+		$QcList = Worker::qc()->get();
 
-		return view('setoran.detail',compact('data','jahitList'));
+		return view('setoran.detail',compact('data','jahitList','QcList'));
 
 	}
 
@@ -260,6 +261,45 @@ class SetoranController extends Controller
 		DB::commit();
 
 		return redirect()->route('setoran.index')->with('success', 'produksi edited.');
+	}
+
+	public function postGantiQc($id, Request $request)
+	{
+		$produksi = Produksi::findOrFail($id);
+
+		// dd($produksi);
+
+		$qc_id = $request->qc_id;
+		if(!$qc_id || empty($qc_id)) {
+			
+			return redirect()->route('setoran.detail',$id)->with('error', 'bukan QC 1.');
+		}
+
+		//check if valid QC
+		$valid = Worker::where('type', '=', Worker::TYPE_QC)->where('id', '=', $qc_id)->first();
+		if(!$valid) {
+
+			return redirect()->route('setoran.detail',$id)->with('error', 'bukan QC 1.');
+			
+			
+		}
+
+		DB::beginTransaction();
+
+		$produksi->qc_id = $qc_id;
+		if(!$produksi->save()) {
+			DB::rollBack();
+
+			return redirect()->route('setoran.detail',$id)->with('error', 'error saving old setoran');
+			
+			
+		}
+
+
+		
+		DB::commit();
+
+		return redirect()->route('setoran.index')->with('success', 'setoran edited.');
 	}
 
     public function postEditStatus($id)
