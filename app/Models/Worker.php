@@ -15,6 +15,7 @@ class Worker extends Model
 
 	const TYPE_POTONG = 1;
 	const TYPE_JAHIT = 2;
+	const TYPE_QC = 3;
 
 	protected $table = 'prod_worker';
 	protected $fillable = ['name'];
@@ -28,6 +29,12 @@ class Worker extends Model
 	public function scopePotong($query)
 	{
 		$query = $query->where('type','=',Worker::TYPE_POTONG);
+		return $query;
+	}
+
+	public function scopeQc($query)
+	{
+		$query = $query->where('type','=',Worker::TYPE_QC);
 		return $query;
 	}
 }

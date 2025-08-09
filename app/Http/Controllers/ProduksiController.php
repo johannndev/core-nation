@@ -25,7 +25,7 @@ class ProduksiController extends Controller
         $defaultStatus = Produksi::STATUS_PRODUKSI;
 
 		//init the query
-		$query = Produksi::with('item','potong','size','jahit');
+		$query = Produksi::with('item','potong','size','jahit','qc');
 		//dates are set!
 		if($from && $to)
 		{
@@ -99,8 +99,9 @@ class ProduksiController extends Controller
 		$data = Produksi::findOrFail($id);
 
 		$jahitList = Worker::jahit()->get();
+		$QcList = Worker::qc()->get();
 
-		return view('produksi.detail',compact('data','jahitList'));
+		return view('produksi.detail',compact('data','jahitList','QcList'));
 
 	}
 
@@ -308,6 +309,45 @@ class ProduksiController extends Controller
 		return redirect()->route('produksi.index')->with('success', 'produksi edited.');
 	}
 
+	public function postGantiQc($id, Request $request)
+	{
+		$produksi = Produksi::findOrFail($id);
+
+		// dd($produksi);
+
+		$qc_id = $request->qc_id;
+		if(!$qc_id || empty($qc_id)) {
+			
+			return redirect()->route('produksi.detail',$id)->with('error', 'bukan QC 1.');
+		}
+
+		//check if valid QC
+		$valid = Worker::where('type', '=', Worker::TYPE_QC)->where('id', '=', $qc_id)->first();
+		if(!$valid) {
+
+			return redirect()->route('produksi.detail',$id)->with('error', 'bukan QC 1.');
+			
+			
+		}
+
+		DB::beginTransaction();
+
+		$produksi->qc_id = $qc_id;
+		if(!$produksi->save()) {
+			DB::rollBack();
+
+			return redirect()->route('produksi.detail',$id)->with('error', 'error saving old produksi');
+			
+			
+		}
+
+
+		
+		DB::commit();
+
+		return redirect()->route('produksi.index')->with('success', 'produksi edited.');
+	}
+
 	public function postSetor($id)
 	{
 
@@ -462,6 +502,78 @@ class ProduksiController extends Controller
 		$w->delete();
 
 		return redirect()->route('produksi.getJahitList')->with('success', $w->name.' deleted');
+	}
+
+
+	public function getQcList()
+	{
+		
+		$dataList = Worker::qc()->withTrashed()->paginate();
+		
+		return view('produksi.qc',compact('dataList'));
+	}
+
+	public function getQcCreate()
+	{
+
+		return view('produksi.qc-create');
+	}
+
+	public function createQc(Request $request)
+	{
+		$input = $request->name;
+
+		$w = new Worker;
+		$w->name = trim($input);
+		$w->type = Worker::TYPE_QC;
+		if(!$w->save())
+		{
+			pre($w->getErrors());exit;
+			return redirect()->back()->with('errorMessage',$w->getMessage());
+		}
+
+		return redirect()->route('produksi.getQcList')->with('success', $w->name.' created');
+	}
+
+	public function getQcEdit($id)
+	{
+		$data = Worker::findOrfail($id);
+
+		return view('produksi.qc-edit',compact('data'));
+	}
+
+	public function updateQc(Request $request,$id)
+	{
+		$input = $request->name;
+
+		$w = Worker::findOrFail($id);
+		$w->name = trim($input);
+		$w->type = Worker::TYPE_QC;
+		if(!$w->save())
+		{
+			pre($w->getErrors());exit;
+			return redirect()->back()->with('errorMessage',$w->getMessage());
+		}
+
+		return redirect()->route('produksi.getQcList')->with('success', $w->name.' created');
+	}
+
+	public function postDeleteQc($id)
+	{
+		$w = Worker::where('id', '=', $id)->where('type', '=', Worker::TYPE_QC)->first();
+		
+		if(!$w)
+			return abort(404);
+		$w->delete();
+
+		return redirect()->route('produksi.getQcList')->with('success', $w->name.' deleted');
+	}
+
+	public function postRestore($id,$type)
+	{
+		$w = Worker::withTrashed()->where('id', '=', $id)->restore();
+
+		return redirect()->route('produksi.'.$type)->with('success','Data Restored');
 	}
 
 

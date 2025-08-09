@@ -81,6 +81,11 @@ class Produksi extends Model
 		return $this->belongsTo('App\Models\Worker','jahit_id');
 	}
 
+	public function qc()
+	{
+		return $this->belongsTo('App\Models\Worker','qc_id');
+	}
+
 	public function size()
 	{
 		return $this->belongsTo('App\Models\Tag','size_id');

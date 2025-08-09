@@ -2,7 +2,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">Potong List</p>
+        <p class="text-2xl font-bold">QC List</p>
 
        
     </div>
@@ -37,9 +37,9 @@
                                         <td class="px-4 py-3">{{$item->name}}</td>
                                      
                                         <td class="px-4 py-3 flex">
-                                             @if ($item->trashed())
+                                            @if ($item->trashed())
 
-                                            <form action="{{route('produksi.restore',[$item->id,'getPotongList'])}}" method="post">
+                                            <form action="{{route('produksi.restore',[$item->id,'getQcList'])}}" method="post">
 
                                                 @csrf
                                               

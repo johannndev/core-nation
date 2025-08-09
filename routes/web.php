@@ -484,6 +484,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/produksi/{id}/detail/updatewc', [ProduksiController::class, 'postEdit'])->name('produksi.postEdit')->middleware('permission:produksi edit');
     Route::post('/produksi/{id}/detail/split', [ProduksiController::class, 'postPisahJahit'])->name('produksi.postPisahJahit')->middleware('permission:produksi edit');
     Route::patch('/produksi/{id}/detail/gantiJahit', [ProduksiController::class, 'postGantiJahit'])->name('produksi.postGantiJahit')->middleware('permission:produksi edit');
+    Route::patch('/produksi/{id}/detail/gantiQc', [ProduksiController::class, 'postGantiQc'])->name('produksi.postGantiQc')->middleware('permission:produksi edit');
     Route::patch('/produksi/{id}/setor', [ProduksiController::class, 'postSetor'])->name('produksi.postSetor')->middleware('permission:produksi setor');
 
     Route::get('/produksi/potong/list', [ProduksiController::class, 'getPotongList'])->name('produksi.getPotongList')->middleware('permission:produksi potong');
@@ -499,6 +500,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/produksi/jahit/{id}/edit', [ProduksiController::class, 'getJahitEdit'])->name('produksi.getJahitEdit')->middleware('permission:produksi jahit edit');
     Route::patch('/produksi/jahit/{id}/update', [ProduksiController::class, 'updateJahit'])->name('produksi.updateJahit')->middleware('permission:produksi jahit edit');
     Route::delete('/produksi/jahit/{id}/delete', [ProduksiController::class, 'postDeleteJahit'])->name('produksi.postDeleteJahit')->middleware('permission:produksi jahit delete');
+
+    Route::get('/produksi/qc/list', [ProduksiController::class, 'getQcList'])->name('produksi.getQcList');
+    Route::get('/produksi/qc/create', [ProduksiController::class, 'getQcCreate'])->name('produksi.getQcCreate');
+    Route::post('/produksi/qc/store', [ProduksiController::class, 'createQc'])->name('produksi.createQc');
+    Route::get('/produksi/qc/{id}/edit', [ProduksiController::class, 'getQcEdit'])->name('produksi.getQcEdit');
+    Route::patch('/produksi/qc/{id}/update', [ProduksiController::class, 'updateQc'])->name('produksi.updateQc');
+    Route::delete('/produksi/qc/{id}/delete', [ProduksiController::class, 'postDeleteQc'])->name('produksi.postDeleteQc');
+
+    Route::post('/produksi/{id}/{type}/restore', [ProduksiController::class, 'postRestore'])->name('produksi.restore');
     
     Route::get('/setoran', [SetoranController::class, 'index'])->name('setoran.index')->middleware('permission:setoran list');
     Route::get('/setoran/{id}/detail', [SetoranController::class, 'detail'])->name('setoran.detail')->middleware('permission:setoran detail');

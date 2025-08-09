@@ -165,6 +165,7 @@
                                     <th scope="col" class="px-4 py-3">Warna</th>
                                     <th scope="col" class="px-4 py-3">Costumer</th>
                                     <th scope="col" class="px-4 py-3 ">Jahit</th>
+                                    <th scope="col" class="px-4 py-3 ">QC</th>
                                     <th scope="col" class="px-4 py-3">Action</th>
                                     
                                 </tr>
@@ -242,6 +243,15 @@
                                        
                                         
                                     </td>
+                                     <td class="px-4 py-3">
+                                    
+                                        @if ($row->qc_id == 0)
+                                            0
+                                        @else
+                                            {{ $row->qc->name }}
+                                        @endif
+                                    </td>
+                                    
                                     <td class="px-4 py-3">
                                         @if ($row->jahit_date)
 
@@ -263,6 +273,7 @@
 
                                         @endif
                                     </td>
+                                   
                                     
                                     
                                 </tr>
