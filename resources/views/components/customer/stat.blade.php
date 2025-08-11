@@ -45,6 +45,15 @@
                   
                 </tr>
 
+                 <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
+                    <td class="px-4 py-3">Warehouse</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['cash_in']['warehouse']) }}</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['cash_out']['warehouse']) }}</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['sell']['warehouse']) }}</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['return']['warehouse']) }}</td>
+                  
+                </tr>
+
                 <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                     <td class="px-4 py-3">Lainnya</td>
                     <td class="px-4 py-3">{{ number_format($dataStat['cash_in']['other']) }}</td>

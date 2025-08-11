@@ -100,7 +100,11 @@ class Stat extends Component
                 ELSE 0 
             END) as cash_in_bank,
             SUM(CASE 
-                WHEN type = ? AND receiver_id = ? AND sender_type NOT IN (?, ?, ?, ?) THEN total 
+                WHEN type = ? AND sender_id = ? AND receiver_type = ? THEN total 
+                ELSE 0 
+            END) as cash_in_warehouse,
+            SUM(CASE 
+                WHEN type = ? AND receiver_id = ? AND sender_type NOT IN (?, ?, ?, ?, ?) THEN total 
                 ELSE 0 
             END) as cash_in_other,
 
@@ -122,7 +126,11 @@ class Stat extends Component
                 ELSE 0 
             END) as cash_out_bank,
             SUM(CASE 
-                WHEN type = ? AND sender_id = ? AND receiver_type NOT IN (?, ?, ?, ?) THEN total 
+                WHEN type = ? AND receiver_id = ? AND sender_type = ? THEN total 
+                ELSE 0 
+            END) as cash_out_warehouse,
+            SUM(CASE 
+                WHEN type = ? AND sender_id = ? AND receiver_type NOT IN (?, ?, ?, ?, ?) THEN total 
                 ELSE 0 
             END) as cash_out_other,
 
@@ -131,6 +139,10 @@ class Stat extends Component
                 WHEN type = ? AND receiver_id = ? AND sender_type = ? THEN total 
                 ELSE 0 
             END) as sell_bank,
+            SUM(CASE 
+                WHEN type = ? AND receiver_id = ? AND sender_type = ? THEN total 
+                ELSE 0 
+            END) as sell_warehouse,
             SUM(CASE 
                 WHEN type = ? AND sender_id = ? THEN total 
                 ELSE 0 
@@ -141,6 +153,10 @@ class Stat extends Component
                 WHEN type = ? AND sender_id = ? AND receiver_type = ? THEN total 
                 ELSE 0 
             END) as return_bank,
+            SUM(CASE 
+                WHEN type = ? AND sender_id = ? AND receiver_type = ? THEN total 
+                ELSE 0 
+            END) as return_warehouse,
             SUM(CASE 
                 WHEN type = ? AND receiver_id = ? THEN total 
                 ELSE 0 
@@ -154,8 +170,10 @@ class Stat extends Component
             Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_ACCOUNT,
             //cash_in_bank
             Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_BANK,
+            //cash_in_warehouse
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_WAREHOUSE,
             // cash_in_other
-            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT, Customer::TYPE_BANK,
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT, Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,
 
             // cash_out_customer
             Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_CUSTOMER,
@@ -165,16 +183,22 @@ class Stat extends Component
             Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_ACCOUNT,
             // cash_out_bank
             Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_BANK,
+            // cash_out_warehouse
+            Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_WAREHOUSE,
             // cash_out_other
-            Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT, Customer::TYPE_BANK,
+            Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT, Customer::TYPE_BANK, Customer::TYPE_WAREHOUSE,
 
             // sell_bank
             Transaction::TYPE_SELL, $customer->id, Customer::TYPE_BANK,
+            // sell_warehouse
+            Transaction::TYPE_SELL, $customer->id, Customer::TYPE_WAREHOUSE,
             // sell_total
             Transaction::TYPE_SELL, $customer->id,
             
             // return_bank
              Transaction::TYPE_RETURN, $customer->id, Customer::TYPE_BANK,
+            // return_warehouse
+            Transaction::TYPE_RETURN, $customer->id, Customer::TYPE_WAREHOUSE,
             // return_total
             Transaction::TYPE_RETURN, $customer->id,
         ])
@@ -187,32 +211,36 @@ class Stat extends Component
                 'reseller' => $data->cash_in_reseller,
                 'journal' => $data->cash_in_account,
                 'bank' => $data->cash_in_bank,
+                'warehouse' => $data->cash_in_warehouse,
                 'other' => $data->cash_in_other,
-                'total' => $data->cash_in_customer + $data->cash_in_reseller + $data->cash_in_account + $data->cash_in_bank + $data->cash_in_other
+                'total' => $data->cash_in_customer + $data->cash_in_reseller + $data->cash_in_account + $data->cash_in_bank + $data->cash_in_other + $data->cash_in_warehouse
             ],
             'cash_out' => [
                 'customer' => $data->cash_out_customer,
                 'reseller' => $data->cash_out_reseller,
                 'journal' => $data->cash_out_account,
                 'bank' => $data->cash_out_bank,
+                'warehouse' => $data->cash_out_warehouse,
                 'other' => $data->cash_out_other,
-                'total' => $data->cash_out_customer + $data->cash_out_reseller + $data->cash_out_account + $data->cash_out_bank + $data->cash_out_other
+                'total' => $data->cash_out_customer + $data->cash_out_reseller + $data->cash_out_account + $data->cash_out_bank + $data->cash_out_other + $data->cash_out_warehouse
             ],
             'sell' => [
                 'customer' => null,
                 'reseller' => null,
                 'journal' => null,
                 'bank' => $data->sell_bank,
+                'warehouse' => $data->sell_warehouse,
                 'other' => null,
-                'total' => $data->sell_bank
+                'total' => $data->sell_bank + $data->sell_warehouse
             ],
             'return' => [
                 'customer' => null,
                 'reseller' => null,
                 'journal' => null,
                 'bank' => $data->return_bank,
+                'warehouse' => $data->return_warehouse,
                 'other' => null,
-                'total' => $data->return_bank
+                'total' => $data->return_bank + $data->return_warehouse
             ]
         ];
 
