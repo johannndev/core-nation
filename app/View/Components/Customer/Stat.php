@@ -96,7 +96,11 @@ class Stat extends Component
                 ELSE 0 
             END) as cash_in_account,
             SUM(CASE 
-                WHEN type = ? AND receiver_id = ? AND sender_type NOT IN (?, ?, ?) THEN total 
+                WHEN type = ? AND sender_id = ? AND receiver_type = ? THEN total 
+                ELSE 0 
+            END) as cash_in_bank,
+            SUM(CASE 
+                WHEN type = ? AND receiver_id = ? AND sender_type NOT IN (?, ?, ?, ?) THEN total 
                 ELSE 0 
             END) as cash_in_other,
 
@@ -114,7 +118,11 @@ class Stat extends Component
                 ELSE 0 
             END) as cash_out_account,
             SUM(CASE 
-                WHEN type = ? AND sender_id = ? AND receiver_type NOT IN (?, ?, ?) THEN total 
+                WHEN type = ? AND receiver_id = ? AND sender_type = ? THEN total 
+                ELSE 0 
+            END) as cash_out_bank,
+            SUM(CASE 
+                WHEN type = ? AND sender_id = ? AND receiver_type NOT IN (?, ?, ?, ?) THEN total 
                 ELSE 0 
             END) as cash_out_other,
 
@@ -134,8 +142,10 @@ class Stat extends Component
             Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_RESELLER,
             // cash_in_account
             Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_ACCOUNT,
+            //cash_in_bank
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_BANK,
             // cash_in_other
-            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT,
+            Transaction::TYPE_CASH_IN, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT, Customer::TYPE_BANK,
 
             // cash_out_customer
             Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_CUSTOMER,
@@ -143,8 +153,10 @@ class Stat extends Component
             Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_RESELLER,
             // cash_out_account
             Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_ACCOUNT,
+            // cash_out_bank
+              Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_BANK,
             // cash_out_other
-            Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT,
+            Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT, Customer::TYPE_BANK,
 
             // sell_total
             Transaction::TYPE_SELL, $customer->id,
@@ -159,20 +171,23 @@ class Stat extends Component
                 'customer' => $data->cash_in_customer,
                 'reseller' => $data->cash_in_reseller,
                 'journal' => $data->cash_in_account,
+                'bank' => $data->cash_in_bank,
                 'other' => $data->cash_in_other,
-                'total' => $data->cash_in_customer + $data->cash_in_reseller + $data->cash_in_account + $data->cash_in_other
+                'total' => $data->cash_in_customer + $data->cash_in_reseller + $data->cash_in_account + $data->cash_in_bank + $data->cash_in_other
             ],
             'cash_out' => [
                 'customer' => $data->cash_out_customer,
                 'reseller' => $data->cash_out_reseller,
                 'journal' => $data->cash_out_account,
+                'bank' => $data->cash_out_bank,
                 'other' => $data->cash_out_other,
-                'total' => $data->cash_out_customer + $data->cash_out_reseller + $data->cash_out_account + $data->cash_out_other
+                'total' => $data->cash_out_customer + $data->cash_out_reseller + $data->cash_out_account + $data->cash_out_bank + $data->cash_out_other
             ],
             'sell' => [
                 'customer' => null,
                 'reseller' => null,
                 'journal' => null,
+                'bank' => null,
                 'other' => null,
                 'total' => $data->sell_total
             ],
@@ -180,6 +195,7 @@ class Stat extends Component
                 'customer' => null,
                 'reseller' => null,
                 'journal' => null,
+                'bank' => null,
                 'other' => null,
                 'total' => $data->return_total
             ]

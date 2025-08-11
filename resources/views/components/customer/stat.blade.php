@@ -37,6 +37,15 @@
                 </tr>
 
                 <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
+                    <td class="px-4 py-3">Bank</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['cash_in']['bank']) }}</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['cash_out']['bank']) }}</td>
+                    <td class="px-4 py-3">-</td>
+                    <td class="px-4 py-3">-</td>
+                  
+                </tr>
+
+                <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                     <td class="px-4 py-3">Lainnya</td>
                     <td class="px-4 py-3">{{ number_format($dataStat['cash_in']['other']) }}</td>
                     <td class="px-4 py-3">{{ number_format($dataStat['cash_out']['other']) }}</td>
