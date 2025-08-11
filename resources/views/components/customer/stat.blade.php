@@ -40,8 +40,8 @@
                     <td class="px-4 py-3">Bank</td>
                     <td class="px-4 py-3">{{ number_format($dataStat['cash_in']['bank']) }}</td>
                     <td class="px-4 py-3">{{ number_format($dataStat['cash_out']['bank']) }}</td>
-                    <td class="px-4 py-3">-</td>
-                    <td class="px-4 py-3">-</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['sell']['bank']) }}</td>
+                    <td class="px-4 py-3">{{ number_format($dataStat['return']['bank']) }}</td>
                   
                 </tr>
 

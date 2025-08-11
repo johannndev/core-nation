@@ -128,9 +128,19 @@ class Stat extends Component
 
             -- Sell & Return
             SUM(CASE 
+                WHEN type = ? AND receiver_id = ? AND sender_type = ? THEN total 
+                ELSE 0 
+            END) as sell_bank,
+            SUM(CASE 
                 WHEN type = ? AND sender_id = ? THEN total 
                 ELSE 0 
             END) as sell_total,
+
+
+            SUM(CASE 
+                WHEN type = ? AND sender_id = ? AND receiver_type = ? THEN total 
+                ELSE 0 
+            END) as return_bank,
             SUM(CASE 
                 WHEN type = ? AND receiver_id = ? THEN total 
                 ELSE 0 
@@ -154,12 +164,17 @@ class Stat extends Component
             // cash_out_account
             Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_ACCOUNT,
             // cash_out_bank
-              Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_BANK,
+            Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_BANK,
             // cash_out_other
             Transaction::TYPE_CASH_OUT, $customer->id, Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_ACCOUNT, Customer::TYPE_BANK,
 
+            // sell_bank
+            Transaction::TYPE_SELL, $customer->id, Customer::TYPE_BANK,
             // sell_total
             Transaction::TYPE_SELL, $customer->id,
+            
+            // return_bank
+             Transaction::TYPE_RETURN, $customer->id, Customer::TYPE_BANK,
             // return_total
             Transaction::TYPE_RETURN, $customer->id,
         ])
@@ -187,17 +202,17 @@ class Stat extends Component
                 'customer' => null,
                 'reseller' => null,
                 'journal' => null,
-                'bank' => null,
+                'bank' => $data->sell_bank,
                 'other' => null,
-                'total' => $data->sell_total
+                'total' => $data->sell_bank
             ],
             'return' => [
                 'customer' => null,
                 'reseller' => null,
                 'journal' => null,
-                'bank' => null,
+                'bank' => $data->return_bank,
                 'other' => null,
-                'total' => $data->return_total
+                'total' => $data->return_bank
             ]
         ];
 

@@ -91,7 +91,7 @@ class Transaction extends Model
 		array('id' => self::TYPE_ADJUST, 'name' => 'Adjust'),
 		array('id' => self::TYPE_RETURN, 'name' => 'Return'),
 		array('id' => self::TYPE_PRODUCTION, 'name' => 'Production'),
-		array('id' => self::TYPE_RETURN_SUPPLIER, 'name' => 'Return'),
+		array('id' => self::TYPE_RETURN_SUPPLIER, 'name' => 'Return Supplier'),
 		array('id' => self::TYPE_DEPRECIATION, 'name' => 'Depreciation'),
 	);
 
