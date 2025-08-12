@@ -1941,6 +1941,10 @@ class TransactionsController extends Controller
 		if($request->date){
 			$transactions = $transactions->whereDate('date','=',$request->date);
 		}
+
+		if($request->invoice){
+			$transactions = $transactions->where('invoice','=',$request->invoice);
+		}
 		
 		if($request->type){
 			$transactions =	$transactions->where('type',$request->type);
