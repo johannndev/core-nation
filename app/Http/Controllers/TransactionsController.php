@@ -2004,7 +2004,7 @@ class TransactionsController extends Controller
 
 		$transactions = $transactions->orderBy('id', 'desc')->paginate(200);
 
-		dd($transactions);
+		// dd($transactions);
         
 		
 
