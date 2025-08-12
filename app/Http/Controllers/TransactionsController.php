@@ -2003,7 +2003,7 @@ class TransactionsController extends Controller
 			->orderBy('id', 'desc')
 			->paginate(200);
 
-		dd($transactions);
+		dd($transactions->toSql(), $transactions->getBindings());
 
 		return view('transactions.sync',compact('transactions','types'));
 
