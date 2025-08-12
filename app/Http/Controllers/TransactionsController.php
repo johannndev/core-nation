@@ -1950,17 +1950,17 @@ class TransactionsController extends Controller
 			$transactions =	$transactions->where('type',$request->type);
 		}
 
-		// if($request->sender == 'success'){
-		// 	$transactions =	$transactions->whereNotNull('a_submit_by');
-		// }else{
-		// 	$transactions =	$transactions->whereNull('a_submit_by');
-		// }
+		if($request->sender == 'success'){
+			$transactions =	$transactions->whereNotNull('a_submit_by');
+		}else{
+			$transactions =	$transactions->whereNull('a_submit_by');
+		}
 
-		// if($request->receiver == 'success'){
-		// 	$transactions =	$transactions->whereNotNull('b_submit_by');
-		// }else{
-		// 	$transactions =	$transactions->whereNull('b_submit_by');
-		// }
+		if($request->receiver == 'success'){
+			$transactions =	$transactions->whereNotNull('b_submit_by');
+		}else{
+			$transactions =	$transactions->whereNull('b_submit_by');
+		}
 
 
 		$transactions =	$transactions->where(function ($query) {
