@@ -1998,12 +1998,13 @@ class TransactionsController extends Controller
 					});
 				});
 			});
-        })
-        ->orderBy('id', 'desc')
-			->orderBy('id', 'desc')
-			->paginate(200);
+        });
 
 		dd($transactions->toSql(), $transactions->getBindings());
+
+		$transactions = $transactions->orderBy('id', 'desc')->paginate(200);
+        
+		
 
 		return view('transactions.sync',compact('transactions','types'));
 
