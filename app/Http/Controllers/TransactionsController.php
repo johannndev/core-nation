@@ -1935,16 +1935,16 @@ class TransactionsController extends Controller
 		];
 
 		$transactions = Transaction::with(['sender', 'receiver'])
-			->where('submit_type', 1);
+			->where('submit_type', 1)->where('invoice','=',442442);
 
 
 		if($request->date){
 			$transactions = $transactions->whereDate('date','=',$request->date);
 		}
 
-		if($request->invoice){
-			$transactions = $transactions->where('invoice','=',$request->invoice);
-		}
+		// if($request->invoice){
+		// 	$transactions = $transactions->where('invoice','=',$request->invoice);
+		// }
 		
 		if($request->type){
 			$transactions =	$transactions->where('type',$request->type);
@@ -2002,6 +2002,8 @@ class TransactionsController extends Controller
         ->orderBy('id', 'desc')
 			->orderBy('id', 'desc')
 			->paginate(200);
+
+		dd($transactions);
 
 		return view('transactions.sync',compact('transactions','types'));
 
