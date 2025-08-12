@@ -2000,9 +2000,11 @@ class TransactionsController extends Controller
 			});
         });
 
-		dd($transactions->toSql(), $transactions->getBindings());
+		// dd($transactions->toSql(), $transactions->getBindings());
 
 		$transactions = $transactions->orderBy('id', 'desc')->paginate(200);
+
+		dd($transactions);
         
 		
 
