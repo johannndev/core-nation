@@ -1963,7 +1963,7 @@ class TransactionsController extends Controller
 		// }
 
 
-		$transactions =	$transactions->where(function ($query) {
+		$transactions =	$transactions->where(function ($query) use($request) {
             $query
                 // TYPE_SELL atau TYPE_RETURN_SUPPLIER → cocokkan dengan sender_id di warehouse_id
 			->where(function ($q) {
@@ -1971,6 +1971,7 @@ class TransactionsController extends Controller
 					Transaction::TYPE_SELL,
 					Transaction::TYPE_RETURN_SUPPLIER
 				])
+                ->$transactions->whereNull('a_submit_by')
 				->whereIn('sender_id', function ($sub) {
 					$sub->select('warehouse_id')->from('jubeliosyncs');
 				});
