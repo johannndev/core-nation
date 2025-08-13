@@ -1971,7 +1971,7 @@ class TransactionsController extends Controller
 					Transaction::TYPE_SELL,
 					Transaction::TYPE_RETURN_SUPPLIER
 				])
-//                ->whereNull('a_submit_by')
+                ->whereNull('a_submit_by')
 				->whereIn('sender_id', function ($sub) {
 					$sub->select('warehouse_id')->from('jubeliosyncs');
 				});
@@ -1983,6 +1983,7 @@ class TransactionsController extends Controller
 					Transaction::TYPE_BUY,
 					Transaction::TYPE_RETURN
 				])
+                ->whereNull('b_submit_by')
 				->whereIn('receiver_id', function ($sub) {
 					$sub->select('warehouse_id')->from('jubeliosyncs');
 				});
