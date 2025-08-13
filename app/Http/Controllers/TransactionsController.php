@@ -1963,7 +1963,7 @@ class TransactionsController extends Controller
 		// }
 
 
-		$transactions =	$transactions->where(function ($query) use($request) {
+		$transactions =	$transactions->where(function ($query) {
             $query
                 // TYPE_SELL atau TYPE_RETURN_SUPPLIER → cocokkan dengan sender_id di warehouse_id
 			->where(function ($q) {
@@ -1988,7 +1988,25 @@ class TransactionsController extends Controller
 					$sub->select('warehouse_id')->from('jubeliosyncs');
 				});
 			})
+            ->orWhere(function ($q) {
+                $q->where('type', Transaction::TYPE_MOVE)
+                  ->where(function ($qq) {
+                      $qq->where(function ($w) {
+                          $w->whereIn('sender_id', function ($sub) {
+                              $sub->select('warehouse_id')->from('jubeliosyncs');
+                          })
+                          ->whereNull('a_submit_by');
+                      })
+                      ->orWhere(function ($w) {
+                          $w->whereIn('receiver_id', function ($sub) {
+                              $sub->select('warehouse_id')->from('jubeliosyncs');
+                          })
+                          ->whereNull('b_submit_by');
+                      });
+                  });
+            });
 
+/*
 			// TYPE_MOVE → cocokkan sender_id atau receiver_id di warehouse_id
 			->orWhere(function ($q) {
 				$q->where('type', Transaction::TYPE_MOVE)
@@ -2000,6 +2018,7 @@ class TransactionsController extends Controller
 					});
 				});
 			});
+*/
         });
 
 		// dd($transactions->toSql(), $transactions->getBindings());
