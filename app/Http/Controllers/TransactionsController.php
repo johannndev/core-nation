@@ -1962,7 +1962,7 @@ class TransactionsController extends Controller
 		// 	$transactions =	$transactions->whereNull('b_submit_by');
 		// }
 
-
+if(!$request->invoice){
 		$transactions =	$transactions->where(function ($query) {
             $query
                 // TYPE_SELL atau TYPE_RETURN_SUPPLIER → cocokkan dengan sender_id di warehouse_id
@@ -2020,7 +2020,7 @@ class TransactionsController extends Controller
 			});
 */
         });
-
+}
 		// dd($transactions->toSql(), $transactions->getBindings());
 
 		$transactions = $transactions->orderBy('id', 'desc')->paginate(200);
