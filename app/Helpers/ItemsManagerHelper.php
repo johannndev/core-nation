@@ -467,24 +467,48 @@ class ItemsManagerHelper
 
 		if(empty(static::$_tags)) static::loadTags($itemType);
 		Cache::forget('item_tags_json_'. ($itemType ?? '0'));
-		static::$_json = Cache::remember('item_tags_json_'. ($itemType ?? '0'), 300, function () use($types) {
+		static::$_json = Cache::remember('item_tags_json_'. ($itemType ?? '0'), 300, function () use($types,$itemType) {
 			$data = array();
 
 			$count = 0;
-			foreach($types as $type => $val)
-			{
-				$data[$count] = array();
-				$data[$count]['name_input'] = $val['name_input'];
-				$data[$count]['name'] = $val['name'];
-				$data[$count]['type_id'] = $type;
-				$data[$count]['data'] = array();
-				foreach (static::$_tags[$type] as $value) {
-					$data[$count]['data'][] = $value->toArray();
+
+			
+
+			if($itemType == Item::TYPE_ASSET_LANCAR){
+
+			
+				foreach($types as $type => $val)
+				{
+					$data[$count] = array();
+					$data[$count]['name_input'] = $val['name_input'] ?? '';
+					$data[$count]['name'] = $val['name'] ?? '';
+					$data[$count]['type_id'] = $type;
+					$data[$count]['data'] = array();
+					foreach (static::$_tags[$type] as $value) {
+						$data[$count]['data'][] = $value->toArray();
+					}
+
+					$count++;
 				}
 
-				$count++;
+			}else{
+
+				foreach($types as $type => $val)
+				{
+					$data[$count] = array();
+					$data[$count]['name'] = $val;
+					$data[$count]['type_id'] = $type;
+					$data[$count]['data'] = array();
+					foreach (static::$_tags[$type] as $value) {
+						$data[$count]['data'][] = $value->toArray();
+					}
+
+					$count++;
+				}
+
 			}
 
+		
 			return $data;
 		});
 
