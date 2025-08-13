@@ -126,7 +126,7 @@
                                         
                                         {{-- <th class="px-4 py-3">{{$item->jubelio_order_id}}</th> --}}
                                         <td class="px-4 py-3">{{$item->type_name}}</td>
-                                        <td class="px-4 py-3 w-40">{{$item->description}}</td>
+                                        <td class="px-4 py-3 w-52">{{$item->description}}</td>
                                         @if ($item->sync_cek == 'S')
 
                                             <td class="px-4 py-3">
