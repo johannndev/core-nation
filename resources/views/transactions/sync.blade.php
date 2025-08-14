@@ -338,6 +338,9 @@
                                         <td class="px-4 py-3">
 
                                             <form action="{{ route('transaction.transactionSyncDisplay',$item->id) }}">
+
+                                                @csrf
+                                                @method('PATCH')
                                             
                                                 @if ($item->sync_hide == 'N')
 
