@@ -2049,6 +2049,9 @@ class TransactionsController extends Controller
 			$transactions->sync_hide = 'N';
 		} 
 
+		$transactions->save();
+
+
 		 return redirect()->route('transaction.transactionSync')->with('success',  'Updated');
 	}
 
