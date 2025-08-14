@@ -2048,6 +2048,8 @@ class TransactionsController extends Controller
 		}else{
 			$transactions->sync_hide = 'N';
 		} 
+
+		 return redirect()->route('transaction.transactionSync')->with('success',  'Updated');
 	}
 
 
