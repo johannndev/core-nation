@@ -48,6 +48,13 @@
 
                                         </select>
                                     </div>
+                                    <div>
+                                        <label for="display" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Display</label>
+                                        <select id="display" name="display" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option  {{Request('display','N') == 'N' ? 'selected' : ''}} value="N">Hidden</option>
+                                            <option  {{Request('display','N') == 'Y' ? 'selected' : ''}} value="Y">Show</option>
+                                        </select>
+                                    </div>
 
                                      {{-- <div>
                                         <label for="sender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sender</label>
@@ -113,6 +120,7 @@
                                         {{-- <th scope="col" class="px-4 py-3">Order ID</th> --}}
                                         <th scope="col" class="px-4 py-3">Sender</th>
                                         <th scope="col" class="px-4 py-3">Receiver</th>
+                                        <th scope="col" class="px-4 py-3">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -327,7 +335,24 @@
 
                                         
                                 
-                                        
+                                        <td class="px-4 py-3">
+
+                                            <form action="{{ route('transaction.transactionSyncDisplay',$item->id) }}">
+                                            
+                                                @if ($item->sync_hide == 'N')
+
+                                                    <button type="submit" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Hide</button>
+
+                                                    
+                                                @else
+
+                                                    <button type="submit" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Show</button>
+                                                    
+                                                @endif
+                                            
+                                            </form>   
+                                            
+                                        </td>
                                         
                                     </tr>
                                         

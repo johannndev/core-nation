@@ -1937,6 +1937,12 @@ class TransactionsController extends Controller
 		$transactions = Transaction::with(['sender', 'receiver'])
 			->where('submit_type', 1);
 
+		if($request->display){
+			$transactions = $transactions->where('sync_hide',$request->display);
+		}else{
+			$transactions = $transactions->where('sync_hide','N');
+		}
+
 
 		if($request->date){
 			$transactions = $transactions->whereDate('date','=',$request->date);
@@ -1962,65 +1968,65 @@ class TransactionsController extends Controller
 		// 	$transactions =	$transactions->whereNull('b_submit_by');
 		// }
 
-if(!$request->invoice){
-		$transactions =	$transactions->where(function ($query) {
-            $query
-                // TYPE_SELL atau TYPE_RETURN_SUPPLIER → cocokkan dengan sender_id di warehouse_id
-			->where(function ($q) {
-				$q->whereIn('type', [
-					Transaction::TYPE_SELL,
-					Transaction::TYPE_RETURN_SUPPLIER
-				])
-                ->whereNull('a_submit_by')
-				->whereIn('sender_id', function ($sub) {
-					$sub->select('warehouse_id')->from('jubeliosyncs');
-				});
-			})
-
-			// TYPE_BUY atau TYPE_RETURN → cocokkan dengan receiver_id di warehouse_id
-			->orWhere(function ($q) {
-				$q->whereIn('type', [
-					Transaction::TYPE_BUY,
-					Transaction::TYPE_RETURN
-				])
-                ->whereNull('b_submit_by')
-				->whereIn('receiver_id', function ($sub) {
-					$sub->select('warehouse_id')->from('jubeliosyncs');
-				});
-			})
-            ->orWhere(function ($q) {
-                $q->where('type', Transaction::TYPE_MOVE)
-                  ->where(function ($qq) {
-                      $qq->where(function ($w) {
-                          $w->whereIn('sender_id', function ($sub) {
-                              $sub->select('warehouse_id')->from('jubeliosyncs');
-                          })
-                          ->whereNull('a_submit_by');
-                      })
-                      ->orWhere(function ($w) {
-                          $w->whereIn('receiver_id', function ($sub) {
-                              $sub->select('warehouse_id')->from('jubeliosyncs');
-                          })
-                          ->whereNull('b_submit_by');
-                      });
-                  });
-            });
-
-/*
-			// TYPE_MOVE → cocokkan sender_id atau receiver_id di warehouse_id
-			->orWhere(function ($q) {
-				$q->where('type', Transaction::TYPE_MOVE)
-				->where(function ($qq) {
-					$qq->whereIn('sender_id', function ($sub) {
-						$sub->select('warehouse_id')->from('jubeliosyncs');
-					})->orWhereIn('receiver_id', function ($sub) {
+		if(!$request->invoice){
+			$transactions =	$transactions->where(function ($query) {
+				$query
+					// TYPE_SELL atau TYPE_RETURN_SUPPLIER → cocokkan dengan sender_id di warehouse_id
+				->where(function ($q) {
+					$q->whereIn('type', [
+						Transaction::TYPE_SELL,
+						Transaction::TYPE_RETURN_SUPPLIER
+					])
+					->whereNull('a_submit_by')
+					->whereIn('sender_id', function ($sub) {
 						$sub->select('warehouse_id')->from('jubeliosyncs');
 					});
+				})
+
+				// TYPE_BUY atau TYPE_RETURN → cocokkan dengan receiver_id di warehouse_id
+				->orWhere(function ($q) {
+					$q->whereIn('type', [
+						Transaction::TYPE_BUY,
+						Transaction::TYPE_RETURN
+					])
+					->whereNull('b_submit_by')
+					->whereIn('receiver_id', function ($sub) {
+						$sub->select('warehouse_id')->from('jubeliosyncs');
+					});
+				})
+				->orWhere(function ($q) {
+					$q->where('type', Transaction::TYPE_MOVE)
+					->where(function ($qq) {
+						$qq->where(function ($w) {
+							$w->whereIn('sender_id', function ($sub) {
+								$sub->select('warehouse_id')->from('jubeliosyncs');
+							})
+							->whereNull('a_submit_by');
+						})
+						->orWhere(function ($w) {
+							$w->whereIn('receiver_id', function ($sub) {
+								$sub->select('warehouse_id')->from('jubeliosyncs');
+							})
+							->whereNull('b_submit_by');
+						});
+					});
 				});
+
+			/*
+				// TYPE_MOVE → cocokkan sender_id atau receiver_id di warehouse_id
+				->orWhere(function ($q) {
+					$q->where('type', Transaction::TYPE_MOVE)
+					->where(function ($qq) {
+						$qq->whereIn('sender_id', function ($sub) {
+							$sub->select('warehouse_id')->from('jubeliosyncs');
+						})->orWhereIn('receiver_id', function ($sub) {
+							$sub->select('warehouse_id')->from('jubeliosyncs');
+						});
+					});
+				});
+			*/
 			});
-*/
-        });
-}
+		}
 		// dd($transactions->toSql(), $transactions->getBindings());
 
 		$transactions = $transactions->orderBy('id', 'desc')->paginate(200);
@@ -2031,6 +2037,17 @@ if(!$request->invoice){
 
 		return view('transactions.sync',compact('transactions','types'));
 
+	}
+
+	public function transactionSyncDisplay(Request $request, $id){
+
+		$transactions = Transaction::find($id);
+
+		if($transactions->sync_hide == 'N'){
+			$transactions->sync_hide = 'Y';
+		}else{
+			$transactions->sync_hide = 'N';
+		} 
 	}
 
 

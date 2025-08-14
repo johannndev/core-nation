@@ -318,6 +318,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/export/sell/item/build', [ExportController::class, 'exportSellItem'])->name('export.sellItemBuild')->middleware('permission:transactions.detail');
 
     Route::get('/transaction/sync', [TransactionsController::class, 'transactionSync'])->name('transaction.transactionSync')->middleware('permission:transactions.detail');
+
+    Route::patch('/transaction/sync/{id}/display', [TransactionsController::class, 'transactionSyncDisplay'])->name('transaction.transactionSyncDisplay')->middleware('permission:transactions.detail');
     
     Route::get('/transaction/{id}/detail/jubelio-sync', [TransactionsController::class, 'detailJubelioSync'])->name('transaction.detailJubelioSync')->middleware('permission:transactions.detail');
 
