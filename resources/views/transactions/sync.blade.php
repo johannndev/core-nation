@@ -337,7 +337,7 @@
                                 
                                         <td class="px-4 py-3">
 
-                                            <form action="{{ route('transaction.transactionSyncDisplay',$item->id) }}">
+                                            <form action="{{ route('transaction.transactionSyncDisplay',$item->id) }}" action="post">
 
                                                 @csrf
                                                 @method('PATCH')
