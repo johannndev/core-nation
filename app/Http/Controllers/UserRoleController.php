@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ModelException;
+use App\Models\Customer;
 use App\Models\Location;
 use App\Models\User;
 use App\Models\UserSetting;
@@ -12,6 +13,7 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UserRoleController extends Controller
@@ -339,6 +341,151 @@ class UserRoleController extends Controller
         return redirect()->route('user.list')->with('success', $user->username.' '.$status);
         
         
+	}
+
+    public function userDefault($id)
+    {
+        $dataList = UserSetting::with('warehouse')->where('user_id',$id)->orderBy('created_at','desc')->get();
+
+        $defaultList = UserSetting::$list;
+
+        $uid = $id;
+
+        return view('user-role.user-default',compact('dataList','defaultList','uid'));
+    }
+
+    public function userDefaultCreate($id)
+    {
+
+        $uid = $id;
+
+        $defaultList = UserSetting::$list;
+
+        $dataListPropRecaiver = [
+			"label" => "Warehouse",
+			"id" => "warehouse",
+			"idList" => "datalistWh",
+			"idOption" => "datalistOptionsWh",
+			"type" => Customer::TYPE_WAREHOUSE,
+			
+		];
+    
+        return view('user-role.user-default-create',compact('defaultList','uid','dataListPropRecaiver'));
+    }
+
+    public function userDefaultStore(Request $request,$id){
+
+        try
+		{
+            DB::beginTransaction();
+
+            // dd($request);
+
+            $user = new UserSetting();
+            $user->name = $request->name;
+            $user->value = $request->warehouse;
+            $user->user_id = $id;
+
+            $user->save();
+
+
+            DB::commit();
+
+            return redirect()->route('user.userDefault',$id)->with('success',  'Setting default created');
+
+            
+		} catch(ModelException $e) {
+			DB::rollBack();
+			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+		} catch(\Exception $e) {
+			DB::rollBack();
+			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+		}
+	}
+
+     public function userDefaultEdit($id,$did)
+    {
+
+        $uid = $id;
+
+        $data = UserSetting::find($did);
+
+        $defaultList = UserSetting::$list;
+
+        $wh = Customer::find($data->value);
+
+        if($wh){
+            $df = $data->value;
+        }else{
+            $df = null;
+        }
+
+        $dataListPropRecaiver = [
+			"label" => "Warehouse",
+			"id" => "warehouse",
+			"idList" => "datalistWh",
+			"idOption" => "datalistOptionsWh",
+			"type" => Customer::TYPE_WAREHOUSE,
+            "default" => $df
+			
+		];
+    
+        return view('user-role.user-default-update',compact('defaultList','uid','dataListPropRecaiver','data'));
+    }
+
+    public function userDefaultUpdate(Request $request,$id){
+
+        try
+		{
+            DB::beginTransaction();
+
+            // dd($request);
+
+            $user = UserSetting::find($id);
+            $user->name = $request->name;
+            $user->value = $request->warehouse;
+           
+            $user->save();
+
+            DB::commit();
+
+            return redirect()->route('user.userDefault',$user->user_id)->with('success',  'Setting default updated');
+
+            
+		} catch(ModelException $e) {
+			DB::rollBack();
+			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+		} catch(\Exception $e) {
+			DB::rollBack();
+			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+		}
+	}
+
+     public function userDefaultDelete(Request $request,$id,$did){
+
+        try
+		{
+            DB::beginTransaction();
+
+            // dd($request);
+
+            $user = UserSetting::find($did);
+           
+           
+            $user->delete();
+
+            DB::commit();
+
+            return redirect()->route('user.userDefault',$id)->with('success',  'Setting default delete');
+
+            
+		} catch(ModelException $e) {
+			DB::rollBack();
+			return redirect()->back()->withInput()->with('errorMessage',$e->getErrors()['error'][0]);
+		} catch(\Exception $e) {
+			DB::rollBack();
+			return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
+		}
 	}
 }
 

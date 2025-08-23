@@ -60,7 +60,7 @@
                                     <option selected>Choose a country</option>
 
                                     @foreach ($bankList as $item)
-                                        <option {{$item->id == "2704" ? 'selected' : ''}} value="{{$item->id}}">{{$item->name}}</option>       
+                                        <option {{$item->id == $defaultParam ? 'selected' : ''}} value="{{$item->id}}">{{$item->name}}</option>       
                                     @endforeach
                                 
                                     

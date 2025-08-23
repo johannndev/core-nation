@@ -2,7 +2,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">User List</p>
+        <p class="text-2xl font-bold">User Default Setting</p>
 
        
     </div>
@@ -15,7 +15,7 @@
                 <!-- Start coding here -->
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
 
-                    <form action="{{route('filter.get',['action' =>'user.list'])}}" method="post">
+                    {{-- <form action="{{route('filter.get',['action' =>'user.list'])}}" method="post">
                         @csrf
 
                         <div class="flex flex-col md:flex-row items-end justify-between p-4">
@@ -73,10 +73,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                                       </svg>
 
-                                      
-                                    {{-- <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" c viewbox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-                                    </svg> --}}
+                         
 
                                     Clear
                                 </a>
@@ -86,7 +83,15 @@
 
                             
                         </div>
-                    </form>
+                    </form> --}}
+
+                    <div class="p-4">
+
+                    
+                    <a href="{{ route('user.userDefaultCreate',$uid) }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create</a>
+
+                    </div>
+
                  
                     <div>
                         <div class="overflow-x-auto">
@@ -95,8 +100,7 @@
                                     <tr>
                                         
                                         <th scope="col" class="px-4 py-3">Name</th>
-                                        <th scope="col" class="px-4 py-3">Role</th>
-                                        <th scope="col" class="px-4 py-3">Location</th>
+                                        <th scope="col" class="px-4 py-3">Value</th>
                                         <th scope="col" class="px-4 py-3">Actions</th>
                                         
                                     </tr>
@@ -108,49 +112,34 @@
                     
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
 
-                                        <th class="px-4 py-3 text-blue-500"><a href="{{ route('user.userDefault',$item->id) }}"> {{ $item->username }}</a></th>
+                                        <th class="px-4 py-3">{{ $defaultList[$item->name]['desc'] }}</th>
                                         <th class="px-4 py-3">
 
-                                            @php
-                                                $string = implode(" ",$item->getRoleNames()->toArray());
-                                            @endphp
-
-                                            
-
-                                            @isset($string)
-                                                {{$string}}
+                                            @isset( $item->warehouse)
+                                                {{ $item->value }}[{{ $item->warehouse->name }}]
                                             @endisset
+                                            
+                                            @empty($item->warehouse)
+                                                {{ $item->value }}
+                                            @endempty
                                             
                                         </th>
 
-                                        <th class="px-4 py-3">
-
-                                            @isset($item->location)
-                                                {{$item->location->name}}
-                                            @endisset
-
-                                        </th>
+                                     
                                      
                                         <td class="px-4 py-3 flex">
-                                            <a href="{{route('user.edit',$item->id)}}" class=" items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-primary-800">
+                                            <a href="{{route('user.userDefaultEdit',[$uid,$item->id])}}" class=" items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-primary-800">
                                                 Edit
                                             </a>
 
-                                            <form action="{{route('user.ban',[$item->id,'userStatus' => $string])}}" method="post">
+                                            <form action="{{ route('user.userDefaultDelete',[$uid,$item->id]) }}" method="post">
 
                                                 @csrf
+                                                @method('DELETE')
                                               
 
                                                 <button type="submit" class=" items-center justify-center text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">
-                                                    @if ($string == 'ban')
-
-                                                        Unban
-
-                                                    @else
-
-                                                        Ban
-
-                                                    @endif
+                                                    Delete
                                                     
                                                 </button>
 
@@ -179,7 +168,7 @@
                             </table>
                         </div>
                     
-                        {{$dataList->onEachSide(1)->links()}}
+                     
                     </div>
 
 

@@ -21,6 +21,7 @@ use App\Models\Jubeliosync;
 use App\Models\StatSell;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
+use App\Models\UserSetting;
 use Carbon\Carbon;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
@@ -137,12 +138,27 @@ class TransactionsController extends Controller
     {
 		$trType = 'sell';
 
+		$userSetting = UserSetting::where('user_id')->where('name','default_sell_warehouse')->first();
+
+		if($userSetting){
+			  $wh = Customer::find($userSetting->value);
+
+			if($wh){
+				$defaultParam = $userSetting->value;
+			}else{
+				$defaultParam = null;
+			}
+		}else{
+			$defaultParam = null;
+		}
+
 		$dataListPropRecaiver = [
 			"label" => "Warehouse",
 			"id" => "warehouse",
 			"idList" => "datalistWh",
 			"idOption" => "datalistOptionsWh",
 			"type" => Customer::TYPE_WAREHOUSE,
+			"default" => $defaultParam
 			
 		];
 
@@ -196,6 +212,20 @@ class TransactionsController extends Controller
     {
 		$trType = 'buy';
 
+		$userSetting = UserSetting::where('user_id')->where('name','default_buy_warehouse')->first();
+
+		if($userSetting){
+			  $wh = Customer::find($userSetting->value);
+
+			if($wh){
+				$defaultParam = $userSetting->value;
+			}else{
+				$defaultParam = null;
+			}
+		}else{
+			$defaultParam = null;
+		}
+
 		$dataListPropRecaiver = [
 			"label" => "Warehouse",
 			"id" => "warehouse",
@@ -211,6 +241,7 @@ class TransactionsController extends Controller
 			"idList" => "datalistSender",
 			"idOption" => "datalistOptionsSender",
 			"type" => Customer::TYPE_SUPPLIER,
+			"default" => $defaultParam
 			
 		];
 
@@ -1138,10 +1169,22 @@ class TransactionsController extends Controller
 	
 	public function cashOut()
     {
-		
+		$userSetting = UserSetting::where('user_id')->where('name','default_journal_account')->first();
+
+		if($userSetting){
+			  $wh = Customer::find($userSetting->value);
+
+			if($wh){
+				$defaultParam = $userSetting->value;
+			}else{
+				$defaultParam = 2704;
+			}
+		}else{
+			$defaultParam = 2704;
+		}
 		$bankList = Customer::where('type',Customer::TYPE_BANK)->orderBy('name','asc')->get();
 		
-        return view('transactions.co',compact('bankList'));
+        return view('transactions.co',compact('bankList','defaultParam'));
     }
 
 	public function postCashOut(Request $request)

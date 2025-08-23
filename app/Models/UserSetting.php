@@ -9,6 +9,8 @@ class UserSetting extends Model
 {
     use HasFactory;
 
+	protected $guarded = [];
+
     protected $table = 'usersettings';
 
 	const TYPE_WAREHOUSE = 1;
@@ -23,4 +25,9 @@ class UserSetting extends Model
 		'default_expense_account' => array('desc' => 'Expense Account','type' => self::TYPE_ACCOUNT),
 		'default_journal_account' => array('desc' => 'Journal Account','type' => self::TYPE_ACCOUNT),
 	);
+
+	public function warehouse()
+	{
+		return $this->hasOne(Customer::class,'id','value');
+	}
 }
