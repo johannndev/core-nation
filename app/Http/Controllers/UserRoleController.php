@@ -362,7 +362,7 @@ class UserRoleController extends Controller
 			"id" => "warehouse",
 			"idList" => "datalistWh",
 			"idOption" => "datalistOptionsWh",
-			"type" => Customer::TYPE_WAREHOUSE,Customer::TYPE_BANK,
+			"type" => Customer::TYPE_WAREHOUSE.",".Customer::TYPE_BANK,
 			
 		];
     
@@ -420,7 +420,7 @@ class UserRoleController extends Controller
 			"id" => "warehouse",
 			"idList" => "datalistWh",
 			"idOption" => "datalistOptionsWh",
-			"type" => Customer::TYPE_WAREHOUSE,Customer::TYPE_BANK,
+			"type" => Customer::TYPE_WAREHOUSE.",".Customer::TYPE_BANK,
             "default" => $df
 			
 		];
