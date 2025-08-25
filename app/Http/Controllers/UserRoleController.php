@@ -343,21 +343,17 @@ class UserRoleController extends Controller
         
 	}
 
-    public function userDefault($id)
+    public function userDefault()
     {
-        $dataList = UserSetting::with('warehouse')->where('user_id',$id)->orderBy('created_at','desc')->get();
+        $dataList = UserSetting::with('warehouse')->where('user_id',Auth::id())->orderBy('created_at','desc')->get();
 
         $defaultList = UserSetting::$list;
 
-        $uid = $id;
-
-        return view('user-role.user-default',compact('dataList','defaultList','uid'));
+        return view('user-role.user-default',compact('dataList','defaultList'));
     }
 
-    public function userDefaultCreate($id)
+    public function userDefaultCreate()
     {
-
-        $uid = $id;
 
         $defaultList = UserSetting::$list;
 
@@ -366,14 +362,14 @@ class UserRoleController extends Controller
 			"id" => "warehouse",
 			"idList" => "datalistWh",
 			"idOption" => "datalistOptionsWh",
-			"type" => Customer::TYPE_WAREHOUSE,
+			"type" => Customer::TYPE_WAREHOUSE,Customer::TYPE_BANK,
 			
 		];
     
-        return view('user-role.user-default-create',compact('defaultList','uid','dataListPropRecaiver'));
+        return view('user-role.user-default-create',compact('defaultList','dataListPropRecaiver'));
     }
 
-    public function userDefaultStore(Request $request,$id){
+    public function userDefaultStore(Request $request){
 
         try
 		{
@@ -384,14 +380,14 @@ class UserRoleController extends Controller
             $user = new UserSetting();
             $user->name = $request->name;
             $user->value = $request->warehouse;
-            $user->user_id = $id;
+            $user->user_id = Auth::id();
 
             $user->save();
 
 
             DB::commit();
 
-            return redirect()->route('user.userDefault',$id)->with('success',  'Setting default created');
+            return redirect()->route('user.userDefault')->with('success',  'Setting default created');
 
             
 		} catch(ModelException $e) {
@@ -403,12 +399,11 @@ class UserRoleController extends Controller
 		}
 	}
 
-     public function userDefaultEdit($id,$did)
+     public function userDefaultEdit($id)
     {
 
-        $uid = $id;
 
-        $data = UserSetting::find($did);
+        $data = UserSetting::find($id);
 
         $defaultList = UserSetting::$list;
 
@@ -425,12 +420,12 @@ class UserRoleController extends Controller
 			"id" => "warehouse",
 			"idList" => "datalistWh",
 			"idOption" => "datalistOptionsWh",
-			"type" => Customer::TYPE_WAREHOUSE,
+			"type" => Customer::TYPE_WAREHOUSE,Customer::TYPE_BANK,
             "default" => $df
 			
 		];
     
-        return view('user-role.user-default-update',compact('defaultList','uid','dataListPropRecaiver','data'));
+        return view('user-role.user-default-update',compact('defaultList','dataListPropRecaiver','data'));
     }
 
     public function userDefaultUpdate(Request $request,$id){
@@ -449,7 +444,7 @@ class UserRoleController extends Controller
 
             DB::commit();
 
-            return redirect()->route('user.userDefault',$user->user_id)->with('success',  'Setting default updated');
+            return redirect()->route('user.userDefault')->with('success',  'Setting default updated');
 
             
 		} catch(ModelException $e) {
@@ -461,7 +456,7 @@ class UserRoleController extends Controller
 		}
 	}
 
-     public function userDefaultDelete(Request $request,$id,$did){
+     public function userDefaultDelete(Request $request,$id){
 
         try
 		{
@@ -469,14 +464,14 @@ class UserRoleController extends Controller
 
             // dd($request);
 
-            $user = UserSetting::find($did);
+            $user = UserSetting::find($id);
            
            
             $user->delete();
 
             DB::commit();
 
-            return redirect()->route('user.userDefault',$id)->with('success',  'Setting default delete');
+            return redirect()->route('user.userDefault')->with('success',  'Setting default delete');
 
             
 		} catch(ModelException $e) {

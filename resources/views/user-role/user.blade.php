@@ -108,7 +108,7 @@
                     
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
 
-                                        <th class="px-4 py-3 text-blue-500"><a href="{{ route('user.userDefault',$item->id) }}"> {{ $item->username }}</a></th>
+                                        <th class="px-4 py-3">{{ $item->username }}</th>
                                         <th class="px-4 py-3">
 
                                             @php

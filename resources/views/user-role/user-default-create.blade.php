@@ -35,7 +35,7 @@
    
 
 
-    <form action="{{route('user.userDefaultStore',$uid)}}" method="post" >
+    <form action="{{route('user.userDefaultStore')}}" method="post" >
 
         @csrf
        

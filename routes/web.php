@@ -542,12 +542,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/user/{id}/update', [UserRoleController::class, 'userUpdate'])->name('user.update')->middleware('permission:user edit');
     Route::post('/user/{id}/ban', [UserRoleController::class, 'ban'])->name('user.ban')->middleware('permission:user ban');
 
-    Route::get('/user/{id}/default', [UserRoleController::class, 'userDefault'])->name('user.userDefault')->middleware('permission:user list');
-    Route::get('/user/{id}/default/create', [UserRoleController::class, 'userDefaultCreate'])->name('user.userDefaultCreate')->middleware('permission:user list');
-    Route::post('/user/{id}/default/store', [UserRoleController::class, 'userDefaultStore'])->name('user.userDefaultStore')->middleware('permission:user list');
-    Route::get('/user/{id}/default/{did}/edit', [UserRoleController::class, 'userDefaultEdit'])->name('user.userDefaultEdit')->middleware('permission:user list');
-    Route::patch('/user/{id}/default/update', [UserRoleController::class, 'userDefaultUpdate'])->name('user.userDefaultUpdate')->middleware('permission:user list');
-    Route::delete('/user/{id}/default/{did}/delete', [UserRoleController::class, 'userDefaultDelete'])->name('user.userDefaultDelete')->middleware('permission:user list');
+    Route::get('/user/setting', [UserRoleController::class, 'userDefault'])->name('user.userDefault')->middleware('permission:user list');
+    Route::get('/user/setting/create', [UserRoleController::class, 'userDefaultCreate'])->name('user.userDefaultCreate')->middleware('permission:user list');
+    Route::post('/user/setting/store', [UserRoleController::class, 'userDefaultStore'])->name('user.userDefaultStore')->middleware('permission:user list');
+    Route::get('/user/setting/{id}/edit', [UserRoleController::class, 'userDefaultEdit'])->name('user.userDefaultEdit')->middleware('permission:user list');
+    Route::patch('/user/setting/{id}/update', [UserRoleController::class, 'userDefaultUpdate'])->name('user.userDefaultUpdate')->middleware('permission:user list');
+    Route::delete('/user/setting/{id}/delete', [UserRoleController::class, 'userDefaultDelete'])->name('user.userDefaultDelete')->middleware('permission:user list');
     
 
     Route::get('/role', [UserRoleController::class, 'indexRole'])->name('role.indexRole')->middleware('permission:user role');
