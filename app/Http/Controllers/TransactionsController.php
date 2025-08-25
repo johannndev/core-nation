@@ -1155,10 +1155,23 @@ class TransactionsController extends Controller
 
 	public function cashIn()
     {
-		
+		$userSetting = UserSetting::where('user_id')->where('name','default_income_account')->first();
+
 		$bankList = Customer::where('type',Customer::TYPE_BANK)->orderBy('name','asc')->get();
+
+		if($userSetting){
+			  $wh = Customer::find($userSetting->value);
+
+			if($wh){
+				$defaultParam = $userSetting->value;
+			}else{
+				$defaultParam = 2704;
+			}
+		}else{
+			$defaultParam = 2704;
+		}
 		
-        return view('transactions.ci',compact('bankList'));
+        return view('transactions.ci',compact('bankList','defaultParam'));
     }
 
 	public function postCashIn(Request $request)
@@ -1169,7 +1182,7 @@ class TransactionsController extends Controller
 	
 	public function cashOut()
     {
-		$userSetting = UserSetting::where('user_id')->where('name','default_journal_account')->first();
+		$userSetting = UserSetting::where('user_id')->where('name','default_expense_account')->first();
 
 		if($userSetting){
 			  $wh = Customer::find($userSetting->value);
