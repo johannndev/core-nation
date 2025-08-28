@@ -495,7 +495,15 @@
                     // $('#name'+itemLineId).val(res.data.data.name);
 
 
-                    $('#price'+itemLineId).val(res.data.data.price);
+                    if( "{{$trType}}" == "buy"){
+                        $('#price'+itemLineId).val(res.data.data.cost);
+                    }else{
+
+                         $('#price'+itemLineId).val(res.data.data.price);
+
+                    }
+
+                   
                     $('#wh'+itemLineId).val(res.data.whQty);
                     $('#discount'+itemLineId).val(0);
 
