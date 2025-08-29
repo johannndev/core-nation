@@ -1187,6 +1187,8 @@ class TransactionsController extends Controller
 		if($userSetting){
 			  $wh = Customer::find($userSetting->value);
 
+			  	dd($wh,$userSetting);
+
 			if($wh){
 				$defaultParam = $userSetting->value;
 			}else{
@@ -1196,7 +1198,7 @@ class TransactionsController extends Controller
 			$defaultParam = 2704;
 		}
 
-		dd($wh,$userSetting);
+	
 		$bankList = Customer::where('type',Customer::TYPE_BANK)->orderBy('name','asc')->get();
 		
         return view('transactions.co',compact('bankList','defaultParam'));
