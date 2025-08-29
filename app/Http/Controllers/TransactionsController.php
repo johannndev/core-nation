@@ -1185,9 +1185,9 @@ class TransactionsController extends Controller
 		$userSetting = UserSetting::where('user_id',Auth::id())->where('name','default_expense_account')->first();
 
 		if($userSetting){
-			  $wh = Customer::find($userSetting->value);
+			$wh = Customer::find($userSetting->value);
 
-			  	dd($wh,$userSetting->value);
+			  	// dd($wh,$userSetting->value);
 
 			if($wh){
 				$defaultParam = $userSetting->value;
