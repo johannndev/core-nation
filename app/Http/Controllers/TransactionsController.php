@@ -1187,7 +1187,7 @@ class TransactionsController extends Controller
 		if($userSetting){
 			  $wh = Customer::find($userSetting->value);
 
-			  	dd($wh,$userSetting);
+			  	dd($wh,$userSetting->value);
 
 			if($wh){
 				$defaultParam = $userSetting->value;
