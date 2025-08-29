@@ -1195,6 +1195,8 @@ class TransactionsController extends Controller
 		}else{
 			$defaultParam = 2704;
 		}
+
+		dd($wh,$userSetting);
 		$bankList = Customer::where('type',Customer::TYPE_BANK)->orderBy('name','asc')->get();
 		
         return view('transactions.co',compact('bankList','defaultParam'));
