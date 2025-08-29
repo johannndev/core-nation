@@ -1182,7 +1182,7 @@ class TransactionsController extends Controller
 	
 	public function cashOut()
     {
-		$userSetting = UserSetting::where('user_id')->where('name','default_expense_account')->first();
+		$userSetting = UserSetting::where('user_id',Auth::id())->where('name','default_expense_account')->first();
 
 		if($userSetting){
 			  $wh = Customer::find($userSetting->value);
