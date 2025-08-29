@@ -127,6 +127,40 @@ class AsetLancarController extends Controller
 		return view('asset-lancar.jubelio',compact('data','urlImage','tid','dataJubelio','message'));
 	}
 
+	public function getItem($id){
+
+        $itemProd = Item::find($id);
+
+        $response = Http::withHeaders([ 
+            'Content-Type'=> 'application/json', 
+            'authorization'=> Cache::get('jubelio_data')['token'], 
+        ]) 
+        ->get('https://api2.jubelio.com/inventory/items/to-stock/',[
+            'q' => $itemProd->code,
+        ]); 
+
+        $result = json_decode($response->body(), true);
+		$dataList = $result['data'];
+
+		// dd($dataList);
+
+        return view('asset-lancar.jubelio-item',compact('dataList','itemProd'));
+
+    }
+
+	public function updateJubelioId($id, Request $request){
+
+		$data = Item::find($id);
+
+		$data->jubelio_item_id = $request->jubelio_item_id ?? null;
+
+		$data->save();
+
+
+		return redirect()->route('asetLancar.jubelio',$id)->with('success', 'Item updated');
+
+	}
+
     public function transaction($id, Request $request)
 	{
         $data = Item::where('id',$id)->first();

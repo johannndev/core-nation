@@ -1388,12 +1388,6 @@ class ApiJubelioController extends Controller
                 // Proses Selesai
             }
 
-           
-
-                
-        
-
-                  
             // Lanjutkan proses dengan $data...
 
         } catch (\Exception $e) {
@@ -1411,7 +1405,9 @@ class ApiJubelioController extends Controller
 
     }
 
-    public function getItem($id){
+    
+
+    public function setItem($id){
 
         $item = Item::find($id);
 

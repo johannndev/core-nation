@@ -353,6 +353,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/item/{id}/detail', [ItemsController::class, 'detail'])->name('item.detail')->middleware('permission:item detail');
 
     Route::get('/item/{id}/jubelio', [ItemsController::class, 'jubelio'])->name('item.jubelio')->middleware('permission:item detail');
+
+    Route::get('/item/{id}/jubelio/cek', [AsetLancarController::class, 'getItem'])->name('item.jubelioGetItem')->middleware('permission:item detail');
+    Route::patch('/item/{id}/jubelio/cek/update', [AsetLancarController::class, 'updateJubelioId'])->name('item.updateJubelioId')->middleware('permission:item detail');
   
     Route::get('/item/{id}/transaction', [ItemsController::class, 'transaction'])->name('item.transaction')->middleware('permission:item transaction');
     Route::get('/item/{id}/transaction/filter', [FilterQueryController::class, 'itemTransFilter'])->name('item.transactionFilter')->middleware('permission:item transaction');
@@ -376,7 +379,9 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/asset-lancar/{id}/jubelio', [AsetLancarController::class, 'jubelio'])->name('asetLancar.jubelio')->middleware('permission:asset lancar detail');
 
-    Route::get('/item/{id}/jubelio/cek', [ApiJubelioController::class, 'getItem'])->name('item.jubelioGetItem')->middleware('permission:item detail');
+    Route::get('/asset-lancar/{id}/jubelio/cek', [AsetLancarController::class, 'getItem'])->name('asetLancar.jubelioGetItem')->middleware('permission:asset lancar detail');
+    Route::patch('/asset-lancar/{id}/jubelio/cek/update', [AsetLancarController::class, 'updateJubelioId'])->name('asetLancar.updateJubelioId')->middleware('permission:asset lancar detail');
+
 
 
     Route::get('/asset-lancar/{id}/transaction', [AsetLancarController::class, 'transaction'])->name('asetLancar.transaction')->middleware('permission:asset lancar transaction');
