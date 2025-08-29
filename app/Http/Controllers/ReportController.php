@@ -102,6 +102,7 @@ class ReportController extends Controller
 			2790, //william
 			2703, //seko
             2546, //umum sby
+            2937, //ROKKY
 		);
 
 		//1. get month input
