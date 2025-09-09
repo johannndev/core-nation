@@ -78,12 +78,22 @@
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
                                 <input  name="csv_file" id="csvFile" accept=".csv" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
 
+                                <div id="loading-item" class="mt-2 transition font-medium transform duration-300 ease-in-out opacity-0 -translate-y-4 text-sm text-yellow-500">
+                                    Tunggu sebentar, data sedang dimuat...
+                                </div>
+
+                                <div id="errorWrap" class="hidden p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                    <span class="font-medium">Gagal upload!</span> <span id="errorMessage"></span>
+                                </div>
+
 
                             </div>
 
-                            <div id="loading-item" class="mt-2 transition font-medium transform duration-300 ease-in-out opacity-0 -translate-y-4 text-sm text-yellow-500">
+                            
+
+                            {{-- <div id="loading-item" class="mt-2 transition font-medium transform duration-300 ease-in-out opacity-0 -translate-y-4 text-sm text-yellow-500">
                                 Tunggu sebentar, data sedang dimuat...
-                            </div>
+                            </div> --}}
                         </div>
 
                        

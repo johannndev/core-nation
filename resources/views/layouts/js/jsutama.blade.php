@@ -318,6 +318,8 @@
 
         let lid = lineC;
 
+        console.log(lid)
+
         if ($('#myCheckbox'+id).is(':checked')) {
             lid = scanId;
             console.log('Checkbox diceklis');
