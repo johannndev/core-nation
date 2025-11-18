@@ -19,16 +19,16 @@ class JubelioHelper
 
     public static function jubelioAuth(){
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])->post('https://api2.jubelio.com/login', [
-            'email' => 'johanwebdev@gmail.com',
-            'password' => 'aY6J9gXZVQ!'
-        ]);
+        // $response = Http::withHeaders([
+        //     'Content-Type' => 'application/json',
+        // ])->post('https://api2.jubelio.com/login', [
+        //     'email' => 'johanwebdev@gmail.com',
+        //     'password' => 'aY6J9gXZVQ!'
+        // ]);
         
-        if ($response->successful()) {
-            return $response->json();
-        }
+        // if ($response->successful()) {
+        //     return $response->json();
+        // }
 
         return null;
 

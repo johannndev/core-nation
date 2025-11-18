@@ -14,6 +14,7 @@ use App\Http\Controllers\CronrunController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DeletedController;
+use App\Http\Controllers\DestyController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FilterQueryController;
 use App\Http\Controllers\GajihController;
@@ -144,6 +145,8 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 
 
 Route::middleware('auth')->group(function () {
+
+    Route::post('/desty/initial/webhook', [DestyController::class, 'initialSync']);
 
     Route::get('/test-running/{id}', [ApiJubelioController::class, 'testApi']);
     // Route::get('/trx', [ApiJubelioController::class, 'cektrx']);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiJubelioController;
+use App\Http\Controllers\DestyApiController;
 use App\Http\Controllers\JubelioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,4 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/order', [JubelioController::class, 'order']);
 Route::post('/retur', [JubelioController::class, 'retur']);
+
+Route::post('/webhook/desty', [DestyApiController::class, 'handleWebhook']);
+Route::get('/webhook/payloads', [DestyApiController::class, 'getPayloads']);
+Route::get('/webhook/payloads/{id}', [DestyApiController::class, 'getPayload']);
 
