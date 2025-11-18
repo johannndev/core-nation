@@ -26,6 +26,8 @@ class DestyController extends Controller
             'Content-Type' => 'application/json'
         ])->get('https://api.desty.app/'.$yourApiAddress);
 
+        dd($response->json());
+
         return $response->json();
     }
 
