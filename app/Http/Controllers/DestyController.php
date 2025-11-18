@@ -18,7 +18,7 @@ class DestyController extends Controller
             $token = DestyHelper::refreshTokenIfNeeded();
         }
 
-        $yourApiAddress = env('APP_URL').'/api/webhook/desty';
+        $yourApiAddress = env('APP_URL').'api/webhook/desty';
 
         // Gunakan token untuk API call
         $response = Http::withHeaders([
