@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('desty_payloads', function (Blueprint $table) {
             $table->id();
 
-            $table->string('order_id');                 // orderId
+            $table->string('order_id');   
+            $table->string('orderType');               // orderId
             $table->string('item_order_id');            // itemOrderId
             $table->string('item_code');                // itemCode
             $table->string('item_external_code');       // itemExternalCode

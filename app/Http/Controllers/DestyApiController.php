@@ -38,6 +38,7 @@ class DestyApiController extends Controller
         foreach ($items as $item) {
             $batchInsert[] = [
                 'order_id' => $orderId,
+                'orderType' => $data['orderType'],
                 'item_order_id' => $item['itemOrderId'],
                 'item_code' => $item['itemCode'],
                 'item_external_code' => $item['itemExternalCode'],
