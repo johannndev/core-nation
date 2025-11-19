@@ -13,31 +13,32 @@ class DestyController extends Controller
     {
         // Cek token valid
         $token = DestyHelper::getValidToken();
-        
+
         if (!$token) {
             // Refresh token jika expired
             $token = DestyHelper::refreshTokenIfNeeded();
         }
 
-        $yourApiAddress = env('APP_URL').'api/webhook/desty';
+        $yourApiAddress = env('APP_URL') . 'api/webhook/desty';
 
         // Gunakan token untuk API call
         $response = Http::withHeaders([
             'accessToken' => $token->token,
             'Content-Type' => 'application/json'
-        ])->get('https://api.desty.app/'.$yourApiAddress);
+        ])->get('https://api.desty.app/' . $yourApiAddress);
 
         dd($response->json());
 
         return $response->json();
     }
 
-     public function payload(Request $request){
-        $dataList = DestyPayload::orderBy('updated_at','desc');
+    public function payload(Request $request)
+    {
+        $dataList = DestyPayload::orderBy('updated_at', 'desc');
 
         // if($request->invoice){
-		// 	$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
-		// }
+        // 	$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
+        // }
 
         // if($request->status == 'warning'){
         //     $dataList = $dataList->where('status',2)->where('error_type',2);
@@ -49,23 +50,36 @@ class DestyController extends Controller
         //     if(!$request->invoice){
         //         $dataList = $dataList->where('status',0);
         //     }
-           
+
         // }
 
         $dataList = $dataList->paginate(200)->withQueryString();
 
         // dd($allRolesInDatabase);
 
-        return view('desty.payload',compact('dataList'));
+        return view('desty.payload', compact('dataList'));
     }
 
-    public function detailPayload($id){
+    public function detailPayload($id)
+    {
         $data = DestyPayload::find($id);
 
-        $jsonData = json_decode($data->json_path, true); // pastikan jadi array/objek PHP
+        // path lengkap file JSON di public/
+        $fullPath = public_path($data->json_path);
+
+        // cek apakah file ada
+        if (!file_exists($fullPath)) {
+            abort(404, 'JSON file not found');
+        }
+
+        // baca file JSON
+        $jsonContent = file_get_contents($fullPath);
+
+        // decode JSON
+        $jsonData = json_decode($jsonContent, true);
 
 
-        return view('desty.detail_payload',compact('data','jsonData'));
+        return view('desty.detail_payload', compact('data', 'jsonData'));
     }
 
     public function simpleWay()
