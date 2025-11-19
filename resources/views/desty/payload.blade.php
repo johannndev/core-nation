@@ -111,7 +111,7 @@
                                         <td class="px-4 py-3">{{$item->quantity}}</td>
                                         <td class="px-4 py-3">{{number_format($item->sell_price)}}</td>
                                         <td class="px-4 py-3 ">
-                                             <a href="{{ route('jubelio.webhook.detail',$item->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Detail</a>
+                                             <a href="{{ route('desty.payloadDetail',$item->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Detail</a>
                                         </td>
 
                                     </tr>
