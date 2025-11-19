@@ -57,7 +57,7 @@ class DestyApiController extends Controller
             ];
         }
 
-        DB::table('order_items')->insert($batchInsert);
+        DB::table('desty_payloads')->insert($batchInsert);
 
         return response()->json([
             'success' => true,
