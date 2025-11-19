@@ -4,51 +4,65 @@ namespace App\Http\Controllers;
 
 use App\Models\DestyPayload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class DestyApiController extends Controller
 {
     public function handleWebhook(Request $request)
     {
-        try {
-           
-            // Simpan payload ke database
-            $destyPayload = DestyPayload::create([
-                'payload' => $request->all()
-            ]);
+        $data = $request->all();
 
-            // Log success (opsional)
-            Log::info('Webhook payload received and saved', [
-                'id' => $destyPayload->id,
-                'orderId' => $request->input('orderId'),
-                'timestamp' => now()
-            ]);
+        $orderId = $data['orderId'];
+        $items = $data['itemList'];
 
-            // Return HTTP 200 dengan response success
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Webhook payload received successfully',
-                'data' => [
-                    'id' => $destyPayload->id,
-                    'received_at' => $destyPayload->created_at
-                ]
-            ], 200);
+        // --- Step 1: Generate JSON file per-order ---
+        $jsonFileName = $orderId . '.json';
+        $jsonPath = public_path('desty/' . $jsonFileName);
 
-        } catch (\Exception $e) {
-            // Log error
-            Log::error('Webhook processing failed: ' . $e->getMessage(), [
-                'payload' => $request->all(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            // Tetap return 200 untuk webhook meskipun ada error
-            // (untuk menghindari retry dari pihak pengirim webhook)
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Payload received but processing failed',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
-            ], 200);
+        // pastikan folder ada
+        if (!file_exists(public_path('desty'))) {
+            mkdir(public_path('desty'), 0777, true);
         }
+
+        // simpan JSON asli ke file
+        file_put_contents($jsonPath, json_encode($data, JSON_PRETTY_PRINT));
+
+        // path untuk database (public path)
+        $publicPath = 'desty/' . $jsonFileName;
+
+
+        // --- Step 2: Simpan batch item ke DB ---
+        $batchInsert = [];
+
+        foreach ($items as $item) {
+            $batchInsert[] = [
+                'order_id' => $orderId,
+                'item_order_id' => $item['itemOrderId'],
+                'item_code' => $item['itemCode'],
+                'item_external_code' => $item['itemExternalCode'],
+                'item_name' => $item['itemName'],
+                'location_id' => $item['locationId'],
+                'location_name' => $item['locationName'],
+                'store_id' => $data['storeId'],
+                'store_name' => $data['storeName'],
+                'platform_order_status' => $item['platformOrderStatus'],
+                'quantity' => $item['quantity'],
+                'sell_price' => $item['sellPrice'],
+                'json_path' => $publicPath,
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        DB::table('order_items')->insert($batchInsert);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Order items saved successfully',
+            'json_path' => $publicPath
+        ]);
     }
 
     /**
@@ -57,7 +71,7 @@ class DestyApiController extends Controller
     public function getPayloads()
     {
         $payloads = DestyPayload::latest()->get();
-        
+
         return response()->json([
             'status' => 'success',
             'data' => $payloads
@@ -70,7 +84,7 @@ class DestyApiController extends Controller
     public function getPayload($id)
     {
         $payload = DestyPayload::find($id);
-        
+
         if (!$payload) {
             return response()->json([
                 'status' => 'error',
