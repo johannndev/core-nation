@@ -147,6 +147,8 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 Route::middleware('auth')->group(function () {
 
     Route::get('/desty/initial/webhook', [DestyController::class, 'initialSync']);
+    Route::get('/desty/payload', [DestyController::class, 'payload'])->name('desty.payload');
+    Route::get('/desty/payload/detail', [DestyController::class, 'detailPayload'])->name('desty.payloadDetail');
 
     Route::get('/test-running/{id}', [ApiJubelioController::class, 'testApi']);
     // Route::get('/trx', [ApiJubelioController::class, 'cektrx']);

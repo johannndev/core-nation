@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\DestyHelper;
+use App\Models\DestyPayload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -29,6 +30,42 @@ class DestyController extends Controller
         dd($response->json());
 
         return $response->json();
+    }
+
+     public function payload(Request $request){
+        $dataList = DestyPayload::orderBy('updated_at','desc');
+
+        // if($request->invoice){
+		// 	$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
+		// }
+
+        // if($request->status == 'warning'){
+        //     $dataList = $dataList->where('status',2)->where('error_type',2);
+        // }elseif($request->status == 'success'){
+        //     $dataList = $dataList->where('status',2)->where('error_type',10);
+        // }elseif($request->status == 'error'){
+        //     $dataList = $dataList->where('status',1)->where('error_type',1);
+        // }else{
+        //     if(!$request->invoice){
+        //         $dataList = $dataList->where('status',0);
+        //     }
+           
+        // }
+
+        $dataList = $dataList->paginate(200)->withQueryString();
+
+        // dd($allRolesInDatabase);
+
+        return view('desty.payload',compact('dataList'));
+    }
+
+    public function detailPayload($id){
+        $data = DestyPayload::find($id);
+
+        $jsonData = json_decode($data->json_path, true); // pastikan jadi array/objek PHP
+
+
+        return view('desty.detail_payload',compact('data','jsonData'));
     }
 
     public function simpleWay()
