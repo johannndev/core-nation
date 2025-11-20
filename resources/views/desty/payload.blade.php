@@ -107,7 +107,7 @@
                                         <td class="px-4 py-3">{{$item->item_code}}</td>
                                         <td class="px-4 py-3">{{$item->location_name}}</td>
                                         <td class="px-4 py-3">{{$item->store_name}}</td>
-                                        <td class="px-4 py-3">{{$item->platform_status}}</td>
+                                        <td class="px-4 py-3">{{$item->platform_order_status}}</td>
                                         <td class="px-4 py-3">{{$item->quantity}}</td>
                                         <td class="px-4 py-3">{{number_format($item->sell_price)}}</td>
                                         <td class="px-4 py-3 ">
