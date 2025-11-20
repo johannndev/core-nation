@@ -32,12 +32,38 @@ class DestyController extends Controller
         return $response->json();
     }
 
+    public function wh()
+    {
+        // Cek token valid
+        $token = DestyHelper::getValidToken();
+
+        if (!$token) {
+            // Refresh token jika expired
+            $token = DestyHelper::refreshTokenIfNeeded();
+        }
+
+
+        $response = Http::withHeaders([
+            'accessToken'   => $token->token,
+            'Content-Type'  => 'application/json'
+        ])->send('post', 'https://api.desty.app/api/warehouse/list', [
+            'body' => json_encode([
+                'pageNumber' => 1,
+                'pageSize'   => 20
+            ])
+        ]);
+
+        dd($response->json());
+
+        return $response->json();
+    }
+
     public function payload(Request $request)
     {
         $dataList = DestyPayload::orderBy('updated_at', 'desc');
 
-        if($request->invoice){
-        	$dataList = $dataList->where('order_id', 'like', '%'.$request->invoice.'%');
+        if ($request->invoice) {
+            $dataList = $dataList->where('order_id', 'like', '%' . $request->invoice . '%');
         }
 
         // if($request->status == 'warning'){
