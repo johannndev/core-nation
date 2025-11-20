@@ -36,9 +36,9 @@ class DestyController extends Controller
     {
         $dataList = DestyPayload::orderBy('updated_at', 'desc');
 
-        // if($request->invoice){
-        // 	$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
-        // }
+        if($request->invoice){
+        	$dataList = $dataList->where('order_id', 'like', '%'.$request->invoice.'%');
+        }
 
         // if($request->status == 'warning'){
         //     $dataList = $dataList->where('status',2)->where('error_type',2);
