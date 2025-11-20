@@ -32,7 +32,7 @@ class DestyController extends Controller
         return $response->json();
     }
 
-    public function sku()
+    public function wh()
     {
         // Cek token valid
         $token = DestyHelper::getValidToken();
