@@ -48,8 +48,8 @@ class DestyController extends Controller
             'Content-Type'  => 'application/json'
         ])->send('post', 'https://api.desty.app/api/warehouse/list', [
             'body' => json_encode([
-                'pageNumber' => 0,
-                'pageSize'   => 0
+                'pageNumber' => 1,
+                'pageSize'   => 20
             ])
         ]);
 
