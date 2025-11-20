@@ -14,7 +14,7 @@
                 <!-- Start coding here -->
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
 
-                    <form action="{{route('filter.get',['action' =>'jubelio.webhook.order'])}}" method="post">
+                    <form action="{{route('filter.get',['action' =>'desty.payload'])}}" method="post">
                         @csrf
 
                         <div class="flex flex-col md:flex-row items-end justify-between p-4">
