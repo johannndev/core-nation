@@ -28,6 +28,25 @@ class DestyApiController extends Controller
                 ], 200);
             }
 
+            $orderStatusList = $payload['orderStatusList'] ?? [];
+
+            $allowedStatus = ['Completed', 'Returns'];
+
+            // Cek apakah ada status yg cocok
+            $matched = array_intersect($orderStatusList, $allowedStatus);
+
+            if (empty($matched)) {
+
+                Log::info('Order status tidak cocok', [
+                    'received_status' => $orderStatusList,
+                    'order_id'        => $payload['orderId'] ?? null
+                ]);
+
+                return response()->json([
+                    'message' => 'Status tidak diproses'
+                ], 200);
+            }
+
             // ==========================
             // PREPARE DATA
             // ==========================
