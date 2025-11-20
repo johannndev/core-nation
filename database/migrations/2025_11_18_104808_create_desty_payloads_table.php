@@ -14,24 +14,28 @@ return new class extends Migration
         Schema::create('desty_payloads', function (Blueprint $table) {
             $table->id();
 
-            $table->string('order_id');   
-            $table->string('orderType');               // orderId
-            $table->string('item_order_id');            // itemOrderId
-            $table->string('item_code');                // itemCode
-            $table->string('item_external_code');       // itemExternalCode
-            $table->string('item_name');                // itemName
-            $table->string('location_id')->nullable();  // locationId
-            $table->string('location_name')->nullable();// locationName
+            $table->date('date')->nullable(); // orderCreateTime (tanggal saja)
 
-            $table->string('store_id');                 // storeId
-            $table->string('store_name');               // storeName
+            $table->string('platform_warehouse_id')->nullable();
+            $table->string('platform_warehouse_name')->nullable();
 
-            $table->string('platform_order_status');    // platformOrderStatus
-            $table->integer('quantity');                // quantity
-            $table->integer('sell_price');              // sellPrice
+            $table->string('store_id')->nullable();
+            $table->string('store_name')->nullable();
+            $table->string('platform_name')->nullable();
 
+            $table->string('invoice')->nullable();
+
+            $table->decimal('adjustment', 15, 2)->default(0);
+            $table->decimal('total_sales', 15, 2)->default(0);
+
+            $table->string('order_status_list')->nullable();  // Completed / Returns
+            $table->string('status')->nullable();             // pending dll
+
+            $table->text('info')->nullable();
+
+            $table->json('item_list')->nullable(); // SIMPAN JSON itemList    
             $table->string('json_path')->nullable();    // path file JSON disimpan
-            $table->integer('status');      
+      
             $table->timestamps();
         });
     }

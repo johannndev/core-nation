@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\DestyPayload;
+use App\Models\DestyWarehouse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -11,91 +13,120 @@ class DestyApiController extends Controller
 {
     public function handleWebhook(Request $request)
     {
-        $data = $request->all();
+        try {
 
-        $orderId = $data['orderId'];
-        $items = $data['itemList'];
+            $payload = $request->all();
+            
+            // ==========================
+            // FILTER ORDER STATUS
+            // ==========================
+            $orderStatus = $payload['orderStatusList'] ?? null;
 
-        // --- Step 1: Generate JSON file per-order ---
-        $jsonFileName = $orderId . '.json';
-        $jsonPath = public_path('desty/' . $jsonFileName);
+            if (!in_array($orderStatus, ['Completed', 'Returned', 'Returns'])) {
+                return response()->json([
+                    'message' => 'Status tidak diproses'
+                ], 200);
+            }
 
-        // pastikan folder ada
-        if (!file_exists(public_path('desty'))) {
-            mkdir(public_path('desty'), 0777, true);
-        }
+            // ==========================
+            // PREPARE DATA
+            // ==========================
 
-        // simpan JSON asli ke file
-        file_put_contents($jsonPath, json_encode($data, JSON_PRETTY_PRINT));
+            $date = Carbon::parse($payload['orderCreateTime'])->format('Y-m-d');
 
-        // path untuk database (public path)
-        $publicPath = 'desty/' . $jsonFileName;
+            $itemList = collect($payload['items'])->map(function ($item) {
+                return [
+                    'code' => $item['itemExternalCode'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['sellPrice'],
+                ];
+            })->toArray();
 
+            $adjustment = $payload['totalInvoice'] - $payload['totalSales']; // minus
 
-        // --- Step 2: Simpan batch item ke DB ---
-        $batchInsert = [];
+            $orderId = $payload['orderId'];
 
-        foreach ($items as $item) {
-            $batchInsert[] = [
-                'order_id' => $orderId,
-                'orderType' => $data['orderType'],
-                'item_order_id' => $item['itemOrderId'],
-                'item_code' => $item['itemCode'],
-                'item_external_code' => $item['itemExternalCode'],
-                'item_name' => $item['itemName'],
-                'location_id' => $item['locationId'],
-                'location_name' => $item['locationName'],
-                'store_id' => $data['storeId'],
-                'store_name' => $data['storeName'],
-                'platform_order_status' => $item['platformOrderStatus'],
-                'quantity' => $item['quantity'],
-                'sell_price' => $item['sellPrice'],
-                'json_path' => $publicPath,
-                'status' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
+            // --- Step 1: Generate JSON file per-order ---
+            $jsonFileName = $orderId . '.json';
+            $jsonPath = public_path('desty/' . $jsonFileName);
+
+            // pastikan folder ada
+            if (!file_exists(public_path('desty'))) {
+                mkdir(public_path('desty'), 0777, true);
+            }
+
+            // simpan JSON asli ke file
+            file_put_contents($jsonPath, json_encode($payload, JSON_PRETTY_PRINT));
+
+            // path untuk database (public path)
+            $publicPath = 'desty/' . $jsonFileName;
+
+            $dataRaw = [
+                "date" => $date,
+                "platformWarehouseId" => $payload['storeName'],
+                "platformWarehouseName" => $payload['platformName'],
+                "storeId" => $payload['storeId'],
+                "storeName" => $payload['storeName'],
+                "platformName" => $payload['platformName'],
+                "invoice" => $payload['orderId'],
+                "adjustment" => $adjustment,
+                "totalSales" => $payload['totalSales'],
+                "orderStatusList" => $orderStatus,
+                "status" => 'pending',
+                "info" => null,
+                "itemList" => $itemList,
+                "json_path" => $publicPath
             ];
-        }
 
-        DB::table('desty_payloads')->insert($batchInsert);
+            // ==========================
+            // SIMPAN TO DestyWarehouse
+            // ==========================
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Order items saved successfully',
-            'json_path' => $publicPath
-        ]);
-    }
+            $platformWarehouseId = $payload['storeName'];
+            $storeId = $payload['storeId'];
 
-    /**
-     * Get all stored payloads (untuk testing/debugging)
-     */
-    public function getPayloads()
-    {
-        $payloads = DestyPayload::latest()->get();
+            $cekWarehouse = DestyWarehouse::where('platformWarehouseId', $platformWarehouseId)
+                ->where('storeId', $storeId)
+                ->first();
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $payloads
-        ], 200);
-    }
+            /**
+             * Simpan jika:
+             * - platformWarehouseId TIDAK ADA, atau
+             * - storeId TIDAK ADA
+             */
+            if (!$cekWarehouse) {
+                DestyWarehouse::create([
+                    "platformWarehouseId" => $payload['storeName'],
+                    "platformWarehouseName" => $payload['platformName'],
+                    "storeId" => $payload['storeId'],
+                    "storeName" => $payload['storeName'],
+                    "platformName" => $payload['platformName'],
+                ]);
+            }
 
-    /**
-     * Get specific payload by ID
-     */
-    public function getPayload($id)
-    {
-        $payload = DestyPayload::find($id);
+            // ==========================
+            // SIMPAN ORDER
+            // ==========================
 
-        if (!$payload) {
+            DestyPayload::create($dataRaw);
+
+            
+
             return response()->json([
-                'status' => 'error',
-                'message' => 'Payload not found'
-            ], 404);
+                'message' => 'Order tersimpan',
+                'data' => $dataRaw
+            ], 200);
+
+        } catch (\Exception $e) {
+
+            Log::error("Webhook Error: ".$e->getMessage());
+
+            return response()->json([
+                'message' => 'Error',
+                'error' => $e->getMessage()
+            ], 500);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $payload
-        ], 200);
+        
     }
 }
