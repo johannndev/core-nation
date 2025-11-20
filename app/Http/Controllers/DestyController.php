@@ -44,7 +44,7 @@ class DestyController extends Controller
 
 
         $response = Http::withHeaders([
-            'Authorization'   => $token->token,
+            'Authorization'   => 'Bearer ' . $token->token,
             'Content-Type'  => 'application/json'
         ])->send('post', 'https://api.desty.app/api/warehouse/list', [
             'body' => json_encode([
