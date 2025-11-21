@@ -83,7 +83,7 @@ class DestyApiController extends Controller
         $dataRaw = [
             "date" => $date,
             "platform_warehouse_id" => $payload['storeName'],
-            "platform_warehouse_name	" => $payload['platformName'],
+            "platform_warehouse_name" => $payload['platformName'],
             "store_id" => $payload['storeId'],
             "store_name" => $payload['storeName'],
             "platform_name" => $payload['platformName'],
