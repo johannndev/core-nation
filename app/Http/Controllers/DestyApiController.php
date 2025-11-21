@@ -89,8 +89,8 @@ class DestyApiController extends Controller
             "platform_name" => $payload['platformName'],
             "invoice" => $payload['orderId'],
             "adjustment" => $adjustment,
-            "total_sales	" => $payload['totalSales'],
-            "order_status_list	" => $orderStatusList, // simpan ARRAY asli
+            "total_sales" => $payload['totalSales'],
+            "order_status_list" => $orderStatusList, // simpan ARRAY asli
             "status" => 'pending',
             "info" => null,
             "item_list" => $itemList,
@@ -98,14 +98,14 @@ class DestyApiController extends Controller
         ];
 
         // SIMPAN WAREHOUSE
-        $cekWarehouse = DestyWarehouse::where('platform_warehouse_id ', $payload['storeName'])
-            ->where('storeId', $payload['storeId'])
+        $cekWarehouse = DestyWarehouse::where('platform_warehouse_id', $payload['storeName'])
+            ->where('store_id', $payload['storeId'])
             ->first();
 
         if (!$cekWarehouse) {
             DestyWarehouse::create([
-                "platform_warehouse_id " => $payload['storeName'],
-                "platform_warehouse_name	" => $payload['platformName'],
+                "platform_warehouse_id" => $payload['storeName'],
+                "platform_warehouse_name" => $payload['platformName'],
                 "store_id" => $payload['storeId'],
                 "store_name" => $payload['storeName'],
                 "platform_name" => $payload['platformName'],
