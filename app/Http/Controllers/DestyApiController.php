@@ -80,10 +80,18 @@ class DestyApiController extends Controller
 
         $publicPath = 'desty/' . $jsonFileName;
 
+        // Ambil item pertama dari itemList
+        $firstItem = $payload['itemList'][0] ?? null;
+
+        // Ambil platform warehouse dari item pertama
+        $platformWarehouseId = $firstItem['platformWarehouseId'] ?? null;
+        $platformWarehouseName = $firstItem['platformWarehouseName'] ?? null;
+        $locationName = $firstItem['locationName'] ?? null;
+
         $dataRaw = [
             "date" => $date,
-            "platform_warehouse_id" => $payload['storeName'],
-            "platform_warehouse_name" => $payload['platformName'],
+            "platform_warehouse_id" => $platformWarehouseId,
+            "platform_warehouse_name" => $platformWarehouseName." (.".$locationName.")",
             "store_id" => $payload['storeId'],
             "store_name" => $payload['storeName'],
             "platform_name" => $payload['platformName'],
@@ -98,14 +106,14 @@ class DestyApiController extends Controller
         ];
 
         // SIMPAN WAREHOUSE
-        $cekWarehouse = DestyWarehouse::where('platform_warehouse_id', $payload['storeName'])
+        $cekWarehouse = DestyWarehouse::where('platform_warehouse_id', $platformWarehouseId)
             ->where('store_id', $payload['storeId'])
             ->first();
 
         if (!$cekWarehouse) {
             DestyWarehouse::create([
-                "platform_warehouse_id" => $payload['storeName'],
-                "platform_warehouse_name" => $payload['platformName'],
+                "platform_warehouse_id" => $platformWarehouseId,
+                "platform_warehouse_name" => $platformWarehouseName." (.".$locationName.")",
                 "store_id" => $payload['storeId'],
                 "store_name" => $payload['storeName'],
                 "platform_name" => $payload['platformName'],
