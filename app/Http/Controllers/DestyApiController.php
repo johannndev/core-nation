@@ -113,7 +113,7 @@ class DestyApiController extends Controller
         if (!$cekWarehouse) {
             DestyWarehouse::create([
                 "platform_warehouse_id" => $platformWarehouseId,
-                "platform_warehouse_name" => $platformWarehouseName." (.".$locationName.")",
+                "platform_warehouse_name" => $platformWarehouseName.$locationName,
                 "store_id" => $payload['storeId'],
                 "store_name" => $payload['storeName'],
                 "platform_name" => $payload['platformName'],
