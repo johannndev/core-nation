@@ -13,10 +13,29 @@ class DestyApiController extends Controller
 {
     public function handleWebhook(Request $request)
     {
+        $payload = $request->all();
+
+        $orderId = $payload['orderId'];
+
+        // --- Step 1: Generate JSON file per-order ---
+        $jsonFileName = $orderId . '.json';
+        $jsonPath = public_path('desty/' . $jsonFileName);
+
+        // pastikan folder ada
+        if (!file_exists(public_path('desty'))) {
+            mkdir(public_path('desty'), 0777, true);
+        }
+
+        // simpan JSON asli ke file
+        file_put_contents($jsonPath, json_encode($payload, JSON_PRETTY_PRINT));
+
+        // path untuk database (public path)
+        $publicPath = 'desty/' . $jsonFileName;
+
         try {
 
-            $payload = $request->all();
-            
+
+
             // ==========================
             // FILTER ORDER STATUS
             // ==========================
@@ -63,22 +82,7 @@ class DestyApiController extends Controller
 
             $adjustment = $payload['totalInvoice'] - $payload['totalSales']; // minus
 
-            $orderId = $payload['orderId'];
 
-            // --- Step 1: Generate JSON file per-order ---
-            $jsonFileName = $orderId . '.json';
-            $jsonPath = public_path('desty/' . $jsonFileName);
-
-            // pastikan folder ada
-            if (!file_exists(public_path('desty'))) {
-                mkdir(public_path('desty'), 0777, true);
-            }
-
-            // simpan JSON asli ke file
-            file_put_contents($jsonPath, json_encode($payload, JSON_PRETTY_PRINT));
-
-            // path untuk database (public path)
-            $publicPath = 'desty/' . $jsonFileName;
 
             $dataRaw = [
                 "date" => $date,
@@ -129,23 +133,20 @@ class DestyApiController extends Controller
 
             DestyPayload::create($dataRaw);
 
-            
+
 
             return response()->json([
                 'message' => 'Order tersimpan',
                 'data' => $dataRaw
             ], 200);
-
         } catch (\Exception $e) {
 
-            Log::error("Webhook Error: ".$e->getMessage());
+            Log::error("Webhook Error: " . $e->getMessage());
 
             return response()->json([
                 'message' => 'Error',
                 'error' => $e->getMessage()
             ], 500);
         }
-
-        
     }
 }
