@@ -90,7 +90,7 @@ class DestyApiController extends Controller
             "invoice" => $payload['orderId'],
             "adjustment" => $adjustment,
             "total_sales" => $payload['totalSales'],
-            "order_status_list" => $orderStatusList, // simpan ARRAY asli
+            "order_status_list" => $orderStatusList[0], // simpan ARRAY asli
             "status" => 'pending',
             "info" => null,
             "item_list" => $itemList,

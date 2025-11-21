@@ -11,7 +11,8 @@ class DestyPayload extends Model
 
     protected $guarded = [];
 
+    // otomatis cast item_list ke array
     protected $casts = [
-        'item_list' => 'array'
+        'item_list' => 'array',
     ];
 }
