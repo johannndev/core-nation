@@ -16,48 +16,31 @@ class DestyApiController extends Controller
         $payload = $request->all();
 
         // ======================================
-        // LOG AWAL SEMUA STATUS YANG DITERIMA
+        // AMBIL orderStatusList SELALU SEBAGAI ARRAY
         // ======================================
+        $orderStatusList = $payload['orderStatusList'] ?? [];
+
+        if (!is_array($orderStatusList)) {
+            $orderStatusList = [$orderStatusList];
+        }
+
+        // LOG STATUS
         Log::info('Received orderStatusList', [
-            'orderStatusList' => $payload['orderStatusList'] ?? null,
+            'orderStatusList' => $orderStatusList,
             'order_id'        => $payload['orderId'] ?? null
         ]);
 
         // ======================================
-        // FILTER ORDER STATUS (STRING)
+        // FILTER
         // ======================================
 
-        // Jika hanya satu string status (misal: "Completed")
-        $orderStatus = $payload['orderStatusList'] ?? null;
+        $allowedStatus = ['Completed', 'Returned', 'Returns'];
 
-        if (!in_array($orderStatus, ['Completed', 'Returned', 'Returns'])) {
-            Log::info('Order status tidak diproses (string)', [
-                'received_status' => $orderStatus,
-                'order_id'        => $payload['orderId'] ?? null
-            ]);
-
-            return response()->json([
-                'message' => 'Status tidak diproses'
-            ], 200);
-        }
-
-        // ======================================
-        // FILTER ORDER STATUS (ARRAY)
-        // ======================================
-        $orderStatusList = $payload['orderStatusList'] ?? [];
-
-        // pastikan berupa array
-        if (!is_array($orderStatusList)) {
-            $orderStatusList = [$orderStatus];
-        }
-
-        $allowedStatus = ['Completed', 'Returns'];
-
+        // cocokkan array kiriman dengan allowed
         $matched = array_intersect($orderStatusList, $allowedStatus);
 
         if (empty($matched)) {
-
-            Log::info('Order status tidak cocok (array)', [
+            Log::info('Order status tidak cocok', [
                 'received_status' => $orderStatusList,
                 'order_id'        => $payload['orderId'] ?? null
             ]);
@@ -68,7 +51,7 @@ class DestyApiController extends Controller
         }
 
         // ======================================
-        // PREPARE DATA
+        // DATA LANJUTAN
         // ======================================
 
         $date = Carbon::parse($payload['orderCreateTime'])->format('Y-m-d');
@@ -94,9 +77,9 @@ class DestyApiController extends Controller
         }
 
         file_put_contents($jsonPath, json_encode($payload, JSON_PRETTY_PRINT));
+
         $publicPath = 'desty/' . $jsonFileName;
 
-        // Data untuk insert
         $dataRaw = [
             "date" => $date,
             "platformWarehouseId" => $payload['storeName'],
@@ -107,17 +90,14 @@ class DestyApiController extends Controller
             "invoice" => $payload['orderId'],
             "adjustment" => $adjustment,
             "totalSales" => $payload['totalSales'],
-            "orderStatusList" => $orderStatus,
+            "orderStatusList" => $orderStatusList, // simpan ARRAY asli
             "status" => 'pending',
             "info" => null,
             "itemList" => $itemList,
             "json_path" => $publicPath
         ];
 
-        // ======================================
-        // SIMPAN WAREHOUSE (JIKA BELUM ADA)
-        // ======================================
-
+        // SIMPAN WAREHOUSE
         $cekWarehouse = DestyWarehouse::where('platformWarehouseId', $payload['storeName'])
             ->where('storeId', $payload['storeId'])
             ->first();
@@ -132,9 +112,7 @@ class DestyApiController extends Controller
             ]);
         }
 
-        // ======================================
         // SIMPAN ORDER
-        // ======================================
         DestyPayload::create($dataRaw);
 
         return response()->json([
