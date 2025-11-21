@@ -82,30 +82,30 @@ class DestyApiController extends Controller
 
         $dataRaw = [
             "date" => $date,
-            "platformWarehouseId" => $payload['storeName'],
-            "platformWarehouseName" => $payload['platformName'],
-            "storeId" => $payload['storeId'],
-            "storeName" => $payload['storeName'],
-            "platformName" => $payload['platformName'],
+            "platform_warehouse_id" => $payload['storeName'],
+            "platform_warehouse_name	" => $payload['platformName'],
+            "store_id" => $payload['storeId'],
+            "store_name" => $payload['storeName'],
+            "platform_name" => $payload['platformName'],
             "invoice" => $payload['orderId'],
             "adjustment" => $adjustment,
-            "totalSales" => $payload['totalSales'],
-            "orderStatusList" => $orderStatusList, // simpan ARRAY asli
+            "total_sales	" => $payload['totalSales'],
+            "order_status_list	" => $orderStatusList, // simpan ARRAY asli
             "status" => 'pending',
             "info" => null,
-            "itemList" => $itemList,
+            "item_list" => $itemList,
             "json_path" => $publicPath
         ];
 
         // SIMPAN WAREHOUSE
-        $cekWarehouse = DestyWarehouse::where('platformWarehouseId', $payload['storeName'])
+        $cekWarehouse = DestyWarehouse::where('platform_warehouse_id ', $payload['storeName'])
             ->where('storeId', $payload['storeId'])
             ->first();
 
         if (!$cekWarehouse) {
             DestyWarehouse::create([
-                "platformWarehouseId" => $payload['storeName'],
-                "platformWarehouseName" => $payload['platformName'],
+                "platform_warehouse_id " => $payload['storeName'],
+                "platform_warehouse_name	" => $payload['platformName'],
                 "storeId" => $payload['storeId'],
                 "storeName" => $payload['storeName'],
                 "platformName" => $payload['platformName'],
