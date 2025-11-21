@@ -56,7 +56,7 @@ class DestyApiController extends Controller
 
         $date = Carbon::parse($payload['orderCreateTime'])->format('Y-m-d');
 
-        $itemList = collect($payload['items'])->map(function ($item) {
+        $itemList = collect($payload['itemList'])->map(function ($item) {
             return [
                 'code' => $item['itemExternalCode'],
                 'quantity' => $item['quantity'],
