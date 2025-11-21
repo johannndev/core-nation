@@ -106,9 +106,9 @@ class DestyApiController extends Controller
             DestyWarehouse::create([
                 "platform_warehouse_id " => $payload['storeName'],
                 "platform_warehouse_name	" => $payload['platformName'],
-                "storeId" => $payload['storeId'],
-                "storeName" => $payload['storeName'],
-                "platformName" => $payload['platformName'],
+                "store_id" => $payload['storeId'],
+                "store_name" => $payload['storeName'],
+                "platform_name" => $payload['platformName'],
             ]);
         }
 
