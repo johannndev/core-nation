@@ -18,13 +18,13 @@
 
                         <div>
                             <p class="text-sm text-gray-500">Order ID</p>
-                            <p class="font-medium">{{$data->order_id}}</p>
+                            <p class="font-medium">{{$data->invoice}}</p>
                         </div>
 
-                        <div>
+                        {{-- <div>
                             <p class="text-sm text-gray-500">Oder Item ID</p>
                             <p class="font-medium">{{$data->item_order_id}}</p>
-                        </div>
+                        </div> --}}
 
                     </div>
                 </div>
