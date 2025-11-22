@@ -78,15 +78,12 @@
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
                                         <th scope="col" class="px-4 py-3">Date</th>
-                                        <th scope="col" class="px-4 py-3">Order ID</th>
-                                        <th scope="col" class="px-4 py-3">Order Item ID</th>
-                                        <th scope="col" class="px-4 py-3">Order Type</th>
-                                        <th scope="col" class="px-4 py-3">Item Code</th>
-                                        <th scope="col" class="px-4 py-3">Location Name</th>
-                                        <th scope="col" class="px-4 py-3">Store Name</th>
-                                        <th scope="col" class="px-4 py-3">Platform Status</th>
-                                        <th scope="col" class="px-4 py-3">Qty</th>
-                                        <th scope="col" class="px-4 py-3">Sale Price</th>
+                                        <th scope="col" class="px-4 py-3">invoice</th>
+                                        <th scope="col" class="px-4 py-3">Warehouse</th>
+                                        <th scope="col" class="px-4 py-3">Store</th>
+                                        <th scope="col" class="px-4 py-3">Type</th>
+                                        <th scope="col" class="px-4 py-3">Total</th>
+                                        <th scope="col" class="px-4 py-3">Cron</th>
                                         <th scope="col" class="px-4 py-3"></th>
                                     </tr>
                                 </thead>
@@ -98,18 +95,18 @@
                                     <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                         <th class="px-4 py-3">
                                          
-                                            {{$item->updated_at}}
+                                            {{$item->date}}
                                            
                                         </th>
-                                        <td class="px-4 py-3">{{$item->order_id}}</td>  
-                                        <td class="px-4 py-3">{{$item->item_order_id}}</td>
-                                        <td class="px-4 py-3">{{$item->orderType}}</td>
-                                        <td class="px-4 py-3">{{$item->item_code}}</td>
-                                        <td class="px-4 py-3">{{$item->location_name}}</td>
-                                        <td class="px-4 py-3">{{$item->store_name}}</td>
-                                        <td class="px-4 py-3">{{$item->platform_order_status}}</td>
+                                        <td class="px-4 py-3">{{$item->invoice}}</td>  
+                                        <td class="px-4 py-3">{{$item->platform_warehouse_id}} - {{$item->warehouse->platform_warehouse_name}}</td>
+                                        <td class="px-4 py-3">{{$item->store_id}} - {{$item->warehouse->store_name}} ({{$item->warehouse->platform_name}})</td>
+                                        <td class="px-4 py-3">{{$item->order_status_list}}</td>
+                                        <td class="px-4 py-3">{{$item->total_sales}}</td>
+                                        <td class="px-4 py-3">{{$item->status}}</td>
+                                        {{-- <td class="px-4 py-3">{{$item->platform_order_status}}</td>
                                         <td class="px-4 py-3">{{$item->quantity}}</td>
-                                        <td class="px-4 py-3">{{number_format($item->sell_price)}}</td>
+                                        <td class="px-4 py-3">{{number_format($item->sell_price)}}</td> --}}
                                         <td class="px-4 py-3 ">
                                              <a href="{{ route('desty.payloadDetail',$item->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Detail</a>
                                         </td>

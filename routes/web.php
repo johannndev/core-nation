@@ -15,6 +15,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DeletedController;
 use App\Http\Controllers\DestyController;
+use App\Http\Controllers\DestySyncController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FilterQueryController;
 use App\Http\Controllers\GajihController;
@@ -150,6 +151,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/desty/payload', [DestyController::class, 'payload'])->name('desty.payload');
     Route::get('/desty/payload/{id}/detail', [DestyController::class, 'detailPayload'])->name('desty.payloadDetail');
     Route::get('/desty/wh', [DestyController::class, 'wh']);
+
+    Route::get('/desty/sync', [DestySyncController::class, 'index'])->name('desty.sync.index');
+    Route::get('/desty/sync/create', [DestySyncController::class, 'create'])->name('desty.sync.create');
+    Route::post('/desty/sync/store', [DestySyncController::class, 'store'])->name('desty.sync.store');
+    Route::delete('/desty/sync/{id}/delete', [DestySyncController::class, 'delete'])->name('desty.sync.delete');
+    
 
     Route::get('/test-running/{id}', [ApiJubelioController::class, 'testApi']);
     // Route::get('/trx', [ApiJubelioController::class, 'cektrx']);

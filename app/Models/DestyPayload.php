@@ -15,4 +15,11 @@ class DestyPayload extends Model
     protected $casts = [
         'item_list' => 'array',
     ];
+
+    // Relasi ke warehouse via kombinasi 2 field
+    public function warehouse()
+    {
+        return $this->hasOne(DestyWarehouse::class, 'platform_warehouse_id', 'platform_warehouse_id')
+                    ->whereColumn('store_id', 'store_id');
+    }
 }

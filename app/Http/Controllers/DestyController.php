@@ -60,7 +60,7 @@ class DestyController extends Controller
 
     public function payload(Request $request)
     {
-        $dataList = DestyPayload::orderBy('updated_at', 'desc');
+        $dataList = DestyPayload::with('warehouse')->orderBy('updated_at', 'desc');
 
         if ($request->invoice) {
             $dataList = $dataList->where('order_id', 'like', '%' . $request->invoice . '%');
@@ -90,13 +90,15 @@ class DestyController extends Controller
     {
         $data = DestyPayload::find($id);
 
+        // dd($data);
+
         // path lengkap file JSON di public/
         $fullPath = public_path($data->json_path);
 
         // cek apakah file ada
-        if (!file_exists($fullPath)) {
-            abort(404, 'JSON file not found');
-        }
+        // if (!file_exists($fullPath)) {
+        //     abort(404, 'JSON file not found');
+        // }
 
         // baca file JSON
         $jsonContent = file_get_contents($fullPath);
