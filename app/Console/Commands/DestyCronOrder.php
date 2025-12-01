@@ -134,6 +134,7 @@ class DestyCronOrder extends Command
 
         $dataOrder = [
             "date" => now()->toDateString(),
+            "due" => null,
             "warehouse" => $destyWh->destySync->warehouse_id,
             "customer"  => $destyWh->destySync->customer_id,
             "invoice"   => $desty->invoice,
