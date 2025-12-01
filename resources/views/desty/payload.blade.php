@@ -12,7 +12,7 @@
         <section class="bg-gray-50 dark:bg-gray-900 ">
             <div class="mx-auto  ">
                 <!-- Start coding here -->
-                <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+                <div class="">
 
                     <form action="{{ route('filter.get', ['action' => 'desty.payload']) }}" method="post">
                         @csrf

@@ -191,8 +191,8 @@ class DestyCronOrder extends Command
             $transaction->type = $type;
             $transaction->adjustment     = $dataJubelio->adjustment;
             $transaction->user_id = -100;
-            $transaction->submit_type = 2;
-            $transaction->description = $dataJubelio->description ?? '';
+            $transaction->submit_type = 3;
+            $transaction->description = $dataJubelio->note ?? '';
 
             $transaction->invoice = $dataJubelio->invoice;
 
