@@ -156,6 +156,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/desty/sync/create', [DestySyncController::class, 'create'])->name('desty.sync.create');
     Route::post('/desty/sync/store', [DestySyncController::class, 'store'])->name('desty.sync.store');
     Route::delete('/desty/sync/{id}/delete', [DestySyncController::class, 'delete'])->name('desty.sync.delete');
+
+    Route::get('desty/cek', [DestyController::class, 'cek'])->name('desty.cek');
     
 
     Route::get('/test-running/{id}', [ApiJubelioController::class, 'testApi']);
