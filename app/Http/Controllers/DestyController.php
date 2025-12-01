@@ -70,18 +70,16 @@ class DestyController extends Controller
             $dataList = $dataList->where('order_id', 'like', '%' . $request->invoice . '%');
         }
 
-        // if($request->status == 'warning'){
-        //     $dataList = $dataList->where('status',2)->where('error_type',2);
-        // }elseif($request->status == 'success'){
-        //     $dataList = $dataList->where('status',2)->where('error_type',10);
-        // }elseif($request->status == 'error'){
-        //     $dataList = $dataList->where('status',1)->where('error_type',1);
-        // }else{
-        //     if(!$request->invoice){
-        //         $dataList = $dataList->where('status',0);
-        //     }
+        if($request->status == 'processed'){
+            $dataList = $dataList->where('status','processed');
+        }elseif($request->status == 'error'){
+            $dataList = $dataList->where('status','error');
+        }elseif($request->status == 'failed'){
+            $dataList = $dataList->where('status','failed');
+        }else{
+            $dataList = $dataList->where('status','pending');
 
-        // }
+        }
 
         $dataList = $dataList->paginate(200)->withQueryString();
 
