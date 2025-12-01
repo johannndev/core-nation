@@ -153,9 +153,11 @@ class DestyCronOrder extends Command
         $createData = $this->createTransaction(Transaction::TYPE_SELL, $dataCollect);
 
         if ($createData['status'] == "200") {
+            Log::info("Order berhasil dibuat di sistem: ID {$desty->id}");
             DestyPayload::where('id', $desty->id)
                 ->update(['status' => 'processed', 'info' => 'Order berhasil dibuat di sistem.']);
         } else {
+            Log::error("Gagal membuat order untuk ID {$desty->id}: " . $createData['message']);
             DestyPayload::where('id', $desty->id)
                 ->update(['status' => 'error', 'info' => 'Gagal membuat order: ' . $createData['message']]);
         }
