@@ -36,7 +36,7 @@ class DestyCronOrder extends Command
     public function handle()
     {
         //
-        Log::info('Task dijalankan pada: ' . now());
+        Log::info('Desty Task dijalankan pada: ' . now());
 
         // 1. Ambil data pending
         $desty = DestyPayload::where('order_status_list', 'Completed')
