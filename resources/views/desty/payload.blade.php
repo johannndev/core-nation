@@ -236,8 +236,8 @@
                                     <hr class="my-4">
 
                                     <div class="px-4 text-sm text-gray-500">
-                                        @if ($item->status != 'pending' )
-                                            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                                        @if ($item->status != 'pending')
+                                            <div class="p-4 mb-4 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-400"
                                                 role="alert">
                                                 {{ $item->info }}
                                             </div>
