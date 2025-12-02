@@ -27,7 +27,7 @@ class DestyApiController extends Controller
         // LOG STATUS
         Log::info('Received orderStatusList', [
             'orderStatusList' => $orderStatusList,
-            'order_id'        => $payload['orderId'] ?? null
+            'order_sn'        => $payload['orderSn'] ?? null
         ]);
 
         // ======================================
@@ -42,7 +42,7 @@ class DestyApiController extends Controller
         if (empty($matched)) {
             Log::info('Order status tidak cocok', [
                 'received_status' => $orderStatusList,
-                'order_id'        => $payload['orderId'] ?? null
+                'order_sn'        => $payload['orderSn'] ?? null
             ]);
 
             return response()->json([
@@ -95,7 +95,7 @@ class DestyApiController extends Controller
             "store_id" => $payload['storeId'],
             "store_name" => $payload['storeName'],
             "platform_name" => $payload['platformName'],
-            "invoice" => $payload['orderId'],
+            "invoice" => $payload['orderSn'],
             "adjustment" => $adjustment,
             "total_sales" => $payload['totalSales'],
             "order_status_list" => $orderStatusList[0], // simpan ARRAY asli
