@@ -125,7 +125,7 @@
 
                                                     </div>
 
-                                                    <div class="flex mt-1 md:mt-0">
+                                                    <div class="flex mt-1 md:mt-0 items-center ">
 
 
                                                         @if ($item->status == 'processed')
@@ -150,9 +150,9 @@
                                                             </div>
                                                         @endif
 
-                                                        <div>
+                                                        <div class="">
                                                             <span
-                                                                class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-sm me-2 border border-gray-300">
+                                                                class="mt-1 bg-gray-100 text-gray-800 text-xs font-medium flex items-center px-2.5 py-0.5 rounded-sm me-2 border border-gray-300">
                                                                 <!-- Payment time solid icon SVG -->
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     viewBox="0 0 24 24" fill="currentColor"
@@ -166,12 +166,7 @@
                                                                         d="M2.25 18a.75.75 0 0 0 0 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 0 0-.75-.75H2.25Z" />
                                                                 </svg>
 
-                                                                <svg class="w-4 h-4 me-1.5" aria-hidden="true"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    fill="currentColor" viewBox="0 0 20 20">
-                                                                    <path
-                                                                        d="M10 2a8 8 0 1 0 8 8 8 8 0 0 0-8-8zm0 14a6 6 0 1 1 6-6 6 6 0 0 1-6 6zm.75-9.25a.75.75 0 0 0-1.5 0v4a.75.75 0 0 0 .75.75h3a.75.75 0 0 0 0-1.5H10.75zm-4.25 5.25a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H6.5z" />
-                                                                </svg>
+                                                               
                                                                 {{ $item->created_at }}
                                                             </span>
                                                         </div>
