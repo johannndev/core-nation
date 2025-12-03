@@ -64,7 +64,7 @@ class DestyController extends Controller
 
     public function payload(Request $request)
     {
-        $dataList = DestyPayload::with('warehouse')->orderBy('updated_at', 'desc');
+        $dataList = DestyPayload::with('warehouse')->orderBy('date', 'desc');
 
         if ($request->invoice) {
             $dataList = $dataList->where('invoice', 'like', '%' . $request->invoice . '%');
