@@ -60,7 +60,7 @@ class DestyApiController extends Controller
             return [
                 'code' => $item['itemExternalCode'],
                 'quantity' => $item['quantity'],
-                'price' => $item['sellPrice'],
+                'price' => $item['price'] != 0 ? $item['price'] : $item['originalPrice'],
             ];
         })->toArray();
 
