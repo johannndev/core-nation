@@ -50,6 +50,17 @@ class DestyApiController extends Controller
             ], 200);
         }
 
+        //jika invoice sudah ada jangan teruskan
+        $existingOrder = DestyPayload::where('invoice', $payload['orderSn'])->first();
+        if ($existingOrder) {
+            Log::info('Order sudah ada, tidak disimpan ulang', [
+                'invoice' => $payload['orderSn']
+            ]); 
+            return response()->json([
+                'message' => 'Order sudah ada'
+            ], 200);
+        }
+
         // ======================================
         // DATA LANJUTAN
         // ======================================
