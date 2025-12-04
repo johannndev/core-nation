@@ -36,8 +36,8 @@
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
                                         <select id="status" name="status"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                            <option {{ Request('status') == 'all' ? 'selected' : '' }}
-                                                value="all">All</option>
+                                            <option {{ Request('status') == 'all' ? 'selected' : '' }} value="all">
+                                                All</option>
                                             <option
                                                 {{ Request('status') == 'pending' || Request('status') === null ? 'selected' : '' }}
                                                 value="pending">Pending</option>
@@ -94,13 +94,16 @@
                     <div>
 
                         <div class="flex space-x-2 mb-4">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                 Pending: {{ $totalPending ?? 0 }}
                             </span>
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                                 Error: {{ $totalError ?? 0 }}
                             </span>
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                 Failed: {{ $totalFailed ?? 0 }}
                             </span>
                         </div>
@@ -180,7 +183,7 @@
                                                                         d="M2.25 18a.75.75 0 0 0 0 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 0 0-.75-.75H2.25Z" />
                                                                 </svg>
 
-                                                               
+
                                                                 {{ $item->date }}
                                                             </span>
                                                         </div>
@@ -272,6 +275,65 @@
                                     <hr class="my-4">
 
                                     <div class="px-4 text-sm text-gray-500">
+                                        @php
+                                            $totalSales = $item->total_sales ?? 0;
+                                            $adjustment = $item->adjustment ?? 0;
+                                            $totalHarga = $totalSales - $adjustment;
+
+                                            // item_list bisa jadi array atau string json
+                                            $items = is_string($item->item_list)
+                                                ? json_decode($item->item_list, true)
+                                                : $item->item_list;
+
+                                            $items = $items ?? [];
+
+                                            $totalQty = 0;
+                                            $totalItem = 0;
+
+                                            foreach ($items as $itm) {
+                                                $totalQty += $itm['quantity'] ?? 0;
+                                                $totalItem++;
+                                            }
+                                        @endphp
+
+
+                                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-2">
+                                            <div class="bg-gray-50 rounded-lg p-3 shadow-sm">
+                                                <p class="text-xs text-gray-500">Tipe Order</p>
+                                                <p class="font-semibold text-gray-800">{{ $item->order_status_list ?? '-' }}</p>
+                                            </div>
+                                            <div class="bg-gray-50 rounded-lg p-3 shadow-sm">
+                                                <p class="text-xs text-gray-500">Tanggal Payment</p>
+                                                <p class="font-semibold text-gray-800">{{ $item->date ?? '-' }}</p>
+                                            </div>
+                                            <div class="bg-gray-50 rounded-lg p-3 shadow-sm">
+                                                <p class="text-xs text-gray-500">Total Harga</p>
+                                                <p class="font-semibold text-gray-800">
+                                                    {{ isset($totalHarga) ? number_format($totalHarga, 0, ',', '.') : '-' }}
+                                                </p>
+                                            </div>
+                                            <div class="bg-gray-50 rounded-lg p-3 shadow-sm">
+                                                <p class="text-xs text-gray-500">Total Adjustment</p>
+                                                <p class="font-semibold text-gray-800">
+                                                    {{ isset($item->adjustment) ? number_format($item->adjustment, 0, ',', '.') : '-' }}
+                                                </p>
+                                            </div>
+                                            <div class="bg-gray-50 rounded-lg p-3 shadow-sm">
+                                                <p class="text-xs text-gray-500">Total Harga Asli</p>
+                                                <p class="font-semibold text-gray-800">
+                                                    {{ isset($item->total_sales) ? number_format($item->total_sales, 0, ',', '.') : '-' }}
+                                                </p>
+                                            </div>
+                                            <div class="bg-gray-50 rounded-lg p-3 shadow-sm">
+                                                <p class="text-xs text-gray-500">Total Item</p>
+                                                <p class="font-semibold text-gray-800">{{ $totalItem }}</p>
+                                            </div>
+                                            <div class="bg-gray-50 rounded-lg p-3 shadow-sm">
+                                                <p class="text-xs text-gray-500">Total Quantity</p>
+                                                <p class="font-semibold text-gray-800">{{ $totalQty }}</p>
+                                            </div>
+                                        </div>
+
                                         @if ($item->status != 'pending')
                                             <div class="p-4 mb-4 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-400"
                                                 role="alert">
