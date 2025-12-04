@@ -120,19 +120,6 @@
                                         <div class="flex justify-start md:justify-between flex-col md:flex-row">
 
                                             <div>
-                                                <div>
-                                                    <span
-                                                        class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-sm me-2  border border-gray-300 ">
-                                                        <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
-                                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path
-                                                                d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
-                                                        </svg>
-
-                                                        {{ $item->created_at }}
-                                                    </span>
-                                                </div>
 
                                                 <div class="flex flex-col md:flex-row items-start md:items-center">
 
@@ -169,22 +156,15 @@
 
                                                         <div class="">
                                                             <span
-                                                                class="mt-1 bg-gray-100 text-gray-800 text-xs font-medium flex items-center px-2.5 py-0.5 rounded-sm me-2 border border-gray-300">
-                                                                <!-- Payment time solid icon SVG -->
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 24 24" fill="currentColor"
-                                                                    class="w-4 h-4 me-1.5">
+                                                                class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-sm me-2  border border-gray-300 ">
+                                                                <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="currentColor" viewBox="0 0 20 20">
                                                                     <path
-                                                                        d="M12 7.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
-                                                                    <path fill-rule="evenodd"
-                                                                        d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 14.625v-9.75ZM8.25 9.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM18.75 9a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-.008ZM4.5 9.75A.75.75 0 0 1 5.25 9h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H5.25a.75.75 0 0 1-.75-.75V9.75Z"
-                                                                        clip-rule="evenodd" />
-                                                                    <path
-                                                                        d="M2.25 18a.75.75 0 0 0 0 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 0 0-.75-.75H2.25Z" />
+                                                                        d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
                                                                 </svg>
 
-
-                                                                {{ $item->date }}
+                                                                {{ $item->created_at }}
                                                             </span>
                                                         </div>
 
@@ -300,7 +280,8 @@
                                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-2">
                                             <div class="bg-gray-50 rounded-lg p-3 shadow-sm">
                                                 <p class="text-xs text-gray-500">Tipe Order</p>
-                                                <p class="font-semibold text-gray-800">{{ $item->order_status_list ?? '-' }}</p>
+                                                <p class="font-semibold text-gray-800">
+                                                    {{ $item->order_status_list ?? '-' }}</p>
                                             </div>
                                             <div class="bg-gray-50 rounded-lg p-3 shadow-sm">
                                                 <p class="text-xs text-gray-500">Tanggal Payment</p>
@@ -336,16 +317,21 @@
 
                                         @if ($item->status != 'pending')
                                             @php
-                                                $alertClass = 'bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-400';
+                                                $alertClass =
+                                                    'bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-400';
                                                 if ($item->status == 'processed') {
-                                                    $alertClass = 'bg-green-50 text-green-800 dark:bg-green-900 dark:text-green-300';
+                                                    $alertClass =
+                                                        'bg-green-50 text-green-800 dark:bg-green-900 dark:text-green-300';
                                                 } elseif ($item->status == 'error') {
-                                                    $alertClass = 'bg-orange-50 text-orange-800 dark:bg-orange-900 dark:text-orange-300';
+                                                    $alertClass =
+                                                        'bg-orange-50 text-orange-800 dark:bg-orange-900 dark:text-orange-300';
                                                 } elseif ($item->status == 'failed') {
-                                                    $alertClass = 'bg-red-50 text-red-800 dark:bg-red-900 dark:text-red-300';
+                                                    $alertClass =
+                                                        'bg-red-50 text-red-800 dark:bg-red-900 dark:text-red-300';
                                                 }
                                             @endphp
-                                            <div class="p-4 mb-4 text-sm rounded-lg {{ $alertClass }}" role="alert">
+                                            <div class="p-4 mb-4 text-sm rounded-lg {{ $alertClass }}"
+                                                role="alert">
                                                 {{ $item->info }}
                                             </div>
                                         @endif
