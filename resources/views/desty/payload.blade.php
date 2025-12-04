@@ -169,7 +169,7 @@
                                                                 </svg>
 
                                                                
-                                                                {{ $item->created_at }}
+                                                                {{ $item->date }}
                                                             </span>
                                                         </div>
 
