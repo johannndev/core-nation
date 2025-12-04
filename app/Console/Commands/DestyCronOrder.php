@@ -144,7 +144,7 @@ class DestyCronOrder extends Command
             "paid"      => null,
             "addMoreInputFields" => $matched,
             "disc"      => "0",
-            "adjustment" => -$desty->adjustment,
+            "adjustment" => $desty->adjustment,
             "ongkir"    => "0"
         ];
 

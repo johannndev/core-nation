@@ -67,15 +67,23 @@ class DestyApiController extends Controller
 
         $date = Carbon::parse($payload['orderPaymentTime']);
 
-        $itemList = collect($payload['itemList'])->map(function ($item) {
+        $itemListCollection = collect($payload['itemList'])->map(function ($item) {
             return [
-                'code' => $item['itemExternalCode'],
+                'code'     => $item['itemExternalCode'],
                 'quantity' => $item['quantity'],
-                'price' => $item['price'] != 0 ? $item['price'] : $item['originalPrice'],
+                'price'    => $item['price'] != 0 ? $item['price'] : $item['originalPrice'],
             ];
-        })->toArray();
+        });
 
-        $adjustment = $payload['totalInvoice'] - $payload['totalSales'];
+        // SUM total sebelum toArray()
+        $totalPrice = $itemListCollection->sum(function ($item) {
+            return $item['quantity'] * $item['price'];
+        });
+
+        // Baru convert ke array
+        $itemList = $itemListCollection->toArray();
+
+        $adjustment = $payload['escrowAmount'] - $totalPrice;
 
         $orderId = $payload['orderId'];
 
@@ -99,6 +107,9 @@ class DestyApiController extends Controller
         $platformWarehouseName = $firstItem['platformWarehouseName'] ?? null;
         $locationName = " (".$firstItem['locationName'].")" ?? null;
 
+        //totalsales = sum payload[itemList][originalPrice]
+
+
         $dataRaw = [
             "date" => $date,
             "platform_warehouse_id" => $platformWarehouseId,
@@ -108,7 +119,7 @@ class DestyApiController extends Controller
             "platform_name" => $payload['platformName'],
             "invoice" => $payload['orderSn'],
             "adjustment" => $adjustment,
-            "total_sales" => $payload['totalSales'],
+            "total_sales" =>  $totalPrice,
             "order_status_list" => $orderStatusList[0], // simpan ARRAY asli
             "status" => 'pending',
             "info" => null,
