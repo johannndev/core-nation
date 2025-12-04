@@ -41,7 +41,7 @@ class DestyCronOrder extends Command
         // 1. Ambil data pending
         $desty = DestyPayload::where('order_status_list', 'Completed')
             ->where('status', 'pending')
-            ->orderBy('date', 'asc')
+            ->orderBy('created_at', 'asc')
             ->first();
 
         if (!$desty) {
