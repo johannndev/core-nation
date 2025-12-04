@@ -74,6 +74,8 @@ class DestyController extends Controller
             $dataList = $dataList->where('status','processed');
         }elseif($request->status == 'error'){
             $dataList = $dataList->where('status','error');
+        }elseif($request->status == 'all'){
+            $dataList = $dataList;
         }elseif($request->status == 'failed'){
             $dataList = $dataList->where('status','failed');
         }else{
