@@ -335,8 +335,17 @@
                                         </div>
 
                                         @if ($item->status != 'pending')
-                                            <div class="p-4 mb-4 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-400"
-                                                role="alert">
+                                            @php
+                                                $alertClass = 'bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-gray-400';
+                                                if ($item->status == 'processed') {
+                                                    $alertClass = 'bg-green-50 text-green-800 dark:bg-green-900 dark:text-green-300';
+                                                } elseif ($item->status == 'error') {
+                                                    $alertClass = 'bg-orange-50 text-orange-800 dark:bg-orange-900 dark:text-orange-300';
+                                                } elseif ($item->status == 'failed') {
+                                                    $alertClass = 'bg-red-50 text-red-800 dark:bg-red-900 dark:text-red-300';
+                                                }
+                                            @endphp
+                                            <div class="p-4 mb-4 text-sm rounded-lg {{ $alertClass }}" role="alert">
                                                 {{ $item->info }}
                                             </div>
                                         @endif
