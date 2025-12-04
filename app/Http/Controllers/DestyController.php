@@ -64,30 +64,35 @@ class DestyController extends Controller
 
     public function payload(Request $request)
     {
-        $dataList = DestyPayload::with('warehouse')->orderBy('created_at', 'desc');
+        // Build query only once, apply filters conditionally
+        $query = DestyPayload::with('warehouse')->orderByDesc('created_at');
 
-        if ($request->invoice) {
-            $dataList = $dataList->where('invoice', 'like', '%' . $request->invoice . '%');
+        if ($invoice = $request->get('invoice')) {
+            $query->where('invoice', 'like', '%' . $invoice . '%');
         }
 
-        if($request->status == 'processed'){
-            $dataList = $dataList->where('status','processed');
-        }elseif($request->status == 'error'){
-            $dataList = $dataList->where('status','error');
-        }elseif($request->status == 'all'){
-            $dataList = $dataList;
-        }elseif($request->status == 'failed'){
-            $dataList = $dataList->where('status','failed');
-        }else{
-            $dataList = $dataList->where('status','pending');
-
+        $status = $request->get('status', 'pending');
+        if (in_array($status, ['processed', 'error', 'failed'])) {
+            $query->where('status', $status);
+        } elseif ($status !== 'all') {
+            $query->where('status', 'pending');
         }
 
-        $dataList = $dataList->paginate(200)->withQueryString();
+        // Use chunked counts for better performance
+        $statusCounts = DestyPayload::selectRaw("
+            SUM(status = 'pending') as totalPending,
+            SUM(status = 'error') as totalError,
+            SUM(status = 'failed') as totalFailed
+        ")->first();
 
-        // dd($allRolesInDatabase);
+        $dataList = $query->paginate(200)->withQueryString();
 
-        return view('desty.payload', compact('dataList'));
+        return view('desty.payload', [
+            'dataList'     => $dataList,
+            'totalPending' => $statusCounts->totalPending,
+            'totalError'   => $statusCounts->totalError,
+            'totalFailed'  => $statusCounts->totalFailed,
+        ]);
     }
 
     public function detailPayload($id)

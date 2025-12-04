@@ -93,6 +93,18 @@
 
                     <div>
 
+                        <div class="flex space-x-2 mb-4">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                Pending: {{ $totalPending ?? 0 }}
+                            </span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                Error: {{ $totalError ?? 0 }}
+                            </span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                Failed: {{ $totalFailed ?? 0 }}
+                            </span>
+                        </div>
+
                         <div class="grid grid-cols-1 gap-4 mt-6">
 
                             @forelse ($dataList as $item)
