@@ -150,13 +150,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/desty/initial/webhook', [DestyController::class, 'initialSync']);
     Route::get('/desty/payload', [DestyController::class, 'payload'])->name('desty.payload');
     Route::get('/desty/payload/{id}/detail', [DestyController::class, 'detailPayload'])->name('desty.payloadDetail');
-    Route::get('/desty/wh', [DestyController::class, 'wh']);
+    Route::get('/desty/data', [DestyController::class, 'dataDesty']);
 
     Route::get('/desty/sync', [DestySyncController::class, 'index'])->name('desty.sync.index');
     Route::get('/desty/sync/create', [DestySyncController::class, 'create'])->name('desty.sync.create');
     Route::post('/desty/sync/store', [DestySyncController::class, 'store'])->name('desty.sync.store');
+    Route::get('/desty/sync/{id}/edit', [DestySyncController::class, 'edit'])->name('desty.sync.edit');
     Route::delete('/desty/sync/{id}/delete', [DestySyncController::class, 'delete'])->name('desty.sync.delete');
-
+    Route::patch('/desty/sync/{id}/update', [DestySyncController::class, 'update'])->name('desty.sync.update');
     Route::get('desty/cek', [DestyController::class, 'cek'])->name('desty.cek');
     
 
@@ -331,6 +332,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/transaction/export/sell/item', [ExportController::class, 'sellItem'])->name('export.sellItem')->middleware('permission:transactions.detail');
     Route::get('/transaction/export/sell/item/build', [ExportController::class, 'exportSellItem'])->name('export.sellItemBuild')->middleware('permission:transactions.detail');
+    Route::get('/transaction/export/sell/item/build/desty', [ExportController::class, 'exportDesty'])->name('export.desty')->middleware('permission:transactions.detail');
 
     Route::get('/transaction/sync', [TransactionsController::class, 'transactionSync'])->name('transaction.transactionSync')->middleware('permission:transactions.detail');
 

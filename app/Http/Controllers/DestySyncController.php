@@ -86,11 +86,32 @@ class DestySyncController extends Controller
         return redirect()->route('desty.sync.index')->with('success', 'Desty Sync created successfully.');
     }
 
+     public function edit($id)
+    {
+
+        $data = DestySync::findOrFail($id);
+
+        return view('desty.sync.edit', compact('data'));
+    }
+
     public function delete($id)
     {
         $destySync = DestySync::findOrFail($id);
         $destySync->delete();
 
         return redirect()->route('desty.sync.index')->with('success', 'Desty Sync deleted successfully.');
+    }
+
+    public function update($id, Request $request)
+    {
+        $data = DestySync::findOrFail($id);
+
+        $data->gudang_id = $request->gudang_id;
+        $data->slot_id = $request->slot_id;
+
+        $data->save();
+
+
+        return redirect()->route('desty.sync.index')->with('success', 'Desty Sync updated.');
     }
 }

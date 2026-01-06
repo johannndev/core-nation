@@ -14,7 +14,6 @@ class DestyHelper
         try {
             $headers = [
                 'Content-Type' => 'application/json',
-                'Cookie' => 'acw_tc=0b3ab43217634384645796714e562272be5d9fa53edd1835bd663d1b2d5bf1'
             ];
 
             $body = [

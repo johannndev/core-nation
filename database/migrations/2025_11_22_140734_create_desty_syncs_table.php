@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('desty_warehouse_id');
             $table->integer('warehouse_id');
             $table->integer('customer_id');
+            $table->string('gudang_id')->nullable();
+            $table->string('slot_id')->nullable();
             $table->timestamps();
         });
     }

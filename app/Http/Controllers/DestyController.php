@@ -36,7 +36,9 @@ class DestyController extends Controller
         return $response->json();
     }
 
-    public function wh()
+    
+
+    public function dataDesty()
     {
         // Cek token valid
         $token = DestyHelper::getValidToken();
@@ -48,16 +50,16 @@ class DestyController extends Controller
 
 
         $response = Http::withHeaders([
-            'Authorization'   => 'Bearer ' . $token->token,
+            'Authorization'   => ''.$token->token.'',
             'Content-Type'  => 'application/json'
-        ])->send('post', 'https://api.desty.app/api/warehouse/list', [
+        ])->send('post', 'https://api.desty.app/api/product/page', [
             'body' => json_encode([
                 'pageNumber' => 1,
                 'pageSize'   => 20
             ])
         ]);
 
-        dd($response->json());
+        dd($response->json(),$token->token);
 
         return $response->json();
     }
