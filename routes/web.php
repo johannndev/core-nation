@@ -335,6 +335,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/export/sell/item/build/desty', [ExportController::class, 'exportDesty'])->name('export.desty')->middleware('permission:transactions.detail');
 
     Route::get('/transaction/sync', [TransactionsController::class, 'transactionSync'])->name('transaction.transactionSync')->middleware('permission:transactions.detail');
+    
+     Route::get('/transaction/{id}/desty/export', [TransactionsController::class, 'destyExport'])->name('transaction.exportDesty')->middleware('permission:transactions.detail');
 
     Route::patch('/transaction/sync/{id}/display', [TransactionsController::class, 'transactionSyncDisplay'])->name('transaction.transactionSyncDisplay')->middleware('permission:transactions.detail');
     

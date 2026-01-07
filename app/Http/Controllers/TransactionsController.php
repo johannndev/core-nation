@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ModelException;
+use App\Exports\DestyTransactionExport;
 use App\Exports\SellItemExport;
 use App\Helpers\AppSettingsHelper;
 use App\Helpers\CCManagerHelper;
@@ -32,6 +33,7 @@ use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class TransactionsController extends Controller
@@ -2113,6 +2115,21 @@ class TransactionsController extends Controller
 
 
 		 return redirect()->route('transaction.transactionSync')->with('success',  'Updated');
+	}
+
+	public function destyExport($id)
+	{
+		
+		$data = Transaction::find($id);
+
+        $typeName = Transaction::$types[$data->type];
+
+        $filename = $typeName . '-' . $data->invoice . '.xlsx';
+
+
+        return Excel::download(new DestyTransactionExport($id), $filename);
+
+
 	}
 
 
