@@ -50,14 +50,13 @@
 
         @endphp
         @forelse ($dataList as $item)
-
             @php
-                
+
                 if ($item->transaction_type == 2 || $item->transaction_type == 17) {
-                    $qty = "-".$item->quantity;
-                    $idgudang = $item->destySender->gudang_id ?? 'kosong';
+                    $qty = '-' . $item->quantity;
+                    $idgudang = (string)$item->destySender->gudang_id ?? 'kosong';
                     $namagudang = $item->destySender->warehouse->name ?? 'kosong';
-                    $idslot = $item->destySender->slot_id ?? 'kosong';
+                    $idslot = (string)$item->destySender->slot_id ?? 'kosong';
                 } else {
                     $qty = $item->quantity;
                 }
@@ -66,11 +65,15 @@
             <tr>
                 <td>{{ $item->item->name }}</td>
                 <td>{{ $item->item->code }}</td>
-                <td data-type="string"  data-format="@">{{(string)$idgudang}}</td>
-                <td>{{$namagudang}}</td>
-                <td  data-type="string" data-format="@">{{(string)$idslot}}</td>
+                <td data-type="string">
+                    {{ $idgudang }}
+                </td>
+                <td>{{ $namagudang }}</td>
+                <td data-type="string">
+                    {{ $idslot }}
+                </td>
                 <td></td>
-                <td>{{ $qty}}</td>
+                <td>{{ $qty }}</td>
                 <td>Rp {{ number_format($item->total, 0, '', '.') }}</td>
             </tr>
         @empty
