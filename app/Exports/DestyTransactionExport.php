@@ -12,11 +12,11 @@ use App\Exports\StringValueBinder;
 
 class DestyTransactionExport extends StringValueBinder implements FromCollection, WithHeadings, WithColumnFormatting
 {
-    protected $id;
+    protected $data;
 
-    public function __construct($id)
+    public function __construct($data)
     {
-        $this->id = $id;
+        $this->data = $data;
     }
 
     /**
@@ -24,35 +24,18 @@ class DestyTransactionExport extends StringValueBinder implements FromCollection
      */
     public function collection(): Collection
     {
-        $dataList = TransactionDetail::where('transaction_id', $this->id)
-            ->with('item', 'destySender.warehouse')
-            ->orderBy('date', 'desc')
-            ->orderBy('transaction_id', 'desc')
-            ->get();
 
+        $dataList = collect($this->data);
         $rows = $dataList->map(function ($item) {
-
-            if ($item->transaction_type == 2 || $item->transaction_type == 17) {
-                $qty = '-' . $item->quantity;
-                $idgudang   = (string) optional($item->destySender)->gudang_id;
-                $namagudang = optional(optional($item->destySender)->warehouse)->name;
-                $idslot     = (string) optional($item->destySender)->slot_id;
-            } else {
-                $qty = $item->quantity;
-                $idgudang = '';
-                $namagudang = '';
-                $idslot = '';
-            }
-
             return [
-                $item->item->name ?? '',
-                $item->item->code ?? '',
-                '="' . $idgudang . '"',
-                $namagudang,
-                '="' . $idslot . '"',
+                $item['nama_produk'] ?? '',
+                $item['sku'] ?? '',
+                '="' . $item['id_gudang'] . '"',
+                $item['nama_gudang'],
+                '="' . $item['id_slot'] . '"',
                 '',
-                $qty,
-                $item->total,
+                $item['qty'],
+                $item['total'],
             ];
         });
 

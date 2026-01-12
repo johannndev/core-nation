@@ -389,9 +389,10 @@
 
                         @endif
 
-                        @if ($data->type == 2 && $data->submit_type == 1)
+                        @if ($showDesty == 1)
+                        
                             
-                        <a href="{{ route('transaction.exportDesty', $data->id) }}" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Desty</a>
+                        <a href="{{ route('transaction.exportDesty', ['id' => $data->id, 'data' => $itemDesty]) }}" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Desty</a>
 
                         @endif
 
