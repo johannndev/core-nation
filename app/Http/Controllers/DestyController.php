@@ -192,8 +192,6 @@ class DestyController extends Controller
             $item_codes = array_column($notMatched->toArray(), 'code');
             $notMatchedString = implode(", ", $item_codes);
 
-            dd( 'Item tidak ditemukan: ' . $notMatchedString);
-
             return redirect()->back()->withInput()->with('errorMessage','Item tidak ditemukan: ' . $notMatchedString);
         }
 
