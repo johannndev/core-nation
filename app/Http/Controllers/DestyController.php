@@ -248,7 +248,7 @@ class DestyController extends Controller
                 
         } else {
             
-            return redirect()->back()->withInput()->with("Gagal membuat order untuk ID {$desty->id}: " . $createData['message']);
+            return redirect()->back()->withInput()->with('errorMessage',"Gagal membuat order untuk ID {$desty->id}: " . $createData['message']);
 
         }
     }
