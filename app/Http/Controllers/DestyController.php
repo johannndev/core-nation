@@ -50,7 +50,7 @@ class DestyController extends Controller
         return $response->json();
     }
 
-    
+
 
     public function dataDesty()
     {
@@ -64,7 +64,7 @@ class DestyController extends Controller
 
 
         $response = Http::withHeaders([
-            'Authorization'   => ''.$token->token.'',
+            'Authorization'   => '' . $token->token . '',
             'Content-Type'  => 'application/json'
         ])->send('post', 'https://api.desty.app/api/product/page', [
             'body' => json_encode([
@@ -73,7 +73,7 @@ class DestyController extends Controller
             ])
         ]);
 
-        dd($response->json(),$token->token);
+        dd($response->json(), $token->token);
 
         return $response->json();
     }
@@ -135,12 +135,13 @@ class DestyController extends Controller
         return view('desty.detail_payload', compact('data', 'jsonData'));
     }
 
-    public function createManual($id){
+    public function createManual($id)
+    {
 
 
         // 1. Ambil data pending
-        $desty = DestyPayload::where('id',$id)->whereIn('order_status_list', ['Completed','Returns'])
-            ->whereIn('status', ['error','failed'])
+        $desty = DestyPayload::where('id', $id)->whereIn('order_status_list', ['Completed', 'Returns'])
+            ->whereIn('status', ['error', 'failed'])
             ->first();
 
         if (!$desty) {
@@ -157,8 +158,8 @@ class DestyController extends Controller
             ->first();
 
         if (!$destyWh || !$destyWh->destySync) {
-           
-            return redirect()->back()->withInput()->with('errorMessage','Desty Warehouse tidak ditemukan atau belum disync');
+
+            return redirect()->back()->withInput()->with('errorMessage', 'Desty Warehouse tidak ditemukan atau belum disync');
         }
 
 
@@ -192,7 +193,7 @@ class DestyController extends Controller
             $item_codes = array_column($notMatched->toArray(), 'code');
             $notMatchedString = implode(", ", $item_codes);
 
-            return redirect()->back()->withInput()->with('errorMessage','Item tidak ditemukan: ' . $notMatchedString);
+            return redirect()->back()->withInput()->with('errorMessage', 'Item tidak ditemukan: ' . $notMatchedString);
         }
 
 
@@ -202,8 +203,8 @@ class DestyController extends Controller
             ->first();
 
         if ($cekTransaksi) {
-           
-            return redirect()->back()->withInput()->with('errorMessage','Order duplicate, sudah dibuat sebelumnya');
+
+            return redirect()->back()->withInput()->with('errorMessage', 'Order duplicate, sudah dibuat sebelumnya');
         }
 
 
@@ -229,12 +230,12 @@ class DestyController extends Controller
 
         $dataCollect = (object)$dataOrder;
 
-        if($desty->order_status_list == 'Completed'){
+        if ($desty->order_status_list == 'Completed') {
             $typeTr = Transaction::TYPE_SELL;
-        }elseif ($desty->order_status_list == 'Returns'){
+        } elseif ($desty->order_status_list == 'Returns') {
             $typeTr = Transaction::TYPE_RETURN;
             # code...
-        }else{
+        } else {
             $typeTr = null;
         }
 
@@ -242,18 +243,17 @@ class DestyController extends Controller
             ->createTransaction($typeTr, $dataCollect);
 
         if ($createData['status'] == "200") {
-           
 
+            DestyPayload::where('id', $desty->id)
+                ->update(['status' => 'processed', 'info' => 'Order berhasil dibuat di sistem.']);
             return redirect()->route('desty.payload')->with('success', "Order berhasil dibuat di sistem: ID {$desty->id}");
-                
         } else {
-            
-            return redirect()->back()->withInput()->with('errorMessage',"Gagal membuat order untuk ID {$desty->id}: " . $createData['message']);
 
+            return redirect()->back()->withInput()->with('errorMessage', "Gagal membuat order untuk ID {$desty->id}: " . $createData['message']);
         }
     }
 
-    
+
 
     public function simpleWay()
     {
@@ -310,9 +310,8 @@ class DestyController extends Controller
 
                     // Ubah menjadi string dengan koma sebagai pemisah
                     $notMatchedString = implode(", ", $item_codes);
-                    
-                    DestyPayload::where('id', $desty->id)->update(['status' => 'failed', 'info' => 'Item tidak ditemukan: ' . $notMatchedString]);
 
+                    DestyPayload::where('id', $desty->id)->update(['status' => 'failed', 'info' => 'Item tidak ditemukan: ' . $notMatchedString]);
                 } else {
 
                     if ($matched->count() > 0) {
@@ -320,8 +319,6 @@ class DestyController extends Controller
                         $cekTransaksi = Transaction::where('type', Transaction::TYPE_SELL)->where('invoice', $dataApi['salesorder_no'])->first();
 
                         if ($cekTransaksi) {
-
-                            
                         } else {
 
 
@@ -351,7 +348,7 @@ class DestyController extends Controller
                                 DestyPayload::where('id', $desty->id)->update(['status' => 'processed', 'info' => 'Order berhasil dibuat di sistem.']);
                             } else {
 
-                               DestyPayload::where('id', $desty->id)->update(['status' => 'error', 'info' => 'Gagal membuat order: ' . $createData['message']]);
+                                DestyPayload::where('id', $desty->id)->update(['status' => 'error', 'info' => 'Gagal membuat order: ' . $createData['message']]);
                             }
                         }
                     }
