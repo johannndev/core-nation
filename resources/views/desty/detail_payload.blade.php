@@ -51,7 +51,7 @@
                 <div class="p-4 mb-4 text-sm rounded-lg {{ $alertClass }}" role="alert">
                     {{ $data->info }}
                 </div>
-            @endif
+           
 
             <div class="mt-2">
 
@@ -65,6 +65,8 @@
                 </form>
 
             </div>
+
+            @endif
 
         </div>
 

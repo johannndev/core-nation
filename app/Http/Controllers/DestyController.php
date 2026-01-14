@@ -139,8 +139,9 @@ class DestyController extends Controller
         // 1. Ambil data pending
         $desty = DestyPayload::where('id',$id)->whereIn('order_status_list', ['Completed','Returns'])
             ->whereIn('status', ['error','failed'])
-            ->orderBy('created_at', 'asc')
             ->first();
+
+        
 
         if (!$desty) {
 
@@ -157,7 +158,7 @@ class DestyController extends Controller
 
         if (!$destyWh || !$destyWh->destySync) {
            
-            return redirect()->back()->withInput()->with('Desty Warehouse tidak ditemukan atau belum disync');
+            return redirect()->back()->withInput()->with('errorMessage','Desty Warehouse tidak ditemukan atau belum disync');
         }
 
 
@@ -191,7 +192,7 @@ class DestyController extends Controller
             $item_codes = array_column($notMatched->toArray(), 'code');
             $notMatchedString = implode(", ", $item_codes);
 
-             return redirect()->back()->withInput()->with('Item tidak ditemukan: ' . $notMatchedString);
+             return redirect()->back()->withInput()->with('errorMessage','Item tidak ditemukan: ' . $notMatchedString);
         }
 
 
@@ -202,7 +203,7 @@ class DestyController extends Controller
 
         if ($cekTransaksi) {
            
-            return redirect()->back()->withInput()->with('Order duplicate, sudah dibuat sebelumnya');
+            return redirect()->back()->withInput()->with('errorMessage','Order duplicate, sudah dibuat sebelumnya');
         }
 
 
