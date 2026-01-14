@@ -147,7 +147,7 @@ class DestyController extends Controller
 
         if (!$desty) {
 
-            return redirect()->back()->withInput()->with("Tidak ada data untuk diproses");
+            return redirect()->back()->withInput()->with('errorMessage', "Tidak ada data untuk diproses");
         }
         // 2. Cek Desty Warehouse
 
