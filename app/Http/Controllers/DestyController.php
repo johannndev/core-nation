@@ -143,8 +143,6 @@ class DestyController extends Controller
             ->whereIn('status', ['error','failed'])
             ->first();
 
-        dd($desty);
-
         if (!$desty) {
 
             return redirect()->back()->withInput()->with('errorMessage', "Tidak ada data untuk diproses");
@@ -194,7 +192,9 @@ class DestyController extends Controller
             $item_codes = array_column($notMatched->toArray(), 'code');
             $notMatchedString = implode(", ", $item_codes);
 
-             return redirect()->back()->withInput()->with('errorMessage','Item tidak ditemukan: ' . $notMatchedString);
+            dd( 'Item tidak ditemukan: ' . $notMatchedString);
+
+            return redirect()->back()->withInput()->with('errorMessage','Item tidak ditemukan: ' . $notMatchedString);
         }
 
 
