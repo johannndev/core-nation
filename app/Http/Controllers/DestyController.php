@@ -136,12 +136,14 @@ class DestyController extends Controller
     }
 
     public function createManual($id){
+
+
         // 1. Ambil data pending
         $desty = DestyPayload::where('id',$id)->whereIn('order_status_list', ['Completed','Returns'])
             ->whereIn('status', ['error','failed'])
             ->first();
 
-        
+        dd($desty);
 
         if (!$desty) {
 
