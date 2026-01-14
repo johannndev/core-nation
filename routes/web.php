@@ -151,6 +151,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/desty/payload', [DestyController::class, 'payload'])->name('desty.payload');
     Route::get('/desty/payload/{id}/detail', [DestyController::class, 'detailPayload'])->name('desty.payloadDetail');
     Route::get('/desty/data', [DestyController::class, 'dataDesty']);
+    Route::post('/desty/create/{id}/manual', [DestyController::class, 'createManual'])->name('desty.createManual');
 
     Route::get('/desty/sync', [DestySyncController::class, 'index'])->name('desty.sync.index');
     Route::get('/desty/sync/create', [DestySyncController::class, 'create'])->name('desty.sync.create');
