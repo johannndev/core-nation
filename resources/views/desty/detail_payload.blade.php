@@ -79,8 +79,9 @@
                 <div class="p-4 mb-4 text-sm rounded-lg {{ $alertClass }}" role="alert">
                     {{ $data->info }}
                 </div>
+            @endif
 
-
+            @if ($data->status == 'error' || $data->status == 'failed')
                 <div class="mt-2">
 
                     <form action="{{ route('desty.createManual', $data->id) }}" method="POST">
@@ -94,6 +95,7 @@
 
                 </div>
             @endif
+
 
         </div>
 
