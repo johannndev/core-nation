@@ -483,7 +483,7 @@
             dataType: 'json',
             success: function (res) {
 
-                console.log(res);
+                //console.log(res);
                 var errorCode = res['error'];
             
                 if(errorCode === 0 ){
