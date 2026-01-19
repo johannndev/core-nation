@@ -81,7 +81,7 @@ class DestyController extends Controller
     public function payload(Request $request)
     {
         // Build query only once, apply filters conditionally
-        $query = DestyPayload::with('warehouse')->orderByDesc('created_at');
+        $query = DestyPayload::with('warehouse','warehouse.destySync')->orderByDesc('created_at');
 
         if ($invoice = $request->get('invoice')) {
             $query->where('invoice', 'like', '%' . $invoice . '%');
@@ -102,6 +102,8 @@ class DestyController extends Controller
         ")->first();
 
         $dataList = $query->paginate(200)->withQueryString();
+
+
 
         return view('desty.payload', [
             'dataList'     => $dataList,
