@@ -1580,7 +1580,7 @@ class TransactionsController extends Controller
 
 	public function return()
     {
-		$trType = 'buy';
+		$trType = 'return';
 
 		$dataListPropSender = [
 			"label" => "Sender",
