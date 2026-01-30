@@ -53,7 +53,7 @@
             <!-- Start coding here -->
             <div class="grid grid-cols-12 gap-4">
 
-                <div class="col-span-4">
+                <div class="col-span-12 md:col-span-4 lg:col-span-4">
 
                     <form class="myForm" id="myForm" method="POST" action="{{ route('restock.addItem') }}">
 
@@ -113,7 +113,7 @@
                     </form>
                 </div>
 
-                <div class="col-span-8">
+                <div class="col-span-12 md:col-span-8 lg:col-span-8">
 
                     <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
                         <p class="text-lg font-bold mb-4">Daftar Restock</p>
