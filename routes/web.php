@@ -33,6 +33,7 @@ use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ResellerController;
+use App\Http\Controllers\RestockController;
 use App\Http\Controllers\SetoranController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatSellController;
@@ -73,9 +74,6 @@ Route::get('/cache-role-reset', function () {
     return 'cache role dihapus';
 });
 
-
-
-
 Route::get('/role-set', function () {
 
     // $user = User::find(1);
@@ -98,6 +96,12 @@ Route::get('/role-set', function () {
     return 'berhasil';
 });
 
+Route::get('restock', [RestockController::class, 'index'])->name('restock.index');
+Route::get('restock/create', [RestockController::class, 'create'])->name('restock.create');
+Route::post('restock/add-item', [RestockController::class, 'addItem'])->name('restock.addItem');
+Route::get('restock/list-item', [RestockController::class, 'listItem'])->name('restock.listItem');
+Route::delete('restock/{id}/remove-item', [RestockController::class, 'removeItem'])->name('restock.removeItem');
+Route::post('restock/store', [RestockController::class, 'store'])->name('restock.store');
 
 Route::get('/logjubelio', [LogJubelioController::class, 'index']);
 Route::get('/logjubelio/{id}/detail', [LogJubelioController::class, 'detail']);
