@@ -102,6 +102,11 @@ Route::post('restock/add-item', [RestockController::class, 'addItem'])->name('re
 Route::get('restock/list-item', [RestockController::class, 'listItem'])->name('restock.listItem');
 Route::delete('restock/{id}/remove-item', [RestockController::class, 'removeItem'])->name('restock.removeItem');
 Route::post('restock/store', [RestockController::class, 'store'])->name('restock.store');
+Route::get('restock/{id}/update', [RestockController::class, 'update'])->name('restock.update');
+Route::post('restock/{id}/update-qty', [RestockController::class, 'updateQty'])->name('restock.updateQty');
+Route::get('restock/{id}/received', [RestockController::class, 'received'])->name('restock.received');
+Route::post('restock/{id}/post-received', [RestockController::class, 'receiveStore'])->name('restock.postReceived');
+Route::get('restock/{id}/history', [RestockController::class, 'history'])->name('restock.history');
 
 Route::get('/logjubelio', [LogJubelioController::class, 'index']);
 Route::get('/logjubelio/{id}/detail', [LogJubelioController::class, 'detail']);
