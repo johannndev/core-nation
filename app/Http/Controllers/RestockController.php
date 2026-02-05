@@ -35,7 +35,7 @@ class RestockController extends Controller
             'item',
             'item.warehouseItem' => function ($q) use ($warehouseIds) {
                 $q->whereIn('warehouse_id', $warehouseIds)
-                    ->with('warehouse:id,name'); // ambil nama warehouse
+                    ->with('warehouse:id,name');
             }
         ]);
 
@@ -59,6 +59,8 @@ class RestockController extends Controller
         }
 
         $restocks = $query->paginate(10)->withQueryString();
+
+        // dd($restocks);
 
         return view('restock.index', compact('restocks'));
     }

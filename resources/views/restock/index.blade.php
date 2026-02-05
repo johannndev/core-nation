@@ -146,6 +146,12 @@
                                     @php
 
                                         $url = $item->item->getImageUrl();
+
+                                        $warehouseItems = $item->item?->warehouseItem;
+
+                                        if (!($warehouseItems instanceof \Illuminate\Support\Collection)) {
+                                            $warehouseItems = collect();
+                                        }
                                     @endphp
 
 
@@ -175,9 +181,9 @@
                                         <td class="px-4 py-3">{{ $item->item->name }}</td>
                                         <td class="px-4 py-3">{{ $item->item->code }}</td>
                                         <td>
-                                            @forelse ($item->item?->warehouseItems ?? [] as $wh)
+                                            @forelse ($warehouseItems as $wh)
                                                 <div>
-                                                    <strong>{{ $wh->warehouse->name ?? '-' }}</strong> :
+                                                    <strong>{{ $wh->warehouse?->name ?? '-' }}</strong> :
                                                     {{ $wh->quantity ?? 0 }}
                                                 </div>
                                             @empty
