@@ -21,7 +21,7 @@
                 <!-- Start coding here -->
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
 
-                    <form action="{{route('filter.get',['action' =>'restock.index'])}}" method="post">
+                    <form action="{{ route('filter.get', ['action' => 'restock.index']) }}" method="post">
                         @csrf
                         <div class="flex flex-col md:flex-row items-end justify-between p-4">
 
@@ -48,8 +48,7 @@
                                                     <option {{ Request('order') == 'desc' ? 'selected' : 'null' }}
                                                         value="desc">Descending</option>
 
-                                                    <option
-                                                        {{ Request('order') == 'asc' ? 'selected' : 'null' }}
+                                                    <option {{ Request('order') == 'asc' ? 'selected' : 'null' }}
                                                         value="asc">Ascending</option>
 
                                                 </select>
@@ -61,16 +60,13 @@
                                                     <option value ="">Choose a type</option>
                                                     <option {{ Request('kolom') == 'restock' ? 'selected' : 'null' }}
                                                         value="restock">Restock</option>
-                                                    <option
-                                                        {{ Request('kolom') == 'production' ? 'selected' : 'null' }}
+                                                    <option {{ Request('kolom') == 'production' ? 'selected' : 'null' }}
                                                         value="production">Production</option>
 
-                                                    <option
-                                                        {{ Request('kolom') == 'shipped' ? 'selected' : 'null' }}
+                                                    <option {{ Request('kolom') == 'shipped' ? 'selected' : 'null' }}
                                                         value="shipped">Shipped</option>
 
-                                                    <option
-                                                        {{ Request('kolom') == 'missing' ? 'selected' : 'null' }}
+                                                    <option {{ Request('kolom') == 'missing' ? 'selected' : 'null' }}
                                                         value="missing">Missing</option>
 
                                                 </select>
@@ -135,6 +131,7 @@
                                     <th scope="col" class="px-4 py-3">Barcode</th>
                                     <th scope="col" class="px-4 py-3">Name</th>
                                     <th scope="col" class="px-4 py-3">Code</th>
+                                    <th scope="col" class="px-4 py-3">Warehouse</th>
                                     <th scope="col" class="px-4 py-3">Restock QTY</th>
                                     <th scope="col" class="px-4 py-3">In Prod QTY</th>
                                     <th scope="col" class="px-4 py-3">Shipped QTY</th>
@@ -177,6 +174,16 @@
 
                                         <td class="px-4 py-3">{{ $item->item->name }}</td>
                                         <td class="px-4 py-3">{{ $item->item->code }}</td>
+                                        <td>
+                                            @forelse ($item->item?->warehouseItems ?? [] as $wh)
+                                                <div>
+                                                    <strong>{{ $wh->warehouse->name ?? '-' }}</strong> :
+                                                    {{ $wh->quantity ?? 0 }}
+                                                </div>
+                                            @empty
+                                                <span class="text-gray-400 italic">No warehouse stock</span>
+                                            @endforelse
+                                        </td>
                                         <td class="px-4 py-3">{{ $item->restocked_quantity }}</td>
                                         <td class="px-4 py-3">{{ $item->in_production_quantity }}</td>
                                         <td class="px-4 py-3">{{ $item->shipped_quantity }}</td>

@@ -24,12 +24,20 @@ class RestockController extends Controller
             'missing'    => 'missing_quantity',
         ];
 
+        $warehouseIds = [2792, 2875, 2851];
+
         // request
         $searchColumn = $request->get('kolom'); // untuk sorting
         $searchValue  = $request->get('code');  // search id / code
         $sortDir      = $request->get('order');
 
-        $query = Restock::with('item');
+        $query = Restock::with([
+            'item',
+            'item.warehouseItem' => function ($q) use ($warehouseIds) {
+                $q->whereIn('warehouse_id', $warehouseIds)
+                    ->with('warehouse:id,name'); // ambil nama warehouse
+            }
+        ]);
 
         /* =========================
      * SEARCH (relasi item)
