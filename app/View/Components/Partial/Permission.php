@@ -274,6 +274,7 @@ class Permission extends Component
             ['name' => 'item stat', 'label' => 'View stat'],
             ['name' => 'item group', 'label' => 'View Group'],
             ['name' => 'item search', 'label' => 'View stat'],
+            ['name' => 'restock', 'label' => 'Item Restock'],
         ];
 
         return $data;

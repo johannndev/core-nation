@@ -84,9 +84,9 @@ Route::get('/role-set', function () {
 
     // $user->assignRole('superadmin');
 
-    $role = Role::create(['name' => 'ban']);
+    // $role = Role::create(['name' => 'ban']);
 
-    // $permission = Permission::create(['name' => 'superadmin']);
+    $permission = Permission::create(['name' => 'restok']);
 
     // $role = Role::where('name','superadmin')->first();
 

@@ -15,9 +15,42 @@ use Illuminate\Support\Facades\DB;
 
 class RestockController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $restocks = Restock::with('item')->orderBy('date', 'desc')->paginate(10);
+        $columnMap = [
+            'restock'    => 'restocked_quantity',
+            'production' => 'in_production_quantity',
+            'shipped'   => 'shipped_quantity',
+            'missing'    => 'missing_quantity',
+        ];
+
+        // request
+        $searchColumn = $request->get('kolom'); // untuk sorting
+        $searchValue  = $request->get('code');  // search id / code
+        $sortDir      = $request->get('order');
+
+        $query = Restock::with('item');
+
+        /* =========================
+     * SEARCH (relasi item)
+     * ========================= */
+        if (!empty($searchValue)) {
+            $query->whereHas('item', function ($q) use ($searchValue) {
+                $q->where('id', 'like', "%{$searchValue}%")
+                    ->orWhere('code', 'like', "%{$searchValue}%");
+            });
+        }
+        /* =========================
+     * SORT (quantity)
+     * ========================= */
+
+        // dd($columnMap[$searchColumn], $sortDir);
+
+        if (isset($columnMap[$searchColumn])) {
+            $query->orderBy($columnMap[$searchColumn], $sortDir);
+        }
+
+        $restocks = $query->paginate(10)->withQueryString();
 
         return view('restock.index', compact('restocks'));
     }
