@@ -38,7 +38,7 @@ class RestockController extends Controller
 
         $query = Restock::with([
             'item',
-            'item.warehouseItem' => function ($q) use ($warehouseIds) {
+            'item.whItem' => function ($q) use ($warehouseIds) {
                 $q->whereIn('warehouse_id', $warehouseIds)
                     ->with('warehouse:id,name');
             }

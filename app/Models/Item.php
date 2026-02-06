@@ -180,6 +180,11 @@ class Item extends Model
         return $this->hasMany(WarehouseItem::class, 'item_id', 'id')->where('warehouse_id',2875);
     }
 
+	public function whItem(): HasMany
+    {
+        return $this->hasMany(WarehouseItem::class, 'item_id', 'id');
+    }
+
 	public function warehousesItemAlt()
 	{
 		return $this->hasMany(WarehouseItem::class,'item_id', 'id');
