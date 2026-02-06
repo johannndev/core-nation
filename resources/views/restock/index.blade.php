@@ -147,7 +147,7 @@
 
                                         $url = $item->item->getImageUrl();
 
-                                        $warehouseItems = $item->item?->warehouseItem;
+                                        $warehouseItems = $item->item?->whItem;
 
                                         if (!($warehouseItems instanceof \Illuminate\Support\Collection)) {
                                             $warehouseItems = collect();
@@ -228,7 +228,7 @@
                                                 </a>
 
                                                 {{-- history --}}
-                                                
+
 
 
 
