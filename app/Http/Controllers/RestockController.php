@@ -12,6 +12,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use App\Models\WarehouseItem;
 
 class RestockController extends Controller
 {
@@ -25,6 +26,10 @@ class RestockController extends Controller
         ];
 
         $warehouseIds = [2792, 2875, 2851];
+
+        $exists = WarehouseItem::where('item_id', 79032)
+        ->whereIn('warehouse_id', $warehouseIds)
+        ->get()->toArray();
 
         // request
         $searchColumn = $request->get('kolom'); // untuk sorting
@@ -60,7 +65,7 @@ class RestockController extends Controller
 
         $restocks = $query->paginate(10)->withQueryString();
 
-        dd($restocks);
+        dd($query->get()->toArray(), $exists);
 
         return view('restock.index', compact('restocks'));
     }
