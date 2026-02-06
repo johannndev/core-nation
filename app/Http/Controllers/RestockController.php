@@ -60,7 +60,7 @@ class RestockController extends Controller
 
         $restocks = $query->paginate(10)->withQueryString();
 
-        // dd($restocks);
+        dd($restocks);
 
         return view('restock.index', compact('restocks'));
     }
