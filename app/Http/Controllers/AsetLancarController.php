@@ -69,7 +69,7 @@ class AsetLancarController extends Controller
 	{
 		$data = Item::with('group','tags')->where('id',$id)->first();
 
-		dd( $data->lancar_image_path);
+
 
 		$urlImage = $data->lancar_image_path;
 
