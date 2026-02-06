@@ -173,7 +173,7 @@
 
 
 
-                                            <a href="{{ route('asetLancar.detail', $item->id) }}"
+                                            <a href="{{ route('asetLancar.detail', $item->item_id) }}"
                                                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ $item->item_id }}</a>
 
                                         </th>
