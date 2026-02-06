@@ -287,6 +287,8 @@ class Item extends Model
 
 		$imageUrl = env('CDN_URL', '/laragon/www/core-nation/public/asset/').$this->id.'.jpg';
 		$imagePath = env('CDN_PATH', '/laragon/www/core-nation/public/asset/').$this->id.'.jpg';
+		
+		dd($imagePath);
 
 		return file_exists($imagePath)
 		? $imageUrl
