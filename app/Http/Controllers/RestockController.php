@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Models\WarehouseItem;
+use Exception;
 
 class RestockController extends Controller
 {
@@ -28,8 +29,8 @@ class RestockController extends Controller
         $warehouseIds = [2792, 2875, 2851];
 
         $exists = WarehouseItem::where('item_id', 79032)
-        ->whereIn('warehouse_id', $warehouseIds)
-        ->get()->toArray();
+            ->whereIn('warehouse_id', $warehouseIds)
+            ->get()->toArray();
 
         // request
         $searchColumn = $request->get('kolom'); // untuk sorting
@@ -67,7 +68,17 @@ class RestockController extends Controller
 
         // dd($query->get()->toArray(), $exists);
 
-        return view('restock.index', compact('restocks'));
+        $cacheKey = "gudang_cart_user_" . auth()->id();
+        $hasCache = Cache::has($cacheKey);
+
+        if ($hasCache) {
+            $cart = Cache::get($cacheKey, []);
+            $cartCount = count($cart);
+        } else {
+            $cartCount = 0;
+        }
+
+        return view('restock.index', compact('restocks', 'cartCount'));
     }
 
     public function create()
@@ -329,29 +340,124 @@ class RestockController extends Controller
             ->with('success', 'Stock updated successfully');
     }
 
-    public function received($id)
+    public function received()
     {
-        $restock = Restock::with('item')->findOrFail($id);
-        return view('restock.received', compact('restock'));
+        $cacheKey = "gudang_cart_user_" . auth()->id();
+
+        // Cache::forget("gudang_cart_user_" . auth()->id());
+
+        $hasCache = Cache::has($cacheKey);
+
+
+
+        if ($hasCache) {
+            $items = Cache::get($cacheKey, []);
+        } else {
+            $items = [];
+        }
+
+        return view('restock.received', compact('items'));
     }
 
-    public function receiveStore($id, Request $request)
+    public function removeCartItem($code)
+    {
+        $userId = auth()->id();
+        $cacheKey = "gudang_cart_user_{$userId}";
+
+        $items = Cache::get($cacheKey, []);
+
+        $items = array_values(array_filter($items, function ($item) use ($code) {
+            return $item['code'] !== $code;
+        }));
+
+        Cache::put($cacheKey, $items, now()->addHour());
+
+        return redirect()->route('restock.received')->with('success', 'Item removed from restock list.');
+    }
+
+    public function receiveStore(Request $request)
     {
         $request->validate([
-            'qty'     => 'required|integer|min:1',
-            'date'    => 'required|date',
+            'date'    => 'required',
             'invoice' => 'nullable|string',
         ]);
 
-        $response = DB::transaction(function () use ($id, $request) {
+        $cacheKey = "gudang_cart_user_" . auth()->id();
+        $items = Cache::get($cacheKey, []);
 
-            $restock = Restock::lockForUpdate()->with('item')->findOrFail($id);
+        $errors = [];
 
-            $receiveQty = (int) $request->qty;
+        foreach ($items as $row) {
+            $restock = Restock::where('item_id', $row['itemId'])->first();
 
-            if ($receiveQty > $restock->shipped_quantity) {
-                throw new \Exception('Qty diterima melebihi shipped quantity');
+            if (!$restock) {
+                $errors[] = "Item {$row['name']} tidak ditemukan di restock";
+                continue;
             }
+
+            if ($row['quantity'] > $restock->shipped_quantity) {
+                $errors[] = "{$row['name']} (Qty {$row['quantity']} > Shipped {$restock->shipped_quantity})";
+            }
+        }
+
+        // kalau ada error → STOP
+        if (!empty($errors)) {
+            return back()->withErrors([
+                'gudang' => "Item berikut tidak cukup shipped qty: " . implode(', ', $errors)
+            ]);
+        }
+
+        $response = DB::transaction(function () use ($items, $request) {
+            $ids = collect($items)->pluck('itemId')->toArray();
+
+            $restocks = Restock::whereIn('item_id', $ids)
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('item_id');
+
+            foreach ($items as $row) {
+                if ($row['quantity'] > $restocks[$row['itemId']]->shipped_quantity) {
+                    throw new Exception("Over qty {$row['name']}");
+                }
+            }
+
+            // bulk update
+            $cases = '';
+            foreach ($items as $row) {
+                $cases .= "WHEN item_id = {$row['itemId']} THEN shipped_quantity - {$row['quantity']} ";
+            }
+
+            DB::statement("
+                UPDATE restocks 
+                SET shipped_quantity = CASE $cases END
+                WHERE item_id IN (" . implode(',', $ids) . ")
+            ");
+
+            $histories = [];
+            $now = now();
+
+            foreach ($items as $row) {
+                $restock = $restocks[$row['itemId']];
+                $before  = $restock->shipped_quantity;
+                $after   = $before - $row['quantity'];
+
+                $histories[] = [
+                    'restock_id'   => $restock->id,
+                    'item_id'      => $restock->item_id,
+                    'step'         => 'received',
+                    'action'       => 'edited',
+                    'qty_before'   => $before,
+                    'qty_after'    => $after,
+                    'qty_changed'  => $row['quantity'],
+                    'invoice'      => $request->invoice,
+                    'user_id'      => auth()->id(),
+                    'date'         => $request->date,
+                    'created_at'   => $now,
+                    'updated_at'   => $now,
+                ];
+            }
+
+            RestockHistory::insert($histories);
 
             // ✅ PAYLOAD KE GUDANG
             $payload = [
@@ -363,40 +469,10 @@ class RestockController extends Controller
                 'note'       => null,
                 'disc'       => 0,
                 'adjustment' => 0,
-                'addMoreInputFields' => [
-                    [
-                        'itemId'   => $restock->item_id,
-                        'code'     => $restock->item->item_code,
-                        'name'     => $restock->item->name,
-                        'quantity' => $receiveQty,
-                        'wh'       => 0,
-                        'price'    => $restock->item->price,
-                        'discount' => 0,
-                        'subtotal' => $receiveQty * $restock->item->price,
-                    ]
-                ],
+                'addMoreInputFields' => $items,
             ];
 
-            // 🔻 KURANGI SHIPPED QTY
-            $before = $restock->shipped_quantity;
 
-            $restock->update([
-                'shipped_quantity' => $before - $receiveQty,
-            ]);
-
-            // 🧾 HISTORY
-            RestockHistory::create([
-                'restock_id'  => $restock->id,
-                'item_id'     => $restock->item_id,
-                'step'        => 'received',
-                'action'      => 'receive',
-                'qty_before'  => $before,
-                'qty_after'   => $restock->shipped_quantity,
-                'qty_changed' => $receiveQty,
-                'invoice'     => $request->invoice,
-                'user_id'     => auth()->id(),
-                'date'        => $request->date,
-            ]);
 
             // 🚚 KIRIM KE GUDANG
             return $this->toGudang(Transaction::TYPE_BUY, $payload);
@@ -410,10 +486,53 @@ class RestockController extends Controller
             return back()->withErrors($result['message']);
         }
 
+        Cache::forget("gudang_cart_user_" . auth()->id());
+
         return redirect()
             ->route('transaction.getDetail', $result['trx'])
             ->with('success', 'Transaction #' . $result['trx'] . ' created.');
     }
+
+    public function addToGudangCart($id, Request $request)
+    {
+        $restock    = Restock::with('item')->findOrFail($id);
+
+        $request->validate([
+            'quantity' => "required|integer|min:1|max:$restock->shipped_quantity",
+        ]);
+
+        $userId   = auth()->id();
+        $cacheKey = "gudang_cart_user_{$userId}";
+
+
+        $receiveQty = (int) $request->quantity;
+
+        $cart = Cache::get($cacheKey, []);
+
+        // 🔥 CEK JIKA ITEM SUDAH ADA
+        foreach ($cart as $row) {
+            if ($row['itemId'] == $restock->item_id) {
+                return back()->with('error', 'Item sudah ada di cart gudang');
+            }
+        }
+
+        // ✅ PUSH ITEM BARU
+        $cart[] = [
+            'itemId'   => $restock->item_id,
+            'code'     => $restock->item->code,
+            'name'     => $restock->item->name,
+            'quantity' => $receiveQty,
+            'wh'        => 0,
+            'price'     => $restock->item->price,
+            'discount'  => 0,
+            'subtotal'  => $receiveQty * $restock->item->price,
+        ];
+
+        Cache::put($cacheKey, $cart, now()->addHour());
+
+        return back()->with('success', 'Item masuk ke Gudang Cart');
+    }
+
 
 
     protected function toGudang($type = null, $payload)
@@ -627,5 +746,46 @@ class RestockController extends Controller
 
 
         return view('restock.history', compact('histories', 'restock'));
+    }
+
+    public function resetSingleQty($id, Request $request)
+    {
+        $request->validate([
+            'type' => 'required|in:production,shipped',
+        ]);
+
+        DB::transaction(function () use ($request, $id) {
+
+            $restock = Restock::lockForUpdate()->findOrFail($id);
+            $type = $request->query('type'); // 🔥 dari query string
+
+            if ($type === 'production') {
+                $before = $restock->in_production_quantity;
+                $restock->in_production_quantity = 0;
+            }
+
+            if ($type === 'shipped') {
+                $before = $restock->shipped_quantity;
+                $restock->shipped_quantity = 0;
+            }
+
+            $restock->save();
+
+            // history
+            RestockHistory::create([
+                'restock_id'  => $restock->id,
+                'item_id'     => $restock->item_id,
+                'step'        => $type,
+                'action'      => 'reset',
+                'qty_before'  => $before,
+                'qty_after'   => 0,
+                'qty_changed' => $before,
+                'invoice'     => null,
+                'user_id'     => auth()->id(),
+                'date'        => now(),
+            ]);
+        });
+
+        return back()->with('success', ucfirst($request->type) . ' qty reset ke 0');
     }
 }

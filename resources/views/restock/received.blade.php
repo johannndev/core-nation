@@ -48,174 +48,130 @@
         </div>
     @endif
 
-    <section class="bg-gray-50 dark:bg-gray-900 mb-8">
-        <div class="mx-auto  ">
-            <!-- Start coding here -->
-            <div class="">
+    <section class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg p-6">
 
-                <div class="">
 
-                    <form method="POST" action="{{ route('restock.postReceived', $restock->id) }}">
-                        @csrf
-                        <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
+        <form method="POST" action="{{ route('restock.postReceived') }}">
+            @csrf
+            {{-- HEADER --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
 
-                            <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-1 items-end "id="">
-                                
-                                <div>
-                                    <label for="date"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date</label>
-                                    <input type="date" name="date" id="date"
-                                        aria-describedby="helper-text-explanation"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        value="{{ date('Y-m-d') }}">
-
-                                </div>
-
-                                <div class="">
-                                    <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 ">Quantity Received
-                                    </label>
-                                    <input  type="text" 
-                                        name="qty" id="qty"
-                                        class="qty register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="" />
-                                </div>
-
-                                <div class="">
-                                    <label for="invoice" class="block mb-2 text-sm font-medium text-gray-900 ">invoice
-                                    </label>
-                                    <input  type="text" 
-                                        name="invoice" id="invoice"
-                                        class="qty register_form bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="" />
-                                </div>
-
-                            </div>
-
-                            <x-layout.submit-button  />
-
-                        </div>
-
-                    </form>
+                {{-- DATE --}}
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        Tanggal Penerimaan
+                    </label>
+                    <input type="date" name="date" value="{{ date('Y-m-d') }}"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5
+                           focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                 </div>
 
-                {{-- <div class="col-span-12 md:col-span-8 lg:col-span-8">
+                {{-- INVOICE --}}
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        No Invoice / Surat Jalan
+                    </label>
+                    <input type="text" name="invoice"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5
+                           focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="INV-2026-0001">
+                </div>
 
-                    <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
-                        <p class="text-lg font-bold mb-4">Daftar Restock</p>
+                {{-- TOTAL INFO --}}
+                <div class="col-span-1 md:col-span-2 flex items-end">
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg w-full">
+                        <p class="text-sm text-gray-500">Total Item</p>
+                        <p class="text-lg font-bold text-gray-900 dark:text-white">
+                            {{ count($items) }} SKU |
+                            {{ collect($items)->sum('quantity') }} pcs
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-                        <div>
-                            @foreach ($items as $item)
-                                <div class="flex items-start justify-between gap-4 border-b py-2">
-                                    <!-- Nama -->
-                                    <div class="flex-1">
-                                        <p class="text-sm text-gray-700 break-words leading-snug">
-                                            {{ $item['name'] }}
-                                        </p>
-                                    </div>
+            {{-- ITEM LIST --}}
+            <div class="border rounded-lg divide-y dark:border-gray-700">
 
-                                    <!-- Qty + Delete -->
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-sm font-semibold text-gray-900">
-                                            {{ $item['qty'] }}
-                                        </span>
+                <div
+                    class="bg-gray-100 dark:bg-gray-700 px-4 py-2 font-semibold text-sm text-gray-700 dark:text-gray-200">
+                    Daftar Barang Diterima
+                </div>
 
-                                        <form method="POST" action="{{ route('restock.removeItem', $item['code']) }}">
-                                            @csrf
-                                            @method('DELETE')
+                @forelse($items as $index => $item)
+                    <div class="flex items-center justify-between px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700">
 
-                                            <button type="submit"
-                                                class="text-xs font-medium text-red-600 hover:text-red-700 hover:underline focus:outline-none focus:ring-2 focus:ring-red-300 rounded">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            @endforeach
-
+                        {{-- ITEM INFO --}}
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                {{ $item['name'] }}
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                {{ $item['code'] }}
+                            </p>
                         </div>
 
-                        <form class="myForm" id="myForm" method="POST" action="{{ route('restock.store') }}">
+                        {{-- QTY --}}
+                        <div class="text-right mr-6">
+                            <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                {{ $item['quantity'] }} pcs
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                Rp {{ number_format($item['subtotal']) }}
+                            </p>
+                        </div>
 
-                            @csrf
+                        {{-- DELETE BUTTON --}}
+                        <button type="button" onclick="deleteItem('{{ $item['code'] }}')"
+                            class="text-red-600 hover:text-red-700 text-sm font-medium px-2 py-1 rounded hover:bg-red-50">
+                            Hapus
+                        </button>
 
-                            <div class="grid grid-cols-2 gap-4 mb-8 mt-4">
-                                <div>
-                                    <label for="date"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date</label>
-                                    <input type="date" name="date" id="date"
-                                        aria-describedby="helper-text-explanation"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        value="{{ date('Y-m-d') }}">
 
-                                </div>
 
-                            </div>
-                            <x-layout.submit-button />
-                        </form>
                     </div>
-                </div> --}}
+                @empty
+                    <div class="p-4 text-gray-500 text-sm text-center">
+                        Tidak ada item di cart gudang
+                    </div>
+                @endforelse
+            </div>
+
+            {{-- FOOTER --}}
+            <div class="mt-6 flex justify-end gap-3">
+                <a href="{{ route('restock.index') }}"
+                    class="px-4 py-2 text-sm rounded-lg border border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700">
+                    Kembali
+                </a>
+
+
+
+                <button type="submit"
+                    class="px-5 py-2 text-sm font-medium text-white bg-green-700 hover:bg-green-800 rounded-lg focus:ring-4 focus:ring-green-300">
+                    Simpan ke Gudang
+                </button>
+
 
             </div>
-        </div>
+
+        </form>
+
+        <form id="delete-form" method="POST" class="hidden">
+            @csrf
+            @method('DELETE')
+        </form>
+
+
     </section>
 
     @push('jsBody')
         <script>
-            function scrollToTop() {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth' // gunakan 'auto' jika tidak ingin animasi
-                });
+            function deleteItem(code) {
+                if (!confirm('Hapus item ini?')) return;
+
+                let form = document.getElementById('delete-form');
+                form.action = `/restock/remove-cart/${code}`; // sesuaikan route
+                form.submit();
             }
-
-
-
-
-
-            $(document).ready(function() {
-
-                initializeSelect2();
-
-            });
-
-            function initializeSelect2() {
-
-                $('#name').select2({
-                    width: '100%',
-                    placeholder: "Pilih ",
-                    minimumInputLength: 2,
-                    ajax: {
-                        url: '{{ route('ajax.getitemName') }}',
-                        dataType: "json",
-                        data: (params) => {
-                            let query = {
-                                search: params.term,
-                                page: params.page || 1,
-                            };
-                            return query;
-                        },
-                        processResults: data => {
-                            return {
-                                results: data.data.map((row) => {
-                                    return {
-                                        text: row.name,
-                                        id: row.id
-                                    };
-                                }),
-                                pagination: {
-                                    more: data.current_page < data.last_page,
-                                },
-                            };
-                        },
-                    },
-                });
-            }
-
-            // 🔑 ID masuk ke input text
-            $('#name').on('select2:select', function(e) {
-                let data = e.params.data;
-                $('#code').val(data.id);
-            });
         </script>
     @endpush
 

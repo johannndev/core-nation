@@ -103,12 +103,12 @@ Route::get('/edititemstat', [CronController::class, 'itemEdit']);
 Route::get('/itemcron', [CronController::class, 'itemCron']);
 
 Route::get('/viewTest', function () {
-    
+
     return base_path();
 });
 
 Route::get('/role-create', function () {
-    
+
     $perm = [
         'transactions.jubelio.return',
         'cron runner',
@@ -118,21 +118,20 @@ Route::get('/role-create', function () {
         'jubelio cek order',
     ];
 
-    foreach($perm as $p){
+    foreach ($perm as $p) {
 
         $permission = Permission::create(['name' => $p]);
-
     }
 
-   
-    
+
+
 
     return 'berhasil';
 });
 Route::get('/statsell/generete', [StatSellController::class, 'generet'])->name('statsale.generate');
 
 
-Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified','exceptRole:ban'])->name('dashboard');
+Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified', 'exceptRole:ban'])->name('dashboard');
 
 
 Route::get('/cek', [HomeController::class, 'cekData']);
@@ -143,17 +142,22 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 Route::middleware('auth')->group(function () {
 
 
-Route::get('restock', [RestockController::class, 'index'])->name('restock.index')->middleware('permission:restock');
-Route::get('restock/create', [RestockController::class, 'create'])->name('restock.create')->middleware('permission:restock');
-Route::post('restock/add-item', [RestockController::class, 'addItem'])->name('restock.addItem')->middleware('permission:restock');
-Route::get('restock/list-item', [RestockController::class, 'listItem'])->name('restock.listItem')->middleware('permission:restock');
-Route::delete('restock/{id}/remove-item', [RestockController::class, 'removeItem'])->name('restock.removeItem')->middleware('permission:restock');
-Route::post('restock/store', [RestockController::class, 'store'])->name('restock.store')->middleware('permission:restock');
-Route::get('restock/{id}/update', [RestockController::class, 'update'])->name('restock.update')->middleware('permission:restock');
-Route::post('restock/{id}/update-qty', [RestockController::class, 'updateQty'])->name('restock.updateQty')->middleware('permission:restock');
-Route::get('restock/{id}/received', [RestockController::class, 'received'])->name('restock.received')->middleware('permission:restock');
-Route::post('restock/{id}/post-received', [RestockController::class, 'receiveStore'])->name('restock.postReceived')->middleware('permission:restock');
-Route::get('restock/{id}/history', [RestockController::class, 'history'])->name('restock.history')->middleware('permission:restock');
+    Route::get('restock', [RestockController::class, 'index'])->name('restock.index')->middleware('permission:restock');
+    Route::get('restock/create', [RestockController::class, 'create'])->name('restock.create')->middleware('permission:restock');
+    Route::post('restock/add-item', [RestockController::class, 'addItem'])->name('restock.addItem')->middleware('permission:restock');
+    Route::get('restock/list-item', [RestockController::class, 'listItem'])->name('restock.listItem')->middleware('permission:restock');
+    Route::delete('restock/{id}/remove-item', [RestockController::class, 'removeItem'])->name('restock.removeItem')->middleware('permission:restock');
+    Route::post('restock/store', [RestockController::class, 'store'])->name('restock.store')->middleware('permission:restock');
+    Route::get('restock/{id}/update', [RestockController::class, 'update'])->name('restock.update')->middleware('permission:restock');
+    Route::post('restock/{id}/update-qty', [RestockController::class, 'updateQty'])->name('restock.updateQty')->middleware('permission:restock');
+    Route::get('restock/received', [RestockController::class, 'received'])->name('restock.received')->middleware('permission:restock');
+    Route::post('restock/post-received', [RestockController::class, 'receiveStore'])->name('restock.postReceived')->middleware('permission:restock');
+    Route::get('restock/{id}/history', [RestockController::class, 'history'])->name('restock.history')->middleware('permission:restock');
+    Route::get('/restock/{id}/reset', [RestockController::class, 'resetSingleQty'])->name('restock.resetSingleQty')->middleware('permission:restock');
+    Route::post('/restock/{id}/to-gudang-cart', [RestockController::class, 'addToGudangCart'])
+        ->name('restock.toGudangCart')->middleware('permission:restock');
+    Route::delete('/restock/remove-cart/{code}', [RestockController::class, 'removeCartItem'])
+        ->name('restock.removeCartItem')->middleware('permission:restock');
 
 
     Route::get('/test-running/{id}', [ApiJubelioController::class, 'testApi']);
@@ -204,7 +208,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
     Route::get('/get/seles-order', [ApiJubelioController::class, 'getSaleOrder'])->name('jubelio.getSaleOrder');
     Route::get('/log/system', [SettingController::class, 'systemLog'])->name('log.system');
 
-   
+
 
     Route::get('/logjubelio', [LogJubelioController::class, 'index'])->name('jubelio.log.index');
     Route::get('/logjubelio/{id}/json', [LogJubelioController::class, 'viewJson'])->name('jubelio.log.viewJson');
@@ -214,7 +218,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
     Route::post('/jubelio/manual/{id}/store', [LogJubelioController::class, 'postManualSeek'])->name('jubelio.manual.store');
     Route::get('/jubelio/solved/{id}/create', [LogJubelioController::class, 'createSolved'])->name('jubelio.solved.create');
     Route::post('/jubelio/solved/{id}/store', [LogJubelioController::class, 'storeSolved'])->name('jubelio.solved.store');
-    
+
     Route::post('/jubelio/adjust/{id}/warehouse', [ApiJubelioController::class, 'adjustStok'])->name('jubelio.adjustStok');
 
     Route::get('/cash-flow', [CashFlowController::class, 'index'])->name('cashflow.index');
@@ -231,7 +235,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
     Route::get('/location/{id}/edit', [LocationController::class, 'edit'])->name('location.edit')->middleware('permission:location');
     Route::patch('/location/{id}/update', [LocationController::class, 'update'])->name('location.update')->middleware('permission:location');
 
-    
+
 
 
 
@@ -273,7 +277,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
 
     Route::get('/transaction', [TransactionsController::class, 'index'])->name('transaction.index')->middleware('permission:transactions.list');
     Route::get('/transaction/filter', [FilterQueryController::class, 'transactionFilter'])->name('transaction.filter')->middleware('permission:transactions.list');
-    
+
     Route::get('/transaction/sell', [TransactionsController::class, 'sell'])->name('transaction.sell')->middleware('permission:transactions.sell');
     Route::post('/transaction/sell/post', [TransactionsController::class, 'postSell'])->name('transaction.postSell')->middleware('permission:transactions.sell');
 
@@ -331,7 +335,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
     Route::get('/transaction/sync', [TransactionsController::class, 'transactionSync'])->name('transaction.transactionSync')->middleware('permission:transactions.detail');
 
     Route::patch('/transaction/sync/{id}/display', [TransactionsController::class, 'transactionSyncDisplay'])->name('transaction.transactionSyncDisplay')->middleware('permission:transactions.detail');
-    
+
     Route::get('/transaction/{id}/detail/jubelio-sync', [TransactionsController::class, 'detailJubelioSync'])->name('transaction.detailJubelioSync')->middleware('permission:transactions.detail');
 
     Route::get('/transaction/{id}/detail/jubelio-sync/warning', [TransactionsController::class, 'warning'])->name('transaction.warningJubelioSync')->middleware('permission:transactions.detail');
@@ -340,7 +344,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
 
     Route::post('/transaction/{id}/detail/jubelio-sync/clear', [TransactionsController::class, 'clearWarning'])->name('transaction.clearWarningJubelioSync')->middleware('permission:transactions.detail');
 
-    
+
     Route::get('/transaction/{id}/edit/note', [TransactionsController::class, 'editNote'])->name('transaction.editNote')->middleware('permission:transactions.detail');
     Route::patch('/transaction/{id}/update/note', [TransactionsController::class, 'updateNote'])->name('transaction.updateNote')->middleware('permission:transactions.detail');
 
@@ -350,11 +354,11 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
     Route::get('/transaction/{id}/delete/detail', [DeletedController::class, 'getDetailDelete'])->name('transaction.getDetailDelete')->middleware('permission:transactions.deleteList');
     Route::delete('/transaction/{id}/destroy', [TransactionsController::class, 'postDelete'])->name('transaction.destroy')->middleware('permission:transactions.delete');
 
-    Route::get('/transaction/{id}/success', function($id){
-        return redirect()->route('transaction.getDetail',$id)->with('success', 'Transaction # ' . $id. ' created.');
+    Route::get('/transaction/{id}/success', function ($id) {
+        return redirect()->route('transaction.getDetail', $id)->with('success', 'Transaction # ' . $id . ' created.');
     })->name('transaction.success');
 
-  
+
     Route::get('/item', [ItemsController::class, 'index'])->name('item.index')->middleware('permission:item list');
     Route::get('/item/create', [ItemsController::class, 'create'])->name('item.create')->middleware('permission:item create');
     Route::post('/item/store', [ItemsController::class, 'postCreate'])->name('item.post')->middleware('permission:item create');
@@ -367,7 +371,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
 
     Route::get('/item/{id}/jubelio/cek', [AsetLancarController::class, 'getItem'])->name('item.jubelioGetItem')->middleware('permission:item detail');
     Route::patch('/item/{id}/jubelio/cek/update', [AsetLancarController::class, 'updateJubelioId'])->name('item.updateJubelioId')->middleware('permission:item detail');
-  
+
     Route::get('/item/{id}/transaction', [ItemsController::class, 'transaction'])->name('item.transaction')->middleware('permission:item transaction');
     Route::get('/item/{id}/transaction/filter', [FilterQueryController::class, 'itemTransFilter'])->name('item.transactionFilter')->middleware('permission:item transaction');
     Route::get('/item/{id}/stat', [ItemsController::class, 'stat'])->name('item.stat')->middleware('permission:item stat');
@@ -387,7 +391,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
     Route::get('/asset-lancar/filter', [FilterQueryController::class, 'assetLancarFilter'])->name('asetLancar.filter')->middleware('permission:asset lancar list');
     Route::get('/asset-lancar/{id}/detail', [AsetLancarController::class, 'detail'])->name('asetLancar.detail')->middleware('permission:asset lancar detail');
 
-    
+
     Route::get('/asset-lancar/{id}/jubelio', [AsetLancarController::class, 'jubelio'])->name('asetLancar.jubelio')->middleware('permission:asset lancar detail');
 
     Route::get('/asset-lancar/{id}/jubelio/cek', [AsetLancarController::class, 'getItem'])->name('asetLancar.jubelioGetItem')->middleware('permission:asset lancar detail');
@@ -442,7 +446,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
     Route::get('/vwarehouse/{id}/item', [VWarehouseController::class, 'items'])->name('vwarehouse.items')->middleware('permission:vwarehouse item');
     Route::get('/vwarehouse/{id}/stat', [VWarehouseController::class, 'stat'])->name('vwarehouse.stat')->middleware('permission:vwarehouse stat');
     Route::get('/vwarehouse/{id}/itemsale', [VWarehouseController::class, 'itemsale'])->name('vwarehouse.itemsale')->middleware('permission:vwarehouse stat');
-    
+
 
 
     Route::get('/account', [AccountController::class, 'index'])->name('account.index')->middleware('permission:account list');
@@ -502,7 +506,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
     Route::patch('/produksi/{id}/detail/updatewc', [ProduksiController::class, 'postEdit'])->name('produksi.postEdit')->middleware('permission:produksi edit');
     Route::post('/produksi/{id}/detail/split', [ProduksiController::class, 'postPisahJahit'])->name('produksi.postPisahJahit')->middleware('permission:produksi edit');
     Route::patch('/produksi/{id}/detail/gantiJahit', [ProduksiController::class, 'postGantiJahit'])->name('produksi.postGantiJahit')->middleware('permission:produksi edit');
-    
+
     Route::patch('/produksi/{id}/setor', [ProduksiController::class, 'postSetor'])->name('produksi.postSetor')->middleware('permission:produksi setor');
 
     Route::get('/produksi/potong/list', [ProduksiController::class, 'getPotongList'])->name('produksi.getPotongList')->middleware('permission:produksi potong');
@@ -527,7 +531,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
     Route::delete('/produksi/qc/{id}/delete', [ProduksiController::class, 'postDeleteQc'])->name('produksi.postDeleteQc');
 
     Route::post('/produksi/{id}/{type}/restore', [ProduksiController::class, 'postRestore'])->name('produksi.restore');
-    
+
     Route::get('/setoran', [SetoranController::class, 'index'])->name('setoran.index')->middleware('permission:setoran list');
     Route::get('/setoran/{id}/detail', [SetoranController::class, 'detail'])->name('setoran.detail')->middleware('permission:setoran detail');
     Route::patch('/setoran/{id}/updatekode', [SetoranController::class, 'postEditItem'])->name('setoran.postEditItem')->middleware('permission:setoran edit item');
@@ -564,7 +568,7 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
     Route::get('/user/setting/{id}/edit', [UserRoleController::class, 'userDefaultEdit'])->name('user.userDefaultEdit');
     Route::patch('/user/setting/{id}/update', [UserRoleController::class, 'userDefaultUpdate'])->name('user.userDefaultUpdate');
     Route::delete('/user/setting/{id}/delete', [UserRoleController::class, 'userDefaultDelete'])->name('user.userDefaultDelete');
-    
+
 
     Route::get('/role', [UserRoleController::class, 'indexRole'])->name('role.indexRole')->middleware('permission:user role');
     Route::get('/role/create', [UserRoleController::class, 'createRole'])->name('role.createRole')->middleware('permission:user create role');
@@ -599,7 +603,6 @@ Route::get('restock/{id}/history', [RestockController::class, 'history'])->name(
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
