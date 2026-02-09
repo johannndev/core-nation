@@ -4,7 +4,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
 
-        <p class="text-2xl font-bold">Update Restock</p>
+        <p class="text-2xl font-bold">Edit Quantity {{$restock->item->name}}</p>
 
 
     </div>
@@ -49,6 +49,7 @@
     @endif
 
     <section class="bg-gray-50 dark:bg-gray-900 mb-8">
+       
         <div class="mx-auto  ">
             <!-- Start coding here -->
             <div class="">
@@ -58,6 +59,8 @@
                     <form method="POST" action="{{ route('restock.updateQty', $restock->id) }}">
                         @csrf
                         <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
+
+                            <p class="text-lg font-semibold mb-6">Update Quantity</p>
 
                             <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-1 items-end "id="">
                                 <div class="mb-3 space-y-2">
@@ -99,7 +102,7 @@
 
                             </div>
 
-                            <x-layout.submit-button :label="'Tambah Item'" />
+                            <x-layout.submit-button  />
 
                         </div>
 
@@ -162,6 +165,43 @@
                         </form>
                     </div>
                 </div> --}}
+
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-gray-50 dark:bg-gray-900 mb-8">
+        <div class="mx-auto  ">
+            <!-- Start coding here -->
+            <div class="">
+
+                <div class="">
+
+                    <form method="POST" action="{{ route('restock.resetSingleQty',$restock->id) }}">
+                        @csrf
+                        <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
+
+                            <p class="text-lg font-semibold mb-6">Reset Quantity</p>
+
+                            <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-1 items-end "id="">
+                                <div class="mb-3 space-y-2">
+                                    @foreach (['production', 'shipped'] as $type)
+                                        <label class="flex items-center gap-2 text-sm">
+                                            <input type="radio" name="type" value="{{ $type }}" required>
+                                            {{ ucfirst($type) }}
+                                        </label>
+                                    @endforeach
+                                </div>
+
+
+                            </div>
+
+                            <x-layout.submit-button />
+
+                        </div>
+
+                    </form>
+                </div>
 
             </div>
         </div>

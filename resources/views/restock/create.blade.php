@@ -200,7 +200,7 @@
                     placeholder: "Pilih ",
                     minimumInputLength: 2,
                     ajax: {
-                        url: '{{ route('ajax.getitemName') }}',
+                        url: '{{ route('ajax.getitembyall') }}',
                         dataType: "json",
                         data: (params) => {
                             let query = {
@@ -213,7 +213,7 @@
                             return {
                                 results: data.data.map((row) => {
                                     return {
-                                        text: row.name,
+                                        text: `${row.code} / ${row.name} (#${row.id})`,
                                         id: row.id
                                     };
                                 }),

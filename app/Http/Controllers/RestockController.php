@@ -754,10 +754,12 @@ class RestockController extends Controller
             'type' => 'required|in:production,shipped',
         ]);
 
+       
+
         DB::transaction(function () use ($request, $id) {
 
             $restock = Restock::lockForUpdate()->findOrFail($id);
-            $type = $request->query('type'); // 🔥 dari query string
+            $type = $request->type; // 🔥 dari query string
 
             if ($type === 'production') {
                 $before = $restock->in_production_quantity;
@@ -768,6 +770,8 @@ class RestockController extends Controller
                 $before = $restock->shipped_quantity;
                 $restock->shipped_quantity = 0;
             }
+
+           
 
             $restock->save();
 
@@ -786,6 +790,6 @@ class RestockController extends Controller
             ]);
         });
 
-        return back()->with('success', ucfirst($request->type) . ' qty reset ke 0');
+        return redirect()->route('restock.index')->with('success', ucfirst($request->type) . ' qty reset ke 0');
     }
 }

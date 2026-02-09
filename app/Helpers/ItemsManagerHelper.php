@@ -12,6 +12,7 @@ use Illuminate\Support\Arr;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\File;
+use PhpParser\Node\Expr\FuncCall;
 
 class ItemsManagerHelper
 {
@@ -83,7 +84,13 @@ class ItemsManagerHelper
 		return true;
 	}
 
-	protected function saveImage($group, $file)
+	public function uploadAsetLancar($item, $file){
+
+		if(!empty($file))
+			$this->saveImage(null, $file, $item->id);
+
+	}
+	protected function saveImage($group, $file, $itemId = null)
 	{
 		if(empty($file))
 			return;
@@ -99,7 +106,14 @@ class ItemsManagerHelper
 			
 		}else{
 			$folder = "";
-			$pathFile = $group->id.'.jpg';
+
+			if($itemId){
+				$pathFile = $itemId.'.jpg';
+			}else{
+				$pathFile = $group->id.'.jpg';
+
+			}
+			
 		}
 
 		$filename =  $pathFile;
@@ -107,6 +121,8 @@ class ItemsManagerHelper
 		// Buat instance gambar dari file yang diunggah
 		// $img = $manager->make($image->getRealPath());
 		$img = $manager->read($image->getRealPath());
+
+	
 		
 		// Tetapkan batas maksimal dimensi tanpa mengubah rasio asli
 	// Dapatkan ukuran asli

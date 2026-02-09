@@ -153,7 +153,7 @@ Route::middleware('auth')->group(function () {
     Route::get('restock/received', [RestockController::class, 'received'])->name('restock.received')->middleware('permission:restock');
     Route::post('restock/post-received', [RestockController::class, 'receiveStore'])->name('restock.postReceived')->middleware('permission:restock');
     Route::get('restock/{id}/history', [RestockController::class, 'history'])->name('restock.history')->middleware('permission:restock');
-    Route::get('/restock/{id}/reset', [RestockController::class, 'resetSingleQty'])->name('restock.resetSingleQty')->middleware('permission:restock');
+    Route::post('/restock/{id}/reset', [RestockController::class, 'resetSingleQty'])->name('restock.resetSingleQty')->middleware('permission:restock');
     Route::post('/restock/{id}/to-gudang-cart', [RestockController::class, 'addToGudangCart'])
         ->name('restock.toGudangCart')->middleware('permission:restock');
     Route::delete('/restock/remove-cart/{code}', [RestockController::class, 'removeCartItem'])
@@ -269,6 +269,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/getItem', [AjaxController::class, 'getItemAjax'])->name('ajax.getitem');
     Route::get('/getItemId', [AjaxController::class, 'getItemId'])->name('ajax.getitemId');
     Route::get('/getItemName', [AjaxController::class, 'getItem'])->name('ajax.getitemName');
+    Route::get('/getItemByAll', [AjaxController::class, 'getItemByAll'])->name('ajax.getitembyall');
     Route::get('/getInvoice', [AjaxController::class, 'getInvoice'])->name('ajax.getInvoice');
     Route::post('/scan-barcode', [AjaxController::class, 'processBarcode']);
     Route::get('/ajax/getWarna', [AjaxController::class, 'getWarna'])->name('ajax.getWarna');
