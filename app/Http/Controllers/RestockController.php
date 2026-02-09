@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ModelException;
 use App\Helpers\AppSettingsHelper;
 use App\Helpers\StatManagerHelper;
+use App\Imports\RestockImport;
 use App\Models\Item;
 use App\Models\Restock;
 use App\Models\RestockHistory;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Models\WarehouseItem;
 use Exception;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RestockController extends Controller
 {
@@ -754,7 +756,7 @@ class RestockController extends Controller
             'type' => 'required|in:production,shipped',
         ]);
 
-       
+
 
         DB::transaction(function () use ($request, $id) {
 
@@ -771,7 +773,7 @@ class RestockController extends Controller
                 $restock->shipped_quantity = 0;
             }
 
-           
+
 
             $restock->save();
 
@@ -791,5 +793,31 @@ class RestockController extends Controller
         });
 
         return redirect()->route('restock.index')->with('success', ucfirst($request->type) . ' qty reset ke 0');
+    }
+
+    public function uploadExcel()
+    {
+        return view('restock.upload_excel');
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+            'date' => 'required|date',
+            'type' => 'required'
+        ]);
+
+        $import = new \App\Imports\RestockImport($request->date, $request->type);
+        Excel::import($import, $request->file('file'));
+
+        if ($import->errors) {
+            return back()->withErrors([
+                'import' => 'Data tidak ditemukan / restock belum ada: '.implode(', ',$import->errors)
+            ]);
+        }
+
+        // Setelah proses impor selesai
+        return redirect()->route('restock.index')->with('success', 'Import Restock Berhasil');
     }
 }

@@ -54,7 +54,7 @@ class ExportController extends Controller
 
     public function exportSellItem(Request $request) 
 	{
-        // dd($request);
+        // dd($request);\
 
         $type = request('type', $request->type);
 

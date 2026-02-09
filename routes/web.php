@@ -158,6 +158,9 @@ Route::middleware('auth')->group(function () {
         ->name('restock.toGudangCart')->middleware('permission:restock');
     Route::delete('/restock/remove-cart/{code}', [RestockController::class, 'removeCartItem'])
         ->name('restock.removeCartItem')->middleware('permission:restock');
+    Route::get('/restock/upload', [RestockController::class, 'uploadExcel'])->name('restock.uploadExcel')->middleware('permission:restock');
+    Route::post('/restock/import-excel', [RestockController::class, 'importExcel'])->name('restock.importExcel')->middleware('permission:restock');
+
 
 
     Route::get('/test-running/{id}', [ApiJubelioController::class, 'testApi']);
