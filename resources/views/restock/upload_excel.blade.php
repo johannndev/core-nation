@@ -64,10 +64,10 @@
 
                             <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-1 items-end "id="">
                                 <div class="mb-3 space-y-2">
-                                    @foreach (['restocked', 'production', 'shipped','missing'] as $type)
+                                    @foreach (['restocked', 'production', 'shipped','missing','restocked_reset','production_reset','shipped_reset','missing_reset'] as $type)
                                         <label class="flex items-center gap-2 text-sm">
                                             <input type="radio" name="type" value="{{ $type }}" required>
-                                            {{ ucfirst($type) }}
+                                            {{ ucfirst(str_replace('_', ' ', $type)) }}
                                         </label>
                                     @endforeach
                                 </div>

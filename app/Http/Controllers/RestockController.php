@@ -753,7 +753,7 @@ class RestockController extends Controller
     public function resetSingleQty($id, Request $request)
     {
         $request->validate([
-            'type' => 'required|in:production,shipped',
+            'type' => 'required|in:restocked,production,shipped',
         ]);
 
 
@@ -762,6 +762,11 @@ class RestockController extends Controller
 
             $restock = Restock::lockForUpdate()->findOrFail($id);
             $type = $request->type; // 🔥 dari query string
+
+            if($type === 'restocked'){
+                $before = $restock->restocked_quantity;
+                $restock->restocked_quantity = 0;
+            }
 
             if ($type === 'production') {
                 $before = $restock->in_production_quantity;

@@ -73,6 +73,7 @@
                                 </div>
                             </div>
                         </div>
+                       
                         @if($data->type == \App\Models\Item::TYPE_ITEM)
                         <div>
                             <div class="grid grid-cols-5 p-4">
@@ -80,7 +81,7 @@
                                     <p class="font-bold">Alias</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p>{{$data->group->alias ?? ''}}</p>
+                                    <p>{{$data->group->alias }}</p>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +105,7 @@
                                     <p class="font-bold">Alias</p>
                                 </div>
                                 <div class="col-span-3">
-                                    <p>{{$data->alias ?? ''}}</p>
+                                    <p>{{$data->group->alias ?? ''}}</p>
                                 </div>
                             </div>
                         </div>

@@ -350,8 +350,9 @@ class ItemsManagerHelper
 		if(!$item = $this->createCrystalItem($item->group, $input, $inputTags, $type_id, $size_id, $item,'update'))
 			return $this->error('error creating item');
 
+
 		//update group
-        if($item->type == Item::TYPE_ITEM)
+        if($input->type == Item::TYPE_ITEM)
         {
     		$group = ItemGroup::findOrFail($item->group_id);
             if($group && $item->type )
@@ -363,6 +364,8 @@ class ItemsManagerHelper
     			$group->alias = strtoupper($input->alias);
     		if(!$group->save())
     			return $this->error($group->getErrors());
+
+			// dd($group,$input->alias);	
         }
 
 		if(!empty($file))

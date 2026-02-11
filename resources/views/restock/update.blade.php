@@ -185,7 +185,7 @@
 
                             <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-1 items-end "id="">
                                 <div class="mb-3 space-y-2">
-                                    @foreach (['production', 'shipped'] as $type)
+                                    @foreach (['restocked','production', 'shipped'] as $type)
                                         <label class="flex items-center gap-2 text-sm">
                                             <input type="radio" name="type" value="{{ $type }}" required>
                                             {{ ucfirst($type) }}

@@ -30,6 +30,7 @@ class RestockImport implements ToCollection
     {
         return 1000; // RAM SAFE
     }
+
     public function collection(Collection $rows)
     {
         if ($rows->isEmpty()) return;
@@ -37,6 +38,31 @@ class RestockImport implements ToCollection
         $date = $this->date;
         $type = $this->type;
         $now  = now();
+
+        // ================================
+        // FIELD MAP
+        // ================================
+        $map = [
+            'restocked'  => ['inc' => 'restocked_quantity', 'dec' => null],
+            'production' => ['inc' => 'in_production_quantity', 'dec' => 'restocked_quantity'],
+            'shipped'    => ['inc' => 'shipped_quantity', 'dec' => 'in_production_quantity'],
+            'missing'    => ['inc' => 'missing_quantity', 'dec' => null],
+
+            // RESET MODE
+            'restocked_reset'  => ['reset' => 'restocked_quantity'],
+            'production_reset' => ['reset' => 'in_production_quantity'],
+            'shipped_reset'    => ['reset' => 'shipped_quantity'],
+            'missing_reset'    => ['reset' => 'missing_quantity'],
+        ];
+
+        if (!isset($map[$type])) {
+            throw new \Exception("Invalid import type: {$type}");
+        }
+
+        $isReset    = str_ends_with($type, '_reset');
+        $incField   = $map[$type]['inc'] ?? null;
+        $decField   = $map[$type]['dec'] ?? null;
+        $resetField = $map[$type]['reset'] ?? null;
 
         // ================================
         // 1️⃣ GET ITEM ID / CODE
@@ -63,7 +89,7 @@ class RestockImport implements ToCollection
         $itemIds = $keys->map(fn($k) => is_numeric($k) ? $k : $idMap[$k]);
 
         // ================================
-        // 3️⃣ LOAD RESTOCK CACHE
+        // 3️⃣ LOAD RESTOCK TODAY
         // ================================
         $restocks = Restock::whereIn('item_id', $itemIds)
             ->whereDate('date', $date)
@@ -71,9 +97,9 @@ class RestockImport implements ToCollection
             ->keyBy('item_id');
 
         // ================================
-        // 4️⃣ VALIDATE RESTOCK FOR TYPE
+        // 4️⃣ VALIDATE RESTOCK FOR NORMAL MODE
         // ================================
-        if (in_array($type, ['production', 'shipped', 'missing'])) {
+        if (!$isReset && in_array($type, ['production', 'shipped', 'missing'])) {
             $missingRestock = $itemIds->diff($restocks->keys());
             if ($missingRestock->isNotEmpty()) {
                 $this->errors = $missingRestock->toArray();
@@ -81,35 +107,59 @@ class RestockImport implements ToCollection
             }
         }
 
-        // ================================
-        // 5️⃣ FIELD MAP
-        // ================================
-        $map = [
-            'restocked'  => ['inc' => 'restocked_quantity', 'dec' => null],
-            'production' => ['inc' => 'in_production_quantity', 'dec' => 'restocked_quantity'],
-            'shipped'    => ['inc' => 'shipped_quantity', 'dec' => 'in_production_quantity'],
-            'missing'    => ['inc' => 'missing_quantity', 'dec' => null],
-        ];
-
-        $incField = $map[$type]['inc'];
-        $decField = $map[$type]['dec'];
-
-        $restockUpdates = [];
         $restockCreates = [];
+        $restockUpdates = [];
         $historyInsert  = [];
 
         // ================================
-        // 6️⃣ LOOP MEMORY ONLY
+        // 5️⃣ LOOP DATA
         // ================================
         foreach ($rows as $row) {
 
             $key = trim($row[0]);
-            $qty = (int)$row[1];
-            if ($qty <= 0) continue;
-
+            $qty = (int)($row[1] ?? 0);
             $itemId = is_numeric($key) ? $key : $idMap[$key];
 
-            // RESTOCK NOT EXIST & TYPE RESTOCKED → CREATE
+            // ================= RESET MODE =================
+            if ($isReset) {
+
+                if (!$restocks->has($itemId)) continue; // tidak auto create
+
+                $r = $restocks[$itemId];
+                $before = $r->$resetField;
+                $after  = 0;
+
+                $restockUpdates[] = [
+                    'id' => $r->id,
+                    $resetField => 0,
+                    'updated_at' => $now,
+                ];
+
+                $historyInsert[] = [
+                    'restock_id' => $r->id,
+                    'item_id' => $itemId,
+                    'step' => $type,
+                    'action' => 'reset',
+                    'qty_before' => $before,
+                    'qty_after' => 0,
+                    'qty_changed' => -$before,
+                    'invoice' => null,
+                    'user_id' => auth()->id(),
+                    'date' => $date,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+
+                continue;
+            }
+
+            // ================= NORMAL MODE (WAJIB QTY) =================
+            if ($qty <= 0) {
+                $this->errors[] = "Qty required for item {$itemId}";
+                continue;
+            }
+
+            // CREATE DAILY RESTOCK (ONLY restocked mode)
             if (!$restocks->has($itemId) && $type == 'restocked') {
 
                 $restockCreates[] = [
@@ -126,11 +176,16 @@ class RestockImport implements ToCollection
 
                 $before = 0;
                 $after  = $qty;
-                $action = 'created';
                 $restockId = null;
+                $action = 'created';
             } else {
 
                 $r = $restocks[$itemId];
+
+                if ($decField && $r->$decField < $qty) {
+                    throw new \Exception("Stock {$decField} not enough for item {$itemId}");
+                }
+
                 $before = $r->$incField;
                 $after  = $before + $qty;
 
@@ -140,20 +195,15 @@ class RestockImport implements ToCollection
                     'updated_at' => $now,
                 ];
 
-                // decrement logic
                 if ($decField) {
                     $update[$decField] = $r->$decField - $qty;
-                    $r->$decField -= $qty;
                 }
 
                 $restockUpdates[] = $update;
-                $r->$incField = $after; // update cache
-
-                $action = 'updated';
                 $restockId = $r->id;
+                $action = 'updated';
             }
 
-            // HISTORY
             $historyInsert[] = [
                 'restock_id' => $restockId,
                 'item_id' => $itemId,
@@ -171,22 +221,34 @@ class RestockImport implements ToCollection
         }
 
         // ================================
-        // 7️⃣ EXECUTE DATABASE BATCH
+        // 6️⃣ EXECUTE DB
         // ================================
         DB::transaction(function () use ($restockCreates, $restockUpdates, &$historyInsert, $date) {
 
-            if ($restockCreates) Restock::insert($restockCreates);
-            if ($restockUpdates) Restock::upsert($restockUpdates, ['id'], array_keys($restockUpdates[0]));
+            if ($restockCreates) {
+                Restock::insert($restockCreates);
+            }
 
-            // map restock_id for new
-            $newRestocks = Restock::whereDate('date', $date)->get(['id', 'item_id'])->keyBy('item_id');
+            if ($restockUpdates) {
+                $cols = array_keys($restockUpdates[0]);
+                $cols = array_diff($cols, ['id']); // jangan update PK
+                Restock::upsert($restockUpdates, ['id'], $cols);
+            }
+
+            // map restock_id for new rows
+            $newRestocks = Restock::whereDate('date', $date)
+                ->get(['id', 'item_id'])
+                ->keyBy('item_id');
+
             foreach ($historyInsert as &$h) {
                 if (!$h['restock_id']) {
                     $h['restock_id'] = $newRestocks[$h['item_id']]->id ?? null;
                 }
             }
 
-            if ($historyInsert) RestockHistory::insert($historyInsert);
+            if ($historyInsert) {
+                RestockHistory::insert($historyInsert);
+            }
         });
     }
 }
