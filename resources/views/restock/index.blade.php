@@ -184,7 +184,9 @@
                                         <th scope="row" id=""
                                             class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
 
+                                            {{$item->item->lancar_image_path}}
 
+                                            
                                             <div class=" mr-3">
                                                 <x-partial.image type="h-20 w-20 print:h-10 print:w-10"
                                                     :url="$url" />
