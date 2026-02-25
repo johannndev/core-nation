@@ -261,7 +261,7 @@ class ItemsManagerHelper
         $item->description2 = $input->description2 ?? "";
         $item->save();
         $item->type = $input->type;
-        if($item->type = Item::TYPE_ASSET_LANCAR)
+        if($item->type == Item::TYPE_ASSET_LANCAR)
         {
             $item->name = strtoupper($input->name); //utk asset lancar
             $item->code = $item->pcode; //untuk edit
