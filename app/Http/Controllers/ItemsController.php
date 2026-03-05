@@ -140,7 +140,7 @@ class ItemsController extends Controller
 			$itemManager = new ItemsManagerHelper;
 
 			// dd($request->tags);
-
+			$input->type = ITEM::TYPE_ITEM;
 			if(!$itemManager->createItems($input, $tags, $request->file))
 				throw new ModelException($itemManager->getErrors(), __LINE__);
 
