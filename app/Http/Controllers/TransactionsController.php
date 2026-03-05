@@ -2165,9 +2165,17 @@ class TransactionsController extends Controller
 
 		$data = Transaction::find($id);
 
+		if ($data->sync_hide == 'Y') {
+			return redirect()->back()->with('errorMessage', 'Excel for this transaction has already been downloaded. Please check your download folder.');
+		}
+
 		$typeName = Transaction::$types[$data->type];
 
 		$filename = $typeName . '-' . $data->invoice . '.xlsx';
+
+		$data->sync_hide = 'Y';
+		$data->download_by = Auth::id();
+		$data->save();
 
 
 		return Excel::download(new DestyTransactionExport($request->data), $filename);

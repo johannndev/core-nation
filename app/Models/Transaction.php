@@ -287,7 +287,10 @@ class Transaction extends Model
 		return $this->errors->toArray();
 	}
 
-	
+	public function userDownloadedBy()
+	{
+		return $this->belongsTo('App\Models\User', 'download_by');
+	}
 
     public function checkPPN($sender, $receiver) {
 
