@@ -16,6 +16,7 @@ use App\Libraries\CCManager;
 
 use App\Libraries\StatManager;
 use App\Libraries\TransactionsManager;
+use App\Models\Cronrun;
 use App\Models\Customer;
 use App\Models\Item;
 use App\Models\Jubeliosync;
@@ -130,6 +131,8 @@ class TransactionsController extends Controller
 		}
 
 		$dataList = $dataList->paginate(20)->withQueryString();
+
+		
 
 		// dd($dataList);
 
@@ -856,11 +859,15 @@ class TransactionsController extends Controller
 			->get();
 
 
+		$cronFlatform = Cronrun::pluck('status', 'name')->toArray(); 
+	
+
+
 		if ($request->receipt == 1) {
 
 			return view('layouts.receipt', compact('data', 'nameWh', 'details'));
 		} else {
-			return view('transactions.detail', compact('details', 'data', 'nameWh', 'cekJubelio', 'countAll', 'limitShow', 'notNullCount', 'submitBy', 'pdfFile','showDesty','itemDesty'));
+			return view('transactions.detail', compact('cronFlatform','details', 'data', 'nameWh', 'cekJubelio', 'countAll', 'limitShow', 'notNullCount', 'submitBy', 'pdfFile','showDesty','itemDesty'));
 		}
 	}
 

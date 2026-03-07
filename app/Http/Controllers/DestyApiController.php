@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cronrun;
 use App\Models\DestyPayload;
 use App\Models\DestyWarehouse;
 use Carbon\Carbon;
@@ -14,6 +15,15 @@ class DestyApiController extends Controller
     public function handleWebhook(Request $request)
     {
         $payload = $request->all();
+
+        $cronFlatform = Cronrun::where('name', 'desty_order')->first();
+
+        if ($cronFlatform && $cronFlatform->status == 0) {
+            Log::info('Cron Desty dimatikan, webhook tidak diproses');
+            return response()->json([
+                'message' => 'Cron Desty dimatikan, webhook tidak diproses'
+            ], 200);
+        }
 
         // ======================================
         // AMBIL orderStatusList SELALU SEBAGAI ARRAY
