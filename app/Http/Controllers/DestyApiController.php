@@ -118,8 +118,8 @@ class DestyApiController extends Controller
             "store_name" => $payload['storeName'],
             "platform_name" => $payload['platformName'],
             "invoice" => $payload['orderSn'],
-            "adjustment" => $adjustment,
-            "total_sales" =>  $totalPrice,
+            "adjustment" => $payload['totalSales'],
+            "total_sales" =>  $payload['totalPrice'],
             "order_status_list" => $orderStatusList[0], // simpan ARRAY asli
             "status" => 'pending',
             "info" => null,
