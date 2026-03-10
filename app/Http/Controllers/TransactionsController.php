@@ -2169,6 +2169,7 @@ class TransactionsController extends Controller
 
 	public function destyExport(Request $request, $id)
 	{
+		dd($request->all());
 
 		$data = Transaction::find($id);
 
