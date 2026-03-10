@@ -414,6 +414,14 @@
                             </a>
                         @endif
 
+                        @php
+                            $limitDownload = auth()->user()->hasPermissionTo('transactions.desty.limit.download');
+
+                            $isHiddenA = $data->desty_side_a;
+                            $isHiddenB = $data->desty_side_b;
+                        @endphp
+
+
                         @if (isset($cronFlatform['desty_order']) && $cronFlatform['desty_order'] === 1 && $showDesty == 1)
 
                             {{-- ================= MOVE TRANSACTION ================= --}}
