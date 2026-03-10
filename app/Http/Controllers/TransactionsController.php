@@ -132,7 +132,7 @@ class TransactionsController extends Controller
 
 		$dataList = $dataList->paginate(20)->withQueryString();
 
-		
+
 
 		// dd($dataList);
 
@@ -732,7 +732,7 @@ class TransactionsController extends Controller
 		$itemDesty = [];
 		$showDesty = 0;
 
-		
+
 
 		if ($data->type == Transaction::TYPE_SELL || $data->type == Transaction::TYPE_RETURN_SUPPLIER) {
 
@@ -784,10 +784,9 @@ class TransactionsController extends Controller
 					}
 				}
 			}
-
 		} else if ($data->type == Transaction::TYPE_MOVE) {
 
-			
+
 			$cekJubelio = Jubeliosync::whereIn('warehouse_id', [$data->sender_id, $data->receiver_id])->count();
 
 			$sjbA = Jubeliosync::with('warehouse')->where('warehouse_id', $data->sender_id)->exists();
@@ -800,48 +799,42 @@ class TransactionsController extends Controller
 				$limitShow = 2;
 			}
 
-			if ($data->submit_type == 1) {
+			if ($data->submit_type == 1 && isset($data->destySender) && isset($data->destyReceiver)) {
 
-				if (isset($data->destySender) && isset($data->destyReceiver)) {
-					$showDesty = 1;
-					$itemSender = [];
-					$itemReceiver = [];
+				$showDesty = 1;
 
-					foreach ($data->transactionDetail as $dtl) {
+				$itemDesty = [
+					'sender' => [],
+					'receiver' => []
+				];
 
+				foreach ($data->transactionDetail as $dtl) {
 
-						$itemSender[] = [
-							"nama_produk" => $dtl->item->name,
-							"sku" => $dtl->item->code,
-							"id_gudang" => $dtl->destySender->gudang_id ?? 'kosong',
-							"nama_gudang" => $dtl->destySender->warehouse->name ?? 'kosong',
-							"id_slot" => $dtl->destySender->slot_id ?? null,
-							"qty" => '-' . $dtl->quantity,
-							"total" =>  $dtl->total,
-						];
-					}
+					// sender (stok keluar)
+					$itemDesty['sender'][] = [
+						"nama_produk" => $dtl->item->name,
+						"sku" => $dtl->item->code,
+						"id_gudang" => $dtl->destySender->gudang_id ?? 'kosong',
+						"nama_gudang" => $dtl->destySender->warehouse->name ?? 'kosong',
+						"id_slot" => $dtl->destySender->slot_id ?? null,
+						"qty" => '-' . $dtl->quantity,
+						"total" => $dtl->total,
+					];
 
-					foreach ($data->transactionDetail as $dtl) {
-
-
-						$itemReceiver[] = [
-							"nama_produk" => $dtl->item->name,
-							"sku" => $dtl->item->code,
-							"id_gudang" => $dtl->destyReceiver->gudang_id ?? 'kosong',
-							"nama_gudang" => $dtl->destyReceiver->warehouse->name ?? 'kosong',
-							"id_slot" => $dtl->destyReceiver->slot_id ?? null,
-							"qty" => $dtl->quantity,
-							"total" =>  $dtl->total,
-						];
-					}
-
-					$itemDesty = array_merge($itemSender, $itemReceiver);
-
-					
+					// receiver (stok masuk)
+					$itemDesty['receiver'][] = [
+						"nama_produk" => $dtl->item->name,
+						"sku" => $dtl->item->code,
+						"id_gudang" => $dtl->destyReceiver->gudang_id ?? 'kosong',
+						"nama_gudang" => $dtl->destyReceiver->warehouse->name ?? 'kosong',
+						"id_slot" => $dtl->destyReceiver->slot_id ?? null,
+						"qty" => $dtl->quantity,
+						"total" => $dtl->total,
+					];
 				}
 			}
 		}
-		
+
 
 		$sortBy = request('kolom', 'id');   // default code
 		$sortType = request('order', 'desc'); // default asc
@@ -859,15 +852,15 @@ class TransactionsController extends Controller
 			->get();
 
 
-		$cronFlatform = Cronrun::pluck('status', 'name')->toArray(); 
-	
+		$cronFlatform = Cronrun::pluck('status', 'name')->toArray();
+
 
 
 		if ($request->receipt == 1) {
 
 			return view('layouts.receipt', compact('data', 'nameWh', 'details'));
 		} else {
-			return view('transactions.detail', compact('cronFlatform','details', 'data', 'nameWh', 'cekJubelio', 'countAll', 'limitShow', 'notNullCount', 'submitBy', 'pdfFile','showDesty','itemDesty'));
+			return view('transactions.detail', compact('cronFlatform', 'details', 'data', 'nameWh', 'cekJubelio', 'countAll', 'limitShow', 'notNullCount', 'submitBy', 'pdfFile', 'showDesty', 'itemDesty'));
 		}
 	}
 
