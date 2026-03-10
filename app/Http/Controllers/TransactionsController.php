@@ -2179,7 +2179,7 @@ class TransactionsController extends Controller
 
 		$typeName = Transaction::$types[$data->type];
 
-		if ($typeName == 'MOVE') {
+		if ($data->type == Transaction::TYPE_MOVE) {
 			if ($request->side == "A") {
 				$filename = $typeName . '-' . $data->invoice . '-Sender.xlsx';
 			} elseif ($request->side == "B") {
