@@ -2162,20 +2162,34 @@ class TransactionsController extends Controller
 
 	public function destyExport(Request $request, $id)
 	{
-		dd($request->all());
 
 		$data = Transaction::find($id);
 
-		if (auth()->user()->hasPermissionTo('transactions.desty.limit.download') && $data->sync_hide == 'Y') {
-			return redirect()->back()->with('errorMessage', 'Excel for this transaction has already been downloaded. Please check your download folder.');
+		if (auth()->user()->hasPermissionTo('transactions.desty.limit.download') ) {
+
+			if ($request->side == "A" && $data->desty_side_a) {
+					return redirect()->back()->with('errorMessage', 'Excel for this transaction has already been downloaded by the Sender side. Please check your download folder.');
+			}
+
+			if ($request->side == "B" && $data->desty_side_b) {
+					return redirect()->back()->with('errorMessage', 'Excel for this transaction has already been downloaded by the Receiver side. Please check your download folder.');
+			}
+			
 		}
 
 		$typeName = Transaction::$types[$data->type];
 
 		$filename = $typeName . '-' . $data->invoice . '.xlsx';
 
-		$data->sync_hide = 'Y';
-		$data->download_by = Auth::id();
+		if($request->side == "A"){
+			$data->desty_side_a = Auth::id();
+		}elseif($request->side == "B"){
+			$data->desty_side_b = Auth::id();
+		}else{
+
+		}
+
+	
 		$data->save();
 
 

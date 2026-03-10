@@ -414,65 +414,81 @@
                             </a>
                         @endif
 
-                        @php
-                            $limitDownload = auth()->user()->hasPermissionTo('transactions.desty.limit.download');
-                            $isHidden = $data->sync_hide === 'Y';
-                        @endphp
+                        @if (isset($cronFlatform['desty_order']) && $cronFlatform['desty_order'] === 1 && $showDesty == 1)
 
-                        @if (isset($cronFlatform['desty_order']) && $cronFlatform['desty_order'] === 1)
-
+                            {{-- ================= MOVE TRANSACTION ================= --}}
                             @if ($data->type == 3)
-                                <a href="{{ route('transaction.exportDesty', ['id' => $data->id, 'data' => $itemDesty['sender']]) }}"
-                                    class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">
-                                    Desty Sender
-                                </a>
 
-                                <a href="{{ route('transaction.exportDesty', ['id' => $data->id, 'data' => $itemDesty['receiver']]) }}"
-                                    class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">
-                                    Desty Receiver
-                                </a>
+                                {{-- ================= SENDER ================= --}}
+                                @if (!$limitDownload || !$isHiddenA)
+                                    <a href="{{ route('transaction.exportDesty', [
+                                        'id' => $data->id,
+                                        'side' => 'a',
+                                        'data' => $itemDesty['sender'],
+                                    ]) }}"
+                                        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                                        Desty Sender
+                                    </a>
+                                @else
+                                    <button disabled
+                                        class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-400 cursor-not-allowed rounded-lg">
+
+                                        Excel Downloaded by
+                                        {{ $data->userDownloadedABy->username ?? 'Unknown' }}
+
+                                    </button>
+                                @endif
+
+
+                                {{-- ================= RECEIVER ================= --}}
+                                @if (!$limitDownload || !$isHiddenB)
+                                    <a href="{{ route('transaction.exportDesty', [
+                                        'id' => $data->id,
+                                        'side' => 'b',
+                                        'data' => $itemDesty['receiver'],
+                                    ]) }}"
+                                        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                                        Desty Receiver
+                                    </a>
+                                @else
+                                    <button disabled
+                                        class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-400 cursor-not-allowed rounded-lg">
+
+                                        Excel Downloaded by
+                                        {{ $data->userDownloadedBBy->username ?? 'Unknown' }}
+
+                                    </button>
+                                @endif
+
+
+                                {{-- ================= NON MOVE TRANSACTION ================= --}}
                             @else
-                                @if ($showDesty == 1)
+                                @php
+                                    $isHidden = $data->desty_side_a;
+                                @endphp
 
-                                    {{-- USER TANPA LIMIT DOWNLOAD -> bebas download --}}
-                                    @if (!$limitDownload)
-                                        <a href="{{ route('transaction.exportDesty', ['id' => $data->id, 'data' => $itemDesty]) }}"
-                                            class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">
-                                            Desty
-                                        </a>
+                                @if (!$limitDownload || !$isHidden)
+                                    <a href="{{ route('transaction.exportDesty', [
+                                        'id' => $data->id,
+                                        'side' => 'a',
+                                        'data' => $itemDesty,
+                                    ]) }}"
+                                        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                                        Desty
+                                    </a>
+                                @else
+                                    <button disabled
+                                        class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-400 cursor-not-allowed rounded-lg">
 
-                                        {{-- USER DENGAN LIMIT DOWNLOAD --}}
-                                    @else
-                                        {{-- belum pernah download --}}
-                                        @if (!$isHidden)
-                                            <a href="{{ route('transaction.exportDesty', ['id' => $data->id, 'data' => $itemDesty]) }}"
-                                                class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">
-                                                Desty
-                                            </a>
+                                        Excel Downloaded by
+                                        {{ $data->userDownloadedBy->username ?? 'Unknown' }}
 
-                                            {{-- sudah pernah download --}}
-                                        @else
-                                            <button disabled
-                                                class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-400 cursor-not-allowed rounded-lg">
-                                                <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg"
-                                                    fill="currentColor" viewBox="0 0 24 24">
-                                                    <path fill-rule="evenodd"
-                                                        d="M8 3a2 2 0 0 0-2 2v3h12V5a2 2 0 0 0-2-2H8Zm-3 7a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h1v-4a1 1 0 0 1 1-1h10a1 1 0 1 0 0-2H5Zm4 11a1 1 0 0 1-1-1v-4h8v4a1 1 0 0 1-1 1H9Z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                                Excel Downloaded by
-                                                {{ $data->userDownloadedBy->username ?? 'Unknown' }}
-                                            </button>
-                                        @endif
-
-                                    @endif
-
+                                    </button>
                                 @endif
 
                             @endif
 
                         @endif
-
                         @if (isset($cronFlatform['get_order']) && $cronFlatform['get_order'] === 1)
 
                             @if ($cekJubelio > 0 && $countAll != $limitShow && $data->submit_type == 1)

@@ -287,9 +287,14 @@ class Transaction extends Model
 		return $this->errors->toArray();
 	}
 
-	public function userDownloadedBy()
+	public function userDownloadedABy()
 	{
-		return $this->belongsTo('App\Models\User', 'download_by');
+		return $this->belongsTo('App\Models\User', 'desty_side_a');
+	}
+
+	public function userDownloadedBBy()
+	{
+		return $this->belongsTo('App\Models\User', 'desty_side_b');
 	}
 
     public function checkPPN($sender, $receiver) {
