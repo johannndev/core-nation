@@ -88,7 +88,7 @@ Route::get('/role-set', function () {
 
     // $user->assignRole('superadmin');
 
-    $role = Role::create(['name' => 'ban']);
+    // $role = Role::create(['name' => 'ban']);
 
     $permission = Permission::create(['name' => 'transactions.desty.limit.download']);
 
