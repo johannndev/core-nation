@@ -432,38 +432,39 @@
                                     Desty Receiver
                                 </a>
                             @else
-                            @endif
+                                @if ($showDesty == 1)
 
-                            @if ($showDesty == 1)
-
-                                {{-- USER TANPA LIMIT DOWNLOAD -> bebas download --}}
-                                @if (!$limitDownload)
-                                    <a href="{{ route('transaction.exportDesty', ['id' => $data->id, 'data' => $itemDesty]) }}"
-                                        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">
-                                        Desty
-                                    </a>
-
-                                    {{-- USER DENGAN LIMIT DOWNLOAD --}}
-                                @else
-                                    {{-- belum pernah download --}}
-                                    @if (!$isHidden)
+                                    {{-- USER TANPA LIMIT DOWNLOAD -> bebas download --}}
+                                    @if (!$limitDownload)
                                         <a href="{{ route('transaction.exportDesty', ['id' => $data->id, 'data' => $itemDesty]) }}"
                                             class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">
                                             Desty
                                         </a>
 
-                                        {{-- sudah pernah download --}}
+                                        {{-- USER DENGAN LIMIT DOWNLOAD --}}
                                     @else
-                                        <button disabled
-                                            class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-400 cursor-not-allowed rounded-lg">
-                                            <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg"
-                                                fill="currentColor" viewBox="0 0 24 24">
-                                                <path fill-rule="evenodd"
-                                                    d="M8 3a2 2 0 0 0-2 2v3h12V5a2 2 0 0 0-2-2H8Zm-3 7a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h1v-4a1 1 0 0 1 1-1h10a1 1 0 1 0 0-2H5Zm4 11a1 1 0 0 1-1-1v-4h8v4a1 1 0 0 1-1 1H9Z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                            Excel Downloaded by {{ $data->userDownloadedBy->username ?? 'Unknown' }}
-                                        </button>
+                                        {{-- belum pernah download --}}
+                                        @if (!$isHidden)
+                                            <a href="{{ route('transaction.exportDesty', ['id' => $data->id, 'data' => $itemDesty]) }}"
+                                                class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                                                Desty
+                                            </a>
+
+                                            {{-- sudah pernah download --}}
+                                        @else
+                                            <button disabled
+                                                class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-400 cursor-not-allowed rounded-lg">
+                                                <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor" viewBox="0 0 24 24">
+                                                    <path fill-rule="evenodd"
+                                                        d="M8 3a2 2 0 0 0-2 2v3h12V5a2 2 0 0 0-2-2H8Zm-3 7a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h1v-4a1 1 0 0 1 1-1h10a1 1 0 1 0 0-2H5Zm4 11a1 1 0 0 1-1-1v-4h8v4a1 1 0 0 1-1 1H9Z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                                Excel Downloaded by
+                                                {{ $data->userDownloadedBy->username ?? 'Unknown' }}
+                                            </button>
+                                        @endif
+
                                     @endif
 
                                 @endif
