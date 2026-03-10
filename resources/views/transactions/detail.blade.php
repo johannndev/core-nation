@@ -414,10 +414,6 @@
                             </a>
                         @endif
 
-                        {{  $data->desty_side_a }}
-
-                         {{  $data->desty_side_b }}
-
                         @php
                             $limitDownload = auth()->user()->hasPermissionTo('transactions.desty.limit.download');
 
