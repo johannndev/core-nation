@@ -2172,7 +2172,7 @@ class TransactionsController extends Controller
 
 		$data = Transaction::find($id);
 
-		if ($data->sync_hide == 'Y') {
+		if (auth()->user()->hasPermissionTo('transactions.desty.limit.download') && $data->sync_hide == 'Y') {
 			return redirect()->back()->with('errorMessage', 'Excel for this transaction has already been downloaded. Please check your download folder.');
 		}
 

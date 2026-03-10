@@ -90,7 +90,7 @@ Route::get('/role-set', function () {
 
     $role = Role::create(['name' => 'ban']);
 
-    // $permission = Permission::create(['name' => 'superadmin']);
+    $permission = Permission::create(['name' => 'transactions.desty.limit.download']);
 
     // $role = Role::where('name','superadmin')->first();
 
