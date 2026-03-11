@@ -140,7 +140,7 @@ class ItemsController extends Controller
 			$itemManager = new ItemsManagerHelper;
 
 			// dd($request->tags);
-
+			$input->type = ITEM::TYPE_ITEM;
 			if(!$itemManager->createItems($input, $tags, $request->file))
 				throw new ModelException($itemManager->getErrors(), __LINE__);
 
@@ -168,7 +168,7 @@ class ItemsController extends Controller
 	{
 		$data = Item::with('group','tags')->where('id',$id)->first();
 
-		// dd($data);
+		// dd($data->group->alias);
 
 		$urlImage = $data->item_image_path;
 

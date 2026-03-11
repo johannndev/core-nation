@@ -449,11 +449,13 @@ class TransactionsController extends Controller
 
 	public function postBuy(Request $request)
 	{
+		
 		return $this->createTransaction(Transaction::TYPE_BUY, $request);
 	}
 
-	protected function createTransaction($type = null, $request)
-	{
+    protected function createTransaction($type = null, $request)
+ 	{
+		
 		try {
 
 			$class = array();
@@ -462,8 +464,9 @@ class TransactionsController extends Controller
 			//start transaction
 			DB::beginTransaction();
 
-			$customer = Customer::find($request->customer);
-			$warehouse = Customer::find($request->warehouse);
+		$customer = Customer::find($request->customer);
+		$warehouse = Customer::find($request->warehouse);
+
 
 			// dd($customer,$warehouse);
 
@@ -1631,8 +1634,8 @@ class TransactionsController extends Controller
 	}
 
 	public function return()
-	{
-		$trType = 'buy';
+    {
+		$trType = 'return';
 
 		$dataListPropSender = [
 			"label" => "Sender",

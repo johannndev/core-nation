@@ -180,6 +180,11 @@ class Item extends Model
         return $this->hasMany(WarehouseItem::class, 'item_id', 'id')->where('warehouse_id',2875);
     }
 
+	public function whItem(): HasMany
+    {
+        return $this->hasMany(WarehouseItem::class, 'item_id', 'id');
+    }
+
 	public function warehousesItemAlt()
 	{
 		return $this->hasMany(WarehouseItem::class,'item_id', 'id');
@@ -282,7 +287,8 @@ class Item extends Model
 
 		$imageUrl = env('CDN_URL', '/laragon/www/core-nation/public/asset/').$this->id.'.jpg';
 		$imagePath = env('CDN_PATH', '/laragon/www/core-nation/public/asset/').$this->id.'.jpg';
-
+		
+	
 		return file_exists($imagePath)
 		? $imageUrl
 		: asset('img/noimg.jpg');

@@ -111,6 +111,19 @@ class AjaxController extends Controller
         return response()->json($item, 200);
     }
 
+    public function getItemByAll(Request $request)
+{
+    $search = str_replace(' ', '%', $request->search);
+
+    $item = Item::where('name', 'like', "%$search%")
+        ->orWhere('code', 'like', "%$search%")
+        ->orWhere('id', $search) // exact match id
+        ->orderBy('name', 'asc')
+        ->paginate();
+
+    return response()->json($item, 200);
+}
+
     public function getItemId(Request $request)
     {
         $search = str_replace(' ', '%', $request->search);
