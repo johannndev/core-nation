@@ -278,7 +278,7 @@ class ItemsController extends Controller
 	
 
 		// dd($tags);
-		$type = Item::TYPE_ITEM;
+		$input->type = Item::TYPE_ITEM;
 
 		foreach($tags as $key => $value) {
 			if($value['type_id'] == Tag::TYPE_SIZE || $value['type_id'] == Tag::TYPE_TYPE || $value['type_id'] == Tag::TYPE_WARNA){
@@ -313,6 +313,7 @@ class ItemsController extends Controller
 				
 
 			DB::beginTransaction();
+    		$input->type = Item::TYPE_ITEM;
 
 			$itemManager = new ItemsManagerHelper;
 
