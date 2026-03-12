@@ -64,7 +64,7 @@ class DestyController extends Controller
 
 
         $response = Http::withHeaders([
-            'Authorization'   => '' . $token->token . '',
+            'Authorization'   => 'Bearer ' . $token->token . '',
             'Content-Type'  => 'application/json'
         ])->send('post', 'https://api.desty.app/api/product/page', [
             'body' => json_encode([
@@ -78,10 +78,44 @@ class DestyController extends Controller
         return $response->json();
     }
 
+    public function warehouse()
+    {
+        // Cek token valid
+        $token = DestyHelper::getValidToken();
+
+        if (!$token) {
+            // Refresh token jika expired
+            $token = DestyHelper::refreshTokenIfNeeded();
+        }
+
+
+        $response = Http::withHeaders([
+            'Authorization'   => 'Bearer ' . $token->token . '',
+            'Content-Type'  => 'application/json'
+        ])->send('post', 'https://api.desty.app/api/warehouse/list', [
+            'body' => json_encode([
+                'pageNumber' => 1,
+                'pageSize'   => 20
+            ])
+        ]);
+
+        if (!$response->successful()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed get warehouse'
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $response->json()['data']['results'] ?? []
+        ]);
+    }
+
     public function payload(Request $request)
     {
         // Build query only once, apply filters conditionally
-        $query = DestyPayload::with('warehouse','warehouse.destySync')->orderByDesc('created_at');
+        $query = DestyPayload::with('warehouse', 'warehouse.destySync')->orderByDesc('created_at');
 
         if ($invoice = $request->get('invoice')) {
             $query->where('invoice', 'like', '%' . $invoice . '%');

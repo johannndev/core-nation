@@ -10,26 +10,27 @@ use Illuminate\Http\Request;
 class DestySyncController extends Controller
 {
 
-    public function index(){
-        $dataList = DestySync::with(['destyWarehouse','warehouse','customer']);
+    public function index()
+    {
+        $dataList = DestySync::with(['destyWarehouse', 'warehouse', 'customer']);
 
-       
+
 
         // if(Request('name')) {
-		// 	$name = str_replace(' ', '%', Request('name'));
-		// 	$dataList = $dataList->where('jubelio_location_name','LIKE',"%$name%");
-		// }
-		// if($id = Request('id')) {
-		// 	$dataList = $dataList->where('memberId','=', $id);
-		// }
+        // 	$name = str_replace(' ', '%', Request('name'));
+        // 	$dataList = $dataList->where('jubelio_location_name','LIKE',"%$name%");
+        // }
+        // if($id = Request('id')) {
+        // 	$dataList = $dataList->where('memberId','=', $id);
+        // }
 
-      
 
-		
-        
-        $dataList = $dataList->orderBy('created_at','desc')->paginate(50)->withQueryString();
 
-        return view('desty.sync.index',compact('dataList'));
+
+
+        $dataList = $dataList->orderBy('created_at', 'desc')->paginate(50)->withQueryString();
+
+        return view('desty.sync.index', compact('dataList'));
     }
 
     public function create()
@@ -64,7 +65,7 @@ class DestySyncController extends Controller
 
 
 
-        return view('desty.sync.create', compact('dataListPropWarehouse', 'dataListPropCustomer','destyWarehouses'));
+        return view('desty.sync.create', compact('dataListPropWarehouse', 'dataListPropCustomer', 'destyWarehouses'));
     }
 
     //function store(){} ke model desty sync
@@ -86,7 +87,7 @@ class DestySyncController extends Controller
         return redirect()->route('desty.sync.index')->with('success', 'Desty Sync created successfully.');
     }
 
-     public function edit($id)
+    public function edit($id)
     {
 
         $data = DestySync::findOrFail($id);
@@ -113,5 +114,29 @@ class DestySyncController extends Controller
 
 
         return redirect()->route('desty.sync.index')->with('success', 'Desty Sync updated.');
+    }
+
+    public function warehouseCreate()
+    {
+        return view('desty.sync.warehouse_create');
+    }
+
+    public function warehouseStore(Request $request)
+    {
+        $validatedData = $request->validate([
+            'warehouse' => 'required|string',
+            'store' => 'required|string',
+        ]);
+
+        // Simpan data ke database
+        DestyWarehouse::create([
+            "platform_warehouse_id" => $request->warehouse,
+            "platform_warehouse_name" => $request->name,
+            "store_id" => $request->store,
+            "store_name" => $request->platformName,
+            "platform_name" => $request->partner,
+        ]);
+
+        return redirect()->route('desty.sync.create')->with('success', 'Desty Warehouse created successfully.');
     }
 }

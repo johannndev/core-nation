@@ -142,11 +142,13 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 
 
 Route::middleware('auth')->group(function () {
+    Route::get('/desty/json/warehouse', [DestyController::class, 'warehouse'])->name('desty.warehouse.json');
 
     Route::get('/desty/initial/webhook', [DestyController::class, 'initialSync']);
     Route::get('/desty/payload', [DestyController::class, 'payload'])->name('desty.payload');
     Route::get('/desty/payload/{id}/detail', [DestyController::class, 'detailPayload'])->name('desty.payloadDetail');
     Route::get('/desty/data', [DestyController::class, 'dataDesty']);
+    
     Route::post('/desty/create/{id}/manual', [DestyController::class, 'createManual'])->name('desty.createManual');
     Route::get('/desty/sync', [DestySyncController::class, 'index'])->name('desty.sync.index');
     Route::get('/desty/sync/create', [DestySyncController::class, 'create'])->name('desty.sync.create');
@@ -154,6 +156,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/desty/sync/{id}/edit', [DestySyncController::class, 'edit'])->name('desty.sync.edit');
     Route::delete('/desty/sync/{id}/delete', [DestySyncController::class, 'delete'])->name('desty.sync.delete');
     Route::patch('/desty/sync/{id}/update', [DestySyncController::class, 'update'])->name('desty.sync.update');
+    Route::get('/desty/sync/warehouse/create', [DestySyncController::class, 'warehouseCreate'])->name('desty.sync.warehouse.create');
+    Route::post('/desty/sync/warehouse/store', [DestySyncController::class, 'warehouseStore'])->name('desty.sync.warehouse.store');
     Route::get('desty/cek', [DestyController::class, 'cek'])->name('desty.cek');
 
     Route::get('restock', [RestockController::class, 'index'])->name('restock.index')->middleware('permission:restock');
