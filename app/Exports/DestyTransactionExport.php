@@ -72,7 +72,7 @@ class DestyTransactionExport extends StringValueBinder implements FromCollection
         return [
             'C' => '@',
             'E' => '@',
-            'H' => '#,##0',
+            'H' => '"Rp "#,##0',
         ];
     }
 }
