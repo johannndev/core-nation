@@ -148,6 +148,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/desty/payload/{id}/detail', [DestyController::class, 'detailPayload'])->name('desty.payloadDetail');
     Route::get('/desty/data', [DestyController::class, 'dataDesty']);
     Route::post('/desty/create/{id}/manual', [DestyController::class, 'createManual'])->name('desty.createManual');
+    Route::get('/desty/sync', [DestySyncController::class, 'index'])->name('desty.sync.index');
+    Route::get('/desty/sync/create', [DestySyncController::class, 'create'])->name('desty.sync.create');
+    Route::post('/desty/sync/store', [DestySyncController::class, 'store'])->name('desty.sync.store');
+    Route::get('/desty/sync/{id}/edit', [DestySyncController::class, 'edit'])->name('desty.sync.edit');
+    Route::delete('/desty/sync/{id}/delete', [DestySyncController::class, 'delete'])->name('desty.sync.delete');
+    Route::patch('/desty/sync/{id}/update', [DestySyncController::class, 'update'])->name('desty.sync.update');
+    Route::get('desty/cek', [DestyController::class, 'cek'])->name('desty.cek');
 
     Route::get('restock', [RestockController::class, 'index'])->name('restock.index')->middleware('permission:restock');
     Route::get('restock/create', [RestockController::class, 'create'])->name('restock.create')->middleware('permission:restock');
