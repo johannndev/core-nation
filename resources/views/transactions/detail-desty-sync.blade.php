@@ -275,7 +275,7 @@
             </div>
 
         @empty($data->a_submit_by)
-            {{-- <form
+            <form
                 action="{{ route('desty.adjustmentDesty', [
                     'id' => $data->id,
                     'warehouse_id' => $werehouses['sender']['warehouse_id'],
@@ -288,7 +288,7 @@
 
                 <x-layout.submit-button />
 
-            </form> --}}
+            </form>
         @endempty
 
     </div>
