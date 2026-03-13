@@ -1001,7 +1001,6 @@ class TransactionsController extends Controller
 
 					$warehouses['sender'] = [
 						'warehouse_id' => $data->sender_id,
-						'jubelio_name' => $sync->warehouse->name ?? null,
 						'system_name' => $data->sender->name ?? null,
 						'adjustment_type' => 2
 					];
@@ -1026,7 +1025,6 @@ class TransactionsController extends Controller
 
 					$warehouses['receiver'] = [
 						'warehouse_id' => $data->receiver_id,
-						'jubelio_name' => $sync->warehouse->name ?? null,
 						'system_name' => $data->receiver->name ?? null,
 						'adjustment_type' => 1
 					];
@@ -1056,14 +1054,12 @@ class TransactionsController extends Controller
 
 					$warehouses['sender'] = [
 						'warehouse_id' => $data->sender_id,
-						'jubelio_name' => $senderSync->warehouse->name ?? null,
 						'system_name' => $data->sender->name ?? null,
 						'adjustment_type' => 'minus'
 					];
 
 					$warehouses['receiver'] = [
 						'warehouse_id' => $data->receiver_id,
-						'jubelio_name' => $receiverSync->warehouse->name ?? null,
 						'system_name' => $data->receiver->name ?? null,
 						'adjustment_type' => 'add'
 					];
@@ -1077,7 +1073,6 @@ class TransactionsController extends Controller
 
 					$warehouses['sender'] = [
 						'warehouse_id' => $data->sender_id,
-						'jubelio_name' => $senderSync->warehouse->name ?? null,
 						'system_name' => $data->sender->name ?? null,
 						'adjustment_type' => 'minus'
 					];
@@ -1091,7 +1086,6 @@ class TransactionsController extends Controller
 
 					$warehouses['receiver'] = [
 						'warehouse_id' => $data->receiver_id,
-						'jubelio_name' => $receiverSync->warehouse->name ?? null,
 						'system_name' => $data->receiver->name ?? null,
 						'adjustment_type' => 'add'
 					];

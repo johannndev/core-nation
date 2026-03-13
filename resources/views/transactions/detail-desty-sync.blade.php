@@ -240,7 +240,7 @@
         </div>
     </section>
 
-    {{ $warehouses['sender']['adjustment_type'] }}
+    {{ $warehouses['sender']['warehouse_id'] }}
 
     @if ($warehouses['sender'])
 
@@ -295,7 +295,7 @@
 
 @endif
 
-{{ $warehouses['receiver']['adjustment_type'] }}
+{{ $warehouses['receiver']['warehouse_id'] }}
 
 @if ($warehouses['receiver'])
 
