@@ -143,6 +143,7 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 
 Route::middleware('auth')->group(function () {
     Route::get('/desty/json/warehouse', [DestyController::class, 'warehouse'])->name('desty.warehouse.json');
+    Route::post('/desty/adjust/warehouse', [DestyController::class, 'adjustmentDesty'])->name('desty.adjustmentDesty');
 
     Route::get('/desty/stock/increase', [DestyController::class, 'increaseDesty'])->name('desty.stock.increase');
     Route::get('/desty/stock/decrease', [DestyController::class, 'decreaseDesty'])->name('desty.stock.decrease');

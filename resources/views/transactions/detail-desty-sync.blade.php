@@ -276,7 +276,7 @@
 
         @empty($data->a_submit_by)
             <form
-                action="{{ route('jubelio.adjustStok', [
+                action="{{ route('desty.adjustmentDesty', [
                     'id' => $data->id,
                     'warehouse_id' => $werehouses['sender']['warehouse_id'],
                     'adjustType' => $adjustType,
@@ -329,7 +329,7 @@
 
     @empty($data->b_submit_by)
         <form
-            action="{{ route('jubelio.adjustStok', [
+            action="{{ route('desty.adjustmentDesty', [
                 'id' => $data->id,
                 'warehouse_id' => $warehouses['receiver']['warehouse_id'],
                 'adjustType' => $adjustType,
