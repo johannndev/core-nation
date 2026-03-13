@@ -278,7 +278,7 @@
             <form
                 action="{{ route('desty.adjustmentDesty', [
                     'id' => $data->id,
-                    'warehouse_id' => $werehouses['sender']['warehouse_id'],
+                    'warehouse_id' => $warehouses['sender']['warehouse_id'],
                     'adjustType' => $adjustType,
                     'side' => 'sender',
                 ]) }}"
