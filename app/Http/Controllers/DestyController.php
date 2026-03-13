@@ -381,7 +381,7 @@ class DestyController extends Controller
             ->where('store_id', $desty->store_id)
             ->first();
 
-        if (!$destyWh || !$destyWh->destySync) {
+        if (!$destyWh) {
 
             return redirect()->back()->withInput()->with('errorMessage', 'Desty Warehouse tidak ditemukan atau belum disync');
         }
