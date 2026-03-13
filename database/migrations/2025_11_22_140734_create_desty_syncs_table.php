@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('desty_syncs', function (Blueprint $table) {
             $table->id();
-            $table->integer('desty_warehouse_id');
+            $table->string('platform_warehouse_id')->nullable(); 
+            $table->string('platform_warehouse_name')->nullable();
+            $table->string('store_id')->nullable();
+            $table->string('store_name')->nullable();
+            $table->string('external_warehouse_id')->nullable(); 
+            $table->string('warehouse_name')->nullable(); 
             $table->integer('warehouse_id');
             $table->integer('customer_id');
             $table->string('gudang_id')->nullable();

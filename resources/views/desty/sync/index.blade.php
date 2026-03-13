@@ -90,6 +90,8 @@
                                 <thead
                                     class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
+                                        <th scope="col" class="px-4 py-3">Warehouse</th>
+
                                         <th scope="col" class="px-4 py-3">Desty</th>
 
                                         <th scope="col" class="px-4 py-3">Aria</th>
@@ -108,20 +110,33 @@
 
                                             <td scope="row" class="px-4 py-3  whitespace-nowrap ">
 
-                                                {{ $item->destyWarehouse->platform_warehouse_name }} ->
-                                                {{ $item->destyWarehouse->store_name }}
-                                                ({{ $item->destyWarehouse->platform_name }})
+                                                {{ $item->warehouse_name }}
+                                            
                                             </td>
 
                                             <td scope="row" class="px-4 py-3  whitespace-nowrap ">
 
-                                                {{ $item->warehouse->name }} -> {{ $item->customer->name }}
+                                                <div>
+                                                    <p class="font-medium">{{ $item->platform_warehouse_name }}</p>
+                                                    <p class="text-xs text-gray-500">{{ $item->platform_warehouse_id }}</p>
+                                                </div>
 
+                                                <div class="mt-2">
+                                                    <p class="font-medium">{{ $item->store_name }}</p>
+                                                    <p class="text-xs text-gray-500">{{ $item->store_id }}</p>
+                                                </div>
                                             </td>
 
                                             <td scope="row" class="px-4 py-3  whitespace-nowrap ">
 
-                                                {{ $item->gudang_id }}
+                                                <p>{{ $item->warehouse->name }}</p>
+
+                                                <p>{{ $item->customer->name }}</p>
+                                            </td>
+
+                                            <td scope="row" class="px-4 py-3  whitespace-nowrap ">
+
+                                                {{ $item->external_warehouse_id }}
 
                                             </td>
 

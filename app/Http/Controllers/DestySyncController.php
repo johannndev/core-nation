@@ -30,8 +30,6 @@ class DestySyncController extends Controller
 
         $dataList = $dataList->orderBy('created_at', 'desc')->paginate(50)->withQueryString();
 
-        dd($dataList);
-
         return view('desty.sync.index', compact('dataList'));
     }
 
@@ -74,14 +72,20 @@ class DestySyncController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'desty_id' => 'required|integer',
+            'warehouse_desty' => 'required',
+            'store_desty' => 'required',
             'warehouse' => 'required|integer',
             'customer' => 'required|integer',
         ]);
 
         // Simpan data ke database
         DestySync::create([
-            'desty_warehouse_id' => $validatedData['desty_id'],
+            'platform_warehouse_id' =>$request->platformWarehouseId,
+            'platform_warehouse_name' => $request->platformWarehouseName,
+            'store_id' => $request->platformStoreId,
+            'store_name' => $request->platformName,
+            'external_warehouse_id' => $request->externalWarehouseId,
+            'warehouse_name' => $request->warehouseName,
             'warehouse_id' => $validatedData['warehouse'],
             'customer_id' => $validatedData['customer'],
         ]);

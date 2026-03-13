@@ -75,54 +75,55 @@
                             <div class="grid grid-cols-2 gap-4 mb-4">
 
                                 {{-- pilih warehouse desty ada tomnbol + untuk create warehouse baru --}}
-                                <div class="col-span-2">
-                                    <div class="flex items-center ">
+                                <div class="grid grid-cols-2 gap-4 mb-4">
 
-                                        <div>
-                                            <label for="name"
-                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Desty
-                                                Warehouse</label>
-                                            <select id="locationSelect" name="desty_id"
-                                                class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('desty_id') bg-red-50  border-red-500 text-red-900 @else bg-gray-50  border-gray-300 text-gray-900 @enderror">
-                                                <option value="">Choose a location</option>
+                                    <div class="mb-4">
+                                        <label
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Warehouse Desty</label>
 
-                                                @foreach ($destyWarehouses as $item)
-                                                    <option {{ old('desty_id') == $item->id ? 'selected' : '' }}
-                                                        data-name="{{ $item->id }}" value="{{ $item->id }}">
-                                                        {{ $item->platform_warehouse_name }} -> {{ $item->store_name }}
-                                                        ({{ $item->platform_name }})
-                                                    </option>
-                                                @endforeach
-
-
-                                            </select>
-                                        </div>
-                                        <div class="ms-4 mt-6">
-                                            <a href="{{ route('desty.sync.warehouse.create') }}"
-                                                class="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
-                                                Create New Warehouse
-                                            </a>
-
-                                        </div>
-
+                                        <select id="warehouse" name="warehouse_desty"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option value="">Loading...</option>
+                                        </select>
                                     </div>
 
+                                    <div class="mb-4">
+                                        <label
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Store Desty</label>
 
+                                        <select id="store" name="store_desty"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option value="">Pilih Store</option>
+                                        </select>
+                                    </div>
 
-
+                                    {{-- Hidden fields --}}
+                                    <input type="text" name="externalWarehouseId" id="externalWarehouseId">
+                                    <input type="text" name="warehouseName" id="warehouseName">
+                                    <input type="text" name="platformWarehouseName" id="platformWarehouseName">
+                                    <input type="text" name="platformStoreId" id="platformStoreId">
+                                    <input type="text" name="platformWarehouseId" id="platformWarehouseId">
+                                    <input type="text" name="platformName" id="platformName">
 
 
                                 </div>
 
-                                <x-partial.select-addr :dataProp='$dataListPropWarehouse' />
-                                <x-partial.select-addr :dataProp='$dataListPropCustomer' />
 
 
-                                <x-layout.submit-button />
+
+
 
                             </div>
+
+                            <x-partial.select-addr :dataProp='$dataListPropWarehouse' />
+                            <x-partial.select-addr :dataProp='$dataListPropCustomer' />
+
+
+                            <x-layout.submit-button />
+
                         </div>
                     </div>
+                </div>
             </section>
 
         </form>
@@ -130,6 +131,86 @@
 
 
     @push('jsBody')
+        <script>
+            let warehouses = []
+
+            // load warehouse
+            $(document).ready(function() {
+
+                $.get("{{ route('desty.warehouse.json') }}", function(res) {
+
+                    if (!res.status) return
+
+                    warehouses = res.data
+
+                    let html = '<option value="">Pilih Warehouse</option>'
+
+                    res.data.forEach(function(item) {
+
+                        html += `
+                <option value="${item.externalWarehouseId}">
+                    ${item.name}
+                </option>
+            `
+                    })
+
+                    $('#warehouse').html(html)
+
+                })
+
+            })
+
+
+            // pilih warehouse
+            $('#warehouse').on('change', function() {
+
+                let id = $(this).val()
+
+                let warehouse = warehouses.find(w => w.externalWarehouseId == id)
+
+                let html = '<option value="">Pilih Store</option>'
+
+                if (warehouse) {
+
+                    $('#externalWarehouseId').val(warehouse.externalWarehouseId)
+                    $('#warehouseName').val(warehouse.name)
+               
+
+                    warehouse.platformWarehouses.forEach(function(store) {
+
+                        html += `
+                <option 
+                    value="${store.platformWarehouseId}"
+                    data-store="${store.platformStoreId}"
+                    data-platform="${store.platformName}"
+                    data-platform-warehouse-id="${store.platformWarehouseId}"
+                    data-platform-warehouse-name="${store.platformWarehouseName}"
+                >
+                    ${store.platformName} - ${store.platformWarehouseName}
+                </option>
+            `
+                    })
+
+                }
+
+                $('#store').html(html)
+
+            })
+
+
+            // pilih store
+            $('#store').on('change', function() {
+
+                let selected = $(this).find(':selected')
+
+                $('#platformStoreId').val(selected.data('store'))
+                $('#platformWarehouseId').val(selected.data('platform-warehouse-id'))
+                $('#platformName').val(selected.data('platform'))
+                $('#platformWarehouseName').val(selected.data('platform-warehouse-name'))
+
+
+            })
+        </script>
     @endpush
 
 

@@ -63,15 +63,125 @@ class DestyController extends Controller
         }
 
 
+        // $response = Http::withHeaders([
+        //     'Authorization'   => 'Bearer ' . $token->token . '',
+        //     'Content-Type'  => 'application/json'
+        // ])->send('post', 'https://api.desty.app/api/product/page', [
+        //     'body' => json_encode([
+        //         'pageNumber' => 1,
+        //         'pageSize'   => 20
+        //     ])
+        // ]);
+
         $response = Http::withHeaders([
             'Authorization'   => 'Bearer ' . $token->token . '',
             'Content-Type'  => 'application/json'
-        ])->send('post', 'https://api.desty.app/api/product/page', [
+        ])->get('https://api.desty.app/api/product/sku/detail', [
+            'skuNumber' => 'AJDCX0011805L'
+        ]);
+
+
+
+
+        dd($response->json(), $token->token);
+
+        return $response->json();
+    }
+
+    public function increaseDesty()
+    {
+        // Cek token valid
+        $token = DestyHelper::getValidToken();
+
+        if (!$token) {
+            // Refresh token jika expired
+            $token = DestyHelper::refreshTokenIfNeeded();
+        }
+
+        $payload = [
+            "warehouseId" => "1",
+            "stocks" => [
+                [
+                    "skuNumber" => "SKU-001",
+                    "stockAdjustment" => 10,
+                    "unitCost" => 5000,
+                    "productName" => "Produk Contoh",
+                    "productId" => "PRD-001",
+                    "receivedDate" => "2026-03-13",
+                    "storedDate" => "2026-03-13",
+                    "expiredDate" => "2027-03-13"
+                ]
+            ]
+        ];
+
+
+        $response = Http::withHeaders([
+            'Authorization'   => 'Bearer ' . $token->token . '',
+            'Content-Type'  => 'application/json'
+        ])->send('post', 'https://api.desty.app/api/inventory/stock/add', [
             'body' => json_encode([
-                'pageNumber' => 1,
-                'pageSize'   => 20
+                "warehouseId" => "1984504770257820800",
+                "stocks" => [
+                    [
+                        "skuNumber" => "AJDCX0011805L",
+                        "stockAdjustment" => 10,
+                        "unitCost" => 0,
+                    ]
+                ]
             ])
         ]);
+
+
+
+        dd($response->json(), $token->token);
+
+        return $response->json();
+    }
+
+    public function decreaseDesty()
+    {
+        // Cek token valid
+        $token = DestyHelper::getValidToken();
+
+        if (!$token) {
+            // Refresh token jika expired
+            $token = DestyHelper::refreshTokenIfNeeded();
+        }
+
+        $payload = [
+            "warehouseId" => "1",
+            "stocks" => [
+                [
+                    "skuNumber" => "SKU-001",
+                    "stockAdjustment" => 10,
+                    "unitCost" => 5000,
+                    "productName" => "Produk Contoh",
+                    "productId" => "PRD-001",
+                    "receivedDate" => "2026-03-13",
+                    "storedDate" => "2026-03-13",
+                    "expiredDate" => "2027-03-13"
+                ]
+            ]
+        ];
+
+
+        $response = Http::withHeaders([
+            'Authorization'   => 'Bearer ' . $token->token . '',
+            'Content-Type'  => 'application/json'
+        ])->send('post', 'https://api.desty.app/api/inventory/stock/minus', [
+            'body' => json_encode([
+                "warehouseId" => "1984504770257820800",
+                "stocks" => [
+                    [
+                        "skuNumber" => "AJDCX0011805L",
+                        "stockAdjustment" => 2,
+                        "unitCost" => 0,
+                    ]
+                ]
+            ])
+        ]);
+
+
 
         dd($response->json(), $token->token);
 
