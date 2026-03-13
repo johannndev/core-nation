@@ -240,7 +240,7 @@
         </div>
     </section>
 
-    {{  $warehouses}}
+    {!!   $warehouses !!}
 
     @if ($warehouses['sender'])
 
