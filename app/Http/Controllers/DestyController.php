@@ -327,6 +327,7 @@ class DestyController extends Controller
         $dataList = $query->paginate(200)->withQueryString();
 
 
+        dd($dataList, $statusCounts);
 
         return view('desty.payload', [
             'dataList'     => $dataList,
