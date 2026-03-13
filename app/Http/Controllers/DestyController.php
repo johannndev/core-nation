@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Services\Transaction\TransactionService;
 use App\Services\Transaction\StatsSalesService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DestyController extends Controller
 {
@@ -186,6 +188,83 @@ class DestyController extends Controller
         dd($response->json(), $token->token);
 
         return $response->json();
+    }
+
+    public function adjustmentDesty(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer',
+            'warehouse_id' => 'required',
+            'adjustType' => 'required|in:add,minus',
+            'side' => 'required|in:sender,receiver'
+        ]);
+
+        // Ambil token
+        $token = DestyHelper::getValidToken() ?? DestyHelper::refreshTokenIfNeeded();
+
+        if (!$token) {
+            return back()->with('fail', 'Desty token tidak tersedia');
+        }
+
+        $trans = Transaction::with('transactionDetail', 'transactionDetail.item')
+            ->findOrFail($request->id);
+
+        if ($trans->transactionDetail->isEmpty()) {
+            return back()->with('fail', 'Tidak ada item untuk adjustment');
+        }
+
+        // Build item payload
+        $items = $trans->transactionDetail->map(function ($detail) use ($request) {
+
+            $qty = $request->adjustType === 'minus'
+                ? -abs($detail->quantity)
+                : abs($detail->quantity);
+
+            return [
+                'skuNumber' => $detail->item->code,
+                'stockAdjustment' => $qty,
+                'unitCost' => 0,
+            ];
+        })->values()->toArray();
+
+
+        try {
+
+            DB::transaction(function () use ($request, $token, $items, $trans) {
+
+                $response = Http::withToken($token->token)
+                    ->timeout(30)
+                    ->post(
+                        "https://api.desty.app/api/inventory/stock/{$request->adjustType}",
+                        [
+                            "warehouseId" => $request->warehouse_id,
+                            "stocks" => $items
+                        ]
+                    );
+
+                if (!$response->successful()) {
+                    throw new \Exception('Desty API Error: ' . $response->body());
+                }
+
+                // Update submit side
+                if ($request->side === 'sender') {
+                    $trans->a_submit_by = Auth::id();
+                }
+
+                if ($request->side === 'receiver') {
+                    $trans->b_submit_by = Auth::id();
+                }
+
+                $trans->save();
+            });
+        } catch (\Throwable $e) {
+
+            return back()->with('error', $e->getMessage());
+        }
+
+        return redirect()
+            ->route('transaction.detailDestySync', $trans->id)
+            ->with('success', 'Desty stock adjustment berhasil');
     }
 
     public function warehouse()

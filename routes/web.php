@@ -88,7 +88,7 @@ Route::get('/role-set', function () {
 
     // $role = Role::create(['name' => 'ban']);
 
-    $permission = Permission::create(['name' => 'restock']);
+    $permission = Permission::create(['name' => 'transactions.desty.limit.download']);
 
     // $role = Role::where('name','superadmin')->first();
 
@@ -364,12 +364,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/transaction/sync/{id}/display', [TransactionsController::class, 'transactionSyncDisplay'])->name('transaction.transactionSyncDisplay')->middleware('permission:transactions.detail');
 
     Route::get('/transaction/{id}/detail/jubelio-sync', [TransactionsController::class, 'detailJubelioSync'])->name('transaction.detailJubelioSync')->middleware('permission:transactions.detail');
+    
 
     Route::get('/transaction/{id}/detail/jubelio-sync/warning', [TransactionsController::class, 'warning'])->name('transaction.warningJubelioSync')->middleware('permission:transactions.detail');
 
     Route::post('/transaction/{id}/detail/jubelio-sync/confirmation', [TransactionsController::class, 'warningKonfirmasi'])->name('transaction.warningKonfirmasiJubelioSync')->middleware('permission:transactions.detail');
 
     Route::post('/transaction/{id}/detail/jubelio-sync/clear', [TransactionsController::class, 'clearWarning'])->name('transaction.clearWarningJubelioSync')->middleware('permission:transactions.detail');
+
+    Route::get('/transaction/{id}/detail/desty-sync', [TransactionsController::class, 'detailDestySync'])->name('transaction.detailDestySync')->middleware('permission:transactions.detail');
 
 
     Route::get('/transaction/{id}/edit/note', [TransactionsController::class, 'editNote'])->name('transaction.editNote')->middleware('permission:transactions.detail');

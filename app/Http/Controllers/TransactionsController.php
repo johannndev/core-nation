@@ -18,6 +18,7 @@ use App\Libraries\StatManager;
 use App\Libraries\TransactionsManager;
 use App\Models\Cronrun;
 use App\Models\Customer;
+use App\Models\DestySync;
 use App\Models\Item;
 use App\Models\Jubeliosync;
 use App\Models\StatSell;
@@ -449,13 +450,13 @@ class TransactionsController extends Controller
 
 	public function postBuy(Request $request)
 	{
-		
+
 		return $this->createTransaction(Transaction::TYPE_BUY, $request);
 	}
 
-    protected function createTransaction($type = null, $request)
- 	{
-		
+	protected function createTransaction($type = null, $request)
+	{
+
 		try {
 
 			$class = array();
@@ -464,8 +465,8 @@ class TransactionsController extends Controller
 			//start transaction
 			DB::beginTransaction();
 
-		$customer = Customer::find($request->customer);
-		$warehouse = Customer::find($request->warehouse);
+			$customer = Customer::find($request->customer);
+			$warehouse = Customer::find($request->warehouse);
 
 
 			// dd($customer,$warehouse);
@@ -961,6 +962,146 @@ class TransactionsController extends Controller
 
 
 		return view('transactions.detail-jubelio-sync', compact('data', 'JubelioA', 'JubelioB', 'adJustTypeA', 'adJustTypeB', 'whA', 'whB', 'whAName', 'whBName'));
+	}
+
+	public function detailDestySync($id, Request $request)
+
+	{
+		$data = Transaction::with(['sender', 'receiver'])
+			->findOrFail($id);
+
+		// Ambil semua mapping jubelio sekaligus
+		$destySync = DestySync::with('warehouse')
+			->whereIn('warehouse_id', [$data->sender_id, $data->receiver_id])
+			->get()
+			->keyBy('warehouse_id');
+
+		$warehouses = [
+			'sender' => null,
+			'receiver' => null
+		];
+
+		switch ($data->type) {
+
+			/*
+        |--------------------------------------------------------------------------
+        | SELL / RETURN SUPPLIER
+        | Stock keluar dari sender
+        |--------------------------------------------------------------------------
+        */
+
+			case Transaction::TYPE_SELL:
+			case Transaction::TYPE_RETURN_SUPPLIER:
+
+				if (isset($destySync[$data->sender_id])) {
+
+					$sync = $destySync[$data->sender_id];
+
+					$warehouses['sender'] = [
+						'warehouse_id' => $data->sender_id,
+						'jubelio_name' => $sync->warehouse->name ?? null,
+						'system_name' => $data->sender->name ?? null,
+						'adjustment_type' => 2
+					];
+				}
+
+				break;
+
+
+			/*
+        |--------------------------------------------------------------------------
+        | BUY / RETURN
+        | Stock masuk ke receiver
+        |--------------------------------------------------------------------------
+        */
+
+			case Transaction::TYPE_BUY:
+			case Transaction::TYPE_RETURN:
+
+				if (isset($destySync[$data->receiver_id])) {
+
+					$sync = $destySync[$data->receiver_id];
+
+					$warehouses['receiver'] = [
+						'warehouse_id' => $data->receiver_id,
+						'jubelio_name' => $sync->warehouse->name ?? null,
+						'system_name' => $data->receiver->name ?? null,
+						'adjustment_type' => 1
+					];
+				}
+
+				break;
+
+
+			/*
+        |--------------------------------------------------------------------------
+        | MOVE
+        | Bisa sender dan receiver
+        |--------------------------------------------------------------------------
+        */
+
+			case Transaction::TYPE_MOVE:
+
+				$senderSync = $destySync[$data->sender_id] ?? null;
+				$receiverSync = $destySync[$data->receiver_id] ?? null;
+
+				/*
+    |--------------------------------------------------------------------------
+    | CASE 1 : Sender & Receiver ada di Jubelio
+    |--------------------------------------------------------------------------
+    */
+				if ($senderSync && $receiverSync) {
+
+					$warehouses['sender'] = [
+						'warehouse_id' => $data->sender_id,
+						'jubelio_name' => $senderSync->warehouse->name ?? null,
+						'system_name' => $data->sender->name ?? null,
+						'adjustment_type' => 'minus'
+					];
+
+					$warehouses['receiver'] = [
+						'warehouse_id' => $data->receiver_id,
+						'jubelio_name' => $receiverSync->warehouse->name ?? null,
+						'system_name' => $data->receiver->name ?? null,
+						'adjustment_type' => 'add'
+					];
+				}
+
+				/*
+    |--------------------------------------------------------------------------
+    | CASE 2 : Hanya Sender ada di Jubelio
+    |--------------------------------------------------------------------------
+    */ else if ($senderSync) {
+
+					$warehouses['sender'] = [
+						'warehouse_id' => $data->sender_id,
+						'jubelio_name' => $senderSync->warehouse->name ?? null,
+						'system_name' => $data->sender->name ?? null,
+						'adjustment_type' => 'minus'
+					];
+				}
+
+				/*
+    |--------------------------------------------------------------------------
+    | CASE 3 : Hanya Receiver ada di Jubelio
+    |--------------------------------------------------------------------------
+    */ else if ($receiverSync) {
+
+					$warehouses['receiver'] = [
+						'warehouse_id' => $data->receiver_id,
+						'jubelio_name' => $receiverSync->warehouse->name ?? null,
+						'system_name' => $data->receiver->name ?? null,
+						'adjustment_type' => 'add'
+					];
+				}
+
+				break;
+		}
+
+		return view(
+			'transactions.detail-desty-sync',
+			compact('data', 'warehouses')
+		);
 	}
 
 	public function move()
@@ -1634,7 +1775,7 @@ class TransactionsController extends Controller
 	}
 
 	public function return()
-    {
+	{
 		$trType = 'return';
 
 		$dataListPropSender = [
@@ -2168,16 +2309,15 @@ class TransactionsController extends Controller
 
 		$data = Transaction::find($id);
 
-		if (auth()->user()->hasPermissionTo('transactions.desty.limit.download') ) {
+		if (auth()->user()->hasPermissionTo('transactions.desty.limit.download')) {
 
 			if ($request->side == "A" && $data->desty_side_a) {
-					return redirect()->back()->with('errorMessage', 'Excel for this transaction has already been downloaded by the Sender side. Please check your download folder.');
+				return redirect()->back()->with('errorMessage', 'Excel for this transaction has already been downloaded by the Sender side. Please check your download folder.');
 			}
 
 			if ($request->side == "B" && $data->desty_side_b) {
-					return redirect()->back()->with('errorMessage', 'Excel for this transaction has already been downloaded by the Receiver side. Please check your download folder.');
+				return redirect()->back()->with('errorMessage', 'Excel for this transaction has already been downloaded by the Receiver side. Please check your download folder.');
 			}
-			
 		}
 
 		$typeName = Transaction::$types[$data->type];
@@ -2190,21 +2330,20 @@ class TransactionsController extends Controller
 			} else {
 				$filename = $typeName . '-' . $data->invoice . '.xlsx';
 			}
-		} else {	
+		} else {
 			$filename = $typeName . '-' . $data->invoice . '.xlsx';
 		}
 
-		
 
-		if($request->side == "A"){
+
+		if ($request->side == "A") {
 			$data->desty_side_a = Auth::id();
-		}elseif($request->side == "B"){
+		} elseif ($request->side == "B") {
 			$data->desty_side_b = Auth::id();
-		}else{
-
+		} else {
 		}
 
-	
+
 		$data->save();
 
 
