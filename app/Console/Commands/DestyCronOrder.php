@@ -7,6 +7,7 @@ use App\Helpers\InvoiceTrackerHelpers;
 use App\Helpers\StatManagerHelper;
 use App\Models\Customer;
 use App\Models\DestyPayload;
+use App\Models\DestySync;
 use App\Models\DestyWarehouse;
 use App\Models\Item;
 use App\Models\Transaction;
@@ -66,8 +67,7 @@ class DestyCronOrder extends Command
 
         // --- lanjut proses karena worker ini yang menang race ---
 
-        $destyWh = DestyWarehouse::with('destySync')
-            ->where('platform_warehouse_id', $desty->platform_warehouse_id)
+        $destyWh = DestySync::where('platform_warehouse_id', $desty->platform_warehouse_id)
             ->where('store_id', $desty->store_id)
             ->first();
 
