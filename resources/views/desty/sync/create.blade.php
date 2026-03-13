@@ -98,12 +98,12 @@
                                     </div>
 
                                     {{-- Hidden fields --}}
-                                    <input type="text" name="externalWarehouseId" id="externalWarehouseId">
-                                    <input type="text" name="warehouseName" id="warehouseName">
-                                    <input type="text" name="platformWarehouseName" id="platformWarehouseName">
-                                    <input type="text" name="platformStoreId" id="platformStoreId">
-                                    <input type="text" name="platformWarehouseId" id="platformWarehouseId">
-                                    <input type="text" name="platformName" id="platformName">
+                                    <input type="hidden" name="externalWarehouseId" id="externalWarehouseId">
+                                    <input type="hidden" name="warehouseName" id="warehouseName">
+                                    <input type="hidden" name="platformWarehouseName" id="platformWarehouseName">
+                                    <input type="hidden" name="platformStoreId" id="platformStoreId">
+                                    <input type="hidden" name="platformWarehouseId" id="platformWarehouseId">
+                                    <input type="hidden" name="platformName" id="platformName">
 
 
                                 </div>

@@ -137,21 +137,7 @@ class DestyApiController extends Controller
             "json_path" => $publicPath
         ];
 
-        // SIMPAN WAREHOUSE
-        $cekWarehouse = DestyWarehouse::where('platform_warehouse_id', $platformWarehouseId)
-            ->where('store_id', $payload['storeId'])
-            ->first();
-
-        if (!$cekWarehouse) {
-            DestyWarehouse::create([
-                "platform_warehouse_id" => $platformWarehouseId,
-                "platform_warehouse_name" => $platformWarehouseName.$locationName,
-                "store_id" => $payload['storeId'],
-                "store_name" => $payload['storeName'],
-                "platform_name" => $payload['platformName'],
-            ]);
-        }
-
+        
         // SIMPAN ORDER
         DestyPayload::create($dataRaw);
 
