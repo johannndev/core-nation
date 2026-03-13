@@ -18,8 +18,13 @@ class DestyWarehouse extends Model
     }
 
     //relation to desty sync one to one
-    public function destySync()
+    public function warehouse()
     {
-        return $this->hasOne(DestySync::class,'desty_warehouse_id','id');
+        return $this->hasOne(Customer::class,'id','warehouse_id');
+    }
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class,'id','customer_id');
     }
 }

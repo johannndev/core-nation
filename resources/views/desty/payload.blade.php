@@ -356,7 +356,7 @@
                                                 </div>
 
                                                 <div class="font-bold text-sm">
-                                                    {{ $item->warehouse->destySync->warehouse->name ?? '-' }}
+                                                    {{ $item->warehouse->warehouse->name ?? '-' }}
                                                 </div>
 
                                             </div>
@@ -375,7 +375,7 @@
                                                 </div>
 
                                                 <div class="font-bold text-sm">
-                                                   {{ $item->warehouse->destySync->customer->name ?? '-' }}
+                                                   {{ $item->warehouse->customer->name ?? '-' }}
                                                 </div>
 
                                             </div>

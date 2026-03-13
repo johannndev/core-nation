@@ -11,10 +11,10 @@ class DestySync extends Model
 
     protected $guarded = [];
 
-    public function destyWarehouse()
-    {
-        return $this->hasOne(DestyWarehouse::class,'id','desty_warehouse_id');
-    }
+    // public function destyWarehouse()
+    // {
+    //     return $this->hasOne(DestyWarehouse::class,'id','desty_warehouse_id');
+    // }
 
     public function warehouse()
     {
