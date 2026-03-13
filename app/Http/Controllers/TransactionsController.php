@@ -981,6 +981,8 @@ class TransactionsController extends Controller
 			'receiver' => null
 		];
 
+		dd($destySync);
+
 		switch ($data->type) {
 
 			/*
