@@ -981,7 +981,7 @@ class TransactionsController extends Controller
 			'receiver' => null
 		];
 
-		dd($destySync);
+		
 
 		switch ($data->type) {
 
@@ -1099,6 +1099,8 @@ class TransactionsController extends Controller
 
 				break;
 		}
+
+		dd($warehouses);
 
 		return view(
 			'transactions.detail-desty-sync',
