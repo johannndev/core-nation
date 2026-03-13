@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\DestyHelper;
 use App\Models\DestyPayload;
+use App\Models\DestySync;
 use App\Models\DestyWarehouse;
 use App\Models\Item;
 use App\Models\Transaction;
@@ -376,8 +377,7 @@ class DestyController extends Controller
 
         // --- lanjut proses karena worker ini yang menang race ---
 
-        $destyWh = DestyWarehouse::with('destySync')
-            ->where('platform_warehouse_id', $desty->platform_warehouse_id)
+        $destyWh = DestySync::where('platform_warehouse_id', $desty->platform_warehouse_id)
             ->where('store_id', $desty->store_id)
             ->first();
 
