@@ -327,8 +327,6 @@ class DestyController extends Controller
         $dataList = $query->paginate(200)->withQueryString();
 
 
-        dd($dataList->toJson(JSON_PRETTY_PRINT));
-
         return view('desty.payload', [
             'dataList'     => $dataList,
             'totalPending' => $statusCounts->totalPending,
