@@ -30,6 +30,8 @@ class DestySyncController extends Controller
 
         $dataList = $dataList->orderBy('created_at', 'desc')->paginate(50)->withQueryString();
 
+        dd($dataList);
+
         return view('desty.sync.index', compact('dataList'));
     }
 
