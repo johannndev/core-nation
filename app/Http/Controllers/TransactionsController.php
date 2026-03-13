@@ -1100,7 +1100,7 @@ class TransactionsController extends Controller
 				break;
 		}
 
-		dd($warehouses);
+
 
 		return view(
 			'transactions.detail-desty-sync',

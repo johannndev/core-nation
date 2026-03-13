@@ -240,6 +240,8 @@
         </div>
     </section>
 
+    {{  $warehouses}}
+
     @if ($warehouses['sender'])
 
         @php
