@@ -201,7 +201,7 @@ class DestyController extends Controller
         // ]);
 
         // Ambil token
-         $token = DestyHelper::getValidToken();
+        $token = DestyHelper::getValidToken();
 
         if (!$token) {
             // Refresh token jika expired
@@ -219,16 +219,18 @@ class DestyController extends Controller
             return back()->with('fail', 'Tidak ada item untuk adjustment');
         }
 
+        $wh = DestySync::where('warehouse_id', $request->warehouse_id)->first();
+
+        if ($wh->isEmpty()) {
+            return back()->with('fail', 'Tidak ada warehouse yang terhubung dengan Desty Sync');
+        }
+
         // Build item payload
         $items = $trans->transactionDetail->map(function ($detail) use ($request) {
 
-            $qty = $request->adjustType === 'minus'
-                ? -abs($detail->quantity)
-                : abs($detail->quantity);
-
             return [
                 'skuNumber' => $detail->item->code,
-                'stockAdjustment' => $qty,
+                'stockAdjustment' => $detail->quantity,
                 'unitCost' => 0,
             ];
         })->values()->toArray();
@@ -236,20 +238,17 @@ class DestyController extends Controller
 
         try {
 
-            DB::transaction(function () use ($request, $token, $items, $trans) {
+            DB::transaction(function () use ($request, $token, $items, $trans,$wh) {
 
                 $response = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $token->token,
+                    'Authorization'   => 'Bearer ' . $token->token . '',
                     'Content-Type'  => 'application/json'
-                ])
-                    ->timeout(30)
-                    ->post(
-                        "https://api.desty.app/api/inventory/stock/{$request->adjustType}",
-                        [
-                            "warehouseId" => $request->warehouse_id,
-                            "stocks" => $items
-                        ]
-                    );
+                ])->send('post', 'https://api.desty.app/api/inventory/stock/minus', [
+                    'body' => json_encode([
+                        "warehouseId" => $wh->external_warehouse_id,
+                        "stocks" => $items
+                    ])
+                ]);
 
                 // dd($response->json());
 
