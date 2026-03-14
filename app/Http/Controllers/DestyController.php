@@ -238,12 +238,12 @@ class DestyController extends Controller
 
         try {
 
-            DB::transaction(function () use ($request, $token, $items, $trans,$wh) {
+            DB::transaction(function () use ($request, $token, $items, $trans, $wh) {
 
                 $response = Http::withHeaders([
                     'Authorization'   => 'Bearer ' . $token->token . '',
                     'Content-Type'  => 'application/json'
-                ])->send('post', 'https://api.desty.app/api/inventory/stock/minus', [
+                ])->send('post', 'https://api.desty.app/api/inventory/stock/' . $request->adjustType, [
                     'body' => json_encode([
                         "warehouseId" => $wh->external_warehouse_id,
                         "stocks" => $items
@@ -254,9 +254,10 @@ class DestyController extends Controller
 
                 $result = $response->json();
 
-                if (!$result['success']) {
+                if (!$response->successful() || empty($result['success']) || $result['success'] !== true) {
                     throw new \Exception($result['msg'] ?? 'Desty API Error');
                 }
+
 
                 // Update submit side
                 if ($request->side === 'sender') {
