@@ -243,7 +243,7 @@ class DestyController extends Controller
                         ]
                     );
 
-                // dd($response->json());
+                dd($response->json());
 
                 if (!$response->successful()) {
                     throw new \Exception('Desty API Error: ' . $response->body());
