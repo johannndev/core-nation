@@ -240,8 +240,6 @@
         </div>
     </section>
 
-    {{ $warehouses['sender']['warehouse_id'] }}
-
     @if ($warehouses['sender'])
 
         @php
