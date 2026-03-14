@@ -221,7 +221,7 @@ class DestyController extends Controller
 
         $wh = DestySync::where('warehouse_id', $request->warehouse_id)->first();
 
-        if ($wh->isEmpty()) {
+        if (!$wh) {
             return back()->with('fail', 'Tidak ada warehouse yang terhubung dengan Desty Sync');
         }
 
