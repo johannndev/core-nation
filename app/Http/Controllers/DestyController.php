@@ -176,8 +176,8 @@ class DestyController extends Controller
                 "warehouseId" => "1984504770257820800",
                 "stocks" => [
                     [
-                        "skuNumber" => "AJDCX0011805L",
-                        "stockAdjustment" => 2,
+                        "skuNumber" => "KNEESUPPORT-20-BLACK-S",
+                        "stockAdjustment" => 1,
                         "unitCost" => 0,
                     ]
                 ]

@@ -12,7 +12,7 @@ class DestySyncController extends Controller
 
     public function index()
     {
-        $dataList = DestySync::with(['destyWarehouse', 'warehouse', 'customer']);
+        $dataList = DestySync::with([ 'warehouse', 'customer']);
 
 
 
