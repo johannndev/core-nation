@@ -243,6 +243,8 @@ class DestyController extends Controller
                         ]
                     );
 
+                // dd($response->json());
+
                 if (!$response->successful()) {
                     throw new \Exception('Desty API Error: ' . $response->body());
                 }
@@ -260,7 +262,7 @@ class DestyController extends Controller
             });
         } catch (\Throwable $e) {
 
-            return back()->with('error', $e->getMessage());
+            return back()->with('fail', $e->getMessage());
         }
 
         return redirect()
