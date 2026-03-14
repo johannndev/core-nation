@@ -233,7 +233,10 @@ class DestyController extends Controller
 
             DB::transaction(function () use ($request, $token, $items, $trans) {
 
-                $response = Http::withToken($token->token)
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $token->token,
+                    'Content-Type'  => 'application/json'
+                ])
                     ->timeout(30)
                     ->post(
                         "https://api.desty.app/api/inventory/stock/{$request->adjustType}",
@@ -307,7 +310,7 @@ class DestyController extends Controller
     public function payload(Request $request)
     {
         // Build query only once, apply filters conditionally
-        $query = DestyPayload::with('warehouse','warehouse.customer','warehouse.warehouse')->orderByDesc('created_at');
+        $query = DestyPayload::with('warehouse', 'warehouse.customer', 'warehouse.warehouse')->orderByDesc('created_at');
 
         if ($invoice = $request->get('invoice')) {
             $query->where('invoice', 'like', '%' . $invoice . '%');
