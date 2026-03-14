@@ -193,12 +193,12 @@ class DestyController extends Controller
 
     public function adjustmentDesty(Request $request)
     {
-        $request->validate([
-            'id' => 'required|integer',
-            'warehouse_id' => 'required',
-            'adjustType' => 'required|in:add,minus',
-            'side' => 'required|in:sender,receiver'
-        ]);
+        // $request->validate([
+        //     'id' => 'required|integer',
+        //     'warehouse_id' => 'required',
+        //     'adjustType' => 'required|in:add,minus',
+        //     'side' => 'required|in:sender,receiver'
+        // ]);
 
         // Ambil token
         $token = DestyHelper::getValidToken() ?? DestyHelper::refreshTokenIfNeeded();
