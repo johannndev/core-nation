@@ -201,7 +201,12 @@ class DestyController extends Controller
         // ]);
 
         // Ambil token
-        $token = DestyHelper::getValidToken() ?? DestyHelper::refreshTokenIfNeeded();
+         $token = DestyHelper::getValidToken();
+
+        if (!$token) {
+            // Refresh token jika expired
+            $token = DestyHelper::refreshTokenIfNeeded();
+        }
 
         if (!$token) {
             return back()->with('fail', 'Desty token tidak tersedia');
