@@ -295,7 +295,6 @@
 
 @endif
 
-{{ $adjustType = $warehouses['receiver']['adjustment_type']; }}
 
 @if ($warehouses['receiver'])
 
