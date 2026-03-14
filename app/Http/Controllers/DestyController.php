@@ -235,7 +235,6 @@ class DestyController extends Controller
             ];
         })->values()->toArray();
 
-        dd($request->adjustType);
 
 
         try {
