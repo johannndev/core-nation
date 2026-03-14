@@ -248,8 +248,10 @@ class DestyController extends Controller
 
                 // dd($response->json());
 
-                if (!$response->successful()) {
-                    throw new \Exception('Desty API Error: ' . $response->body());
+                $result = $response->json();
+
+                if (!$result['success']) {
+                    throw new \Exception($result['msg'] ?? 'Desty API Error');
                 }
 
                 // Update submit side
