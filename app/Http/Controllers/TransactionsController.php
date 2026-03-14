@@ -1002,7 +1002,7 @@ class TransactionsController extends Controller
 					$warehouses['sender'] = [
 						'warehouse_id' => $data->sender_id,
 						'system_name' => $data->sender->name ?? null,
-						'adjustment_type' => 2
+						'adjustment_type' => 'minus'
 					];
 				}
 
@@ -1026,7 +1026,7 @@ class TransactionsController extends Controller
 					$warehouses['receiver'] = [
 						'warehouse_id' => $data->receiver_id,
 						'system_name' => $data->receiver->name ?? null,
-						'adjustment_type' => 1
+						'adjustment_type' => 'add'
 					];
 				}
 
