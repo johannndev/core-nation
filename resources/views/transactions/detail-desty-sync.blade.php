@@ -295,7 +295,7 @@
 
 @endif
 
-{{ $warehouses['receiver']['warehouse_id'] }}
+
 
 @if ($warehouses['receiver'])
 
