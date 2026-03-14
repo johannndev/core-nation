@@ -240,7 +240,7 @@
         </div>
     </section>
 
-    {{ $adjustType = $warehouses['sender']['adjustment_type']; }}
+
 
     @if ($warehouses['sender'])
 
