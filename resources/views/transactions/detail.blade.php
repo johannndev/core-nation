@@ -497,6 +497,8 @@
                             @endif
 
                         @endif
+
+                        {{$data->submit_type}}{{$cronFlatform['get_order']}}
                         @if (isset($cronFlatform['get_order']) && $cronFlatform['get_order'] === 1)
 
                             @if ( $data->submit_type == 1)
