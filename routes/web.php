@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\JubelioHelper;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddrbookController;
 use App\Http\Controllers\AjaxController;
@@ -68,6 +69,13 @@ use Illuminate\Support\Facades\Hash;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
+});
+
+Route::get('/jubelio-token', function () {
+    
+    $auth = JubelioHelper::jubelioAuth();
+
+    dd($auth);
 });
 
 Route::get('/cache-role-reset', function () {
