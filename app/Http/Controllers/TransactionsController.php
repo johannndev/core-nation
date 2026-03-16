@@ -859,7 +859,7 @@ class TransactionsController extends Controller
 		$cronFlatform = Cronrun::pluck('status', 'name')->toArray();
 
 
-		dd($cronFlatform = Cronrun::pluck('status', 'name')->toArray());
+		// dd($cronFlatform = Cronrun::pluck('status', 'name')->toArray());
 
 
 		if ($request->receipt == 1) {
