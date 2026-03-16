@@ -43,6 +43,19 @@ class TransactionDetail extends Model
 		return $this->belongsTo('App\Models\Customer','sender_id')->withTrashed();
 	}
 
+	//relasi ke model DestySync dengan belongsTo
+
+
+	public function destyReceiver()
+	{
+		return $this->belongsTo('App\Models\DestySync', 'receiver_id', 'warehouse_id');
+	}
+
+	public function destySender()
+	{
+		return $this->belongsTo('App\Models\DestySync', 'sender_id', 'warehouse_id');
+	}
+
 	public function item()
 	{
 		return $this->belongsTo('App\Models\Item','item_id');

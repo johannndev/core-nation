@@ -14,6 +14,8 @@ use App\Http\Controllers\CronrunController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DeletedController;
+use App\Http\Controllers\DestyController;
+use App\Http\Controllers\DestySyncController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FilterQueryController;
 use App\Http\Controllers\GajihController;
@@ -86,7 +88,7 @@ Route::get('/role-set', function () {
 
     // $role = Role::create(['name' => 'ban']);
 
-    $permission = Permission::create(['name' => 'restock']);
+    $permission = Permission::create(['name' => 'transactions.desty.limit.download']);
 
     // $role = Role::where('name','superadmin')->first();
 
@@ -140,7 +142,26 @@ Route::post('/filter', [FilterQueryController::class, 'getFilter'])->name('filte
 
 
 Route::middleware('auth')->group(function () {
+    Route::get('/desty/json/warehouse', [DestyController::class, 'warehouse'])->name('desty.warehouse.json');
+    Route::post('/desty/adjust/warehouse', [DestyController::class, 'adjustmentDesty'])->name('desty.adjustmentDesty');
 
+    Route::get('/desty/stock/increase', [DestyController::class, 'increaseDesty'])->name('desty.stock.increase');
+    Route::get('/desty/stock/decrease', [DestyController::class, 'decreaseDesty'])->name('desty.stock.decrease');
+    Route::get('/desty/initial/webhook', [DestyController::class, 'initialSync']);
+    Route::get('/desty/payload', [DestyController::class, 'payload'])->name('desty.payload');
+    Route::get('/desty/payload/{id}/detail', [DestyController::class, 'detailPayload'])->name('desty.payloadDetail');
+    Route::get('/desty/data', [DestyController::class, 'dataDesty']);
+    
+    Route::post('/desty/create/{id}/manual', [DestyController::class, 'createManual'])->name('desty.createManual');
+    Route::get('/desty/sync', [DestySyncController::class, 'index'])->name('desty.sync.index');
+    Route::get('/desty/sync/create', [DestySyncController::class, 'create'])->name('desty.sync.create');
+    Route::post('/desty/sync/store', [DestySyncController::class, 'store'])->name('desty.sync.store');
+    Route::get('/desty/sync/{id}/edit', [DestySyncController::class, 'edit'])->name('desty.sync.edit');
+    Route::delete('/desty/sync/{id}/delete', [DestySyncController::class, 'delete'])->name('desty.sync.delete');
+    Route::patch('/desty/sync/{id}/update', [DestySyncController::class, 'update'])->name('desty.sync.update');
+    Route::get('/desty/sync/warehouse/create', [DestySyncController::class, 'warehouseCreate'])->name('desty.sync.warehouse.create');
+    Route::post('/desty/sync/warehouse/store', [DestySyncController::class, 'warehouseStore'])->name('desty.sync.warehouse.store');
+    Route::get('desty/cek', [DestyController::class, 'cek'])->name('desty.cek');
 
     Route::get('restock', [RestockController::class, 'index'])->name('restock.index')->middleware('permission:restock');
     Route::get('restock/create', [RestockController::class, 'create'])->name('restock.create')->middleware('permission:restock');
@@ -335,18 +356,24 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/transaction/export/sell/item', [ExportController::class, 'sellItem'])->name('export.sellItem')->middleware('permission:transactions.detail');
     Route::get('/transaction/export/sell/item/build', [ExportController::class, 'exportSellItem'])->name('export.sellItemBuild')->middleware('permission:transactions.detail');
+    Route::get('/transaction/export/sell/item/build/desty', [ExportController::class, 'exportDesty'])->name('export.desty')->middleware('permission:transactions.detail');
 
     Route::get('/transaction/sync', [TransactionsController::class, 'transactionSync'])->name('transaction.transactionSync')->middleware('permission:transactions.detail');
+    
+     Route::get('/transaction/{id}/desty/export', [TransactionsController::class, 'destyExport'])->name('transaction.exportDesty')->middleware('permission:transactions.detail');
 
     Route::patch('/transaction/sync/{id}/display', [TransactionsController::class, 'transactionSyncDisplay'])->name('transaction.transactionSyncDisplay')->middleware('permission:transactions.detail');
 
     Route::get('/transaction/{id}/detail/jubelio-sync', [TransactionsController::class, 'detailJubelioSync'])->name('transaction.detailJubelioSync')->middleware('permission:transactions.detail');
+    
 
     Route::get('/transaction/{id}/detail/jubelio-sync/warning', [TransactionsController::class, 'warning'])->name('transaction.warningJubelioSync')->middleware('permission:transactions.detail');
 
     Route::post('/transaction/{id}/detail/jubelio-sync/confirmation', [TransactionsController::class, 'warningKonfirmasi'])->name('transaction.warningKonfirmasiJubelioSync')->middleware('permission:transactions.detail');
 
     Route::post('/transaction/{id}/detail/jubelio-sync/clear', [TransactionsController::class, 'clearWarning'])->name('transaction.clearWarningJubelioSync')->middleware('permission:transactions.detail');
+
+    Route::get('/transaction/{id}/detail/desty-sync', [TransactionsController::class, 'detailDestySync'])->name('transaction.detailDestySync')->middleware('permission:transactions.detail');
 
 
     Route::get('/transaction/{id}/edit/note', [TransactionsController::class, 'editNote'])->name('transaction.editNote')->middleware('permission:transactions.detail');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\ModelException;
 use App\Helpers\InvoiceTrackerHelpers;
 use App\Helpers\StatManagerHelper;
+use App\Models\Cronrun;
 use App\Models\Customer;
 use App\Models\Item;
 use App\Models\Jubelioorder;
@@ -51,6 +52,16 @@ class JubelioController extends Controller
 
     public function order(Request $request)
     {
+
+        $cronFlatform = Cronrun::where('name', 'get_order')->first();
+
+        if ($cronFlatform && $cronFlatform->status == 0) {
+            Log::info('Cron Jubelio dimatikan, webhook tidak diproses');
+            return response()->json([
+                'message' => 'Cron Jubelio dimatikan, webhook tidak diproses'
+            ], 200);
+        }
+
         $secret = 'corenation2025';
         $content = trim($request->getContent());
         $sign = hash_hmac('sha256', $content . $secret, $secret, false);

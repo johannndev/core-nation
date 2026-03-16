@@ -262,6 +262,16 @@ class Transaction extends Model
         return $this->hasMany(TransactionDetail::class, 'transaction_id', 'id');
     }
 
+	public function destyReceiver()
+	{
+		return $this->belongsTo('App\Models\DestySync', 'receiver_id', 'warehouse_id');
+	}
+
+	public function destySender()
+	{
+		return $this->belongsTo('App\Models\DestySync', 'sender_id', 'warehouse_id');
+	}
+
 	public function addError($key, $msg)
 	{
 		if(!$this->errors instanceof MessageBag)
@@ -277,7 +287,15 @@ class Transaction extends Model
 		return $this->errors->toArray();
 	}
 
-	
+	public function userDownloadedABy()
+	{
+		return $this->belongsTo('App\Models\User', 'desty_side_a');
+	}
+
+	public function userDownloadedBBy()
+	{
+		return $this->belongsTo('App\Models\User', 'desty_side_b');
+	}
 
     public function checkPPN($sender, $receiver) {
 

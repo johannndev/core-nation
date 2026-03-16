@@ -125,6 +125,7 @@ class Permission extends Component
             ['name' => 'transactions.sellbatch', 'label' => 'Sell Batch'],
             ['name' => 'transactions.movebatch', 'label' => 'Move Batch'],
             ['name' => 'transactions.jubelio.return', 'label' => 'Jubelio Return'],
+            ['name' => 'transactions.desty.limit.download', 'label' => 'Desty Limit Download'], //transactions.desty.limit.download
             
         ];
 

@@ -322,9 +322,9 @@
                                 </div>
                             </div>
                         </div>
-                @empty
-                    
-                @endforelse
+                    @empty
+                        
+                    @endforelse
 
                 </div>
 

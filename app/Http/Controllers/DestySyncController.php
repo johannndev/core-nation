@@ -1,0 +1,148 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Customer;
+use App\Models\DestySync;
+use App\Models\DestyWarehouse;
+use Illuminate\Http\Request;
+
+class DestySyncController extends Controller
+{
+
+    public function index()
+    {
+        $dataList = DestySync::with([ 'warehouse', 'customer']);
+
+
+
+        // if(Request('name')) {
+        // 	$name = str_replace(' ', '%', Request('name'));
+        // 	$dataList = $dataList->where('jubelio_location_name','LIKE',"%$name%");
+        // }
+        // if($id = Request('id')) {
+        // 	$dataList = $dataList->where('memberId','=', $id);
+        // }
+
+
+
+
+
+        $dataList = $dataList->orderBy('created_at', 'desc')->paginate(50)->withQueryString();
+
+        return view('desty.sync.index', compact('dataList'));
+    }
+
+    public function create()
+    {
+
+        // $dataApi = JubelioHelper::checkOrUpdateData('jub', 'new_value');
+
+
+
+        $destyWarehouses = DestyWarehouse::orderBy('platform_warehouse_name', 'asc')->get();
+
+        // dd($dataList);
+
+
+        $dataListPropWarehouse = [
+            "label" => "Warehouse",
+            "id" => "warehouse",
+            "idList" => "datalistWh",
+            "idOption" => "datalistOptionsWh",
+            "type" => Customer::TYPE_WAREHOUSE,
+
+        ];
+
+        $dataListPropCustomer = [
+            "label" => "Customer",
+            "id" => "customer",
+            "idList" => "datalistCs",
+            "idOption" => "datalistOptionsCs",
+            "type" => Customer::TYPE_CUSTOMER,
+
+        ];
+
+
+
+        return view('desty.sync.create', compact('dataListPropWarehouse', 'dataListPropCustomer', 'destyWarehouses'));
+    }
+
+    //function store(){} ke model desty sync
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'warehouse_desty' => 'required',
+            'store_desty' => 'required',
+            'warehouse' => 'required|integer',
+            'customer' => 'required|integer',
+        ]);
+
+        // Simpan data ke database
+        DestySync::create([
+            'platform_warehouse_id' =>$request->platformWarehouseId,
+            'platform_warehouse_name' => $request->platformWarehouseName,
+            'store_id' => $request->platformStoreId,
+            'store_name' => $request->platformName,
+            'external_warehouse_id' => $request->externalWarehouseId,
+            'warehouse_name' => $request->warehouseName,
+            'warehouse_id' => $validatedData['warehouse'],
+            'customer_id' => $validatedData['customer'],
+        ]);
+
+        return redirect()->route('desty.sync.index')->with('success', 'Desty Sync created successfully.');
+    }
+
+    public function edit($id)
+    {
+
+        $data = DestySync::findOrFail($id);
+
+        return view('desty.sync.edit', compact('data'));
+    }
+
+    public function delete($id)
+    {
+        $destySync = DestySync::findOrFail($id);
+        $destySync->delete();
+
+        return redirect()->route('desty.sync.index')->with('success', 'Desty Sync deleted successfully.');
+    }
+
+    public function update($id, Request $request)
+    {
+        $data = DestySync::findOrFail($id);
+
+        $data->gudang_id = $request->gudang_id;
+        $data->slot_id = $request->slot_id;
+
+        $data->save();
+
+
+        return redirect()->route('desty.sync.index')->with('success', 'Desty Sync updated.');
+    }
+
+    public function warehouseCreate()
+    {
+        return view('desty.sync.warehouse_create');
+    }
+
+    public function warehouseStore(Request $request)
+    {
+        $validatedData = $request->validate([
+            'warehouse' => 'required|string',
+            'store' => 'required|string',
+        ]);
+
+        // Simpan data ke database
+        DestyWarehouse::create([
+            "platform_warehouse_id" => $request->warehouse,
+            "platform_warehouse_name" => $request->name,
+            "store_id" => $request->store,
+            "store_name" => $request->platformName,
+            "platform_name" => $request->partner,
+        ]);
+
+        return redirect()->route('desty.sync.create')->with('success', 'Desty Warehouse created successfully.');
+    }
+}
