@@ -309,6 +309,17 @@
 
 
         @endif
+
+    @else
+
+        {{-- alert danger jika ada item yang belum ada jubelio item id nya --}}
+        <div id="alert-additional-content-1" class="p-4 mb-4 text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                    
+            <div class="mt-2 mb-4 text-sm">
+                <p>
+                    Terdapat {{$data->item_with_jubelio_count}} item Jubelio yang belum terdaftar di item, silahkan cek kembali data item pada transaksi ini.
+                </p>
+            </div>
         
 
 
