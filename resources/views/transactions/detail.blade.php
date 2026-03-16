@@ -502,7 +502,7 @@
                         
                         @if (isset($cronFlatform['proses_order']) && $cronFlatform['proses_order'] == 1)
 
-                            @if ($cekJubelio > 0 && $countAll != $limitShow && $data->submit_type == 1)
+                            @if ( $data->submit_type == 1)
                                 <a href="{{ route('transaction.detailJubelioSync', $data->id) }}"
                                     class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg">
                                     <svg class="h-3.5 w-3.5 mr-2" xmlns="http://www.w3.org/2000/svg"
