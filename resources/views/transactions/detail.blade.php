@@ -498,7 +498,7 @@
 
                         @endif
 
-                        {{-- {{ $cronFlatform['get_order'] }} --}}
+                        {{ $cronFlatform['proses_order'] }}
                         
                         @if (isset($cronFlatform['proses_order']) && $cronFlatform['proses_order'] === 1)
 
