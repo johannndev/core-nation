@@ -66,7 +66,7 @@ class RestockController extends Controller
             $query->orderBy($columnMap[$searchColumn], $sortDir);
         }
 
-        $restocks = $query->paginate(10)->withQueryString();
+        $restocks = $query->paginate(200)->withQueryString();
 
         // dd($query->get()->toArray(), $exists);
 
