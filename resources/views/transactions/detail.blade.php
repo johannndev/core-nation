@@ -500,7 +500,7 @@
 
                         {{ $cronFlatform['proses_order'] }}
                         
-                        @if (isset($cronFlatform['proses_order']) && $cronFlatform['proses_order'] === 1)
+                        @if (isset($cronFlatform['proses_order']) && $cronFlatform['proses_order'] == 1)
 
                             @if ($cekJubelio > 0 && $countAll != $limitShow && $data->submit_type == 1)
                                 <a href="{{ route('transaction.detailJubelioSync', $data->id) }}"
