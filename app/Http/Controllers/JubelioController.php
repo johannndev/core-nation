@@ -53,7 +53,7 @@ class JubelioController extends Controller
     public function order(Request $request)
     {
 
-        $cronFlatform = Cronrun::where('name', 'get_order')->first();
+        $cronFlatform = Cronrun::where('name', 'proses_order')->first();
 
         if ($cronFlatform && $cronFlatform->status == 0) {
             Log::info('Cron Jubelio dimatikan, webhook tidak diproses');
@@ -223,6 +223,15 @@ class JubelioController extends Controller
             ], 200);
     
             
+        }
+
+        $cronFlatform = Cronrun::where('name', 'proses_order')->first();
+
+        if ($cronFlatform && $cronFlatform->status == 0) {
+            Log::info('Cron Jubelio dimatikan, webhook tidak diproses');
+            return response()->json([
+                'message' => 'Cron Jubelio dimatikan, webhook tidak diproses'
+            ], 200);
         }
 
         $dataApi = json_decode($response->body(), true);
