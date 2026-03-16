@@ -515,8 +515,10 @@
 
                         @endif
 
-                        @if ($data->submit_type == 1)
-                            <a href="{{ route('transaction.detailDestySync', $data->id) }}"
+                        @if (isset($cronFlatform['desty_order']) && $cronFlatform['desty_order'] === 1)
+
+                            @if ($data->submit_type == 1)
+                                <a href="{{ route('transaction.detailDestySync', $data->id) }}"
                                     class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg">
                                     <svg class="h-3.5 w-3.5 mr-2" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
@@ -527,6 +529,8 @@
 
                                     Desty Adjustment
                                 </a>
+                            @endif
+
                         @endif
 
 
