@@ -18,13 +18,7 @@ class DestyApiController extends Controller
 
         $cronFlatform = Cronrun::where('name', 'desty_order')->first();
 
-        if ($cronFlatform && $cronFlatform->status == 0) {
-            Log::info('Cron Desty dimatikan, webhook tidak diproses');
-            return response()->json([
-                'message' => 'Cron Desty dimatikan, webhook tidak diproses'
-            ], 200);
-        }
-
+       
         // ======================================
         // AMBIL orderStatusList SELALU SEBAGAI ARRAY
         // ======================================
@@ -121,7 +115,13 @@ class DestyApiController extends Controller
 
         $invoice = $payload['orderSn'];
 
-        $invoiceBaru = "SP-" . $invoice;
+        if ($payload['platformName'] == "shopee") {
+              $invoiceBaru = "SP-" . $invoice;
+        }else{
+            $invoiceBaru = $invoice;
+        }
+
+      
 
 
 
