@@ -115,10 +115,16 @@ class DestyCronOrder extends Command
             return;
         }
 
+        if($desty->platform_name == "shopee"){
+            $jubelioInvoice = 'SP-'.$desty->invoice;
+        }else{
+            $jubelioInvoice = $desty->invoice;
+        }
 
         // 4. Cek apakah transaksi sudah ada → cegah duplikasi
+        
         $cekTransaksi = Transaction::where('type', Transaction::TYPE_SELL)
-            ->where('invoice', $desty->invoice)
+            ->where('invoice',$jubelioInvoice)
             ->first();
 
         if ($cekTransaksi) {

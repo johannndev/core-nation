@@ -113,18 +113,6 @@ class DestyApiController extends Controller
 
         //totalsales = sum payload[itemList][originalPrice]
 
-        $invoice = $payload['orderSn'];
-
-        if ($payload['platformName'] == "shopee") {
-              $invoiceBaru = "SP-" . $invoice;
-        }else{
-            $invoiceBaru = $invoice;
-        }
-
-      
-
-
-
         $dataRaw = [
             "date" => $date,
             "platform_warehouse_id" => $platformWarehouseId,
@@ -132,7 +120,7 @@ class DestyApiController extends Controller
             "store_id" => $payload['storeId'],
             "store_name" => $payload['storeName'],
             "platform_name" => $payload['platformName'],
-            "invoice" =>  $invoiceBaru,
+            "invoice" =>  $payload['orderSn'],
             "adjustment" => $payload['totalSales'],
             "total_sales" =>  $payload['totalPrice'],
             "order_status_list" => $orderStatusList[0], // simpan ARRAY asli
