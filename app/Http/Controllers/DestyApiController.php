@@ -119,6 +119,11 @@ class DestyApiController extends Controller
 
         //totalsales = sum payload[itemList][originalPrice]
 
+        $invoice = $payload['orderSn'];
+
+        $invoiceBaru = "SP-" . $invoice;
+
+
 
         $dataRaw = [
             "date" => $date,
@@ -127,7 +132,7 @@ class DestyApiController extends Controller
             "store_id" => $payload['storeId'],
             "store_name" => $payload['storeName'],
             "platform_name" => $payload['platformName'],
-            "invoice" => $payload['orderSn'],
+            "invoice" =>  $invoiceBaru,
             "adjustment" => $payload['totalSales'],
             "total_sales" =>  $payload['totalPrice'],
             "order_status_list" => $orderStatusList[0], // simpan ARRAY asli
