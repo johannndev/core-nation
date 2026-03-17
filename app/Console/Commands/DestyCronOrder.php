@@ -125,6 +125,7 @@ class DestyCronOrder extends Command
             $jubelioInvoice = 'LZ-'.$desty->invoice;
         }else{
             $jubelioInvoice = $desty->invoice;
+        }
            
         // 4. Cek apakah transaksi sudah ada → cegah duplikasi
         
