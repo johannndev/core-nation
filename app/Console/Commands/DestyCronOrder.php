@@ -121,10 +121,20 @@ class DestyCronOrder extends Command
             $jubelioInvoice = $desty->invoice;
         }
 
+        $cekTransaksiJubelio = Transaction::where('type', Transaction::TYPE_SELL)
+            ->where('invoice',$jubelioInvoice)
+            ->first();
+
+        if ($cekTransaksiJubelio) {
+            DestyPayload::where('id', $desty->id)
+                ->update(['status' => 'processed', 'info' => 'Order duplicate, sudah dibuat oleh jubelio sebelumnya']);
+            return;
+        }
+
         // 4. Cek apakah transaksi sudah ada → cegah duplikasi
         
         $cekTransaksi = Transaction::where('type', Transaction::TYPE_SELL)
-            ->where('invoice',$jubelioInvoice)
+            ->where('invoice',$desty->invoice)
             ->first();
 
         if ($cekTransaksi) {
