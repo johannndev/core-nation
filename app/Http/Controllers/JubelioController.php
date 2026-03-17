@@ -22,10 +22,11 @@ use Illuminate\Support\Facades\Log;
 
 class JubelioController extends Controller
 {
-    public function cekOrder(Request $request){
+    public function cekOrder(Request $request)
+    {
 
         $jsonData = [];
-        if($request->order_id){
+        if ($request->order_id) {
 
             $token = Cache::get('jubelio_data')['token'] ?? null;
 
@@ -42,25 +43,14 @@ class JubelioController extends Controller
             $data = $response->json();
 
             $jsonData = $data;
-            
         }
 
-        return view('jubelio.cek.index',compact('jsonData'));
-
-
+        return view('jubelio.cek.index', compact('jsonData'));
     }
 
     public function order(Request $request)
     {
 
-        $cronFlatform = Cronrun::where('name', 'proses_order')->first();
-
-        if ($cronFlatform && $cronFlatform->status == 0) {
-            Log::info('Cron Jubelio dimatikan, webhook tidak diproses');
-            return response()->json([
-                'message' => 'Cron Jubelio dimatikan, webhook tidak diproses'
-            ], 200);
-        }
 
         $secret = 'corenation2025';
         $content = trim($request->getContent());
@@ -71,7 +61,15 @@ class JubelioController extends Controller
             return response()->json(['error' => 'Invalid signature'], 403);
         }
 
+
         $dataApi = $request->all();
+
+        if ($dataApi['source'] === "SHOPEE") {
+            return response()->json([
+                'status' => 'ok',
+                'message' => 'Data dari Shopee tidak diproses',
+            ], 200);
+        }
 
         if ($dataApi['status'] === "SHIPPED") {
             $tanggal = Carbon::parse($dataApi['transaction_date']);
@@ -84,9 +82,9 @@ class JubelioController extends Controller
                 ], 200);
             }
 
-            $cekTransaksi = Transaction::where('type',Transaction::TYPE_SELL)->where('invoice',$dataApi['salesorder_no'])->first();
+            $cekTransaksi = Transaction::where('type', Transaction::TYPE_SELL)->where('invoice', $dataApi['salesorder_no'])->first();
 
-            $exists = Jubelioorder::where('invoice',$dataApi['salesorder_no'])
+            $exists = Jubelioorder::where('invoice', $dataApi['salesorder_no'])
                 ->where('type', 'SELL')
                 ->where('order_status', $dataApi['status'])
                 ->exists();
@@ -96,18 +94,15 @@ class JubelioController extends Controller
                     'status' => 'ok',
                     'message' => 'Data already exists',
                 ], 200);
-            }else{
+            } else {
 
-                if($cekTransaksi){
+                if ($cekTransaksi) {
 
                     return response()->json([
                         'status' => 'ok',
                         'message' => 'Invoice sudah ada',
                     ], 200);
-
-                    
-
-                }else{
+                } else {
 
                     DB::table('jubelioorders')->insert([
                         'jubelio_order_id'  => $dataApi['salesorder_id'],
@@ -129,15 +124,8 @@ class JubelioController extends Controller
                         'status' => 'ok',
                         'message' => 'Data saved successfully',
                     ], 200);
-
-                  
-                    
                 }
-
             }
-
-
-
         } elseif ($dataApi['status'] === "CANCELED") {
             $transaction = Transaction::where('type', Transaction::TYPE_SELL)
                 ->where('invoice', $dataApi['salesorder_no'])
@@ -179,11 +167,12 @@ class JubelioController extends Controller
         ], 200);
     }
 
-    public function retur(Request $request){
+    public function retur(Request $request)
+    {
         $secret = 'corenation2025';
         $content = trim($request->getContent());
 
-        $sign = hash_hmac('sha256',$content . $secret, $secret, false);
+        $sign = hash_hmac('sha256', $content . $secret, $secret, false);
 
         $signature = $request->header('Sign');
 
@@ -191,21 +180,21 @@ class JubelioController extends Controller
             return response()->json(['error' => 'Invalid signature'], 403);
         }
 
-        $data = $request->all(); 
+        $data = $request->all();
 
         $logStore = [];
 
-        $response = Http::withHeaders([ 
-            'Content-Type'=> 'application/json', 
-            'authorization'=> Cache::get('jubelio_data')['token'], 
-        ]) 
-        ->get('https://api2.jubelio.com/sales/sales-returns/'. $data['return_id']); 
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'authorization' => Cache::get('jubelio_data')['token'],
+        ])
+            ->get('https://api2.jubelio.com/sales/sales-returns/' . $data['return_id']);
 
-        
+
 
         if ($response->failed()) {
             $statusCode = $response->status();
-            
+
             // Tangani kasus jika ID tidak ditemukan (404)
             if ($statusCode === 404) {
                 return response()->json([
@@ -213,7 +202,6 @@ class JubelioController extends Controller
                     'pesan' => 'Data retur tidak ditemukan.',
                     'logStore' => $logStore
                 ], 200);
-                
             }
 
             return response()->json([
@@ -221,25 +209,16 @@ class JubelioController extends Controller
                 'pesan' => 'Gagal mengambil data dari API. Response: ' . $response->body(),
                 'logStore' => $logStore
             ], 200);
-    
-            
         }
 
-        $cronFlatform = Cronrun::where('name', 'proses_order')->first();
 
-        if ($cronFlatform && $cronFlatform->status == 0) {
-            Log::info('Cron Jubelio dimatikan, webhook tidak diproses');
-            return response()->json([
-                'message' => 'Cron Jubelio dimatikan, webhook tidak diproses'
-            ], 200);
-        }
 
         $dataApi = json_decode($response->body(), true);
-        
 
-        $cekTransaksi = Transaction::where('type',Transaction::TYPE_SELL)->where('invoice',$dataApi['salesorder_no'])->first();
 
-        $exists = Jubelioorder::where('invoice',$dataApi['salesorder_no'])
+        $cekTransaksi = Transaction::where('type', Transaction::TYPE_SELL)->where('invoice', $dataApi['salesorder_no'])->first();
+
+        $exists = Jubelioorder::where('invoice', $dataApi['salesorder_no'])
             ->where('type', 'RETURN')
             ->where('order_status', 'RETURN')
             ->exists();
@@ -249,18 +228,15 @@ class JubelioController extends Controller
                 'status' => 'ok',
                 'message' => 'Data already exists',
             ], 200);
-        }else{
+        } else {
 
-            if(!$cekTransaksi){
+            if (!$cekTransaksi) {
 
                 return response()->json([
                     'status' => 'ok',
                     'message' => 'Transaksi sell tidak ada.',
                 ], 200);
-
-                
-
-            }else{
+            } else {
 
                 DB::table('jubelioorders')->insert([
                     'jubelio_order_id'  => $dataApi['return_id'],
@@ -282,53 +258,50 @@ class JubelioController extends Controller
                     'status' => 'ok',
                     'message' => 'Data saved successfully',
                 ], 200);
-
-                
-                
             }
-
         }
-
     }
 
-    public function index(Request $request){
-        $dataList = Jubelioorder::orderBy('updated_at','desc');
+    public function index(Request $request)
+    {
+        $dataList = Jubelioorder::orderBy('updated_at', 'desc');
 
-        if($request->invoice){
-			$dataList = $dataList->where('invoice', 'like', '%'.$request->invoice.'%');
-		}
+        if ($request->invoice) {
+            $dataList = $dataList->where('invoice', 'like', '%' . $request->invoice . '%');
+        }
 
-        if($request->status == 'warning'){
-            $dataList = $dataList->where('status',2)->where('error_type',2);
-        }elseif($request->status == 'success'){
-            $dataList = $dataList->where('status',2)->where('error_type',10);
-        }elseif($request->status == 'error'){
-            $dataList = $dataList->where('status',1)->where('error_type',1);
-        }else{
-            if(!$request->invoice){
-                $dataList = $dataList->where('status',0);
+        if ($request->status == 'warning') {
+            $dataList = $dataList->where('status', 2)->where('error_type', 2);
+        } elseif ($request->status == 'success') {
+            $dataList = $dataList->where('status', 2)->where('error_type', 10);
+        } elseif ($request->status == 'error') {
+            $dataList = $dataList->where('status', 1)->where('error_type', 1);
+        } else {
+            if (!$request->invoice) {
+                $dataList = $dataList->where('status', 0);
             }
-           
         }
 
         $dataList = $dataList->paginate(200)->withQueryString();
 
         // dd($allRolesInDatabase);
 
-        return view('jubelio.webhook.index',compact('dataList'));
+        return view('jubelio.webhook.index', compact('dataList'));
     }
 
-  
-     public function detail($id){
+
+    public function detail($id)
+    {
         $data = Jubelioorder::find($id);
 
         $jsonData = json_decode($data->payload, true); // pastikan jadi array/objek PHP
 
 
-        return view('jubelio.webhook.detail',compact('data','jsonData'));
+        return view('jubelio.webhook.detail', compact('data', 'jsonData'));
     }
 
-     private function getOrder($orderId){
+    private function getOrder($orderId)
+    {
         try {
             $token = Cache::get('jubelio_data')['token'] ?? null;
 
@@ -353,7 +326,7 @@ class JubelioController extends Controller
 
             return $data;
         } catch (\Exception $e) {
-            
+
             return [
                 'error' => true,
                 'message' => $e->getMessage(),
@@ -361,35 +334,35 @@ class JubelioController extends Controller
         }
     }
 
-    public function createManual($id){
+    public function createManual($id)
+    {
 
         $logjubelio = Jubelioorder::findOrFail($id);
 
-        if($logjubelio->source == 1){
+        if ($logjubelio->source == 1) {
 
             $data = json_decode($logjubelio->payload, true);
-
-        }else{
+        } else {
             $data = $this->getOrder($logjubelio->jubelio_order_id);
         }
 
 
-       
+
 
         $adjust = $data['sub_total'] - $data['grand_total'];
 
-        $jubelioSync = Jubeliosync::where('jubelio_store_id', $data['store_id'])->where('jubelio_location_id',$data['location_id'])->first();
+        $jubelioSync = Jubeliosync::where('jubelio_store_id', $data['store_id'])->where('jubelio_location_id', $data['location_id'])->first();
 
-        
+
         $sid = $id;
 
-        return view('jubelio.webhook.manual',compact('jubelioSync','data','adjust','sid'));
+        return view('jubelio.webhook.manual', compact('jubelioSync', 'data', 'adjust', 'sid'));
     }
 
     public function storeManual($id)
     {
 
-        $logjubelio = Jubelioorder::where('id',$id)->first();
+        $logjubelio = Jubelioorder::where('id', $id)->first();
 
 
         if ($logjubelio) {
@@ -401,8 +374,7 @@ class JubelioController extends Controller
                 if (isset($dataApi['error'])) {
 
 
-                    return redirect()->route('jubelio.webhook.createManual',$logjubelio->id)->with('errorMessage', 'Gagal ambil data API: ' . $dataApi['message']);
-
+                    return redirect()->route('jubelio.webhook.createManual', $logjubelio->id)->with('errorMessage', 'Gagal ambil data API: ' . $dataApi['message']);
                 }
             }
 
@@ -429,7 +401,7 @@ class JubelioController extends Controller
                     $existingProducts = Item::whereIn(DB::raw('UPPER(code)'), $itemCodes)
                         ->get(['id', 'code', 'name'])
                         ->keyBy(fn($item) => strtoupper($item->code));
-                 
+
                     $groupedData = collect($arrayItems)->partition(function ($item) use ($existingProducts) {
                         return isset($existingProducts[strtoupper($item['item_code'])]);
                     });
@@ -456,8 +428,7 @@ class JubelioController extends Controller
                         $item_codes = array_column($notMatched->toArray(), 'item_code');
                         $notMatchedString = implode(", ", $item_codes);
 
-                        return redirect()->route('jubelio.webhook.createManual',$logjubelio->id)->with('errorMessage', 'SKU tidak ditemukan: ' . $notMatchedString);
-
+                        return redirect()->route('jubelio.webhook.createManual', $logjubelio->id)->with('errorMessage', 'SKU tidak ditemukan: ' . $notMatchedString);
                     } else {
                         $cekTransaksi = Transaction::where('type', Transaction::TYPE_SELL)
                             ->where('invoice', $arrayInvoice)
@@ -465,13 +436,11 @@ class JubelioController extends Controller
 
                         if ($cekTransaksi) {
 
-                            return redirect()->route('jubelio.webhook.createManual',$logjubelio->id)->with('errorMessage', 'Transaction sudah ada');
-
+                            return redirect()->route('jubelio.webhook.createManual', $logjubelio->id)->with('errorMessage', 'Transaction sudah ada');
                         } else {
                             if (count($arrayItems) !== $matched->count()) {
 
-                                return redirect()->route('jubelio.webhook.createManual',$logjubelio->id)->with('errorMessage', 'Jumlah item tidak sesuai, kemungkinan ada SKU tidak masuk.');
-
+                                return redirect()->route('jubelio.webhook.createManual', $logjubelio->id)->with('errorMessage', 'Jumlah item tidak sesuai, kemungkinan ada SKU tidak masuk.');
                             } else {
                                 // Proses create transaction hanya jika jumlahnya cocok
                                 $adjust = $arraySubTotal - $arrayGrandTotal;
@@ -498,7 +467,7 @@ class JubelioController extends Controller
 
                                 if ($createData['status'] == "200") {
 
-                                     $logjubelio->update([
+                                    $logjubelio->update([
                                         'run_count' => $arrayRunCount,
                                         'error_type' => 10,
                                         'error' => null,
@@ -507,39 +476,35 @@ class JubelioController extends Controller
                                     ]);
 
                                     return redirect()->route('jubelio.webhook.order')->with('success',  'Transaction created');
-
                                 } else {
 
-                                    return redirect()->route('jubelio.webhook.createManual',$logjubelio->id)->with('errorMessage', $createData['message']);
-
-                                    
+                                    return redirect()->route('jubelio.webhook.createManual', $logjubelio->id)->with('errorMessage', $createData['message']);
                                 }
                             }
                         }
                     }
                 } else {
-                   
-                    return redirect()->route('jubelio.webhook.createManual',$logjubelio->id)->with('errorMessage', 'Data sync dengan aria tidak ditemukan');
+
+                    return redirect()->route('jubelio.webhook.createManual', $logjubelio->id)->with('errorMessage', 'Data sync dengan aria tidak ditemukan');
                 }
             }
         }
-      
-       
     }
 
-    protected function toggleSign($value) {
+    protected function toggleSign($value)
+    {
         return -$value;
     }
 
     protected function createTransaction($type = null, $dataJubelio)
     {
-    
+
 
         try {
 
 
-            
-            
+
+
             //start transaction
             DB::beginTransaction();
 
@@ -552,30 +517,29 @@ class JubelioController extends Controller
             $transaction = new Transaction();
             $transaction->date = $dataJubelio->date;
             $transaction->type = $type;
-            $transaction->adjustment	 = $dataJubelio->adjustment;
-            $transaction->user_id =Auth::id();
+            $transaction->adjustment     = $dataJubelio->adjustment;
+            $transaction->user_id = Auth::id();
             $transaction->submit_type = 2;
 
             //    if($dataJubelio->note){
             //        $transaction->description = $dataJubelio->note;
             //    }else{
-                
+
             //    }
 
             $transaction->description = " ";
             $transaction->invoice = $dataJubelio->invoice;
 
-            if($dataJubelio->due){
+            if ($dataJubelio->due) {
                 $transaction->due = $dataJubelio->due;
-            }else{
+            } else {
                 $transaction->due = '0000-00-00';
             }
 
             $transaction->detail_ids = ' ';
-            
+
             $transaction->save();
-            switch($type)
-            {
+            switch ($type) {
                 case Transaction::TYPE_BUY:
                 case Transaction::TYPE_RETURN:
                     $transaction->sender_id = $customer->id;
@@ -589,48 +553,47 @@ class JubelioController extends Controller
                 default: //don't update stats for move, production
                     break;
             }
-            
+
             $transaction->init($type);
 
             // dd($dataJubelio->addMoreInputFields);
             //gets the transaction id
-            if(!$transaction->save())
+            if (!$transaction->save())
 
-                
+
                 throw new ModelException($transaction->getErrors(), __LINE__);
 
-            if(!$details = $transaction->createDetails($dataJubelio->addMoreInputFields))
+            if (!$details = $transaction->createDetails($dataJubelio->addMoreInputFields))
                 throw new ModelException($transaction->getErrors(), __LINE__);
-            
+
 
             //check ppn first
             $transaction->checkPPN($transaction->sender, $transaction->receiver);
 
-        
+
 
 
             //add to customer stat
             // $sm = new StatManager;
 
             $sm = new StatManagerHelper();
-            switch($type)
-            {
+            switch ($type) {
                 case Transaction::TYPE_BUY:
                 case Transaction::TYPE_RETURN:
                     //add balance to sender(supplier)
-                    $sender_balance = $sm->add($transaction->sender_id,$transaction,true); //skip 1 because the transaction is already created?
-                    if($sender_balance === false)
+                    $sender_balance = $sm->add($transaction->sender_id, $transaction, true); //skip 1 because the transaction is already created?
+                    if ($sender_balance === false)
                         throw new ModelException($sm->getErrors());
 
                     $transaction->sender_balance = $sender_balance;
                     break;
                 case Transaction::TYPE_SELL:
                 case Transaction::TYPE_RETURN_SUPPLIER:
-                    $transaction->setAttribute('total',0 - $transaction->total); //make negative
+                    $transaction->setAttribute('total', 0 - $transaction->total); //make negative
 
                     //deduct balance from receiver(customer)
-                    $receiver_balance = $sm->deduct($transaction->receiver_id,$transaction,true);
-                    if($receiver_balance === false)
+                    $receiver_balance = $sm->deduct($transaction->receiver_id, $transaction, true);
+                    if ($receiver_balance === false)
                         throw new ModelException($sm->getErrors());
 
                     $transaction->receiver_balance = $receiver_balance;
@@ -643,28 +606,28 @@ class JubelioController extends Controller
                     break;
             }
 
-            
 
-            if(!$transaction->save())
+
+            if (!$transaction->save())
                 throw new $transaction->getErrors();
 
-            
-            
+
+
 
 
             InvoiceTrackerHelpers::flag($transaction);
 
-        
-            if($type == Transaction::TYPE_SELL || $type == Transaction::TYPE_RETURN){
 
-            
+            if ($type == Transaction::TYPE_SELL || $type == Transaction::TYPE_RETURN) {
+
+
 
                 // Query
                 $result = DB::table('transaction_details')
-                ->where('transaction_details.transaction_id',$transaction->id)
-                ->join('items', 'transaction_details.item_id', '=', 'items.id')
-                ->whereIn('transaction_details.transaction_type', [Transaction::TYPE_SELL, Transaction::TYPE_RETURN]) // Filter transaction_type 2 dan 15
-                ->selectRaw('
+                    ->where('transaction_details.transaction_id', $transaction->id)
+                    ->join('items', 'transaction_details.item_id', '=', 'items.id')
+                    ->whereIn('transaction_details.transaction_type', [Transaction::TYPE_SELL, Transaction::TYPE_RETURN]) // Filter transaction_type 2 dan 15
+                    ->selectRaw('
                     items.group_id,
                     MONTH(transaction_details.date) as bulan,
                     YEAR(transaction_details.date) as tahun,
@@ -673,11 +636,11 @@ class JubelioController extends Controller
                     SUM(transaction_details.quantity) as sum_qty,
                     SUM(transaction_details.total) as sum_total
                 ')
-                ->groupBy('items.group_id', DB::raw('MONTH(transaction_details.date)'), DB::raw('YEAR(transaction_details.date)'), 'transaction_details.sender_id', 'transaction_details.transaction_type')
-                ->orderBy('items.group_id') // Optional: Untuk urutan hasil
-                ->sharedLock()
-                ->get();
-        
+                    ->groupBy('items.group_id', DB::raw('MONTH(transaction_details.date)'), DB::raw('YEAR(transaction_details.date)'), 'transaction_details.sender_id', 'transaction_details.transaction_type')
+                    ->orderBy('items.group_id') // Optional: Untuk urutan hasil
+                    ->sharedLock()
+                    ->get();
+
                 $insertData = [];
                 foreach ($result as $row) {
                     $insertData[] = [
@@ -696,7 +659,6 @@ class JubelioController extends Controller
                 // dd($insertData);
 
                 $this->updateOrCreateStatsalesOptimized($insertData);
-
             }
 
             //commit db transaction
@@ -704,30 +666,29 @@ class JubelioController extends Controller
 
             // $dataJubelio->session()->flash('success', 'Transaction # ' . $transaction->id. ' created.');
 
-                return $data = [
-                    'status' => '200',
-                    'message' => 'ok',
-                    'transaction_id' => $transaction->id,
-                ];
+            return $data = [
+                'status' => '200',
+                'message' => 'ok',
+                'transaction_id' => $transaction->id,
+            ];
 
             //    return redirect()->route('transaction.getDetail',$transaction->id)->with('success', 'Transaction # ' . $transaction->id. ' created.');
-            
+
             // return response()->json([
             //     'url' => route('transaction.getDetail',$transaction->id,$transaction->date),
             // ]);
 
-            
-        } catch(ModelException $e) {
-            
+
+        } catch (ModelException $e) {
+
             DB::rollBack();
 
             if ($e->getCode() == 1213) {
-                
+
                 return $data = [
                     'status' => '500',
                     'message' => $e->getMessage(),
                 ];
-                
             }
 
             return $data = [
@@ -735,85 +696,85 @@ class JubelioController extends Controller
                 'message' => $e->getErrors()['error'][0],
             ];
 
-            
+
             // return response()->json($e->getErrors(), 500);
-        
-        } catch(\Exception $e) {
+
+        } catch (\Exception $e) {
             DB::rollBack();
 
             return $data = [
-                    'status' => '422',
-                    'message' => $e->getMessage(),
-                ];
+                'status' => '422',
+                'message' => $e->getMessage(),
+            ];
 
             //    return redirect()->back()->withInput()->with('errorMessage',$e->getMessage());
 
             // return response()->json($e->getMessage(), 500);
-            
+
         }
-        
     }
 
     public function updateOrCreateStatsalesOptimized(array $data)
-	{
-		foreach ($data as $entry) {
-			$existing = DB::table('stat_sells')
-				->where('group_id', $entry['group_id'])
-				->where('bulan', $entry['bulan'])
-				->where('tahun', $entry['tahun'])
-				->where('sender_id', $entry['sender_id'])
+    {
+        foreach ($data as $entry) {
+            $existing = DB::table('stat_sells')
+                ->where('group_id', $entry['group_id'])
+                ->where('bulan', $entry['bulan'])
+                ->where('tahun', $entry['tahun'])
+                ->where('sender_id', $entry['sender_id'])
                 ->sharedLock()
-				->first();
+                ->first();
 
-			if ($existing) {
-				// Jika data ditemukan, update sum_qty dan sum_total
-				DB::table('stat_sells')
-					->where('id', $existing->id)
-					->incrementEach([
-						'sum_qty' => $entry['sum_qty'],
-						'sum_total' => $entry['sum_total']
-					]);
-			} else {
-				// Jika tidak ditemukan, insert data baru
-				DB::table('stat_sells')->insert([
-					'group_id' => $entry['group_id'],
-					'bulan' => $entry['bulan'],
-					'tahun' => $entry['tahun'],
-					'sender_id' => $entry['sender_id'],
-					'type' => $entry['type'],
-					'sum_qty' => $entry['sum_qty'],
-					'sum_total' => $entry['sum_total'],
-					'created_at' => now(),
-					'updated_at' => now(),
-				]);
-			}
-		}
+            if ($existing) {
+                // Jika data ditemukan, update sum_qty dan sum_total
+                DB::table('stat_sells')
+                    ->where('id', $existing->id)
+                    ->incrementEach([
+                        'sum_qty' => $entry['sum_qty'],
+                        'sum_total' => $entry['sum_total']
+                    ]);
+            } else {
+                // Jika tidak ditemukan, insert data baru
+                DB::table('stat_sells')->insert([
+                    'group_id' => $entry['group_id'],
+                    'bulan' => $entry['bulan'],
+                    'tahun' => $entry['tahun'],
+                    'sender_id' => $entry['sender_id'],
+                    'type' => $entry['type'],
+                    'sum_qty' => $entry['sum_qty'],
+                    'sum_total' => $entry['sum_total'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
 
-		return response()->json(['message' => 'Data processed successfully'], 200);
-	}
+        return response()->json(['message' => 'Data processed successfully'], 200);
+    }
 
-    public function createSolved($id){
+    public function createSolved($id)
+    {
 
         $logjubelio = Jubelioorder::findOrFail($id);
 
-        if($logjubelio->source == 1){
+        if ($logjubelio->source == 1) {
 
             $data = json_decode($logjubelio->payload, true);
-
-        }else{
+        } else {
             $data = $this->getOrder($logjubelio->jubelio_order_id);
         }
 
         $adjust = $data['sub_total'] - $data['grand_total'];
 
-        $jubelioSync = Jubeliosync::where('jubelio_store_id', $data['store_id'])->where('jubelio_location_id',$data['location_id'])->first();
-        
+        $jubelioSync = Jubeliosync::where('jubelio_store_id', $data['store_id'])->where('jubelio_location_id', $data['location_id'])->first();
+
         $sid = $id;
 
-        return view('jubelio.webhook.solved',compact('jubelioSync','data','adjust','sid'));
+        return view('jubelio.webhook.solved', compact('jubelioSync', 'data', 'adjust', 'sid'));
     }
 
-    public function storeSolved($id){
+    public function storeSolved($id)
+    {
 
         $logjubelio = Jubelioorder::findOrFail($id);
         $logjubelio->error_type = 10;
@@ -823,9 +784,6 @@ class JubelioController extends Controller
 
         $logjubelio->save();
 
-        return redirect()->route('jubelio.webhook.order')->with('success','Jubelio order Solved');
+        return redirect()->route('jubelio.webhook.order')->with('success', 'Jubelio order Solved');
     }
-
-
-
 }

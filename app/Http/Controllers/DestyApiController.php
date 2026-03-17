@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Cronrun;
 use App\Models\DestyPayload;
 use App\Models\DestyWarehouse;
-use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -66,25 +65,6 @@ class DestyApiController extends Controller
             ], 200);
         }
 
-        $invoice = $payload['orderSn'];
-
-        if ($payload['platformName'] == "shopee") {
-              $invoiceBaru = "SP-" . $invoice;
-        }else{
-            $invoiceBaru = $invoice;
-        }
-
-        $trx = Transaction::where('invoice', $invoiceBaru)->first();
-
-        if ($trx) {
-            Log::info('Order sudah ada di transaksi, tidak disimpan ulang', [
-                'invoice' => $invoiceBaru
-            ]); 
-            return response()->json([
-                'message' => 'Order sudah ada di transaksi'
-            ], 200);
-        }
-
         // ======================================
         // DATA LANJUTAN
         // ======================================
@@ -133,7 +113,13 @@ class DestyApiController extends Controller
 
         //totalsales = sum payload[itemList][originalPrice]
 
-        
+        $invoice = $payload['orderSn'];
+
+        if ($payload['platformName'] == "shopee") {
+              $invoiceBaru = "SP-" . $invoice;
+        }else{
+            $invoiceBaru = $invoice;
+        }
 
       
 
@@ -146,7 +132,7 @@ class DestyApiController extends Controller
             "store_id" => $payload['storeId'],
             "store_name" => $payload['storeName'],
             "platform_name" => $payload['platformName'],
-            "invoice" =>  $payload['orderSn'],
+            "invoice" =>  $invoiceBaru,
             "adjustment" => $payload['totalSales'],
             "total_sales" =>  $payload['totalPrice'],
             "order_status_list" => $orderStatusList[0], // simpan ARRAY asli
