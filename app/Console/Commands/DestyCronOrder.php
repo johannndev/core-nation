@@ -117,29 +117,25 @@ class DestyCronOrder extends Command
 
         if($desty->platform_name == "shopee"){
             $jubelioInvoice = 'SP-'.$desty->invoice;
+        }elseif($desty->platform_name == "tokopedia"){
+            $jubelioInvoice = 'TK-'.$desty->invoice;
+        }elseif($desty->platform_name == "tiktok"){
+             $jubelioInvoice = 'TT-'.$desty->invoice;
+        }elseif($desty->platform_name == "lazada"){
+            $jubelioInvoice = 'LZ-'.$desty->invoice;
         }else{
             $jubelioInvoice = $desty->invoice;
-        }
-
-        $cekTransaksiJubelio = Transaction::where('type', Transaction::TYPE_SELL)
-            ->where('invoice',$jubelioInvoice)
-            ->first();
-
-        if ($cekTransaksiJubelio) {
-            DestyPayload::where('id', $desty->id)
-                ->update(['status' => 'processed', 'info' => 'Order duplicate, sudah dibuat oleh jubelio sebelumnya']);
-            return;
-        }
-
+           
         // 4. Cek apakah transaksi sudah ada → cegah duplikasi
         
         $cekTransaksi = Transaction::where('type', Transaction::TYPE_SELL)
-            ->where('invoice',$desty->invoice)
+            ->where('invoice',$jubelioInvoice)
+            ->orWhere('invoice',$desty->invoice)
             ->first();
 
         if ($cekTransaksi) {
             DestyPayload::where('id', $desty->id)
-                ->update(['status' => 'processed', 'info' => 'Order duplicate, sudah dibuat sebelumnya']);
+                ->update(['status' => 'processed', 'info' => 'Order sudah diproses sebelumnya (duplikat invoice)']);
             return;
         }
 
