@@ -44,14 +44,9 @@ class DestyApiController extends Controller
         $matched = array_intersect($orderStatusList, $allowedStatus);
 
         if (empty($matched)) {
-            Log::info('Order status tidak cocok', [
-                'received_status' => $orderStatusList,
-                'order_sn'        => $payload['orderSn'] ?? null
-            ]);
-
-            return response()->json([
-                'message' => 'Status tidak diproses'
-            ], 200);
+           $status = 'pending';
+        }else {
+            $status = 'notMatched';
         }
 
         //jika invoice sudah ada jangan teruskan
@@ -124,7 +119,7 @@ class DestyApiController extends Controller
             "adjustment" => $payload['totalSales'],
             "total_sales" =>  $payload['totalPrice'],
             "order_status_list" => $orderStatusList[0], // simpan ARRAY asli
-            "status" => 'pending',
+            "status" => $status,
             "info" => null,
             "item_list" => $itemList,
             "json_path" => $publicPath

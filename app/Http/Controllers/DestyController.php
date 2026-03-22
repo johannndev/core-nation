@@ -325,7 +325,7 @@ class DestyController extends Controller
         }
 
         $status = $request->get('status', 'pending');
-        if (in_array($status, ['processed', 'error', 'failed'])) {
+        if (in_array($status, ['processed', 'error', 'failed', 'notMatched'])) {
             $query->where('status', $status);
         } elseif ($status !== 'all') {
             $query->where('status', 'pending');
@@ -335,7 +335,8 @@ class DestyController extends Controller
         $statusCounts = DestyPayload::selectRaw("
             SUM(status = 'pending') as totalPending,
             SUM(status = 'error') as totalError,
-            SUM(status = 'failed') as totalFailed
+            SUM(status = 'failed') as totalFailed,
+            SUM(status = 'notMatched') as totalNotMatched
         ")->first();
 
         $dataList = $query->paginate(200)->withQueryString();
@@ -346,6 +347,7 @@ class DestyController extends Controller
             'totalPending' => $statusCounts->totalPending,
             'totalError'   => $statusCounts->totalError,
             'totalFailed'  => $statusCounts->totalFailed,
+            'totalNotMatched' => $statusCounts->totalNotMatched,
         ]);
     }
 
