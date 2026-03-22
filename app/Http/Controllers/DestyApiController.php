@@ -38,7 +38,7 @@ class DestyApiController extends Controller
         // FILTER
         // ======================================
 
-        $allowedStatus = ['Completed', 'Returned', 'Returns'];
+        $allowedStatus = ['Shipping', 'Returned', 'Returns'];
 
         // cocokkan array kiriman dengan allowed
         $matched = array_intersect($orderStatusList, $allowedStatus);
