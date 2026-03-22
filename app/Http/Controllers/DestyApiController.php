@@ -44,9 +44,9 @@ class DestyApiController extends Controller
         $matched = array_intersect($orderStatusList, $allowedStatus);
 
         if (empty($matched)) {
-           $status = 'pending';
-        }else {
             $status = 'notMatched';
+        }else {
+            $status = 'pending';
         }
 
         //jika invoice sudah ada jangan teruskan
