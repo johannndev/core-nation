@@ -64,12 +64,12 @@ class JubelioController extends Controller
 
         $dataApi = $request->all();
 
-        if ($dataApi['source'] === "SHOPEE") {
-            return response()->json([
-                'status' => 'ok',
-                'message' => 'Data dari Shopee tidak diproses',
-            ], 200);
-        }
+        // if ($dataApi['source'] === "SHOPEE") {
+        //     return response()->json([
+        //         'status' => 'ok',
+        //         'message' => 'Data dari Shopee tidak diproses',
+        //     ], 200);
+        // }
 
         if ($dataApi['status'] === "SHIPPED") {
             $tanggal = Carbon::parse($dataApi['transaction_date']);
