@@ -81,7 +81,7 @@
                 </div>
             @endif
 
-            @if ($data->status == 'error' || $data->status == 'failed')
+            @if ($data->status == 'error' || $data->status == 'failed' || $data->status == 'notMatched')
                 <div class="mt-2">
 
                     <form action="{{ route('desty.createManual', $data->id) }}" method="POST">

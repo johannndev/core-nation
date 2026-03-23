@@ -40,7 +40,7 @@ class DestyCronOrder extends Command
         Log::info('Desty Task dijalankan pada: ' . now());
 
         // 1. Ambil data pending
-        $desty = DestyPayload::whereIn('order_status_list', ['Completed','Returns'])
+        $desty = DestyPayload::whereIn('order_status_list', ['Shipping','Returns'])
             ->where('status', 'pending')
             ->orderBy('created_at', 'asc')
             ->first();
@@ -163,7 +163,7 @@ class DestyCronOrder extends Command
 
         $dataCollect = (object)$dataOrder;
 
-        if($desty->order_status_list == 'Completed'){
+        if($desty->order_status_list == 'Shipping'){
             $typeTr = Transaction::TYPE_SELL;
         }elseif ($desty->order_status_list == 'Returns'){
             $typeTr = Transaction::TYPE_RETURN;
