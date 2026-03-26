@@ -92,24 +92,29 @@
                     </form>
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
-                      
-                        <a href="{{ route('orders.index', ['status' => 'success']) }}"
+                        <div
+                            class="p-4 bg-white border-l-4 border-gray-400 shadow-sm rounded-lg hover:bg-gray-50 transition">
+                            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Pending</p>
+                            <p class="text-2xl font-bold text-gray-800">{{ number_format($stats->pending) }}</p>
+                        </div>
+
+                        <div
                             class="p-4 bg-white border-l-4 border-green-500 shadow-sm rounded-lg hover:bg-green-50 transition">
                             <p class="text-xs font-semibold text-green-600 uppercase tracking-wider">Success</p>
                             <p class="text-2xl font-bold text-gray-800">{{ number_format($stats->success) }}</p>
-                        </a>
+                        </div>
 
-                        <a href="{{ route('orders.index', ['status' => 'warning']) }}"
+                        <div
                             class="p-4 bg-white border-l-4 border-yellow-500 shadow-sm rounded-lg hover:bg-yellow-50 transition">
                             <p class="text-xs font-semibold text-yellow-600 uppercase tracking-wider">Duplicate</p>
                             <p class="text-2xl font-bold text-gray-800">{{ number_format($stats->warning) }}</p>
-                        </a>
+                        </div>
 
-                        <a href="{{ route('orders.index', ['status' => 'error']) }}"
+                        <div
                             class="p-4 bg-white border-l-4 border-red-500 shadow-sm rounded-lg hover:bg-red-50 transition">
                             <p class="text-xs font-semibold text-red-600 uppercase tracking-wider">Error SKU</p>
                             <p class="text-2xl font-bold text-gray-800">{{ number_format($stats->error) }}</p>
-                        </a>
+                        </div>
                     </div>
 
                     <div>
