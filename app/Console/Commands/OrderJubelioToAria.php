@@ -40,7 +40,7 @@ class OrderJubelioToAria extends Command
 
     public function handle()
     {
-        Log::info('Proses order Jubelio ke Aria Transaction dijalankan pada: ' . now());
+        Log::info('V1 - Proses order Jubelio ke Aria Transaction dijalankan pada: ' . now());
 
         $logjubelio = Jubelioorder::whereIn('type', ['SELL', 'RETURN'])
             ->where('status', 0)
