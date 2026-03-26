@@ -48,7 +48,7 @@ class OrderJubelioToAria extends Command
             ->orderBy('created_at', 'asc')
             ->first();
 
-        log::info('Data Jubelioorder yang diproses: ' . ($logjubelio ? "ID: {$logjubelio->id}, Type: {$logjubelio->type}, Invoice: {$logjubelio->invoice_no}" : "Tidak ada data"));
+        log::info('Data Jubelioorder yang diproses: ' . ($logjubelio ? "ID: {$logjubelio->id}, Type: {$logjubelio->type}, Invoice: {$logjubelio->invoice}" : "Tidak ada data"));
 
         // 1. Cek apakah ada data yang harus diproses
         if (!$logjubelio) {
