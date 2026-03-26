@@ -264,29 +264,38 @@ class JubelioController extends Controller
 
     public function index(Request $request)
     {
-        $dataList = Jubelioorder::orderBy('updated_at', 'desc');
+        // Ambil semua statistik dalam 1 kali query ke database
+        $stats = Jubelioorder::selectRaw("
+        COUNT(CASE WHEN status = 0 THEN 1 END) as pending,
+        COUNT(CASE WHEN status = 2 AND error_type = 10 THEN 1 END) as success,
+        COUNT(CASE WHEN status = 2 AND error_type = 2 THEN 1 END) as warning,
+        COUNT(CASE WHEN status = 1 AND error_type = 1 THEN 1 END) as error
+    ")->first();
 
+        $query = Jubelioorder::orderBy('updated_at', 'desc');
+
+        // Pencarian Invoice
         if ($request->invoice) {
-            $dataList = $dataList->where('invoice', 'like', '%' . $request->invoice . '%');
+            $query->where('invoice', 'like', '%' . $request->invoice . '%');
         }
 
+        // Filter Status
         if ($request->status == 'warning') {
-            $dataList = $dataList->where('status', 2)->where('error_type', 2);
+            $query->where('status', 2)->where('error_type', 2);
         } elseif ($request->status == 'success') {
-            $dataList = $dataList->where('status', 2)->where('error_type', 10);
+            $query->where('status', 2)->where('error_type', 10);
         } elseif ($request->status == 'error') {
-            $dataList = $dataList->where('status', 1)->where('error_type', 1);
+            $query->where('status', 1)->where('error_type', 1);
         } else {
+            // Default view: Pending (jika tidak sedang mencari invoice)
             if (!$request->invoice) {
-                $dataList = $dataList->where('status', 0);
+                $query->where('status', 0);
             }
         }
 
-        $dataList = $dataList->paginate(200)->withQueryString();
+        $dataList = $query->paginate(100)->withQueryString();
 
-        // dd($allRolesInDatabase);
-
-        return view('jubelio.webhook.index', compact('dataList'));
+        return view('jubelio.webhook.index', compact('dataList', 'stats'));
     }
 
 
