@@ -92,12 +92,7 @@
                     </form>
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
-                        <a href="{{ route('orders.index') }}"
-                            class="p-4 bg-white border-l-4 border-gray-400 shadow-sm rounded-lg hover:bg-gray-50 transition">
-                            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Pending</p>
-                            <p class="text-2xl font-bold text-gray-800">{{ number_format($stats->pending) }}</p>
-                        </a>
-
+                      
                         <a href="{{ route('orders.index', ['status' => 'success']) }}"
                             class="p-4 bg-white border-l-4 border-green-500 shadow-sm rounded-lg hover:bg-green-50 transition">
                             <p class="text-xs font-semibold text-green-600 uppercase tracking-wider">Success</p>
