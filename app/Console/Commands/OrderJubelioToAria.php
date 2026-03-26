@@ -48,6 +48,8 @@ class OrderJubelioToAria extends Command
             ->orderBy('created_at', 'asc')
             ->first();
 
+        log::info('Data Jubelioorder yang diproses: ' . ($logjubelio ? "ID: {$logjubelio->id}, Type: {$logjubelio->type}" : "Tidak ada data"));
+
         // 1. Cek apakah ada data yang harus diproses
         if (!$logjubelio) {
             Log::info('Tidak ada antrian order Jubelio untuk diproses.');
