@@ -644,11 +644,13 @@ class JubelioController extends Controller
             $transaction->description = " ";
             $transaction->invoice = $dataJubelio->invoice;
 
-            if ($dataJubelio->due) {
-                $transaction->due = $dataJubelio->due;
-            } else {
-                $transaction->due = '0000-00-00';
-            }
+            // if ($dataJubelio->due) {
+            //     $transaction->due = $dataJubelio->due;
+            // } else {
+            //     $transaction->due = '0000-00-00';
+            // }
+
+            $transaction->due = '0000-00-00';
 
             $transaction->detail_ids = ' ';
 
