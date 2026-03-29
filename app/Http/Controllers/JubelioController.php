@@ -641,7 +641,7 @@ class JubelioController extends Controller
 
             //    }
 
-            $transaction->description = " ";
+            $transaction->description = $dataJubelio->description ?? '';
             $transaction->invoice = $dataJubelio->invoice;
 
             // if ($dataJubelio->due) {
