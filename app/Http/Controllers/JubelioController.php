@@ -81,8 +81,8 @@ class JubelioController extends Controller
                     'message' => 'Transaksi sebelum tanggal 06 Maret 2025 tidak dibuat. Tanggal transaksi: ' . $tanggal->toDateTimeString(),
                 ], 200);
             }
-
-            $cekTransaksi = Transaction::where('type', Transaction::TYPE_SELL)->where('invoice', $dataApi['salesorder_no'])->first();
+            $destyInvoice = str_replace("SP-", "", $dataApi['salesorder_no']);
+            $cekTransaksi = Transaction::where('type', Transaction::TYPE_SELL)->where('invoice', $dataApi['salesorder_no'])->orWhere('invoice',$destyInvoice)->first();
 
             $exists = Jubelioorder::where('invoice', $dataApi['salesorder_no'])
                 ->where('type', 'SELL')
