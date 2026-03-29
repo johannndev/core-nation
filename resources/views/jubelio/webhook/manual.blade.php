@@ -49,10 +49,25 @@
                       
                         <div class=" grid md:grid-cols-2 gap-4">
 
-                            <div>
+                            @if ($logjubelio->type == 'SELL')
+                              <div>
                                 <p class="text-sm text-gray-500">No. Sales Order</p>
                                 <p>{{$data['salesorder_no']}}</p>
                             </div>
+                                
+                            @else
+                                <div>
+                                    <p class="text-sm text-gray-500">No. Return</p>
+                                    <p>{{$data['return_no']}}</p>
+                                </div>
+
+                                <div>
+                                    <p class="text-sm text-gray-500">No. Sales Order</p>
+                                    <p>{{$data['salesorder_no']}}</p>
+                                </div>
+                                
+                            @endif
+                            
 
                             <div>
                                 <p class="text-sm text-gray-500">Invoice</p>
