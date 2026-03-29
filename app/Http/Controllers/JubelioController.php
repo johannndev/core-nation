@@ -358,7 +358,7 @@ class JubelioController extends Controller
 
         dd($logjubelio);
 
-
+        //tes
 
         $adjust = $data['sub_total'] - $data['grand_total'];
 
