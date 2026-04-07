@@ -261,6 +261,84 @@
                             </div>
                         </div>
 
+                        {{-- ========================= --}}
+                        {{-- GLOBAL SUMMARY DETAIL --}}
+                        {{-- ========================= --}}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+
+                            {{-- CASH IN --}}
+                            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Cash In</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white">
+                                    {{ Number::format(array_sum($customerReport['cashIn']) + array_sum($resellerReport['cashIn'])) }}
+                                </p>
+                            </div>
+
+                            {{-- CASH OUT --}}
+                            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Cash Out</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white">
+                                    {{ Number::format(array_sum($customerReport['cashOut']) + array_sum($resellerReport['cashOut'])) }}
+                                </p>
+                            </div>
+
+                            {{-- SELL --}}
+                            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Sell</p>
+                                <p class="text-xl font-bold text-blue-600">
+                                    {{ Number::format(array_sum($customerReport['sell']) + array_sum($resellerReport['sell'])) }}
+                                </p>
+                            </div>
+
+                            {{-- RETURN --}}
+                            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Return</p>
+                                <p class="text-xl font-bold text-red-600">
+                                    {{ Number::format(array_sum($customerReport['return']) + array_sum($resellerReport['return'])) }}
+                                </p>
+                            </div>
+
+                        </div>
+
+                        {{-- ========================= --}}
+                        {{-- GLOBAL SUMMARY DETAIL --}}
+                        {{-- ========================= --}}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+
+                            {{-- CASH IN --}}
+                            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Cash In</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white">
+                                    {{ Number::format(array_sum($customerReport['cashIn']) + array_sum($resellerReport['cashIn'])) }}
+                                </p>
+                            </div>
+
+                            {{-- CASH OUT --}}
+                            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Cash Out</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white">
+                                    {{ Number::format(array_sum($customerReport['cashOut']) + array_sum($resellerReport['cashOut'])) }}
+                                </p>
+                            </div>
+
+                            {{-- SELL --}}
+                            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Sell</p>
+                                <p class="text-xl font-bold text-blue-600">
+                                    {{ Number::format(array_sum($customerReport['sell']) + array_sum($resellerReport['sell'])) }}
+                                </p>
+                            </div>
+
+                            {{-- RETURN --}}
+                            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Return</p>
+                                <p class="text-xl font-bold text-red-600">
+                                    {{ Number::format(array_sum($customerReport['return']) + array_sum($resellerReport['return'])) }}
+                                </p>
+                            </div>
+
+                        </div>
+
                     </div>
 
 
