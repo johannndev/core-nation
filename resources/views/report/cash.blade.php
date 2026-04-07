@@ -106,7 +106,7 @@
                         {{-- CUSTOMER --}}
                         {{-- ========================= --}}
                         <div>
-                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">Customer</h3>
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3 p-4">Customer</h3>
 
                             {{-- SUMMARY --}}
                             {{-- <div class="mb-4 text-sm text-gray-700 dark:text-gray-300">
@@ -186,7 +186,7 @@
                         {{-- RESELLER --}}
                         {{-- ========================= --}}
                         <div>
-                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">Reseller</h3>
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3 p-4">Reseller</h3>
 
                             {{-- SUMMARY --}}
                             {{-- <div class="mb-4 text-sm text-gray-700 dark:text-gray-300">
