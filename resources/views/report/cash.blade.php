@@ -109,11 +109,11 @@
                             <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">Customer</h3>
 
                             {{-- SUMMARY --}}
-                            <div class="mb-4 text-sm text-gray-700 dark:text-gray-300">
+                            {{-- <div class="mb-4 text-sm text-gray-700 dark:text-gray-300">
                                 <span class="mr-6">Total Cash:
                                     <b>{{ Number::format($customerReport['nettCash']) }}</b></span>
                                 <span>Total Sell: <b>{{ Number::format($customerReport['nettSell']) }}</b></span>
-                            </div>
+                            </div> --}}
 
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -189,11 +189,11 @@
                             <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">Reseller</h3>
 
                             {{-- SUMMARY --}}
-                            <div class="mb-4 text-sm text-gray-700 dark:text-gray-300">
+                            {{-- <div class="mb-4 text-sm text-gray-700 dark:text-gray-300">
                                 <span class="mr-6">Total Cash:
                                     <b>{{ Number::format($resellerReport['nettCash']) }}</b></span>
                                 <span>Total Sell: <b>{{ Number::format($resellerReport['nettSell']) }}</b></span>
-                            </div>
+                            </div> --}}
 
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
