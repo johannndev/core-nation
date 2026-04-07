@@ -216,7 +216,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/jubelio/webhook', [JubelioController::class, 'index'])->name('jubelio.webhook.order')->middleware('permission:jubelio webhook');
     Route::get('/jubelio/webhook/{id}/detail', [JubelioController::class, 'detail'])->name('jubelio.webhook.detail')->middleware('permission:jubelio webhook');
-    Route::get('/jubelio/webhook/{id}/manual/create', [JubelioController::class, 'createManual'])->name('jubelio.webhook.createManual')->middleware('permission:jubelio webhook');
+    Route::get('/jubelio/webhook/{id}/manual/create', [JubelioController::class, 'creaphpteManual'])->name('jubelio.webhook.createManual')->middleware('permission:jubelio webhook');
     Route::post('/jubelio/webhook/{id}/manual/store', [JubelioController::class, 'storeManual'])->name('jubelio.webhook.storeManual')->middleware('permission:jubelio webhook');
     Route::get('/jubelio/webhook/{id}/solved/create', [JubelioController::class, 'createSolved'])->name('jubelio.webhook.createSolved')->middleware('permission:jubelio webhook');
     Route::post('/jubelio/webhook/{id}/solved/store', [JubelioController::class, 'storeSolved'])->name('jubelio.webhook.storeSolved')->middleware('permission:jubelio webhook');

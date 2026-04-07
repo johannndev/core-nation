@@ -14,155 +14,331 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ReportController extends Controller
 {
-    public function profitLoss(Request $request){
-        $datesNow = Carbon::now()->subMonth(6);
-        $datesLast = Carbon::now()->subMonth(7);
+	public function profitLoss(Request $request)
+	{
+		$datesNow = Carbon::now()->subMonth(6);
+		$datesLast = Carbon::now()->subMonth(7);
 
 
 		$rm = new RecordManagerHelper();
 		$pl = $rm->getProfitLoss($datesNow->month, $datesNow->year);
 		$compare = $rm->getProfitLoss($datesNow->month, $datesNow->year);
 
-        $ops = Operation::pluck('name','id');
+		$ops = Operation::pluck('name', 'id');
 		$operations = [];
-		foreach($ops as $id => $name) {
+		foreach ($ops as $id => $name) {
 			$operations[] = ['id' => $id, 'name' => $name];
 		}
 
-        dd($operations,$pl,$compare,$ops);
+		dd($operations, $pl, $compare, $ops);
+	}
 
-    }
+	// public function cash(Request $request){
+	//     //cust ids
+	// 	$cids = array(
+	// 		2475, //shopee core
+	// 		2224, //shopee crystal
+	// 		2258, //toped
+	// 		1677, //lazada
+	// 		2768, //tiktok
+	// 		2446, //blibli
+	// 		2043, //zalora
+	// 		1868, //java yoga
+	// 		2073, //yoga light
+	// 		122, //acu
+	// 		98, //aling
+	// 		298, //angela
+	// 		756, //atiek
+	// 		117, //caroline
+	// 		2136, //desi
+	// 		142, //elisa
+	// 		2229, //erna
+	// 		2187, //fanny
+	// 		2588, //loretta
+	// 		2170, //maria malang
+	// 		2415, //merry
+	// 		296, //minarsih bali
+	// 		1678, //musdiani
+	// 		2218, //nurcahyani alwi
+	// 		205, //paula
+	// 		519, //rindu
+	// 		930, //rusmalina
+	// 		1070, //rustinawati
+	// 		1116, //susi
+	// 		80, //tutik
+	// 		2308, //yuli riau
+	// 		2710, //anytime
+	// 		2457, //roca
+	// 		2664, //cahya
+	// 		2742, //erwin
+	// 		2153, //fb cust
+	// 		2031, //fb dp
+	// 		2733, //reza
+	// 		2722, //heritage
+	// 		2686, //rizki nanda
+	// 		2781, //evy bantrang
+	// 		2717, //leon
+	// 		2727, //fitri
+	// 		1885, //yufika
+	// 		2791, //synergy
+	// 		2873, //alexander bali
+	// 		2872, //aden
+	// 		2091, //athaya
+	// 		2763, //arie
+	// 		2838, //bee
+	// 		2689, //caroline ang
+	// 		359, //dewi suryani
+	// 		2852, //erwin fithub
+	// 		2766, //febri
+	// 		2807, //finns
+	// 		2754, //keliling
+	// 		2847, //mike fithub
+	// 		2700, //nando
+	// 		2721, //novi bandung
+	// 		2656, //rangers
+	// 		2735, //rocky
+	// 		2850, //rosa
+	// 		2858, //vava
+	// 		2790, //william
+	// 		2703, //seko
+	//         2546, //umum sby
+	//         2937, //ROKKY
+	// 	);
 
-    public function cash(Request $request){
-        //cust ids
-		$cids = array(
-			2475, //shopee core
-			2224, //shopee crystal
-			2258, //toped
-			1677, //lazada
-			2768, //tiktok
-			2446, //blibli
-			2043, //zalora
-			1868, //java yoga
-			2073, //yoga light
-			122, //acu
-			98, //aling
-			298, //angela
-			756, //atiek
-			117, //caroline
-			2136, //desi
-			142, //elisa
-			2229, //erna
-			2187, //fanny
-			2588, //loretta
-			2170, //maria malang
-			2415, //merry
-			296, //minarsih bali
-			1678, //musdiani
-			2218, //nurcahyani alwi
-			205, //paula
-			519, //rindu
-			930, //rusmalina
-			1070, //rustinawati
-			1116, //susi
-			80, //tutik
-			2308, //yuli riau
-			2710, //anytime
-			2457, //roca
-			2664, //cahya
-			2742, //erwin
-			2153, //fb cust
-			2031, //fb dp
-			2733, //reza
-			2722, //heritage
-			2686, //rizki nanda
-			2781, //evy bantrang
-			2717, //leon
-			2727, //fitri
-			1885, //yufika
-			2791, //synergy
-			2873, //alexander bali
-			2872, //aden
-			2091, //athaya
-			2763, //arie
-			2838, //bee
-			2689, //caroline ang
-			359, //dewi suryani
-			2852, //erwin fithub
-			2766, //febri
-			2807, //finns
-			2754, //keliling
-			2847, //mike fithub
-			2700, //nando
-			2721, //novi bandung
-			2656, //rangers
-			2735, //rocky
-			2850, //rosa
-			2858, //vava
-			2790, //william
-			2703, //seko
-            2546, //umum sby
-            2937, //ROKKY
-		);
+	// 	//1. get month input
 
-		//1. get month input
+	//     $datesNow = Carbon::now();
 
-        $datesNow = Carbon::now();
+	//     if($request->month){
+	//         $month = $request->month;
+	//     }else{
+	//         $month = $datesNow->month;
+	//     }
 
-        if($request->month){
-            $month = $request->month;
-        }else{
-            $month = $datesNow->month;
-        }
+	//     if($request->year){
+	//         $year = $request->year;
+	//     }else{
+	//         $year = $datesNow->year;
+	//     }
 
-        if($request->year){
-            $year = $request->year;
-        }else{
-            $year = $datesNow->year;
-        }
 
-		
-		// $year = $request->year;
-		$date = Carbon::createFromDate("$year","$month","01");
+	// 	// $year = $request->year;
+	// 	$date = Carbon::createFromDate("$year","$month","01");
+	// 	$startDate = $date->startOfMonth()->toDateString();
+	// 	$endDate = $date->endOfMonth()->toDateString();
+
+	//     $cashIn = Transaction::whereIn('sender_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_CASH_IN)->groupBy('sender_id')->selectRaw('sender_id, sum(total) as st')->get()->pluck('st','sender_id')->toArray();
+
+	//     $cashOut = Transaction::whereIn('receiver_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_CASH_OUT)->groupBy('receiver_id')->selectRaw('receiver_id, sum(total) as st')->get()->pluck('st','receiver_id')->toArray();
+
+	//     $sell = Transaction::whereIn('receiver_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_SELL)->groupBy('receiver_id')->selectRaw('receiver_id, sum(total) as st')->get()->pluck('st','receiver_id')->toArray();
+
+	//     $returnData = Transaction::whereIn('sender_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_RETURN)->groupBy('sender_id')->selectRaw('sender_id, sum(total) as st')->get()->pluck('st','sender_id')->toArray();
+
+	//     // dd($return);
+
+
+	//     $dcList = Customer::whereIn('id',$cids)->get();
+
+
+	//     $nettCash = array_sum($cashIn) + array_sum($cashOut);
+
+	//     $nettSell = array_sum($sell) + array_sum($returnData);
+
+	//     $yearList = [];
+
+	//     for ($i = 2019; $i <= date('Y'); $i++){
+	//         $yearList[] = $i;
+	//     }
+
+	//     $yearList = array_reverse($yearList);
+
+
+
+
+
+	// 	return view('report.cash',compact('dcList','cashIn','cashOut','returnData','sell','nettCash','nettSell','month','year','yearList','datesNow'));
+
+	// }
+
+	public function cash(Request $request)
+	{
+		// =========================
+		// 1. SET ID
+		// =========================
+		$customerIds = [
+			2475,
+			2224,
+			2258,
+			1677,
+			2768,
+			2446,
+			2043,
+			1868,
+			2073,
+			122,
+			98,
+			298,
+			756,
+			117,
+			2136,
+			142,
+			2229,
+			2187,
+			2588,
+			2170,
+			2415,
+			296,
+			1678,
+			2218,
+			205,
+			519,
+			930,
+			1070,
+			1116,
+			80,
+			2308,
+			2710,
+			2457,
+			2664,
+			2742,
+			2153,
+			2031,
+			2733,
+			2722,
+			2686,
+			2781,
+			2717,
+			2727,
+			1885,
+			2791,
+			2873,
+			2872,
+			2091,
+			2763,
+			2838,
+			2689,
+			359,
+			2852,
+			2766,
+			2807,
+			2754,
+			2847,
+			2700,
+			2721,
+			2656,
+			2735,
+			2850,
+			2858,
+			2790,
+			2703,
+			2546,
+			2937
+		];
+
+		// 👉 isi sendiri
+		$resellerIds = [
+			122,
+			432,
+			298
+			// 3001,3002,3003
+		];
+
+		// =========================
+		// 2. FILTER TANGGAL
+		// =========================
+		$datesNow = Carbon::now();
+
+		$month = $request->month ?? $datesNow->month;
+		$year  = $request->year ?? $datesNow->year;
+
+		$date = Carbon::createFromDate($year, $month, 1);
 		$startDate = $date->startOfMonth()->toDateString();
-		$endDate = $date->endOfMonth()->toDateString();
+		$endDate   = $date->endOfMonth()->toDateString();
 
-        $cashIn = Transaction::whereIn('sender_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_CASH_IN)->groupBy('sender_id')->selectRaw('sender_id, sum(total) as st')->get()->pluck('st','sender_id')->toArray();
+		// =========================
+		// 3. FUNCTION HELPER (CLOSURE)
+		// =========================
+		$getReport = function ($ids) use ($startDate, $endDate) {
 
-        $cashOut = Transaction::whereIn('receiver_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_CASH_OUT)->groupBy('receiver_id')->selectRaw('receiver_id, sum(total) as st')->get()->pluck('st','receiver_id')->toArray();
+			$cashIn = Transaction::whereIn('sender_id', $ids)
+				->whereBetween('date', [$startDate, $endDate])
+				->where('type', Transaction::TYPE_CASH_IN)
+				->groupBy('sender_id')
+				->selectRaw('sender_id, sum(total) as st')
+				->pluck('st', 'sender_id')->toArray();
 
-        $sell = Transaction::whereIn('receiver_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_SELL)->groupBy('receiver_id')->selectRaw('receiver_id, sum(total) as st')->get()->pluck('st','receiver_id')->toArray();
+			$cashOut = Transaction::whereIn('receiver_id', $ids)
+				->whereBetween('date', [$startDate, $endDate])
+				->where('type', Transaction::TYPE_CASH_OUT)
+				->groupBy('receiver_id')
+				->selectRaw('receiver_id, sum(total) as st')
+				->pluck('st', 'receiver_id')->toArray();
 
-        $returnData = Transaction::whereIn('sender_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_RETURN)->groupBy('sender_id')->selectRaw('sender_id, sum(total) as st')->get()->pluck('st','sender_id')->toArray();
+			$sell = Transaction::whereIn('receiver_id', $ids)
+				->whereBetween('date', [$startDate, $endDate])
+				->where('type', Transaction::TYPE_SELL)
+				->groupBy('receiver_id')
+				->selectRaw('receiver_id, sum(total) as st')
+				->pluck('st', 'receiver_id')->toArray();
 
-        // dd($return);
-        
+			$returnData = Transaction::whereIn('sender_id', $ids)
+				->whereBetween('date', [$startDate, $endDate])
+				->where('type', Transaction::TYPE_RETURN)
+				->groupBy('sender_id')
+				->selectRaw('sender_id, sum(total) as st')
+				->pluck('st', 'sender_id')->toArray();
 
-        $dcList = Customer::whereIn('id',$cids)->get();
+			return [
+				'cashIn' => $cashIn,
+				'cashOut' => $cashOut,
+				'sell' => $sell,
+				'return' => $returnData,
 
+				// ⚠️ rekomendasi: return dikurang
+				'nettCash' => array_sum($cashIn) + array_sum($cashOut),
+				'nettSell' => array_sum($sell) - array_sum($returnData),
+			];
+		};
 
-        $nettCash = array_sum($cashIn) + array_sum($cashOut);
+		// =========================
+		// 4. AMBIL DATA
+		// =========================
+		$customerReport = $getReport($customerIds);
+		$resellerReport = $getReport($resellerIds);
 
-        $nettSell = array_sum($sell) + array_sum($returnData);
+		$customerList = Customer::whereIn('id', $customerIds)->get();
+		$resellerList = Customer::whereIn('id', $resellerIds)->get();
 
-        $yearList = [];
+		// =========================
+		// 5. YEAR LIST
+		// =========================
+		$yearList = [];
+		for ($i = 2019; $i <= date('Y'); $i++) {
+			$yearList[] = $i;
+		}
+		$yearList = array_reverse($yearList);
 
-        for ($i = 2019; $i <= date('Y'); $i++){
-            $yearList[] = $i;
-        }
+		// =========================
+		// 6. RETURN VIEW
+		// =========================
+		return view('report.cash', [
+			'customerList' => $customerList,
+			'resellerList' => $resellerList,
 
-        $yearList = array_reverse($yearList);
-                                            
+			'customerReport' => $customerReport,
+			'resellerReport' => $resellerReport,
 
+			'month' => $month,
+			'year' => $year,
+			'yearList' => $yearList,
+			'datesNow' => $datesNow,
+		]);
+	}
 
-
-        
-		return view('report.cash',compact('dcList','cashIn','cashOut','returnData','sell','nettCash','nettSell','month','year','yearList','datesNow'));
-	
-    }
-
-	public function income(Request $request){
-		 // Ambil input dari request atau pakai default
+	public function income(Request $request)
+	{
+		// Ambil input dari request atau pakai default
 		$month = $request->input('bulan');
 		$year = $request->input('tahun');
 		$periode = $request->input('type'); // 6 atau 12
@@ -272,167 +448,187 @@ class ReportController extends Controller
 					THEN transactions.total ELSE 0 END
 				) as cashout_supplier
 			", [
-				$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeSell, $receiverTypeCustomer, $receiverTypeReseller,
+				$typeSell,
+				$receiverTypeCustomer,
+				$receiverTypeReseller,
+				$typeSell,
+				$receiverTypeCustomer,
+				$receiverTypeReseller,
+				$typeSell,
+				$receiverTypeCustomer,
+				$receiverTypeReseller,
 
-				$typeReturn, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeReturn, $receiverTypeCustomer, $receiverTypeReseller,
+				$typeReturn,
+				$receiverTypeCustomer,
+				$receiverTypeReseller,
+				$typeReturn,
+				$receiverTypeCustomer,
+				$receiverTypeReseller,
 
-				$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashIn, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashIn, $receiverTypeAccount,
+				$typeCashIn,
+				$receiverTypeCustomer,
+				$receiverTypeReseller,
+				$typeCashIn,
+				$receiverTypeCustomer,
+				$receiverTypeReseller,
+				$typeCashIn,
+				$receiverTypeCustomer,
+				$receiverTypeReseller,
+				$typeCashIn,
+				$receiverTypeAccount,
 
-				$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashOut, $receiverTypeCustomer, $receiverTypeReseller,
-				$typeCashOut, $receiverTypeAccount,
-				$typeCashOut, $receiverTypeSupplier
+				$typeCashOut,
+				$receiverTypeCustomer,
+				$receiverTypeReseller,
+				$typeCashOut,
+				$receiverTypeCustomer,
+				$receiverTypeReseller,
+				$typeCashOut,
+				$receiverTypeCustomer,
+				$receiverTypeReseller,
+				$typeCashOut,
+				$receiverTypeAccount,
+				$typeCashOut,
+				$receiverTypeSupplier
 			])
 			->whereBetween('transactions.date', [$startDateString, $endDateString])
 			->groupByRaw('YEAR(transactions.date), MONTH(transactions.date)')
 			->orderByRaw('YEAR(transactions.date), MONTH(transactions.date)')
 			->get();
 
-			$results = [];
+		$results = [];
 
-			// Inisialisasi seluruh bulan dari startDate ke endDate
-			$period = Carbon::parse($startDate)->startOfMonth();
-			$end = Carbon::parse($endDate)->startOfMonth();
+		// Inisialisasi seluruh bulan dari startDate ke endDate
+		$period = Carbon::parse($startDate)->startOfMonth();
+		$end = Carbon::parse($endDate)->startOfMonth();
 
-			while ($period <= $end) {
-				$key = $period->format('M-y'); // contoh: Jan-25
-				$results[$key] = [
-					'sell_offline' => 0,
-					'sell_online' => 0,
-					'sell_total' => 0,
-					'return_offline' => 0,
-					'return_online' => 0,
-					'nett_revenue' => 0,
-					'cash_in_offline' => 0,
-					'cash_in_online' => 0,
-					'cash_in_total' => 0,
-					'cash_in_journal' => 0,
-					'nett_cash_in' => 0,
-					'cash_out_offline' => 0,
-					'cash_out_online' => 0,
-					'cash_out_total' => 0,
-					'cash_out_journal' => 0,
-					'cash_out_supplier' => 0,
-					'nett_cash_out' => 0,
-					'nett_cash' => 0,
-				
-				];
-				$period->addMonth();
-			}
+		while ($period <= $end) {
+			$key = $period->format('M-y'); // contoh: Jan-25
+			$results[$key] = [
+				'sell_offline' => 0,
+				'sell_online' => 0,
+				'sell_total' => 0,
+				'return_offline' => 0,
+				'return_online' => 0,
+				'nett_revenue' => 0,
+				'cash_in_offline' => 0,
+				'cash_in_online' => 0,
+				'cash_in_total' => 0,
+				'cash_in_journal' => 0,
+				'nett_cash_in' => 0,
+				'cash_out_offline' => 0,
+				'cash_out_online' => 0,
+				'cash_out_total' => 0,
+				'cash_out_journal' => 0,
+				'cash_out_supplier' => 0,
+				'nett_cash_out' => 0,
+				'nett_cash' => 0,
 
-			// Isi data dari query
-			foreach ($rawData as $row) {
+			];
+			$period->addMonth();
+		}
 
-				$sellOffline = (float) abs($row->sell_offline);
-				$sellOnline = (float) abs($row->sell_online);
-				$sellTotal = (float) abs($row->sell_total);
-				$returnOffline = (float) abs($row->return_offline);
-				$returnOnline = (float) abs($row->return_online);
-				$cashInOffline = (float) abs($row->cashin_offline);
-				$cashInOnline = (float) abs($row->cashin_online);
-				$cashInTotal = (float) abs($row->cashin_total);
-				$cashInJournal = (float) abs($row->cashin_journal);
-				$cashOutOffline = (float) abs($row->cashout_offline);
-				$cashOutOnline = (float) abs($row->cashout_online);
-				$cashOutTotal = (float) abs($row->cashout_total);
-				$cashOutJournal = (float) abs($row->cashout_journal);
-				$cashOutSupplier = (float) abs($row->cashout_supplier);
+		// Isi data dari query
+		foreach ($rawData as $row) {
 
-				$totalIncome = $sellOffline + $sellOnline + $returnOffline + $returnOnline;
-				$totalCashIn = $cashInOffline + $cashInOnline + $cashInJournal;
-				$totalCashOut = $cashOutOffline + $cashOutOnline + $cashOutJournal;
+			$sellOffline = (float) abs($row->sell_offline);
+			$sellOnline = (float) abs($row->sell_online);
+			$sellTotal = (float) abs($row->sell_total);
+			$returnOffline = (float) abs($row->return_offline);
+			$returnOnline = (float) abs($row->return_online);
+			$cashInOffline = (float) abs($row->cashin_offline);
+			$cashInOnline = (float) abs($row->cashin_online);
+			$cashInTotal = (float) abs($row->cashin_total);
+			$cashInJournal = (float) abs($row->cashin_journal);
+			$cashOutOffline = (float) abs($row->cashout_offline);
+			$cashOutOnline = (float) abs($row->cashout_online);
+			$cashOutTotal = (float) abs($row->cashout_total);
+			$cashOutJournal = (float) abs($row->cashout_journal);
+			$cashOutSupplier = (float) abs($row->cashout_supplier);
 
-				$key = Carbon::create($row->year, $row->month)->format('M-y');
-				$results[$key] = [
-					'sell_offline' => $sellOffline,
-					'sell_online' => $sellOnline,
-					'sell_total' => $sellTotal,
-					'return_offline' => $returnOffline,
-					'return_online' => $returnOnline,
-					'nett_revenue' => $totalIncome,
-					'cash_in_offline' => $cashInOffline,
-					'cash_in_online' => $cashInOnline ,
-					'cash_in_total' => $cashInTotal ,
-					'cash_in_journal' => $cashInJournal,
-					'nett_cash_in' =>  $totalCashIn,
-					'cash_out_offline' => $cashOutOffline,
-					'cash_out_online' => $cashOutOnline ,
-					'cash_out_total' => $cashOutTotal ,
-					'cash_out_journal' => $cashOutJournal,
-					'cash_out_supplier' => $cashOutSupplier,
-					'nett_cash_out' =>  $totalCashOut,
-					'nett_cash' => $totalCashIn - $totalCashOut,
-				];
-			}
+			$totalIncome = $sellOffline + $sellOnline + $returnOffline + $returnOnline;
+			$totalCashIn = $cashInOffline + $cashInOnline + $cashInJournal;
+			$totalCashOut = $cashOutOffline + $cashOutOnline + $cashOutJournal;
 
-			$dateList = [];
-			foreach($results as $key => $row){
+			$key = Carbon::create($row->year, $row->month)->format('M-y');
+			$results[$key] = [
+				'sell_offline' => $sellOffline,
+				'sell_online' => $sellOnline,
+				'sell_total' => $sellTotal,
+				'return_offline' => $returnOffline,
+				'return_online' => $returnOnline,
+				'nett_revenue' => $totalIncome,
+				'cash_in_offline' => $cashInOffline,
+				'cash_in_online' => $cashInOnline,
+				'cash_in_total' => $cashInTotal,
+				'cash_in_journal' => $cashInJournal,
+				'nett_cash_in' =>  $totalCashIn,
+				'cash_out_offline' => $cashOutOffline,
+				'cash_out_online' => $cashOutOnline,
+				'cash_out_total' => $cashOutTotal,
+				'cash_out_journal' => $cashOutJournal,
+				'cash_out_supplier' => $cashOutSupplier,
+				'nett_cash_out' =>  $totalCashOut,
+				'nett_cash' => $totalCashIn - $totalCashOut,
+			];
+		}
 
-				$dateList[$key] = [
-					'date' => $key,
-				];
+		$dateList = [];
+		foreach ($results as $key => $row) {
 
-			}
+			$dateList[$key] = [
+				'date' => $key,
+			];
+		}
 
-			$income = [];
-			foreach($results as $key => $row){
+		$income = [];
+		foreach ($results as $key => $row) {
 
-				$income[$key] = [
-					'sell_offline' => $row['sell_offline'],
-					'sell_online' => $row['sell_online'],
-					'sell_total' => $row['sell_total'],
-					'return_offline' => $row['return_offline'],
-					'return_online' => $row['return_online'],
-					'nett_revenue' => $row['nett_revenue']
-				];
+			$income[$key] = [
+				'sell_offline' => $row['sell_offline'],
+				'sell_online' => $row['sell_online'],
+				'sell_total' => $row['sell_total'],
+				'return_offline' => $row['return_offline'],
+				'return_online' => $row['return_online'],
+				'nett_revenue' => $row['nett_revenue']
+			];
+		}
 
-			}
+		$cashIn = [];
+		foreach ($results as $key => $row) {
 
-			$cashIn = [];
-			foreach($results as $key => $row){
+			$cashIn[$key] = [
+				'cash_in_offline' => $row['cash_in_offline'],
+				'cash_in_online' => $row['cash_in_online'],
+				'cash_in_total' => $row['cash_in_total'],
+				'cash_in_journal' => $row['cash_in_journal'],
+				'nett_cash_in' => $row['nett_cash_in'],
+			];
+		}
 
-				$cashIn[$key] = [
-					'cash_in_offline' => $row['cash_in_offline'],
-					'cash_in_online' => $row['cash_in_online'],
-					'cash_in_total' => $row['cash_in_total'],
-					'cash_in_journal' => $row['cash_in_journal'],
-					'nett_cash_in' => $row['nett_cash_in'],
-				];
+		$cashOut = [];
+		foreach ($results as $key => $row) {
 
-			}
+			$cashOut[$key] = [
+				'cash_out_offline' => $row['cash_out_offline'],
+				'cash_out_online' => $row['cash_out_online'],
+				'cash_out_total' => $row['cash_out_total'],
+				'cash_out_journal' => $row['cash_out_journal'],
+				'cash_out_supplier' => $row['cash_out_supplier'],
+				'nett_cash_out' => $row['nett_cash_out'],
+			];
+		}
 
-			$cashOut = [];
-			foreach($results as $key => $row){
+		$cashTotal = [];
+		foreach ($results as $key => $row) {
 
-				$cashOut[$key] = [
-					'cash_out_offline' => $row['cash_out_offline'],
-					'cash_out_online' => $row['cash_out_online'],
-					'cash_out_total' => $row['cash_out_total'],
-					'cash_out_journal' => $row['cash_out_journal'],
-					'cash_out_supplier' => $row['cash_out_supplier'],
-					'nett_cash_out' => $row['nett_cash_out'],
-				];
+			$cashTotal[$key] = [
+				'nett_cash' => $row['nett_cash'],
+			];
+		}
 
-			}
-
-			$cashTotal = [];
-			foreach($results as $key => $row){
-
-				$cashTotal[$key] = [
-					'nett_cash' => $row['nett_cash'],
-				];
-
-			}
-
-		return view('report.income',compact('results','dateList','income','cashIn','cashOut','cashTotal','startDateString','endDateString'));
-	}	
+		return view('report.income', compact('results', 'dateList', 'income', 'cashIn', 'cashOut', 'cashTotal', 'startDateString', 'endDateString'));
+	}
 
 	public function incomeBook(Request $request, $id)
 	{
@@ -449,7 +645,7 @@ class ReportController extends Controller
 		$isOnline = 0;
 		$type = 'transactions.receiver_id';
 		$whereType = 'transactions.receiver_type';
-		$groupType = 'transactions.receiver_id'; 
+		$groupType = 'transactions.receiver_id';
 		$all = 'n';
 		$label = $id;
 		$customerTypes = [Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER];
@@ -462,7 +658,7 @@ class ReportController extends Controller
 			$typeSell = Transaction::TYPE_CASH_IN;
 			$type = 'transactions.sender_id';
 			$whereType = 'transactions.sender_type';
-			$groupType = 'transactions.sender_id'; 
+			$groupType = 'transactions.sender_id';
 		} elseif (str_contains($id, 'cash-out')) {
 			$typeSell = Transaction::TYPE_CASH_OUT;
 		}
@@ -528,5 +724,4 @@ class ReportController extends Controller
 			'label'
 		));
 	}
-
 }
