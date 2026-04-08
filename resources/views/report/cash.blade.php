@@ -131,8 +131,9 @@
                                         @forelse ($customerList as $item)
                                             <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                                 <th class="px-4 py-3 whitespace-nowrap">
-                                                    <span
-                                                        class="font-medium text-blue-600 dark:text-blue-500">{{ $item->name }}</span>
+
+                                                    <a href="{{route('customer.transaction',$item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->name}}</a>
+                                                    
                                                 </th>
                                                 <td class="px-4 py-3">
                                                     {{ Number::format($customerReport['cashIn'][$item->id] ?? 0) }}
@@ -211,8 +212,9 @@
                                         @forelse ($resellerList as $item)
                                             <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                                 <th class="px-4 py-3 whitespace-nowrap">
-                                                    <span
-                                                        class="font-medium text-blue-600 dark:text-blue-500">{{ $item->name }}</span>
+                                                    <a href="{{ route('reseller.transaction', $item->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                                        {{ $item->name }}
+                                                    </a>
                                                 </th>
                                                 <td class="px-4 py-3">
                                                     {{ Number::format($resellerReport['cashIn'][$item->id] ?? 0) }}
