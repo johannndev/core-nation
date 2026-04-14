@@ -305,12 +305,20 @@ class ReportController extends Controller
 		// =========================
 		$datesNow = Carbon::now();
 
-		$month = $request->month ?? $datesNow->month;
+
+		$month = $request->month;
 		$year  = $request->year ?? $datesNow->year;
 
-		$date = Carbon::createFromDate($year, $month, 1);
-		$startDate = $date->startOfMonth()->toDateString();
-		$endDate   = $date->endOfMonth()->toDateString();
+		if ($month) {
+			// 👉 FILTER BULAN
+			$date = Carbon::createFromDate($year, $month, 1);
+			$startDate = $date->startOfMonth()->toDateString();
+			$endDate   = $date->endOfMonth()->toDateString();
+		} else {
+			// 👉 FILTER 1 TAHUN
+			$startDate = Carbon::createFromDate($year, 1, 1)->startOfYear()->toDateString();
+			$endDate   = Carbon::createFromDate($year, 12, 31)->endOfYear()->toDateString();
+		}
 
 		// =========================
 		// 2. AMBIL CUSTOMER (SUPPLIER + ACCOUNT)

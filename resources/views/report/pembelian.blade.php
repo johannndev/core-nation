@@ -2,7 +2,9 @@
 
     {{-- HEADER --}}
     <div class="mb-6">
-        <p class="text-2xl font-bold">Data {{ $month }} - {{ $year }}</p>
+        <p class="text-2xl font-bold"> Data
+            {{ $month ? "Bulan $month" : 'Tahun' }}
+            {{ $year }}</p>
     </div>
 
     <div class="mb-8">
@@ -20,8 +22,10 @@
                                 <div>
                                     <label class="text-sm">Month</label>
                                     <select name="month" class="w-full p-2 rounded-lg">
+                                        <option value="">-- All Month --</option>
+
                                         @for ($i = 1; $i <= 12; $i++)
-                                            <option {{ Request('month', $datesNow->month) == $i ? 'selected' : '' }}
+                                            <option {{ Request('month') == $i ? 'selected' : '' }}
                                                 value="{{ $i }}">
                                                 {{ $i }}
                                             </option>
