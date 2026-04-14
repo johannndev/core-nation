@@ -876,23 +876,32 @@ class ReportController extends Controller
 				'c.id',
 				'c.name as nama_gudang',
 
-				// jumlah item unik
+				// jumlah item unik (SKU)
 				DB::raw('COUNT(DISTINCT wi.item_id) as total_item'),
 
-				// total qty semua item (optional, tapi bagus untuk debug)
+				// total qty
 				DB::raw('COALESCE(SUM(wi.qty), 0) as total_qty'),
 
-				// total nilai stok
-				DB::raw('COALESCE(SUM(wi.qty * i.cost), 0) as total_cost')
+				// 🔥 total cost (custom logic)
+				DB::raw("
+                COALESCE(SUM(
+                    wi.qty * 
+                    CASE 
+                        WHEN i.type = 'asset_lancar' THEN COALESCE(i.cost, 0)
+                        WHEN i.type = 'item' THEN (COALESCE(i.price, 0) * 0.3)
+                        ELSE 0
+                    END
+                ), 0) as total_cost
+            ")
 			)
 			->groupBy('c.id', 'c.name')
 			->orderBy('c.name')
 			->get();
 
-		// 🔍 VALIDASI (optional, buat pastikan jumlah gudang sama)
-		$totalWarehouse = Customer::withTrashed()->where('type', Customer::TYPE_WAREHOUSE)->count();
-
-		// dd($totalWarehouse, $data);
+		// 🔍 VALIDASI jumlah gudang
+		$totalWarehouse = Customer::withTrashed()
+			->where('type', Customer::TYPE_WAREHOUSE)
+			->count();
 
 		return view('report.whItem', compact('totalWarehouse', 'data'));
 	}
