@@ -101,7 +101,11 @@
                                     @foreach ($data as $row)
                                         <tr class="border-b hover:bg-gray-50">
                                             <td class="px-4 py-3 text-left">
-                                                {{ $row->nama_gudang }}
+                                               <a href="{{ route('warehouse.items', $row->id) }}"
+                                                    class="text-blue-600 hover:underline">
+                                                    {{ $row->nama_gudang }}
+                                                </a>
+                                               
                                             </td>
 
                                             <td class="px-4 py-3 text-right tabular-nums">

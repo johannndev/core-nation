@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\RecordManagerHelper;
 use App\Models\Customer;
+use App\Models\Item;
 use App\Models\Operation;
 use App\Models\Transaction;
 use Carbon\Carbon;
@@ -854,9 +855,11 @@ class ReportController extends Controller
 		));
 	}
 
+
+
 	public function grubItem()
 	{
-		// 🔥 STEP 1: Aggregate warehouse_item (gabungkan qty per item per gudang)
+		// 🔥 STEP 1: Aggregate warehouse_item
 		$wi = DB::table('warehouse_item')
 			->select(
 				'warehouse_id',
@@ -865,7 +868,7 @@ class ReportController extends Controller
 			)
 			->groupBy('warehouse_id', 'item_id');
 
-		// 🔥 STEP 2: Join ke customer & item, lalu hitung per gudang
+		// 🔥 STEP 2: SUMMARY per gudang
 		$data = DB::table('customers as c')
 			->leftJoinSub($wi, 'wi', function ($join) {
 				$join->on('wi.warehouse_id', '=', 'c.id');
@@ -876,19 +879,15 @@ class ReportController extends Controller
 				'c.id',
 				'c.name as nama_gudang',
 
-				// jumlah item unik (SKU)
 				DB::raw('COUNT(DISTINCT wi.item_id) as total_item'),
-
-				// total qty
 				DB::raw('COALESCE(SUM(wi.qty), 0) as total_qty'),
 
-				// 🔥 total cost (custom logic)
 				DB::raw("
                 COALESCE(SUM(
                     wi.qty * 
                     CASE 
-                        WHEN i.type = 'asset_lancar' THEN COALESCE(i.cost, 0)
-                        WHEN i.type = 'item' THEN (COALESCE(i.price, 0) * 0.3)
+                        WHEN i.type = '" . Item::TYPE_ASSET_LANCAR . "' THEN COALESCE(i.cost, 0)
+                        WHEN i.type = '" . Item::TYPE_ITEM . "' THEN (COALESCE(i.price, 0) * 0.3)
                         ELSE 0
                     END
                 ), 0) as total_cost
@@ -902,6 +901,8 @@ class ReportController extends Controller
 		$totalWarehouse = Customer::withTrashed()
 			->where('type', Customer::TYPE_WAREHOUSE)
 			->count();
+
+		// dd($data, $totalWarehouse);
 
 		return view('report.whItem', compact('totalWarehouse', 'data'));
 	}
