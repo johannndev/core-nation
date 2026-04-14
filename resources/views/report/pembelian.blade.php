@@ -21,7 +21,8 @@
                                     <label class="text-sm">Month</label>
                                     <select name="month" class="w-full p-2 rounded-lg">
                                         @for ($i = 1; $i <= 12; $i++)
-                                            <option {{ Request('month', $datesNow->month) == $i ? 'selected' : '' }} value="{{ $i }}">
+                                            <option {{ Request('month', $datesNow->month) == $i ? 'selected' : '' }}
+                                                value="{{ $i }}">
                                                 {{ $i }}
                                             </option>
                                         @endfor
@@ -32,7 +33,8 @@
                                     <label class="text-sm">Year</label>
                                     <select name="year" class="w-full p-2 rounded-lg">
                                         @foreach ($yearList as $y)
-                                            <option {{ Request('year', $datesNow->year) == $y ? 'selected' : '' }} value="{{ $y }}">
+                                            <option {{ Request('year', $datesNow->year) == $y ? 'selected' : '' }}
+                                                value="{{ $y }}">
                                                 {{ $y }}
                                             </option>
                                         @endforeach
@@ -91,13 +93,17 @@
 
                                         <tr class="border-b">
                                             <td class="px-4 py-3 text-left">
-                                                <a href="{{ route('supplier.transaction', $item->id) }}" class="text-blue-600 hover:underline">
+                                                <a href="{{ route('supplier.transaction', $item->id) }}"
+                                                    class="text-blue-600 hover:underline">
                                                     {{ $item->name }}
                                                 </a>
                                             </td>
-                                            <td class="px-4 py-3 text-right tabular-nums">{{ Number::format($buy) }}</td>
-                                            <td class="px-4 py-3 text-right tabular-nums">{{ Number::format($ret) }}</td>
-                                            <td class="px-4 py-3 text-right font-bold tabular-nums">{{ Number::format($nett) }}</td>
+                                            <td class="px-4 py-3 text-right tabular-nums">{{ Number::format($buy) }}
+                                            </td>
+                                            <td class="px-4 py-3 text-right tabular-nums">{{ Number::format($ret) }}
+                                            </td>
+                                            <td class="px-4 py-3 text-right font-bold tabular-nums">
+                                                {{ Number::format($nett) }}</td>
                                         </tr>
                                     @endforeach
 
@@ -137,12 +143,17 @@
 
                                         <tr class="border-b">
                                             <td class="px-4 py-3 text-left">
-                                                <a href="{{ route('supplier.transaction', $item->id) }}" class="text-blue-600 hover:underline">
+                                                <a href="{{ route('supplier.transaction', $item->id) }}"
+                                                    class="text-blue-600 hover:underline">
                                                     {{ $item->name }}
-                                                </a></td>
-                                            <td class="px-4 py-3 text-right text-blue-600 tabular-nums">{{ Number::format($in) }}</td>
-                                            <td class="px-4 py-3 text-right text-red-600 tabular-nums">{{ Number::format($out) }}</td>
-                                            <td class="px-4 py-3 text-right font-bold tabular-nums">{{ Number::format($nett) }}</td>
+                                                </a>
+                                            </td>
+                                            <td class="px-4 py-3 text-right text-blue-600 tabular-nums">
+                                                {{ Number::format($in) }}</td>
+                                            <td class="px-4 py-3 text-right text-red-600 tabular-nums">
+                                                {{ Number::format($out) }}</td>
+                                            <td class="px-4 py-3 text-right font-bold tabular-nums">
+                                                {{ Number::format($nett) }}</td>
                                         </tr>
                                     @endforeach
 
@@ -150,7 +161,8 @@
                                         <td class="text-left px-4 py-3">Total</td>
                                         <td class="text-right">{{ Number::format($totalCashInSupplier) }}</td>
                                         <td class="text-right">{{ Number::format($totalCashOutSupplier) }}</td>
-                                        <td class="text-right">{{ Number::format($totalCashOutSupplier - $totalCashInSupplier) }}</td>
+                                        <td class="text-right">
+                                            {{ Number::format($totalCashOutSupplier - $totalCashInSupplier) }}</td>
                                     </tr>
 
                                 </tbody>
@@ -183,13 +195,17 @@
 
                                         <tr class="border-b">
                                             <td class="px-4 py-3 text-left">
-                                                <a href="{{ route('operation.account', $acc->id) }}" class="text-blue-600 hover:underline">
+                                                <a href="{{ route('operation.account', $acc->id) }}"
+                                                    class="text-blue-600 hover:underline">
                                                     {{ $acc->name }}
                                                 </a>
                                             </td>
-                                            <td class="px-4 py-3 text-right text-blue-600 tabular-nums">{{ Number::format($in) }}</td>
-                                            <td class="px-4 py-3 text-right text-red-600 tabular-nums">{{ Number::format($out) }}</td>
-                                            <td class="px-4 py-3 text-right font-bold tabular-nums">{{ Number::format($nett) }}</td>
+                                            <td class="px-4 py-3 text-right text-blue-600 tabular-nums">
+                                                {{ Number::format($in) }}</td>
+                                            <td class="px-4 py-3 text-right text-red-600 tabular-nums">
+                                                {{ Number::format($out) }}</td>
+                                            <td class="px-4 py-3 text-right font-bold tabular-nums">
+                                                {{ Number::format($nett) }}</td>
                                         </tr>
                                     @endforeach
 
@@ -197,7 +213,8 @@
                                         <td class="text-left px-4 py-3">Total</td>
                                         <td class="text-right">{{ Number::format($totalCashInAccount) }}</td>
                                         <td class="text-right">{{ Number::format($totalCashOutAccount) }}</td>
-                                        <td class="text-right">{{ Number::format($totalCashOutAccount - $totalCashInAccount) }}</td>
+                                        <td class="text-right">
+                                            {{ Number::format($totalCashOutAccount - $totalCashInAccount) }}</td>
                                     </tr>
 
                                 </tbody>
@@ -207,36 +224,60 @@
                         {{-- ========================= --}}
                         {{-- GLOBAL SUMMARY --}}
                         {{-- ========================= --}}
-                        <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                        <div class="space-y-4">
 
-                            <div class="p-4 bg-white shadow rounded">
-                                <p class="text-sm">Total Buy</p>
-                                <p class="font-bold text-right">{{ Number::format($totalBuy) }}</p>
+                            {{-- TOP SUMMARY --}}
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+                                <div class="p-4 bg-white shadow rounded">
+                                    <p class="text-sm">Total Buy</p>
+                                    <p class="font-bold text-right">{{ Number::format($totalBuy) }}</p>
+                                </div>
+
+                                <div class="p-4 bg-white shadow rounded">
+                                    <p class="text-sm">Total Return</p>
+                                    <p class="font-bold text-right">{{ Number::format($totalReturn) }}</p>
+                                </div>
+
+                                <div class="p-4 bg-white shadow rounded">
+                                    <p class="text-sm">Total Cash In</p>
+                                    <p class="font-bold text-right text-blue-600">
+                                        {{ Number::format($totalCashIn) }}
+                                    </p>
+                                </div>
+
+                                <div class="p-4 bg-white shadow rounded">
+                                    <p class="text-sm">Total Cash Out</p>
+                                    <p class="font-bold text-right text-red-600">
+                                        {{ Number::format($totalCashOut) }}
+                                    </p>
+                                </div>
+
                             </div>
 
-                            <div class="p-4 bg-white shadow rounded">
-                                <p class="text-sm">Total Return</p>
-                                <p class="font-bold text-right">{{ Number::format($totalReturn) }}</p>
-                            </div>
+                            {{-- ========================= --}}
+                            {{-- NETT (BOTTOM HIGHLIGHT) --}}
+                            {{-- ========================= --}}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                            <div class="p-4 bg-white shadow rounded">
-                                <p class="text-sm">Nett Supplier Buy</p>
-                                <p class="font-bold text-right text-red-500">{{ Number::format($nettSupplierBuy) }}</p>
-                            </div>
+                                {{-- NETT SUPPLIER --}}
+                                <div class="p-5 bg-yellow-50 border border-yellow-300 rounded-lg shadow">
+                                    <p class="text-sm text-gray-600">Nett Supplier Buy</p>
+                                    <p
+                                        class="text-2xl font-bold text-right {{ $nettSupplierBuy >= 0 ? 'text-red-600' : 'text-green-600' }}">
+                                        {{ Number::format($nettSupplierBuy) }}
+                                    </p>
+                                </div>
 
-                            <div class="p-4 bg-white shadow rounded">
-                                <p class="text-sm">Total Cash In</p>
-                                <p class="font-bold text-right text-blue-600">{{ Number::format($totalCashIn) }}</p>
-                            </div>
+                                {{-- NETT CASH --}}
+                                <div class="p-5 bg-green-50 border border-green-300 rounded-lg shadow">
+                                    <p class="text-sm text-gray-600">Nett Cash</p>
+                                    <p
+                                        class="text-2xl font-bold text-right {{ $nettCash >= 0 ? 'text-red-600' : 'text-green-600' }}">
+                                        {{ Number::format($nettCash) }}
+                                    </p>
+                                </div>
 
-                            <div class="p-4 bg-white shadow rounded">
-                                <p class="text-sm">Total Cash Out</p>
-                                <p class="font-bold text-right text-red-600">{{ Number::format($totalCashOut) }}</p>
-                            </div>
-
-                            <div class="p-4 bg-white shadow rounded">
-                                <p class="text-sm">Nett Cash</p>
-                                <p class="font-bold text-right text-green-600">{{ Number::format($nettCash) }}</p>
                             </div>
 
                         </div>
