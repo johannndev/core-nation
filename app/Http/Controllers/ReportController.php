@@ -298,6 +298,165 @@ class ReportController extends Controller
 		]);
 	}
 
+	public function pembelian(Request $request)
+	{
+		// =========================
+		// 1. FILTER TANGGAL
+		// =========================
+		$datesNow = Carbon::now();
+
+		$month = $request->month ?? $datesNow->month;
+		$year  = $request->year ?? $datesNow->year;
+
+		$date = Carbon::createFromDate($year, $month, 1);
+		$startDate = $date->startOfMonth()->toDateString();
+		$endDate   = $date->endOfMonth()->toDateString();
+
+		// =========================
+		// 2. AMBIL CUSTOMER (SUPPLIER + ACCOUNT)
+		// =========================
+		$customers = Customer::withTrashed()
+			->whereIn('type', [
+				Customer::TYPE_SUPPLIER,
+				Customer::TYPE_ACCOUNT
+			])
+			->get();
+
+		$supplierList = $customers
+			->where('type', Customer::TYPE_SUPPLIER)
+			->values();
+
+		$accountList = $customers
+			->where('type', Customer::TYPE_ACCOUNT)
+			->values();
+
+		$allIds = $customers->pluck('id')->toArray();
+
+		// mapping biar O(1)
+		$supplierMap = $supplierList->pluck('id')->flip();
+		$accountMap  = $accountList->pluck('id')->flip();
+
+		// =========================
+		// 3. QUERY TUNGGAL (OPTIMIZED)
+		// =========================
+		$rows = Transaction::whereBetween('date', [$startDate, $endDate])
+			->where(function ($q) use ($allIds) {
+				$q->whereIn('sender_id', $allIds)
+					->orWhereIn('receiver_id', $allIds);
+			})
+			->selectRaw("
+            sender_id,
+            receiver_id,
+            type,
+            SUM(total) as total
+        ")
+			->groupBy('sender_id', 'receiver_id', 'type')
+			->get();
+
+		// =========================
+		// 4. INIT REPORT
+		// =========================
+		$supplierReport = [
+			'buy' => [],
+			'returnSupplier' => [],
+			'cashInSupplier' => [],
+			'cashInAccount' => [],
+			'cashOutSupplier' => [],
+			'nettBuy' => 0,
+			'cashOutAccount' => [],
+		];
+
+		// =========================
+		// 5. LOOP DATA (CORE LOGIC)
+		// =========================
+		foreach ($rows as $row) {
+
+			// ======================
+			// BUY (uang keluar ke supplier)
+			// ======================
+			if ($row->type == Transaction::TYPE_BUY && isset($supplierMap[$row->sender_id])) {
+				$supplierReport['buy'][$row->sender_id] =
+					($supplierReport['buy'][$row->sender_id] ?? 0) + $row->total;
+			}
+
+			// ======================
+			// RETURN SUPPLIER (uang masuk dari supplier)
+			// ======================
+			if ($row->type == Transaction::TYPE_RETURN_SUPPLIER && isset($supplierMap[$row->sender_id])) {
+				$supplierReport['returnSupplier'][$row->sender_id] =
+					($supplierReport['returnSupplier'][$row->sender_id] ?? 0) + $row->total;
+			}
+
+			// ======================
+			// CASH IN
+			// ======================
+			if ($row->type == Transaction::TYPE_CASH_IN) {
+
+				// supplier
+				if (isset($supplierMap[$row->sender_id])) {
+					$supplierReport['cashInSupplier'][$row->sender_id] =
+						($supplierReport['cashInSupplier'][$row->sender_id] ?? 0) + $row->total;
+				}
+
+				// account
+				if (isset($accountMap[$row->sender_id])) {
+					$supplierReport['cashInAccount'][$row->sender_id] =
+						($supplierReport['cashInAccount'][$row->sender_id] ?? 0) + $row->total;
+				}
+			}
+
+			// ======================
+			// CASH OUT (NEW)
+			// ======================
+			if ($row->type == Transaction::TYPE_CASH_OUT) {
+
+				// ke supplier (uang keluar)
+				if (isset($supplierMap[$row->receiver_id])) {
+					$supplierReport['cashOutSupplier'][$row->receiver_id] =
+						($supplierReport['cashOutSupplier'][$row->receiver_id] ?? 0) + $row->total;
+				}
+
+				// dari account
+				if (isset($accountMap[$row->sender_id])) {
+					$supplierReport['cashOutAccount'][$row->sender_id] =
+						($supplierReport['cashOutAccount'][$row->sender_id] ?? 0) + $row->total;
+				}
+			}
+		}
+
+		// =========================
+		// 6. HITUNG NETT
+		// =========================
+		$supplierReport['nettBuy'] =
+			array_sum($supplierReport['buy'])
+			- array_sum($supplierReport['returnSupplier'])
+			- array_sum($supplierReport['cashInSupplier']);
+		// ⚠️ cashInAccount tidak dihitung (internal)
+
+		// =========================
+		// 7. YEAR LIST
+		// =========================
+		$yearList = [];
+		for ($i = 2019; $i <= date('Y'); $i++) {
+			$yearList[] = $i;
+		}
+		$yearList = array_reverse($yearList);
+
+		// =========================
+		// 8. RETURN VIEW
+		// =========================
+		return view('report.pembelian', [
+			'supplierList'   => $supplierList,
+			'supplierReport' => $supplierReport,
+			'accountList'    => $accountList,
+
+			'month'    => $month,
+			'year'     => $year,
+			'yearList' => $yearList,
+			'datesNow' => $datesNow,
+		]);
+	}
+
 	public function income(Request $request)
 	{
 		// Ambil input dari request atau pakai default
