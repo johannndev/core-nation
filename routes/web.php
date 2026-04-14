@@ -594,6 +594,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/pembelian', [ReportController::class, 'pembelian'])->name('report.pembelian')->middleware('permission:report nett cash');
     Route::get('/reports/pendapatan', [ReportController::class, 'income'])->name('report.income');
     Route::get('/reports/pendapatan/{id}/book', [ReportController::class, 'incomeBook'])->name('report.incomeBook');
+    Route::get('/reports/item-gudang', [ReportController::class, 'grubItem'])->name('report.grubItem');
 
     Route::get('/user', [UserRoleController::class, 'userList'])->name('user.list')->middleware('permission:user list');
     Route::get('/user/create', [UserRoleController::class, 'userCreate'])->name('user.create')->middleware('permission:user create');

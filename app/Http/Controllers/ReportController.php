@@ -853,4 +853,47 @@ class ReportController extends Controller
 			'label'
 		));
 	}
+
+	public function grubItem()
+	{
+		// 🔥 STEP 1: Aggregate warehouse_item (gabungkan qty per item per gudang)
+		$wi = DB::table('warehouse_item')
+			->select(
+				'warehouse_id',
+				'item_id',
+				DB::raw('SUM(quantity) as qty')
+			)
+			->groupBy('warehouse_id', 'item_id');
+
+		// 🔥 STEP 2: Join ke customer & item, lalu hitung per gudang
+		$data = DB::table('customers as c')
+			->leftJoinSub($wi, 'wi', function ($join) {
+				$join->on('wi.warehouse_id', '=', 'c.id');
+			})
+			->leftJoin('items as i', 'i.id', '=', 'wi.item_id')
+			->where('c.type', Customer::TYPE_WAREHOUSE)
+			->select(
+				'c.id',
+				'c.name as nama_gudang',
+
+				// jumlah item unik
+				DB::raw('COUNT(DISTINCT wi.item_id) as total_item'),
+
+				// total qty semua item (optional, tapi bagus untuk debug)
+				DB::raw('COALESCE(SUM(wi.qty), 0) as total_qty'),
+
+				// total nilai stok
+				DB::raw('COALESCE(SUM(wi.qty * i.cost), 0) as total_cost')
+			)
+			->groupBy('c.id', 'c.name')
+			->orderBy('c.name')
+			->get();
+
+		// 🔍 VALIDASI (optional, buat pastikan jumlah gudang sama)
+		$totalWarehouse = Customer::withTrashed()->where('type', Customer::TYPE_WAREHOUSE)->count();
+
+		// dd($totalWarehouse, $data);
+
+		return view('report.whItem', compact('totalWarehouse', 'data'));
+	}
 }
