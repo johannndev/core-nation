@@ -164,6 +164,18 @@ class ReportController extends Controller
 
 	public function cash(Request $request)
 	{
+
+		DB::listen(function ($query) {
+			$sql = $query->sql;
+
+			foreach ($query->bindings as $binding) {
+				$value = is_numeric($binding) ? $binding : "'" . $binding . "'";
+				$sql = preg_replace('/\?/', $value, $sql, 1);
+			}
+
+			dump($sql . ' | time: ' . $query->time . ' ms');
+		});
+
 		$datesNow = Carbon::now();
 
 		$month = $request->month;
@@ -286,11 +298,6 @@ class ReportController extends Controller
 		}
 		$yearList = array_reverse($yearList);
 
-		DB::listen(function ($query) {
-			dump($query->sql);
-			dump($query->bindings);
-			dump($query->time);
-		});
 
 		return view('report.cash', [
 			'customerList' => $customerList,
