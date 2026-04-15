@@ -216,7 +216,7 @@
                                     {{ Number::format(
                                         array_sum($customerReport['cashIn']) +
                                         array_sum($resellerReport['cashIn']) +
-                                        array_sum($bankReport['cashIn'])
+                                        
                                     ) }}
                                 </b>
                             </div>
@@ -227,7 +227,7 @@
                                     {{ Number::format(
                                         array_sum($customerReport['cashOut']) +
                                         array_sum($resellerReport['cashOut']) +
-                                        array_sum($bankReport['cashOut'])
+                                       
                                     ) }}
                                 </b>
                             </div>
@@ -238,7 +238,7 @@
                                     {{ Number::format(
                                         array_sum($customerReport['sell']) +
                                         array_sum($resellerReport['sell']) +
-                                        array_sum($bankReport['sell'])
+                                       
                                     ) }}
                                 </b>
                             </div>
@@ -249,7 +249,7 @@
                                     {{ Number::format(
                                         array_sum($customerReport['return']) +
                                         array_sum($resellerReport['return']) +
-                                        array_sum($bankReport['return'])
+                                       
                                     ) }}
                                 </b>
                             </div>
