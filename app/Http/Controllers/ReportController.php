@@ -234,7 +234,7 @@ class ReportController extends Controller
 				$resellerReport['cashIn'][$row->sender_id] = ($resellerReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
 			}
 			if ($row->type == Transaction::TYPE_CASH_IN && isset($bankMap[$row->sender_id])) { // ✅ NEW
-				$bankReport['cashIn'][$row->sender_id] = ($bankReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
+				$bankReport['cashIn'][$row->receiver_id] = ($bankReport['cashIn'][$row->receiver_id] ?? 0) + $row->total;
 			}
 
 			// ================= CASH OUT =================
@@ -245,7 +245,7 @@ class ReportController extends Controller
 				$resellerReport['cashOut'][$row->receiver_id] = ($resellerReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
 			}
 			if ($row->type == Transaction::TYPE_CASH_OUT && isset($bankMap[$row->receiver_id])) { // ✅ NEW
-				$bankReport['cashOut'][$row->receiver_id] = ($bankReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
+				$bankReport['cashOut'][$row->sender_id] = ($bankReport['cashOut'][$row->sender_id] ?? 0) + $row->total;
 			}
 
 			// ================= SELL =================
