@@ -166,14 +166,12 @@ class ReportController extends Controller
 	{
 
 		DB::listen(function ($query) {
-			$sql = $query->sql;
-
-			foreach ($query->bindings as $binding) {
-				$value = is_numeric($binding) ? $binding : "'" . $binding . "'";
-				$sql = preg_replace('/\?/', $value, $sql, 1);
-			}
-
-			dump($sql . ' | time: ' . $query->time . ' ms');
+			dump([
+				'sql' => $query->sql,
+				'bindings' => $query->bindings,
+				'time' => $query->time,
+				'trace' => collect(debug_backtrace())->take(5)
+			]);
 		});
 
 		$datesNow = Carbon::now();
