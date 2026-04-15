@@ -389,7 +389,7 @@ class ReportController extends Controller
 			})->toArray()
 		);
 
-		dump('QUERY PEMBELIAN:', $fullSql);
+		dd('QUERY PEMBELIAN:', $fullSql);
 
 		// lanjut normal
 		$rows = $query->get();
