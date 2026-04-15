@@ -30,9 +30,13 @@
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
 
+                                            <option value="">-- All Month --</option>
+
                                             @for ($i = 1; $i <= 12; $i++)
-                                                <option {{ Request('month', $datesNow->month) == $i ? 'selected' : '' }}
-                                                    value="{{ $i }}">{{ $i }}</option>
+                                                <option {{ Request('month') == $i ? 'selected' : '' }}
+                                                    value="{{ $i }}">
+                                                    {{ $i }}
+                                                </option>
                                             @endfor
 
                                         </select>
@@ -132,8 +136,9 @@
                                             <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                                 <th class="px-4 py-3 whitespace-nowrap">
 
-                                                    <a href="{{route('customer.transaction',$item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$item->name}}</a>
-                                                    
+                                                    <a href="{{ route('customer.transaction', $item->id) }}"
+                                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ $item->name }}</a>
+
                                                 </th>
                                                 <td class="px-4 py-3">
                                                     {{ Number::format($customerReport['cashIn'][$item->id] ?? 0) }}
@@ -212,7 +217,8 @@
                                         @forelse ($resellerList as $item)
                                             <tr class="border-b dark:border-gray-700 hover:bg-gray-100">
                                                 <th class="px-4 py-3 whitespace-nowrap">
-                                                    <a href="{{ route('reseller.transaction', $item->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                                    <a href="{{ route('reseller.transaction', $item->id) }}"
+                                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                                         {{ $item->name }}
                                                     </a>
                                                 </th>
