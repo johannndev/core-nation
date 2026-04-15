@@ -165,7 +165,6 @@ class ReportController extends Controller
 	public function cash(Request $request)
 	{
 
-
 		$datesNow = Carbon::now();
 
 		$month = $request->month;
@@ -193,19 +192,45 @@ class ReportController extends Controller
 
 		$allIds = $customers->pluck('id')->toArray();
 
-		$rows = Transaction::whereBetween('date', [$startDate, $endDate])
+		// $rows = Transaction::whereBetween('date', [$startDate, $endDate])
+		// 	->where(function ($q) use ($allIds) {
+		// 		$q->whereIn('sender_id', $allIds)
+		// 			->orWhereIn('receiver_id', $allIds);
+		// 	})
+		// 	->selectRaw("
+		// 	sender_id,
+		// 	receiver_id,
+		// 	type,
+		// 	SUM(total) as total
+		// ")
+		// 	->groupBy('sender_id', 'receiver_id', 'type')
+		// 	->get();
+
+		$query = Transaction::whereBetween('date', [$startDate, $endDate])
 			->where(function ($q) use ($allIds) {
 				$q->whereIn('sender_id', $allIds)
 					->orWhereIn('receiver_id', $allIds);
 			})
 			->selectRaw("
-			sender_id,
-			receiver_id,
-			type,
-			SUM(total) as total
-		")
-			->groupBy('sender_id', 'receiver_id', 'type')
-			->get();
+        sender_id,
+        receiver_id,
+        type,
+        SUM(total) as total
+    ")
+			->groupBy('sender_id', 'receiver_id', 'type');
+
+		// ✅ DEBUG (TAMPIL DI HALAMAN, TIDAK STOP)
+		$fullSql = vsprintf(
+			str_replace('?', '%s', $query->toSql()),
+			collect($query->getBindings())->map(function ($b) {
+				return is_numeric($b) ? $b : "'" . addslashes($b) . "'";
+			})->toArray()
+		);
+
+		dump('QUERY CASH:', $fullSql);
+
+		// lanjut normal
+		$rows = $query->get();
 
 		$init = function () {
 			return [
@@ -353,46 +378,20 @@ class ReportController extends Controller
 
 		// =========================
 		// 3. QUERY TUNGGAL (OPTIMIZED)
-		// // =========================
-		// $rows = Transaction::whereBetween('date', [$startDate, $endDate])
-		// 	->where(function ($q) use ($allIds) {
-		// 		$q->whereIn('sender_id', $allIds)
-		// 			->orWhereIn('receiver_id', $allIds);
-		// 	})
-		// 	->selectRaw("
-		//     sender_id,
-		//     receiver_id,
-		//     type,
-		//     SUM(total) as total
-		// ")
-		// 	->groupBy('sender_id', 'receiver_id', 'type')
-		// 	->get();
-
-		$query = Transaction::whereBetween('date', [$startDate, $endDate])
+		// =========================
+		$rows = Transaction::whereBetween('date', [$startDate, $endDate])
 			->where(function ($q) use ($allIds) {
 				$q->whereIn('sender_id', $allIds)
 					->orWhereIn('receiver_id', $allIds);
 			})
 			->selectRaw("
-        sender_id,
-        receiver_id,
-        type,
-        SUM(total) as total
-    ")
-			->groupBy('sender_id', 'receiver_id', 'type');
-
-		// ✅ DEBUG QUERY
-		$fullSql = vsprintf(
-			str_replace('?', '%s', $query->toSql()),
-			collect($query->getBindings())->map(function ($b) {
-				return is_numeric($b) ? $b : "'" . addslashes($b) . "'";
-			})->toArray()
-		);
-
-		dd('QUERY PEMBELIAN:', $fullSql);
-
-		// lanjut normal
-		$rows = $query->get();
+            sender_id,
+            receiver_id,
+            type,
+            SUM(total) as total
+        ")
+			->groupBy('sender_id', 'receiver_id', 'type')
+			->get();
 
 		// =========================
 		// 4. INIT REPORT
