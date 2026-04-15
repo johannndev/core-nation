@@ -286,6 +286,12 @@ class ReportController extends Controller
 		}
 		$yearList = array_reverse($yearList);
 
+		DB::listen(function ($query) {
+			dump($query->sql);
+			dump($query->bindings);
+			dump($query->time);
+		});
+
 		return view('report.cash', [
 			'customerList' => $customerList,
 			'resellerList' => $resellerList,
