@@ -34,142 +34,184 @@ class ReportController extends Controller
 		dd($operations, $pl, $compare, $ops);
 	}
 
-	// public function cash(Request $request){
-	//     //cust ids
-	// 	$cids = array(
-	// 		2475, //shopee core
-	// 		2224, //shopee crystal
-	// 		2258, //toped
-	// 		1677, //lazada
-	// 		2768, //tiktok
-	// 		2446, //blibli
-	// 		2043, //zalora
-	// 		1868, //java yoga
-	// 		2073, //yoga light
-	// 		122, //acu
-	// 		98, //aling
-	// 		298, //angela
-	// 		756, //atiek
-	// 		117, //caroline
-	// 		2136, //desi
-	// 		142, //elisa
-	// 		2229, //erna
-	// 		2187, //fanny
-	// 		2588, //loretta
-	// 		2170, //maria malang
-	// 		2415, //merry
-	// 		296, //minarsih bali
-	// 		1678, //musdiani
-	// 		2218, //nurcahyani alwi
-	// 		205, //paula
-	// 		519, //rindu
-	// 		930, //rusmalina
-	// 		1070, //rustinawati
-	// 		1116, //susi
-	// 		80, //tutik
-	// 		2308, //yuli riau
-	// 		2710, //anytime
-	// 		2457, //roca
-	// 		2664, //cahya
-	// 		2742, //erwin
-	// 		2153, //fb cust
-	// 		2031, //fb dp
-	// 		2733, //reza
-	// 		2722, //heritage
-	// 		2686, //rizki nanda
-	// 		2781, //evy bantrang
-	// 		2717, //leon
-	// 		2727, //fitri
-	// 		1885, //yufika
-	// 		2791, //synergy
-	// 		2873, //alexander bali
-	// 		2872, //aden
-	// 		2091, //athaya
-	// 		2763, //arie
-	// 		2838, //bee
-	// 		2689, //caroline ang
-	// 		359, //dewi suryani
-	// 		2852, //erwin fithub
-	// 		2766, //febri
-	// 		2807, //finns
-	// 		2754, //keliling
-	// 		2847, //mike fithub
-	// 		2700, //nando
-	// 		2721, //novi bandung
-	// 		2656, //rangers
-	// 		2735, //rocky
-	// 		2850, //rosa
-	// 		2858, //vava
-	// 		2790, //william
-	// 		2703, //seko
-	//         2546, //umum sby
-	//         2937, //ROKKY
+
+
+	// public function cash(Request $request)
+	// {
+
+	// 	$datesNow = Carbon::now();
+
+	// 	$month = $request->month;
+	// 	$year  = $request->year ?? $datesNow->year;
+
+	// 	if ($month) {
+	// 		$date = Carbon::createFromDate($year, $month, 1);
+	// 		$startDate = $date->startOfMonth()->toDateString();
+	// 		$endDate   = $date->endOfMonth()->toDateString();
+	// 	} else {
+	// 		$startDate = Carbon::createFromDate($year, 1, 1)->startOfYear()->toDateString();
+	// 		$endDate   = Carbon::createFromDate($year, 12, 31)->endOfYear()->toDateString();
+	// 	}
+
+	// 	// ✅ TAMBAH BANK DI SINI
+	// 	$customers = Customer::whereIn('type', [
+	// 		Customer::TYPE_CUSTOMER,
+	// 		Customer::TYPE_RESELLER,
+	// 		Customer::TYPE_BANK
+	// 	])->get();
+
+	// 	$customerList = $customers->where('type', Customer::TYPE_CUSTOMER)->values();
+	// 	$resellerList = $customers->where('type', Customer::TYPE_RESELLER)->values();
+	// 	$bankList     = $customers->where('type', Customer::TYPE_BANK)->values(); // ✅ NEW
+
+	// 	$allIds = $customers->pluck('id')->toArray();
+
+	// 	// $rows = Transaction::whereBetween('date', [$startDate, $endDate])
+	// 	// 	->where(function ($q) use ($allIds) {
+	// 	// 		$q->whereIn('sender_id', $allIds)
+	// 	// 			->orWhereIn('receiver_id', $allIds);
+	// 	// 	})
+	// 	// 	->selectRaw("
+	// 	// 	sender_id,
+	// 	// 	receiver_id,
+	// 	// 	type,
+	// 	// 	SUM(total) as total
+	// 	// ")
+	// 	// 	->groupBy('sender_id', 'receiver_id', 'type')
+	// 	// 	->get();
+
+	// 	$query = Transaction::whereBetween('date', [$startDate, $endDate])
+	// 		->where(function ($q) use ($allIds) {
+	// 			$q->whereIn('sender_id', $allIds)
+	// 				->orWhereIn('receiver_id', $allIds);
+	// 		})
+	// 		->selectRaw("
+	//     sender_id,
+	//     receiver_id,
+	//     type,
+	//     SUM(total) as total
+	// ")
+	// 		->groupBy('sender_id', 'receiver_id', 'type');
+
+	// 	// ✅ DEBUG (TAMPIL DI HALAMAN, TIDAK STOP)
+	// 	$fullSql = vsprintf(
+	// 		str_replace('?', '%s', $query->toSql()),
+	// 		collect($query->getBindings())->map(function ($b) {
+	// 			return is_numeric($b) ? $b : "'" . addslashes($b) . "'";
+	// 		})->toArray()
 	// 	);
 
-	// 	//1. get month input
+	// 	dump('QUERY CASH:', $fullSql);
 
-	//     $datesNow = Carbon::now();
+	// 	// lanjut normal
+	// 	$rows = $query->get();
 
-	//     if($request->month){
-	//         $month = $request->month;
-	//     }else{
-	//         $month = $datesNow->month;
-	//     }
+	// 	$init = function () {
+	// 		return [
+	// 			'cashIn' => [],
+	// 			'cashOut' => [],
+	// 			'sell' => [],
+	// 			'return' => [],
+	// 			'nettCash' => 0,
+	// 			'nettSell' => 0,
+	// 		];
+	// 	};
 
-	//     if($request->year){
-	//         $year = $request->year;
-	//     }else{
-	//         $year = $datesNow->year;
-	//     }
+	// 	$customerReport = $init();
+	// 	$resellerReport = $init();
+	// 	$bankReport     = $init(); // ✅ NEW
+
+	// 	$customerMap = $customerList->pluck('id')->flip();
+	// 	$resellerMap = $resellerList->pluck('id')->flip();
+	// 	$bankMap     = $bankList->pluck('id')->flip(); // ✅ NEW
+
+	// 	foreach ($rows as $row) {
+
+	// 		// ================= CASH IN =================
+	// 		if ($row->type == Transaction::TYPE_CASH_IN && isset($customerMap[$row->sender_id])) {
+	// 			$customerReport['cashIn'][$row->sender_id] = ($customerReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
+	// 		}
+	// 		if ($row->type == Transaction::TYPE_CASH_IN && isset($resellerMap[$row->sender_id])) {
+	// 			$resellerReport['cashIn'][$row->sender_id] = ($resellerReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
+	// 		}
+	// 		if ($row->type == Transaction::TYPE_CASH_IN && isset($bankMap[$row->receiver_id])) { // ✅ NEW
+	// 			$bankReport['cashIn'][$row->receiver_id] = ($bankReport['cashIn'][$row->receiver_id] ?? 0) + $row->total;
+	// 		}
+
+	// 		// ================= CASH OUT =================
+	// 		if ($row->type == Transaction::TYPE_CASH_OUT && isset($customerMap[$row->receiver_id])) {
+	// 			$customerReport['cashOut'][$row->receiver_id] = ($customerReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
+	// 		}
+	// 		if ($row->type == Transaction::TYPE_CASH_OUT && isset($resellerMap[$row->receiver_id])) {
+	// 			$resellerReport['cashOut'][$row->receiver_id] = ($resellerReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
+	// 		}
+	// 		if ($row->type == Transaction::TYPE_CASH_OUT && isset($bankMap[$row->sender_id])) { // ✅ NEW
+	// 			$bankReport['cashOut'][$row->sender_id] = ($bankReport['cashOut'][$row->sender_id] ?? 0) + $row->total;
+	// 		}
+
+	// 		// ================= SELL =================
+	// 		if ($row->type == Transaction::TYPE_SELL && isset($customerMap[$row->receiver_id])) {
+	// 			$customerReport['sell'][$row->receiver_id] = ($customerReport['sell'][$row->receiver_id] ?? 0) + $row->total;
+	// 		}
+	// 		if ($row->type == Transaction::TYPE_SELL && isset($resellerMap[$row->receiver_id])) {
+	// 			$resellerReport['sell'][$row->receiver_id] = ($resellerReport['sell'][$row->receiver_id] ?? 0) + $row->total;
+	// 		}
+	// 		if ($row->type == Transaction::TYPE_SELL && isset($bankMap[$row->receiver_id])) { // ✅ NEW
+	// 			$bankReport['sell'][$row->receiver_id] = ($bankReport['sell'][$row->receiver_id] ?? 0) + $row->total;
+	// 		}
+
+	// 		// ================= RETURN =================
+	// 		if ($row->type == Transaction::TYPE_RETURN && isset($customerMap[$row->sender_id])) {
+	// 			$customerReport['return'][$row->sender_id] = ($customerReport['return'][$row->sender_id] ?? 0) + $row->total;
+	// 		}
+	// 		if ($row->type == Transaction::TYPE_RETURN && isset($resellerMap[$row->sender_id])) {
+	// 			$resellerReport['return'][$row->sender_id] = ($resellerReport['return'][$row->sender_id] ?? 0) + $row->total;
+	// 		}
+	// 		if ($row->type == Transaction::TYPE_RETURN && isset($bankMap[$row->sender_id])) { // ✅ NEW
+	// 			$bankReport['return'][$row->sender_id] = ($bankReport['return'][$row->sender_id] ?? 0) + $row->total;
+	// 		}
+	// 	}
+
+	// 	$calc = function (&$report) {
+	// 		$report['nettCash'] = array_sum($report['cashIn']) + array_sum($report['cashOut']);
+	// 		$report['nettSell'] = array_sum($report['sell']) - array_sum($report['return']);
+	// 	};
+
+	// 	$calc($customerReport);
+	// 	$calc($resellerReport);
+	// 	$calc($bankReport); // ✅ NEW
+
+	// 	$yearList = [];
+	// 	for ($i = 2019; $i <= date('Y'); $i++) {
+	// 		$yearList[] = $i;
+	// 	}
+	// 	$yearList = array_reverse($yearList);
 
 
-	// 	// $year = $request->year;
-	// 	$date = Carbon::createFromDate("$year","$month","01");
-	// 	$startDate = $date->startOfMonth()->toDateString();
-	// 	$endDate = $date->endOfMonth()->toDateString();
+	// 	return view('report.cash', [
+	// 		'customerList' => $customerList,
+	// 		'resellerList' => $resellerList,
+	// 		'bankList'     => $bankList, // ✅ NEW
 
-	//     $cashIn = Transaction::whereIn('sender_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_CASH_IN)->groupBy('sender_id')->selectRaw('sender_id, sum(total) as st')->get()->pluck('st','sender_id')->toArray();
+	// 		'customerReport' => $customerReport,
+	// 		'resellerReport' => $resellerReport,
+	// 		'bankReport'     => $bankReport, // ✅ NEW
 
-	//     $cashOut = Transaction::whereIn('receiver_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_CASH_OUT)->groupBy('receiver_id')->selectRaw('receiver_id, sum(total) as st')->get()->pluck('st','receiver_id')->toArray();
-
-	//     $sell = Transaction::whereIn('receiver_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_SELL)->groupBy('receiver_id')->selectRaw('receiver_id, sum(total) as st')->get()->pluck('st','receiver_id')->toArray();
-
-	//     $returnData = Transaction::whereIn('sender_id',$cids)->whereBetween('date',[$startDate,$endDate])->where('type',Transaction::TYPE_RETURN)->groupBy('sender_id')->selectRaw('sender_id, sum(total) as st')->get()->pluck('st','sender_id')->toArray();
-
-	//     // dd($return);
-
-
-	//     $dcList = Customer::whereIn('id',$cids)->get();
-
-
-	//     $nettCash = array_sum($cashIn) + array_sum($cashOut);
-
-	//     $nettSell = array_sum($sell) + array_sum($returnData);
-
-	//     $yearList = [];
-
-	//     for ($i = 2019; $i <= date('Y'); $i++){
-	//         $yearList[] = $i;
-	//     }
-
-	//     $yearList = array_reverse($yearList);
-
-
-
-
-
-	// 	return view('report.cash',compact('dcList','cashIn','cashOut','returnData','sell','nettCash','nettSell','month','year','yearList','datesNow'));
-
+	// 		'month' => $month,
+	// 		'year' => $year,
+	// 		'yearList' => $yearList,
+	// 		'datesNow' => $datesNow,
+	// 	]);
 	// }
 
 	public function cash(Request $request)
 	{
-
 		$datesNow = Carbon::now();
 
 		$month = $request->month;
 		$year  = $request->year ?? $datesNow->year;
 
+		// ================= DATE RANGE =================
 		if ($month) {
 			$date = Carbon::createFromDate($year, $month, 1);
 			$startDate = $date->startOfMonth()->toDateString();
@@ -179,7 +221,7 @@ class ReportController extends Controller
 			$endDate   = Carbon::createFromDate($year, 12, 31)->endOfYear()->toDateString();
 		}
 
-		// ✅ TAMBAH BANK DI SINI
+		// ================= CUSTOMER LIST (WITH TRASHED) =================
 		$customers = Customer::whereIn('type', [
 			Customer::TYPE_CUSTOMER,
 			Customer::TYPE_RESELLER,
@@ -188,38 +230,39 @@ class ReportController extends Controller
 
 		$customerList = $customers->where('type', Customer::TYPE_CUSTOMER)->values();
 		$resellerList = $customers->where('type', Customer::TYPE_RESELLER)->values();
-		$bankList     = $customers->where('type', Customer::TYPE_BANK)->values(); // ✅ NEW
+		$bankList     = $customers->where('type', Customer::TYPE_BANK)->values();
 
-		$allIds = $customers->pluck('id')->toArray();
-
-		// $rows = Transaction::whereBetween('date', [$startDate, $endDate])
-		// 	->where(function ($q) use ($allIds) {
-		// 		$q->whereIn('sender_id', $allIds)
-		// 			->orWhereIn('receiver_id', $allIds);
-		// 	})
-		// 	->selectRaw("
-		// 	sender_id,
-		// 	receiver_id,
-		// 	type,
-		// 	SUM(total) as total
-		// ")
-		// 	->groupBy('sender_id', 'receiver_id', 'type')
-		// 	->get();
-
+		// ================= QUERY =================
 		$query = Transaction::whereBetween('date', [$startDate, $endDate])
-			->where(function ($q) use ($allIds) {
-				$q->whereIn('sender_id', $allIds)
-					->orWhereIn('receiver_id', $allIds);
+			->where(function ($q) {
+				$q->whereIn('sender_type', [
+					Customer::TYPE_CUSTOMER,
+					Customer::TYPE_RESELLER,
+					Customer::TYPE_BANK
+				])
+					->orWhereIn('receiver_type', [
+						Customer::TYPE_CUSTOMER,
+						Customer::TYPE_RESELLER,
+						Customer::TYPE_BANK
+					]);
 			})
 			->selectRaw("
-        sender_id,
-        receiver_id,
-        type,
-        SUM(total) as total
-    ")
-			->groupBy('sender_id', 'receiver_id', 'type');
+            sender_id,
+            sender_type,
+            receiver_id,
+            receiver_type,
+            type,
+            SUM(total) as total
+        ")
+			->groupBy(
+				'sender_id',
+				'sender_type',
+				'receiver_id',
+				'receiver_type',
+				'type'
+			);
 
-		// ✅ DEBUG (TAMPIL DI HALAMAN, TIDAK STOP)
+		// ================= DEBUG =================
 		$fullSql = vsprintf(
 			str_replace('?', '%s', $query->toSql()),
 			collect($query->getBindings())->map(function ($b) {
@@ -229,9 +272,9 @@ class ReportController extends Controller
 
 		dump('QUERY CASH:', $fullSql);
 
-		// lanjut normal
 		$rows = $query->get();
 
+		// ================= INIT =================
 		$init = function () {
 			return [
 				'cashIn' => [],
@@ -245,59 +288,82 @@ class ReportController extends Controller
 
 		$customerReport = $init();
 		$resellerReport = $init();
-		$bankReport     = $init(); // ✅ NEW
+		$bankReport     = $init();
 
-		$customerMap = $customerList->pluck('id')->flip();
-		$resellerMap = $resellerList->pluck('id')->flip();
-		$bankMap     = $bankList->pluck('id')->flip(); // ✅ NEW
+		// helper
+		$add = function (&$report, $key, $id, $value) {
+			$report[$key][$id] = ($report[$key][$id] ?? 0) + $value;
+		};
 
+		// ================= LOOP =================
 		foreach ($rows as $row) {
 
-			// ================= CASH IN =================
-			if ($row->type == Transaction::TYPE_CASH_IN && isset($customerMap[$row->sender_id])) {
-				$customerReport['cashIn'][$row->sender_id] = ($customerReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
-			}
-			if ($row->type == Transaction::TYPE_CASH_IN && isset($resellerMap[$row->sender_id])) {
-				$resellerReport['cashIn'][$row->sender_id] = ($resellerReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
-			}
-			if ($row->type == Transaction::TYPE_CASH_IN && isset($bankMap[$row->receiver_id])) { // ✅ NEW
-				$bankReport['cashIn'][$row->receiver_id] = ($bankReport['cashIn'][$row->receiver_id] ?? 0) + $row->total;
+			// ===== CASH IN =====
+			if ($row->type == Transaction::TYPE_CASH_IN) {
+
+				if ($row->sender_type == Customer::TYPE_CUSTOMER) {
+					$add($customerReport, 'cashIn', $row->sender_id, $row->total);
+				}
+
+				if ($row->sender_type == Customer::TYPE_RESELLER) {
+					$add($resellerReport, 'cashIn', $row->sender_id, $row->total);
+				}
+
+				if ($row->receiver_type == Customer::TYPE_BANK) {
+					$add($bankReport, 'cashIn', $row->receiver_id, $row->total);
+				}
 			}
 
-			// ================= CASH OUT =================
-			if ($row->type == Transaction::TYPE_CASH_OUT && isset($customerMap[$row->receiver_id])) {
-				$customerReport['cashOut'][$row->receiver_id] = ($customerReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
-			}
-			if ($row->type == Transaction::TYPE_CASH_OUT && isset($resellerMap[$row->receiver_id])) {
-				$resellerReport['cashOut'][$row->receiver_id] = ($resellerReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
-			}
-			if ($row->type == Transaction::TYPE_CASH_OUT && isset($bankMap[$row->sender_id])) { // ✅ NEW
-				$bankReport['cashOut'][$row->sender_id] = ($bankReport['cashOut'][$row->sender_id] ?? 0) + $row->total;
+			// ===== CASH OUT =====
+			if ($row->type == Transaction::TYPE_CASH_OUT) {
+
+				if ($row->receiver_type == Customer::TYPE_CUSTOMER) {
+					$add($customerReport, 'cashOut', $row->receiver_id, $row->total);
+				}
+
+				if ($row->receiver_type == Customer::TYPE_RESELLER) {
+					$add($resellerReport, 'cashOut', $row->receiver_id, $row->total);
+				}
+
+				if ($row->sender_type == Customer::TYPE_BANK) {
+					$add($bankReport, 'cashOut', $row->sender_id, $row->total);
+				}
 			}
 
-			// ================= SELL =================
-			if ($row->type == Transaction::TYPE_SELL && isset($customerMap[$row->receiver_id])) {
-				$customerReport['sell'][$row->receiver_id] = ($customerReport['sell'][$row->receiver_id] ?? 0) + $row->total;
-			}
-			if ($row->type == Transaction::TYPE_SELL && isset($resellerMap[$row->receiver_id])) {
-				$resellerReport['sell'][$row->receiver_id] = ($resellerReport['sell'][$row->receiver_id] ?? 0) + $row->total;
-			}
-			if ($row->type == Transaction::TYPE_SELL && isset($bankMap[$row->receiver_id])) { // ✅ NEW
-				$bankReport['sell'][$row->receiver_id] = ($bankReport['sell'][$row->receiver_id] ?? 0) + $row->total;
+			// ===== SELL =====
+			if ($row->type == Transaction::TYPE_SELL) {
+
+				if ($row->receiver_type == Customer::TYPE_CUSTOMER) {
+					$add($customerReport, 'sell', $row->receiver_id, $row->total);
+				}
+
+				if ($row->receiver_type == Customer::TYPE_RESELLER) {
+					$add($resellerReport, 'sell', $row->receiver_id, $row->total);
+				}
+
+				if ($row->receiver_type == Customer::TYPE_BANK) {
+					$add($bankReport, 'sell', $row->receiver_id, $row->total);
+				}
 			}
 
-			// ================= RETURN =================
-			if ($row->type == Transaction::TYPE_RETURN && isset($customerMap[$row->sender_id])) {
-				$customerReport['return'][$row->sender_id] = ($customerReport['return'][$row->sender_id] ?? 0) + $row->total;
-			}
-			if ($row->type == Transaction::TYPE_RETURN && isset($resellerMap[$row->sender_id])) {
-				$resellerReport['return'][$row->sender_id] = ($resellerReport['return'][$row->sender_id] ?? 0) + $row->total;
-			}
-			if ($row->type == Transaction::TYPE_RETURN && isset($bankMap[$row->sender_id])) { // ✅ NEW
-				$bankReport['return'][$row->sender_id] = ($bankReport['return'][$row->sender_id] ?? 0) + $row->total;
+			// ===== RETURN =====
+			if ($row->type == Transaction::TYPE_RETURN) {
+
+				if ($row->sender_type == Customer::TYPE_CUSTOMER) {
+					$add($customerReport, 'return', $row->sender_id, $row->total);
+				}
+
+				if ($row->sender_type == Customer::TYPE_RESELLER) {
+					$add($resellerReport, 'return', $row->sender_id, $row->total);
+				}
+
+				if ($row->sender_type == Customer::TYPE_BANK) {
+					$add($bankReport, 'return', $row->sender_id, $row->total);
+				}
 			}
 		}
 
+		// ================= CALC =================
 		$calc = function (&$report) {
 			$report['nettCash'] = array_sum($report['cashIn']) + array_sum($report['cashOut']);
 			$report['nettSell'] = array_sum($report['sell']) - array_sum($report['return']);
@@ -305,23 +371,92 @@ class ReportController extends Controller
 
 		$calc($customerReport);
 		$calc($resellerReport);
-		$calc($bankReport); // ✅ NEW
+		$calc($bankReport);
 
+		// ================= YEAR LIST =================
 		$yearList = [];
 		for ($i = 2019; $i <= date('Y'); $i++) {
 			$yearList[] = $i;
 		}
 		$yearList = array_reverse($yearList);
 
+		// ================= SET A =================
+		// CUSTOMER + RESELLER (sender)
+		$A = Transaction::whereBetween('date', [$startDate, $endDate])
+			->where('type', Transaction::TYPE_CASH_IN)
+			->whereIn('sender_type', [
+				Customer::TYPE_CUSTOMER,
+				Customer::TYPE_RESELLER
+			])
+			->pluck('id');
 
+		// ================= SET B =================
+		// BANK (receiver)
+		$B = Transaction::whereBetween('date', [$startDate, $endDate])
+			->where('type', Transaction::TYPE_CASH_IN)
+			->where('receiver_type', Customer::TYPE_BANK)
+			->pluck('id');
+
+		// ================= SELISIH =================
+		$onlyCustomerReseller = $A->diff($B)->values();
+		$onlyBank             = $B->diff($A)->values();
+
+		// ================= DETAIL =================
+
+		// 🔴 CUSTOMER / RESELLER → TIDAK MASUK BANK
+		$detailCustomerReseller = Transaction::whereIn('id', $onlyCustomerReseller)
+			->get([
+				'id',
+				'sender_type',
+				'receiver_type', // 🔥 ini yang kita butuh
+				'total'
+			]);
+
+		// 🔴 BANK → BUKAN DARI CUSTOMER / RESELLER
+		$detailBank = Transaction::whereIn('id', $onlyBank)
+			->get([
+				'id',
+				'sender_type',   // 🔥 ini yang kita butuh
+				'receiver_type',
+				'total'
+			]);
+
+		// ================= OUTPUT =================
+		dd([
+			'CUSTOMER_RESELLER_TIDAK_MASUK_BANK' => [
+				'count' => $detailCustomerReseller->count(),
+				'data' => $detailCustomerReseller->map(function ($row) {
+					return [
+						'id' => $row->id,
+						'receiver_type' => $row->receiver_type, // 🔥 fokus sini
+						'total' => $row->total,
+					];
+				}),
+			],
+
+			'BANK_TIDAK_DARI_CUSTOMER_RESELLER' => [
+				'count' => $detailBank->count(),
+				'data' => $detailBank->map(function ($row) {
+					return [
+						'id' => $row->id,
+						'sender_type' => $row->sender_type, // 🔥 fokus sini
+						'total' => $row->total,
+					];
+				}),
+			],
+		]);
+
+
+
+		// ================= RETURN =================
 		return view('report.cash', [
 			'customerList' => $customerList,
 			'resellerList' => $resellerList,
-			'bankList'     => $bankList, // ✅ NEW
+			'bankList'     => $bankList,
 
 			'customerReport' => $customerReport,
 			'resellerReport' => $resellerReport,
-			'bankReport'     => $bankReport, // ✅ NEW
+			'bankReport'     => $bankReport,
 
 			'month' => $month,
 			'year' => $year,
