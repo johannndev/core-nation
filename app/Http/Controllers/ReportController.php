@@ -244,8 +244,8 @@ class ReportController extends Controller
 			->where(function ($q) {
 				$q->whereIn('sender_type', [
 					Customer::TYPE_CUSTOMER,
-					Customer::TYPE_RESELLER,
-					Customer::TYPE_BANK
+					Customer::TYPE_RESELLER
+					
 				])
 					->orWhereIn('receiver_type', [
 						Customer::TYPE_CUSTOMER,
