@@ -221,73 +221,72 @@ class ReportController extends Controller
 			$endDate   = Carbon::createFromDate($year, 12, 31)->endOfYear()->toDateString();
 		}
 
-		// ================= CUSTOMER LIST (NO SOFT DELETE) =================
-		$customers = Customer::whereNull('deleted_at')
-			->whereIn('type', [
-				Customer::TYPE_CUSTOMER,
-				Customer::TYPE_RESELLER,
-				Customer::TYPE_BANK
-			])
-			->get();
+		// ================= CUSTOMER LIST =================
+		$customers = Customer::whereIn('type', [
+			Customer::TYPE_CUSTOMER,
+			Customer::TYPE_RESELLER,
+			Customer::TYPE_BANK
+		])->get();
 
 		$customerList = $customers->where('type', Customer::TYPE_CUSTOMER)->values();
 		$resellerList = $customers->where('type', Customer::TYPE_RESELLER)->values();
 		$bankList     = $customers->where('type', Customer::TYPE_BANK)->values();
 
-		// ================= VALID IDS =================
-		$validCustomerIds = $customerList->pluck('id')->toArray();
-		$validResellerIds = $resellerList->pluck('id')->toArray();
-		$validBankIds     = $bankList->pluck('id')->toArray();
-
 		// ================= QUERY =================
-		$query = Transaction::whereBetween('date', [$startDate, $endDate])
+		$rows = Transaction::whereBetween('date', [$startDate, $endDate])
 			->where(function ($q) {
-				$q->whereIn('sender_type', [
-					Customer::TYPE_CUSTOMER,
-					Customer::TYPE_RESELLER
-					
-				])
-					->orWhereIn('receiver_type', [
+
+				// ✅ CUSTOMER & RESELLER dari sender
+				$q->where(function ($sub) {
+					$sub->whereIn('sender_type', [
 						Customer::TYPE_CUSTOMER,
-						Customer::TYPE_RESELLER,
-						Customer::TYPE_BANK
-					]);
+						Customer::TYPE_RESELLER
+					])
+						->whereHas('sender'); // auto skip soft delete
+				})
+
+					// ✅ BANK dari receiver + sender harus customer/reseller
+					->orWhere(function ($sub) {
+						$sub->where('receiver_type', Customer::TYPE_BANK)
+							->whereIn('sender_type', [
+								Customer::TYPE_CUSTOMER,
+								Customer::TYPE_RESELLER
+							])
+							->whereHas('receiverWithoutTrashed') // bank valid
+							->whereHas('senderWithoutTrashed');  // sender valid
+					});
 			})
 			->selectRaw("
-        sender_id,
-        sender_type,
-        receiver_id,
-        receiver_type,
-        type,
-        SUM(total) as total
-    ")
+            sender_id,
+            sender_type,
+            receiver_id,
+            receiver_type,
+            type,
+            SUM(total) as total
+        ")
 			->groupBy(
 				'sender_id',
 				'sender_type',
 				'receiver_id',
 				'receiver_type',
 				'type'
-			);
-
-		$rows = $query->get();
+			)
+			->get();
 
 		// ================= INIT =================
-		$init = function () {
-			return [
-				'cashIn' => [],
-				'cashOut' => [],
-				'sell' => [],
-				'return' => [],
-				'nettCash' => 0,
-				'nettSell' => 0,
-			];
-		};
+		$init = fn() => [
+			'cashIn' => [],
+			'cashOut' => [],
+			'sell' => [],
+			'return' => [],
+			'nettCash' => 0,
+			'nettSell' => 0,
+		];
 
 		$customerReport = $init();
 		$resellerReport = $init();
 		$bankReport     = $init();
 
-		// ================= HELPER =================
 		$add = function (&$report, $key, $id, $value) {
 			$report[$key][$id] = ($report[$key][$id] ?? 0) + $value;
 		};
@@ -298,23 +297,18 @@ class ReportController extends Controller
 			// ===== CASH IN =====
 			if ($row->type == Transaction::TYPE_CASH_IN) {
 
-				if (
-					$row->sender_type == Customer::TYPE_CUSTOMER &&
-					in_array($row->sender_id, $validCustomerIds)
-				) {
+				// customer & reseller dari sender
+				if ($row->sender_type == Customer::TYPE_CUSTOMER) {
 					$add($customerReport, 'cashIn', $row->sender_id, $row->total);
 				}
 
-				if (
-					$row->sender_type == Customer::TYPE_RESELLER &&
-					in_array($row->sender_id, $validResellerIds)
-				) {
+				if ($row->sender_type == Customer::TYPE_RESELLER) {
 					$add($resellerReport, 'cashIn', $row->sender_id, $row->total);
 				}
 
+				// bank dari receiver
 				if (
 					$row->receiver_type == Customer::TYPE_BANK &&
-					in_array($row->receiver_id, $validBankIds) &&
 					in_array($row->sender_type, [
 						Customer::TYPE_CUSTOMER,
 						Customer::TYPE_RESELLER
@@ -327,48 +321,42 @@ class ReportController extends Controller
 			// ===== CASH OUT =====
 			if ($row->type == Transaction::TYPE_CASH_OUT) {
 
-				if (
-					$row->receiver_type == Customer::TYPE_CUSTOMER &&
-					in_array($row->receiver_id, $validCustomerIds)
-				) {
-					$add($customerReport, 'cashOut', $row->receiver_id, $row->total);
+				if ($row->sender_type == Customer::TYPE_CUSTOMER) {
+					$add($customerReport, 'cashOut', $row->sender_id, $row->total);
+				}
+
+				if ($row->sender_type == Customer::TYPE_RESELLER) {
+					$add($resellerReport, 'cashOut', $row->sender_id, $row->total);
 				}
 
 				if (
-					$row->receiver_type == Customer::TYPE_RESELLER &&
-					in_array($row->receiver_id, $validResellerIds)
+					$row->receiver_type == Customer::TYPE_BANK &&
+					in_array($row->sender_type, [
+						Customer::TYPE_CUSTOMER,
+						Customer::TYPE_RESELLER
+					])
 				) {
-					$add($resellerReport, 'cashOut', $row->receiver_id, $row->total);
-				}
-
-				if (
-					$row->sender_type == Customer::TYPE_BANK &&
-					in_array($row->sender_id, $validBankIds)
-				) {
-					$add($bankReport, 'cashOut', $row->sender_id, $row->total);
+					$add($bankReport, 'cashOut', $row->receiver_id, $row->total);
 				}
 			}
 
 			// ===== SELL =====
 			if ($row->type == Transaction::TYPE_SELL) {
 
-				if (
-					$row->receiver_type == Customer::TYPE_CUSTOMER &&
-					in_array($row->receiver_id, $validCustomerIds)
-				) {
-					$add($customerReport, 'sell', $row->receiver_id, $row->total);
+				if ($row->sender_type == Customer::TYPE_CUSTOMER) {
+					$add($customerReport, 'sell', $row->sender_id, $row->total);
 				}
 
-				if (
-					$row->receiver_type == Customer::TYPE_RESELLER &&
-					in_array($row->receiver_id, $validResellerIds)
-				) {
-					$add($resellerReport, 'sell', $row->receiver_id, $row->total);
+				if ($row->sender_type == Customer::TYPE_RESELLER) {
+					$add($resellerReport, 'sell', $row->sender_id, $row->total);
 				}
 
 				if (
 					$row->receiver_type == Customer::TYPE_BANK &&
-					in_array($row->receiver_id, $validBankIds)
+					in_array($row->sender_type, [
+						Customer::TYPE_CUSTOMER,
+						Customer::TYPE_RESELLER
+					])
 				) {
 					$add($bankReport, 'sell', $row->receiver_id, $row->total);
 				}
@@ -377,25 +365,22 @@ class ReportController extends Controller
 			// ===== RETURN =====
 			if ($row->type == Transaction::TYPE_RETURN) {
 
-				if (
-					$row->sender_type == Customer::TYPE_CUSTOMER &&
-					in_array($row->sender_id, $validCustomerIds)
-				) {
+				if ($row->sender_type == Customer::TYPE_CUSTOMER) {
 					$add($customerReport, 'return', $row->sender_id, $row->total);
 				}
 
-				if (
-					$row->sender_type == Customer::TYPE_RESELLER &&
-					in_array($row->sender_id, $validResellerIds)
-				) {
+				if ($row->sender_type == Customer::TYPE_RESELLER) {
 					$add($resellerReport, 'return', $row->sender_id, $row->total);
 				}
 
 				if (
-					$row->sender_type == Customer::TYPE_BANK &&
-					in_array($row->sender_id, $validBankIds)
+					$row->receiver_type == Customer::TYPE_BANK &&
+					in_array($row->sender_type, [
+						Customer::TYPE_CUSTOMER,
+						Customer::TYPE_RESELLER
+					])
 				) {
-					$add($bankReport, 'return', $row->sender_id, $row->total);
+					$add($bankReport, 'return', $row->receiver_id, $row->total);
 				}
 			}
 		}
@@ -411,11 +396,7 @@ class ReportController extends Controller
 		$calc($bankReport);
 
 		// ================= YEAR LIST =================
-		$yearList = [];
-		for ($i = 2019; $i <= date('Y'); $i++) {
-			$yearList[] = $i;
-		}
-		$yearList = array_reverse($yearList);
+		$yearList = collect(range(2019, date('Y')))->reverse()->values();
 
 		// ================= SET A =================
 		// CUSTOMER + RESELLER (sender)

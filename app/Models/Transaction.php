@@ -242,6 +242,16 @@ class Transaction extends Model
 		return $this->belongsTo('App\Models\Customer','sender_id')->withTrashed();
 	}
 
+		public function receiverWithoutTrashed()
+	{
+		return $this->belongsTo('App\Models\Customer','receiver_id');
+	}
+
+	public function senderWithoutTrashed()
+	{
+		return $this->belongsTo('App\Models\Customer','sender_id');
+	}
+
 	public function user()
 	{
 		return $this->belongsTo('App\Models\User','user_id');
