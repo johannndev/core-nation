@@ -424,9 +424,14 @@ class ReportController extends Controller
 				Transaction::TYPE_CASH_IN,
 				Transaction::TYPE_RETURN,
 			])
+			->whereIn('sender_type', [ // 🔥 filter dulu
+				Customer::TYPE_CUSTOMER,
+				Customer::TYPE_RESELLER,
+			])
 			->selectRaw('receiver_type, COUNT(*) as total')
 			->groupBy('receiver_type')
-			->pluck('total', 'receiver_type'); // 🔥 jadi key-value
+			->pluck('total', 'receiver_type');
+
 
 		// ================= CASH OUT / SELL =================
 		$cashOut = Transaction::whereBetween('date', [$startDate, $endDate])
@@ -434,17 +439,22 @@ class ReportController extends Controller
 				Transaction::TYPE_CASH_OUT,
 				Transaction::TYPE_SELL,
 			])
+			->whereIn('receiver_type', [ // 🔥 filter dulu
+				Customer::TYPE_CUSTOMER,
+				Customer::TYPE_RESELLER,
+			])
 			->selectRaw('sender_type, COUNT(*) as total')
 			->groupBy('sender_type')
-			->pluck('total', 'sender_type'); // 🔥 jadi key-value
+			->pluck('total', 'sender_type');
+
 
 		// ================= DD =================
 		dd([
 			'date_range' => [$startDate, $endDate],
 
-			// hasil bersih (bukan object)
-			'cashin_return_receiver_types' => $cashIn,
-			'cashout_sell_sender_types' => $cashOut,
+			// 🔥 sesuai kebutuhan audit kamu
+			'cashin_sender_customer_reseller__receiver_breakdown' => $cashIn,
+			'cashout_receiver_customer_reseller__sender_breakdown' => $cashOut,
 		]);
 
 		// ================= SET A =================
