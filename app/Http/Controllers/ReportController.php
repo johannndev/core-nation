@@ -236,34 +236,58 @@ class ReportController extends Controller
 		$rows = Transaction::whereBetween('date', [$startDate, $endDate])
 			->where(function ($q) {
 
-				// ✅ CUSTOMER & RESELLER dari sender
+				// ✅ CASH IN → pakai sender
 				$q->where(function ($sub) {
-					$sub->whereIn('sender_type', [
-						Customer::TYPE_CUSTOMER,
-						Customer::TYPE_RESELLER
-					])
-						->whereHas('sender'); // auto skip soft delete
+					$sub->where('type', Transaction::TYPE_CASH_IN)
+						->whereIn('sender_type', [
+							Customer::TYPE_CUSTOMER,
+							Customer::TYPE_RESELLER
+						])
+						->whereHas('sender');
 				})
 
-					// ✅ BANK dari receiver + sender harus customer/reseller
+					// ✅ CASH OUT & SELL → pakai receiver
+					->orWhere(function ($sub) {
+						$sub->whereIn('type', [
+							Transaction::TYPE_CASH_OUT,
+							Transaction::TYPE_SELL
+						])
+							->whereIn('receiver_type', [
+								Customer::TYPE_CUSTOMER,
+								Customer::TYPE_RESELLER
+							])
+							->whereHas('receiver');
+					})
+
+					// ================= RETURN (sender) =================
+					->orWhere(function ($sub) {
+						$sub->where('type', Transaction::TYPE_RETURN)
+							->whereIn('sender_type', [
+								Customer::TYPE_CUSTOMER,
+								Customer::TYPE_RESELLER
+							])
+							->whereHas('sender');
+					})
+
+					// ✅ BANK
 					->orWhere(function ($sub) {
 						$sub->where('receiver_type', Customer::TYPE_BANK)
 							->whereIn('sender_type', [
 								Customer::TYPE_CUSTOMER,
 								Customer::TYPE_RESELLER
 							])
-							->whereHas('sender') // bank valid
-							->whereHas('senderWithoutTrashed');  // sender valid
+							->whereHas('receiver')
+							->whereHas('senderWithoutTrashed');
 					});
 			})
 			->selectRaw("
-            sender_id,
-            sender_type,
-            receiver_id,
-            receiver_type,
-            type,
-            SUM(total) as total
-        ")
+			sender_id,
+			sender_type,
+			receiver_id,
+			receiver_type,
+			type,
+			SUM(total) as total
+		")
 			->groupBy(
 				'sender_id',
 				'sender_type',
@@ -294,10 +318,9 @@ class ReportController extends Controller
 		// ================= LOOP =================
 		foreach ($rows as $row) {
 
-			// ===== CASH IN =====
+			// ===== CASH IN (sender) =====
 			if ($row->type == Transaction::TYPE_CASH_IN) {
 
-				// customer & reseller dari sender
 				if ($row->sender_type == Customer::TYPE_CUSTOMER) {
 					$add($customerReport, 'cashIn', $row->sender_id, $row->total);
 				}
@@ -306,7 +329,6 @@ class ReportController extends Controller
 					$add($resellerReport, 'cashIn', $row->sender_id, $row->total);
 				}
 
-				// bank dari receiver
 				if (
 					$row->receiver_type == Customer::TYPE_BANK &&
 					in_array($row->sender_type, [
@@ -318,15 +340,15 @@ class ReportController extends Controller
 				}
 			}
 
-			// ===== CASH OUT =====
+			// ===== CASH OUT (receiver) =====
 			if ($row->type == Transaction::TYPE_CASH_OUT) {
 
-				if ($row->sender_type == Customer::TYPE_CUSTOMER) {
-					$add($customerReport, 'cashOut', $row->sender_id, $row->total);
+				if ($row->receiver_type == Customer::TYPE_CUSTOMER) {
+					$add($customerReport, 'cashOut', $row->receiver_id, $row->total);
 				}
 
-				if ($row->sender_type == Customer::TYPE_RESELLER) {
-					$add($resellerReport, 'cashOut', $row->sender_id, $row->total);
+				if ($row->receiver_type == Customer::TYPE_RESELLER) {
+					$add($resellerReport, 'cashOut', $row->receiver_id, $row->total);
 				}
 
 				if (
@@ -340,15 +362,15 @@ class ReportController extends Controller
 				}
 			}
 
-			// ===== SELL =====
+			// ===== SELL (receiver) =====
 			if ($row->type == Transaction::TYPE_SELL) {
 
-				if ($row->sender_type == Customer::TYPE_CUSTOMER) {
-					$add($customerReport, 'sell', $row->sender_id, $row->total);
+				if ($row->receiver_type == Customer::TYPE_CUSTOMER) {
+					$add($customerReport, 'sell', $row->receiver_id, $row->total);
 				}
 
-				if ($row->sender_type == Customer::TYPE_RESELLER) {
-					$add($resellerReport, 'sell', $row->sender_id, $row->total);
+				if ($row->receiver_type == Customer::TYPE_RESELLER) {
+					$add($resellerReport, 'sell', $row->receiver_id, $row->total);
 				}
 
 				if (
@@ -362,7 +384,7 @@ class ReportController extends Controller
 				}
 			}
 
-			// ===== RETURN =====
+			// ===== RETURN (biarin sesuai existing kamu / optional ubah) =====
 			if ($row->type == Transaction::TYPE_RETURN) {
 
 				if ($row->sender_type == Customer::TYPE_CUSTOMER) {
@@ -397,83 +419,82 @@ class ReportController extends Controller
 
 		// ================= YEAR LIST =================
 		$yearList = collect(range(2019, date('Y')))->reverse()->values();
-
 		// ================= SET A =================
 		// CUSTOMER + RESELLER (sender)
-		$A = Transaction::whereBetween('date', [$startDate, $endDate])
-			->where('type', Transaction::TYPE_CASH_OUT)
-			->whereIn('sender_type', [
-				Customer::TYPE_CUSTOMER,
-				Customer::TYPE_RESELLER
-			])
-			->pluck('id');
+		// $A = Transaction::whereBetween('date', [$startDate, $endDate])
+		// 	->where('type', Transaction::TYPE_CASH_OUT)
+		// 	->whereIn('receiver_type', [
+		// 		Customer::TYPE_CUSTOMER,
+		// 		Customer::TYPE_RESELLER
+		// 	])
+		// 	->pluck('id');
 
-		// // ================= SET B =================
-		// // BANK (receiver)
-		$B = Transaction::whereBetween('date', [$startDate, $endDate])
-			->where('type', Transaction::TYPE_CASH_OUT)
-			->where('receiver_type', Customer::TYPE_BANK)
-			->pluck('id');
+		// // // ================= SET B =================
+		// // // BANK (receiver)
+		// $B = Transaction::whereBetween('date', [$startDate, $endDate])
+		// 	->where('type', Transaction::TYPE_CASH_OUT)
+		// 	->where('receiver_type', Customer::TYPE_BANK)
+		// 	->pluck('id');
 
-		// // ================= SELISIH =================
-		$onlyCustomerReseller = $A->diff($B)->values();
-		$onlyBank             = $B->diff($A)->values();
+		// // // ================= SELISIH =================
+		// $onlyCustomerReseller = $A->diff($B)->values();
+		// $onlyBank             = $B->diff($A)->values();
 
-		// // ================= DETAIL =================
+		// // // ================= DETAIL =================
 
-		// // 🔴 CUSTOMER / RESELLER → TIDAK MASUK BANK
-		$detailCustomerReseller = Transaction::whereIn('id', $onlyCustomerReseller)
-			->get([
-				'id',
-				'sender_type',
-				'receiver_type', // 🔥 ini yang kita butuh
-				'total'
-			]);
+		// // // 🔴 CUSTOMER / RESELLER → TIDAK MASUK BANK
+		// $detailCustomerReseller = Transaction::whereIn('id', $onlyCustomerReseller)
+		// 	->get([
+		// 		'id',
+		// 		'sender_type',
+		// 		'receiver_type', // 🔥 ini yang kita butuh
+		// 		'total'
+		// 	]);
 
-		// // 🔴 BANK → BUKAN DARI CUSTOMER / RESELLER
-		$detailBank = Transaction::whereIn('id', $onlyBank)
-			->get([
-				'id',
-				'sender_type',   // 🔥 ini yang kita butuh
-				'receiver_type',
-				'total'
-			]);
+		// // // 🔴 BANK → BUKAN DARI CUSTOMER / RESELLER
+		// $detailBank = Transaction::whereIn('id', $onlyBank)
+		// 	->get([
+		// 		'id',
+		// 		'sender_type',   // 🔥 ini yang kita butuh
+		// 		'receiver_type',
+		// 		'total'
+		// 	]);
 
-		// // ================= OUTPUT =================
-		dd([
-			'CUSTOMER_RESELLER_CASH_OUT' => [
-				'count' => $detailCustomerReseller->count(),
-				'data' => $detailCustomerReseller->map(function ($row) {
-					return [
-						'id' => $row->id,
-						'receiver_type' => $row->receiver_type, // 🔥 fokus sini
-						'total' => $row->total,
-					];
-				}),
-			],
+		// // // ================= OUTPUT =================
+		// dd([
+		// 	'CUSTOMER_RESELLER_CASH_OUT' => [
+		// 		'count' => $detailCustomerReseller->count(),
+		// 		'data' => $detailCustomerReseller->map(function ($row) {
+		// 			return [
+		// 				'id' => $row->id,
+		// 				'receiver_type' => $row->receiver_type, // 🔥 fokus sini
+		// 				'total' => $row->total,
+		// 			];
+		// 		}),
+		// 	],
 
-			// 'CUSTOMER_RESELLER_TIDAK_MASUK_BANK' => [
-			// 	'count' => $detailCustomerReseller->count(),
-			// 	'data' => $detailCustomerReseller->map(function ($row) {
-			// 		return [
-			// 			'id' => $row->id,
-			// 			'receiver_type' => $row->receiver_type, // 🔥 fokus sini
-			// 			'total' => $row->total,
-			// 		];
-			// 	}),
-			// ],
+		// 	'CUSTOMER_RESELLER_TIDAK_MASUK_BANK' => [
+		// 		'count' => $detailCustomerReseller->count(),
+		// 		'data' => $detailCustomerReseller->map(function ($row) {
+		// 			return [
+		// 				'id' => $row->id,
+		// 				'receiver_type' => $row->receiver_type, // 🔥 fokus sini
+		// 				'total' => $row->total,
+		// 			];
+		// 		}),
+		// 	],
 
-			// 'BANK_TIDAK_DARI_CUSTOMER_RESELLER' => [
-			// 	'count' => $detailBank->count(),
-			// 	'data' => $detailBank->map(function ($row) {
-			// 		return [
-			// 			'id' => $row->id,
-			// 			'sender_type' => $row->sender_type, // 🔥 fokus sini
-			// 			'total' => $row->total,
-			// 		];
-			// 	}),
-			// ],
-		]);
+		// 	'BANK_TIDAK_DARI_CUSTOMER_RESELLER' => [
+		// 		'count' => $detailBank->count(),
+		// 		'data' => $detailBank->map(function ($row) {
+		// 			return [
+		// 				'id' => $row->id,
+		// 				'sender_type' => $row->sender_type, // 🔥 fokus sini
+		// 				'total' => $row->total,
+		// 			];
+		// 		}),
+		// 	],
+		// ]);
 
 
 
