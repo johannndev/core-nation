@@ -400,69 +400,80 @@ class ReportController extends Controller
 
 		// ================= SET A =================
 		// CUSTOMER + RESELLER (sender)
-		// $A = Transaction::whereBetween('date', [$startDate, $endDate])
-		// 	->where('type', Transaction::TYPE_CASH_IN)
-		// 	->whereIn('sender_type', [
-		// 		Customer::TYPE_CUSTOMER,
-		// 		Customer::TYPE_RESELLER
-		// 	])
-		// 	->pluck('id');
+		$A = Transaction::whereBetween('date', [$startDate, $endDate])
+			->where('type', Transaction::TYPE_CASH_OUT)
+			->whereIn('sender_type', [
+				Customer::TYPE_CUSTOMER,
+				Customer::TYPE_RESELLER
+			])
+			->pluck('id');
 
 		// // ================= SET B =================
 		// // BANK (receiver)
-		// $B = Transaction::whereBetween('date', [$startDate, $endDate])
-		// 	->where('type', Transaction::TYPE_CASH_IN)
-		// 	->where('receiver_type', Customer::TYPE_BANK)
-		// 	->pluck('id');
+		$B = Transaction::whereBetween('date', [$startDate, $endDate])
+			->where('type', Transaction::TYPE_CASH_OUT)
+			->where('receiver_type', Customer::TYPE_BANK)
+			->pluck('id');
 
 		// // ================= SELISIH =================
-		// $onlyCustomerReseller = $A->diff($B)->values();
-		// $onlyBank             = $B->diff($A)->values();
+		$onlyCustomerReseller = $A->diff($B)->values();
+		$onlyBank             = $B->diff($A)->values();
 
 		// // ================= DETAIL =================
 
 		// // 🔴 CUSTOMER / RESELLER → TIDAK MASUK BANK
-		// $detailCustomerReseller = Transaction::whereIn('id', $onlyCustomerReseller)
-		// 	->get([
-		// 		'id',
-		// 		'sender_type',
-		// 		'receiver_type', // 🔥 ini yang kita butuh
-		// 		'total'
-		// 	]);
+		$detailCustomerReseller = Transaction::whereIn('id', $onlyCustomerReseller)
+			->get([
+				'id',
+				'sender_type',
+				'receiver_type', // 🔥 ini yang kita butuh
+				'total'
+			]);
 
 		// // 🔴 BANK → BUKAN DARI CUSTOMER / RESELLER
-		// $detailBank = Transaction::whereIn('id', $onlyBank)
-		// 	->get([
-		// 		'id',
-		// 		'sender_type',   // 🔥 ini yang kita butuh
-		// 		'receiver_type',
-		// 		'total'
-		// 	]);
+		$detailBank = Transaction::whereIn('id', $onlyBank)
+			->get([
+				'id',
+				'sender_type',   // 🔥 ini yang kita butuh
+				'receiver_type',
+				'total'
+			]);
 
 		// // ================= OUTPUT =================
-		// dd([
-		// 	'CUSTOMER_RESELLER_TIDAK_MASUK_BANK' => [
-		// 		'count' => $detailCustomerReseller->count(),
-		// 		'data' => $detailCustomerReseller->map(function ($row) {
-		// 			return [
-		// 				'id' => $row->id,
-		// 				'receiver_type' => $row->receiver_type, // 🔥 fokus sini
-		// 				'total' => $row->total,
-		// 			];
-		// 		}),
-		// 	],
+		dd([
+			'CUSTOMER_RESELLER_CASH_OUT' => [
+				'count' => $detailCustomerReseller->count(),
+				'data' => $detailCustomerReseller->map(function ($row) {
+					return [
+						'id' => $row->id,
+						'receiver_type' => $row->receiver_type, // 🔥 fokus sini
+						'total' => $row->total,
+					];
+				}),
+			],
 
-		// 	'BANK_TIDAK_DARI_CUSTOMER_RESELLER' => [
-		// 		'count' => $detailBank->count(),
-		// 		'data' => $detailBank->map(function ($row) {
-		// 			return [
-		// 				'id' => $row->id,
-		// 				'sender_type' => $row->sender_type, // 🔥 fokus sini
-		// 				'total' => $row->total,
-		// 			];
-		// 		}),
-		// 	],
-		// ]);
+			// 'CUSTOMER_RESELLER_TIDAK_MASUK_BANK' => [
+			// 	'count' => $detailCustomerReseller->count(),
+			// 	'data' => $detailCustomerReseller->map(function ($row) {
+			// 		return [
+			// 			'id' => $row->id,
+			// 			'receiver_type' => $row->receiver_type, // 🔥 fokus sini
+			// 			'total' => $row->total,
+			// 		];
+			// 	}),
+			// ],
+
+			// 'BANK_TIDAK_DARI_CUSTOMER_RESELLER' => [
+			// 	'count' => $detailBank->count(),
+			// 	'data' => $detailBank->map(function ($row) {
+			// 		return [
+			// 			'id' => $row->id,
+			// 			'sender_type' => $row->sender_type, // 🔥 fokus sini
+			// 			'total' => $row->total,
+			// 		];
+			// 	}),
+			// ],
+		]);
 
 
 

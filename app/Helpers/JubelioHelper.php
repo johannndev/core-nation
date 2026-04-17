@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 class JubelioHelper
 {
-     /**
+    /**
      * Cek atau update data berdasarkan slug
      *
      * @param string $slug
@@ -17,21 +17,26 @@ class JubelioHelper
      * @return object
      */
 
-    public static function jubelioAuth(){
+    public static function jubelioAuth()
+    {
+
+        // ❌ Jika tidak aktif → langsung null
+        if (!env('JUBELIO_ACTIVE', false)) {
+            return null;
+        }
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('https://api2.jubelio.com/login', [
-            'email' => 'johanwebdev@gmail.com',
-            'password' => 'aY6J9gXZVQ!'
+        ])->post(env('JUBELIO_URL'), [
+            'email' => env('JUBELIO_EMAIL'),
+            'password' => env('JUBELIO_PASSWORD'),
         ]);
-        
+
         if ($response->successful()) {
             return $response->json();
         }
 
         return null;
-
     }
 
     public static function getJubelioCache()
@@ -44,7 +49,7 @@ class JubelioHelper
             if (!$jubelioApi || !isset($jubelioApi['token'])) {
                 return null; // Jika gagal autentikasi, return null
             }
-    
+
             return [
                 'token' => $jubelioApi['token'],
             ];
@@ -92,9 +97,4 @@ class JubelioHelper
 
         return $data;
     }
-
 }
-
-
-
-
