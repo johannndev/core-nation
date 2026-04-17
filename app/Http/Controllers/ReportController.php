@@ -418,28 +418,33 @@ class ReportController extends Controller
 		$yearList = collect(range(2019, date('Y')))->reverse()->values();
 
 		// ================= DD TYPE =================
-		dd([
-			// ✅ Cash In / Return → group by receiver_type
-        'cashin_return_receiver_type' => Transaction::whereBetween('date', [$startDate, $endDate])
-            ->whereIn('type', [
-                Transaction::TYPE_CASH_IN,
-                Transaction::TYPE_RETURN,
-            ])
-            ->selectRaw('receiver_type, COUNT(*) as total')
-            ->groupBy('receiver_type')
-            ->orderBy('receiver_type')
-            ->get(),
+		// ================= CASH IN / RETURN =================
+		$cashIn = Transaction::whereBetween('date', [$startDate, $endDate])
+			->whereIn('type', [
+				Transaction::TYPE_CASH_IN,
+				Transaction::TYPE_RETURN,
+			])
+			->selectRaw('receiver_type, COUNT(*) as total')
+			->groupBy('receiver_type')
+			->pluck('total', 'receiver_type'); // 🔥 jadi key-value
 
-        // ✅ Cash Out / Sell → group by sender_type
-        'cashout_sell_sender_type' => Transaction::whereBetween('date', [$startDate, $endDate])
-            ->whereIn('type', [
-                Transaction::TYPE_CASH_OUT,
-                Transaction::TYPE_SELL,
-            ])
-            ->selectRaw('sender_type, COUNT(*) as total')
-            ->groupBy('sender_type')
-            ->orderBy('sender_type')
-            ->get(),
+		// ================= CASH OUT / SELL =================
+		$cashOut = Transaction::whereBetween('date', [$startDate, $endDate])
+			->whereIn('type', [
+				Transaction::TYPE_CASH_OUT,
+				Transaction::TYPE_SELL,
+			])
+			->selectRaw('sender_type, COUNT(*) as total')
+			->groupBy('sender_type')
+			->pluck('total', 'sender_type'); // 🔥 jadi key-value
+
+		// ================= DD =================
+		dd([
+			'date_range' => [$startDate, $endDate],
+
+			// hasil bersih (bukan object)
+			'cashin_receiver_types' => $cashIn,
+			'cashout_sender_types' => $cashOut,
 		]);
 
 		// ================= SET A =================
