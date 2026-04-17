@@ -443,8 +443,8 @@ class ReportController extends Controller
 			'date_range' => [$startDate, $endDate],
 
 			// hasil bersih (bukan object)
-			'cashin_receiver_types' => $cashIn,
-			'cashout_sender_types' => $cashOut,
+			'cashin_return_receiver_types' => $cashIn,
+			'cashout_sell_sender_types' => $cashOut,
 		]);
 
 		// ================= SET A =================
