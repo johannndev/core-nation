@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -11,9 +12,7 @@ class CashFlowController extends Controller
 {
     public function index(Request $request){
 
-
-
-        $groupBySender = Transaction::whereIn('type', [1, 2, 7, 9, 15, 17]);
+        $groupBySender = Transaction::whereIn('type', [Transaction::TYPE_BUY, Transaction::TYPE_SELL, Transaction::TYPE_CASH_OUT, Transaction::TYPE_CASH_IN, Transaction::TYPE_RETURN, Transaction::TYPE_RETURN_SUPPLIER]);
 
         if($request->tahun){
             $groupBySender = $groupBySender->whereYear('created_at', $request->tahun);
@@ -29,7 +28,7 @@ class CashFlowController extends Controller
         }
 
 
-        $groupBySender = $groupBySender->whereIn('sender_type', [1, 7, 3, 8])
+        $groupBySender = $groupBySender->whereIn('sender_type', [Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_BANK, Customer::TYPE_ACCOUNT])
         ->select(
             'sender_type',
             DB::raw('SUM(CASE WHEN type = "9" THEN total ELSE 0 END) AS cash_in_total'),
@@ -47,7 +46,7 @@ class CashFlowController extends Controller
 
         $groupBySender = $groupBySender->get();
 
-        $groupByReceiver = Transaction::whereIn('type', [1, 2, 7, 9, 15, 17]);
+        $groupByReceiver = Transaction::whereIn('type', [Transaction::TYPE_BUY, Transaction::TYPE_SELL, Transaction::TYPE_CASH_OUT, Transaction::TYPE_CASH_IN, Transaction::TYPE_RETURN, Transaction::TYPE_RETURN_SUPPLIER]);
 
         if($request->tahun){
             $groupByReceiver = $groupByReceiver->whereYear('created_at', $request->tahun);
@@ -63,7 +62,7 @@ class CashFlowController extends Controller
         }
 
 
-        $groupByReceiver = $groupByReceiver->whereIn('receiver_type', [1, 7, 3, 8])
+        $groupByReceiver = $groupByReceiver->whereIn('receiver_type', [Customer::TYPE_CUSTOMER, Customer::TYPE_RESELLER, Customer::TYPE_BANK, Customer::TYPE_ACCOUNT])
         ->select(
             'receiver_type',
             DB::raw('SUM(CASE WHEN type = "9" THEN total ELSE 0 END) AS cash_in_total'),
