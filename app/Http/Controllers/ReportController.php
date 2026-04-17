@@ -221,23 +221,40 @@ class ReportController extends Controller
 			$endDate   = Carbon::createFromDate($year, 12, 31)->endOfYear()->toDateString();
 		}
 
-		// ================= CUSTOMER LIST =================
-		$customers = Customer::whereIn('type', [
-			Customer::TYPE_CUSTOMER,
-			Customer::TYPE_RESELLER,
-			Customer::TYPE_BANK
-		])->get();
+		// ================= GET CUSTOMER ID FROM TRANSACTION =================
+		$trxCustomerIds = Transaction::whereBetween('date', [$startDate, $endDate])
+			->selectRaw('sender_id, receiver_id')
+			->get()
+			->flatMap(function ($row) {
+				return [$row->sender_id, $row->receiver_id];
+			})
+			->filter()
+			->unique()
+			->values();
+
+		// ================= CUSTOMER LIST (ACTIVE + USED DELETED) =================
+		$customers = Customer::withTrashed()
+			->whereIn('type', [
+				Customer::TYPE_CUSTOMER,
+				Customer::TYPE_RESELLER,
+				Customer::TYPE_BANK
+			])
+			->where(function ($q) use ($trxCustomerIds) {
+				$q->whereNull('deleted_at') // aktif
+					->orWhereIn('id', $trxCustomerIds); // deleted tapi dipakai
+			})
+			->get();
 
 		$customerList = $customers->where('type', Customer::TYPE_CUSTOMER)->values();
 		$resellerList = $customers->where('type', Customer::TYPE_RESELLER)->values();
 		$bankList     = $customers->where('type', Customer::TYPE_BANK)->values();
 
-		// ================= VALID IDS =================
-		$customerIds = $customerList->pluck('id')->toArray();
-		$resellerIds = $resellerList->pluck('id')->toArray();
-		$bankIds     = $bankList->pluck('id')->toArray();
+		// ================= VALID IDS (OPTIMIZED) =================
+		$customerIds = array_flip($customerList->pluck('id')->toArray());
+		$resellerIds = array_flip($resellerList->pluck('id')->toArray());
+		$bankIds     = array_flip($bankList->pluck('id')->toArray());
 
-		// ================= QUERY =================
+		// ================= QUERY (NO whereHas 🔥) =================
 		$rows = Transaction::whereBetween('date', [$startDate, $endDate])
 			->where(function ($q) {
 
@@ -247,8 +264,7 @@ class ReportController extends Controller
 						->whereIn('sender_type', [
 							Customer::TYPE_CUSTOMER,
 							Customer::TYPE_RESELLER
-						])
-						->whereHas('sender');
+						]);
 				})
 
 					// CASH OUT & SELL → receiver
@@ -260,8 +276,7 @@ class ReportController extends Controller
 							->whereIn('receiver_type', [
 								Customer::TYPE_CUSTOMER,
 								Customer::TYPE_RESELLER
-							])
-							->whereHas('receiver');
+							]);
 					})
 
 					// RETURN → sender
@@ -270,8 +285,7 @@ class ReportController extends Controller
 							->whereIn('sender_type', [
 								Customer::TYPE_CUSTOMER,
 								Customer::TYPE_RESELLER
-							])
-							->whereHas('sender');
+							]);
 					})
 
 					// BANK → receiver
@@ -280,19 +294,17 @@ class ReportController extends Controller
 							->whereIn('sender_type', [
 								Customer::TYPE_CUSTOMER,
 								Customer::TYPE_RESELLER
-							])
-							->whereHas('receiver')
-							->whereHas('senderWithoutTrashed');
+							]);
 					});
 			})
 			->selectRaw("
-			sender_id,
-			sender_type,
-			receiver_id,
-			receiver_type,
-			type,
-			SUM(total) as total
-		")
+            sender_id,
+            sender_type,
+            receiver_id,
+            receiver_type,
+            type,
+            SUM(total) as total
+        ")
 			->groupBy(
 				'sender_id',
 				'sender_type',
@@ -326,15 +338,15 @@ class ReportController extends Controller
 			// ===== CASH IN =====
 			if ($row->type == Transaction::TYPE_CASH_IN) {
 
-				if ($row->sender_type == Customer::TYPE_CUSTOMER && in_array($row->sender_id, $customerIds)) {
+				if ($row->sender_type == Customer::TYPE_CUSTOMER && isset($customerIds[$row->sender_id])) {
 					$add($customerReport, 'cashIn', $row->sender_id, $row->total);
 				}
 
-				if ($row->sender_type == Customer::TYPE_RESELLER && in_array($row->sender_id, $resellerIds)) {
+				if ($row->sender_type == Customer::TYPE_RESELLER && isset($resellerIds[$row->sender_id])) {
 					$add($resellerReport, 'cashIn', $row->sender_id, $row->total);
 				}
 
-				if ($row->receiver_type == Customer::TYPE_BANK && in_array($row->receiver_id, $bankIds)) {
+				if ($row->receiver_type == Customer::TYPE_BANK && isset($bankIds[$row->receiver_id])) {
 					$add($bankReport, 'cashIn', $row->receiver_id, $row->total);
 				}
 			}
@@ -342,15 +354,15 @@ class ReportController extends Controller
 			// ===== CASH OUT =====
 			if ($row->type == Transaction::TYPE_CASH_OUT) {
 
-				if ($row->receiver_type == Customer::TYPE_CUSTOMER && in_array($row->receiver_id, $customerIds)) {
+				if ($row->receiver_type == Customer::TYPE_CUSTOMER && isset($customerIds[$row->receiver_id])) {
 					$add($customerReport, 'cashOut', $row->receiver_id, $row->total);
 				}
 
-				if ($row->receiver_type == Customer::TYPE_RESELLER && in_array($row->receiver_id, $resellerIds)) {
+				if ($row->receiver_type == Customer::TYPE_RESELLER && isset($resellerIds[$row->receiver_id])) {
 					$add($resellerReport, 'cashOut', $row->receiver_id, $row->total);
 				}
 
-				if ($row->receiver_type == Customer::TYPE_BANK && in_array($row->receiver_id, $bankIds)) {
+				if ($row->receiver_type == Customer::TYPE_BANK && isset($bankIds[$row->receiver_id])) {
 					$add($bankReport, 'cashOut', $row->receiver_id, $row->total);
 				}
 			}
@@ -358,15 +370,15 @@ class ReportController extends Controller
 			// ===== SELL =====
 			if ($row->type == Transaction::TYPE_SELL) {
 
-				if ($row->receiver_type == Customer::TYPE_CUSTOMER && in_array($row->receiver_id, $customerIds)) {
+				if ($row->receiver_type == Customer::TYPE_CUSTOMER && isset($customerIds[$row->receiver_id])) {
 					$add($customerReport, 'sell', $row->receiver_id, $row->total);
 				}
 
-				if ($row->receiver_type == Customer::TYPE_RESELLER && in_array($row->receiver_id, $resellerIds)) {
+				if ($row->receiver_type == Customer::TYPE_RESELLER && isset($resellerIds[$row->receiver_id])) {
 					$add($resellerReport, 'sell', $row->receiver_id, $row->total);
 				}
 
-				if ($row->receiver_type == Customer::TYPE_BANK && in_array($row->receiver_id, $bankIds)) {
+				if ($row->receiver_type == Customer::TYPE_BANK && isset($bankIds[$row->receiver_id])) {
 					$add($bankReport, 'sell', $row->receiver_id, $row->total);
 				}
 			}
@@ -374,21 +386,21 @@ class ReportController extends Controller
 			// ===== RETURN =====
 			if ($row->type == Transaction::TYPE_RETURN) {
 
-				if ($row->sender_type == Customer::TYPE_CUSTOMER && in_array($row->sender_id, $customerIds)) {
+				if ($row->sender_type == Customer::TYPE_CUSTOMER && isset($customerIds[$row->sender_id])) {
 					$add($customerReport, 'return', $row->sender_id, $row->total);
 				}
 
-				if ($row->sender_type == Customer::TYPE_RESELLER && in_array($row->sender_id, $resellerIds)) {
+				if ($row->sender_type == Customer::TYPE_RESELLER && isset($resellerIds[$row->sender_id])) {
 					$add($resellerReport, 'return', $row->sender_id, $row->total);
 				}
 
-				if ($row->receiver_type == Customer::TYPE_BANK && in_array($row->receiver_id, $bankIds)) {
+				if ($row->receiver_type == Customer::TYPE_BANK && isset($bankIds[$row->receiver_id])) {
 					$add($bankReport, 'return', $row->receiver_id, $row->total);
 				}
 			}
 		}
 
-		// ================= NORMALIZE (WAJIB) =================
+		// ================= NORMALIZE =================
 		$normalize = function ($list, &$report) {
 			foreach ($list as $item) {
 				$id = $item->id;
@@ -416,52 +428,6 @@ class ReportController extends Controller
 
 		// ================= YEAR LIST =================
 		$yearList = collect(range(2019, date('Y')))->reverse()->values();
-
-		// ================= DD TYPE =================
-		// ================= CASH IN / RETURN =================
-		$cashIn = Transaction::whereBetween('date', [$startDate, $endDate])
-			->whereIn('type', [
-				Transaction::TYPE_CASH_IN,
-				Transaction::TYPE_RETURN,
-			])
-			->whereIn('sender_type', [ // 🔥 filter dulu
-				Customer::TYPE_CUSTOMER,
-				Customer::TYPE_RESELLER,
-			])
-			->selectRaw('receiver_type, COUNT(*) as total')
-			->groupBy('receiver_type')
-			->pluck('total', 'receiver_type');
-
-
-		// ================= CASH OUT / SELL =================
-		$cashOut = Transaction::whereBetween('date', [$startDate, $endDate])
-			->whereIn('type', [
-				Transaction::TYPE_CASH_OUT,
-				Transaction::TYPE_SELL,
-			])
-			->whereIn('receiver_type', [ // 🔥 filter dulu
-				Customer::TYPE_CUSTOMER,
-				Customer::TYPE_RESELLER,
-			])
-			->selectRaw('sender_type, COUNT(*) as total')
-			->groupBy('sender_type')
-			->pluck('total', 'sender_type');
-
-		$bankMaster = Customer::whereIn('type', [
-			Customer::TYPE_BANK,
-		])->pluck('id')->unique()->values();
-
-		$trxBank = Transaction::whereBetween('date', [$startDate, $endDate])
-			->where('receiver_type', Customer::TYPE_BANK)
-			->where('sender_type',Customer::TYPE_CUSTOMER)
-			->pluck('receiver_id')
-			->filter()
-			->unique()
-			->values();
-
-		$invalidBank = $trxBank->diff($bankMaster)->values();
-
-		dd($invalidBank);
 
 		// ================= RETURN =================
 		return view('report.cash', [
