@@ -419,25 +419,27 @@ class ReportController extends Controller
 
 		// ================= DD TYPE =================
 		dd([
-			// ✅ Cash In / Return → lihat receiver_type
-			'cashin_receiver_types' => Transaction::whereBetween('date', [$startDate, $endDate])
-				->whereIn('type', [
-					Transaction::TYPE_CASH_IN,
-					Transaction::TYPE_RETURN,
-				])
-				->pluck('receiver_type')
-				->unique()
-				->values(),
+			// ✅ Cash In / Return → group by receiver_type
+        'cashin_return_receiver_type' => Transaction::whereBetween('date', [$startDate, $endDate])
+            ->whereIn('type', [
+                Transaction::TYPE_CASH_IN,
+                Transaction::TYPE_RETURN,
+            ])
+            ->selectRaw('receiver_type, COUNT(*) as total')
+            ->groupBy('receiver_type')
+            ->orderBy('receiver_type')
+            ->get(),
 
-			// ✅ Cash Out / Sell → lihat sender_type
-			'cashout_sender_types' => Transaction::whereBetween('date', [$startDate, $endDate])
-				->whereIn('type', [
-					Transaction::TYPE_CASH_OUT,
-					Transaction::TYPE_SELL,
-				])
-				->pluck('sender_type')
-				->unique()
-				->values(),
+        // ✅ Cash Out / Sell → group by sender_type
+        'cashout_sell_sender_type' => Transaction::whereBetween('date', [$startDate, $endDate])
+            ->whereIn('type', [
+                Transaction::TYPE_CASH_OUT,
+                Transaction::TYPE_SELL,
+            ])
+            ->selectRaw('sender_type, COUNT(*) as total')
+            ->groupBy('sender_type')
+            ->orderBy('sender_type')
+            ->get(),
 		]);
 
 		// ================= SET A =================
