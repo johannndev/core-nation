@@ -1262,6 +1262,137 @@ class ReportController extends Controller
 		return view('report.whItem', compact('totalWarehouse', 'data'));
 	}
 
+	// public function laporanBiaya(Request $request)
+	// {
+	// 	// =========================
+	// 	// 1. FILTER TANGGAL
+	// 	// =========================
+	// 	$datesNow = Carbon::now();
+
+	// 	$month = $request->month;
+	// 	$year  = $request->year ?? $datesNow->year;
+
+	// 	if ($month) {
+	// 		$date = Carbon::createFromDate($year, $month, 1);
+	// 		$startDate = $date->startOfMonth()->toDateString();
+	// 		$endDate   = $date->endOfMonth()->toDateString();
+	// 	} else {
+	// 		$startDate = Carbon::createFromDate($year, 1, 1)->startOfYear()->toDateString();
+	// 		$endDate   = Carbon::createFromDate($year, 12, 31)->endOfYear()->toDateString();
+	// 	}
+
+	// 	// =========================
+	// 	// 2. AMBIL LIST UNTUK VIEW (Tabel)
+	// 	// =========================
+	// 	// Kita tetap mengambil datanya untuk me-render nama-nama di tabel Blade
+	// 	$customers = Customer::withTrashed()
+	// 		->whereIn('type', [
+	// 			Customer::TYPE_ACCOUNT,
+	// 			Customer::TYPE_BANK
+	// 		])
+	// 		->get();
+
+	// 	$accountList = $customers->where('type', Customer::TYPE_ACCOUNT)->values();
+	// 	$bankList    = $customers->where('type', Customer::TYPE_BANK)->values();
+
+	// 	// =========================
+	// 	// 3. QUERY TUNGGAL (SUPER OPTIMIZED)
+	// 	// =========================
+	// 	// Filter langsung di DB menggunakan sender_type dan receiver_type
+	// 	$rows = Transaction::whereBetween('date', [$startDate, $endDate])
+	// 		->where(function ($q) {
+	// 			// Kondisi A: Dari Account ke Bank
+	// 			$q->where(function ($q2) {
+	// 				$q2->where('sender_type', Customer::TYPE_ACCOUNT)
+	// 					->where('receiver_type', Customer::TYPE_BANK);
+	// 			})
+	// 				// Kondisi B: Dari Bank ke Account
+	// 				->orWhere(function ($q2) {
+	// 					$q2->where('sender_type', Customer::TYPE_BANK)
+	// 						->where('receiver_type', Customer::TYPE_ACCOUNT);
+	// 				});
+	// 		})
+	// 		->selectRaw("
+	//         sender_id,
+	//         receiver_id,
+	//         sender_type,
+	//         receiver_type,
+	//         SUM(total) as total
+	//     ")
+	// 		->groupBy('sender_id', 'receiver_id', 'sender_type', 'receiver_type')
+	// 		->get();
+
+	// 	// =========================
+	// 	// 4. INIT REPORT
+	// 	// =========================
+	// 	$accountReport = [
+	// 		'cashIn'  => [], // Sender = Account, Receiver = Bank
+	// 		'cashOut' => [], // Sender = Bank, Receiver = Account
+	// 	];
+
+	// 	$bankReport = [
+	// 		'cashIn'  => [], // Sender = Bank, Receiver = Account
+	// 		'cashOut' => [], // Sender = Account, Receiver = Bank
+	// 	];
+
+	// 	// =========================
+	// 	// 5. LOOP DATA (CORE LOGIC)
+	// 	// =========================
+	// 	foreach ($rows as $row) {
+
+	// 		// ---------------------------------------------------------
+	// 		// KONDISI A: Uang mengalir dari ACCOUNT ke BANK
+	// 		// ---------------------------------------------------------
+	// 		if ($row->sender_type == Customer::TYPE_ACCOUNT && $row->receiver_type == Customer::TYPE_BANK) {
+	// 			// Jurnal (Account): Cash IN
+	// 			$accountReport['cashIn'][$row->sender_id] =
+	// 				($accountReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
+
+	// 			// Bank: Cash OUT
+	// 			$bankReport['cashOut'][$row->receiver_id] =
+	// 				($bankReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
+	// 		}
+
+	// 		// ---------------------------------------------------------
+	// 		// KONDISI B: Uang mengalir dari BANK ke ACCOUNT
+	// 		// ---------------------------------------------------------
+	// 		if ($row->sender_type == Customer::TYPE_BANK && $row->receiver_type == Customer::TYPE_ACCOUNT) {
+	// 			// Jurnal (Account): Cash OUT (Account sebagai receiver)
+	// 			$accountReport['cashOut'][$row->receiver_id] =
+	// 				($accountReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
+
+	// 			// Bank: Cash IN (Bank sebagai sender)
+	// 			$bankReport['cashIn'][$row->sender_id] =
+	// 				($bankReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
+	// 		}
+	// 	}
+
+	// 	// =========================
+	// 	// 6. YEAR LIST
+	// 	// =========================
+	// 	$yearList = [];
+	// 	for ($i = 2019; $i <= date('Y'); $i++) {
+	// 		$yearList[] = $i;
+	// 	}
+	// 	$yearList = array_reverse($yearList);
+
+	// 	// =========================
+	// 	// 7. RETURN VIEW
+	// 	// =========================
+	// 	return view('report.biaya_jurnal_bank', [
+	// 		'accountList'   => $accountList,
+	// 		'accountReport' => $accountReport,
+
+	// 		'bankList'      => $bankList,
+	// 		'bankReport'    => $bankReport,
+
+	// 		'month'    => $month,
+	// 		'year'     => $year,
+	// 		'yearList' => $yearList,
+	// 		'datesNow' => $datesNow,
+	// 	]);
+	// }
+
 	public function laporanBiaya(Request $request)
 	{
 		// =========================
@@ -1282,31 +1413,70 @@ class ReportController extends Controller
 		}
 
 		// =========================
-		// 2. AMBIL LIST UNTUK VIEW (Tabel)
+		// 2. AMBIL ID CUSTOMER DARI TRANSAKSI
 		// =========================
-		// Kita tetap mengambil datanya untuk me-render nama-nama di tabel Blade
+		$transactionCustomerIds = Transaction::whereBetween('date', [$startDate, $endDate])
+			->where(function ($q) {
+				$q->where(function ($q2) {
+					$q2->where('sender_type', Customer::TYPE_ACCOUNT)
+						->where('receiver_type', Customer::TYPE_BANK);
+				})->orWhere(function ($q2) {
+					$q2->where('sender_type', Customer::TYPE_BANK)
+						->where('receiver_type', Customer::TYPE_ACCOUNT);
+				});
+			})
+			->selectRaw('sender_id as id')
+			->union(
+				Transaction::whereBetween('date', [$startDate, $endDate])
+					->where(function ($q) {
+						$q->where(function ($q2) {
+							$q2->where('sender_type', Customer::TYPE_ACCOUNT)
+								->where('receiver_type', Customer::TYPE_BANK);
+						})->orWhere(function ($q2) {
+							$q2->where('sender_type', Customer::TYPE_BANK)
+								->where('receiver_type', Customer::TYPE_ACCOUNT);
+						});
+					})
+					->selectRaw('receiver_id as id')
+			)
+			->pluck('id')
+			->unique()
+			->toArray();
+
+		// =========================
+		// 3. AMBIL CUSTOMER (FINAL RULE)
+		// =========================
 		$customers = Customer::withTrashed()
 			->whereIn('type', [
 				Customer::TYPE_ACCOUNT,
 				Customer::TYPE_BANK
 			])
+			->where(function ($q) use ($transactionCustomerIds) {
+				$q->whereNull('deleted_at') // aktif
+					->orWhereIn('id', $transactionCustomerIds); // deleted tapi ada transaksi
+			})
 			->get();
 
-		$accountList = $customers->where('type', Customer::TYPE_ACCOUNT)->values();
-		$bankList    = $customers->where('type', Customer::TYPE_BANK)->values();
+		// =========================
+		// 4. SPLIT LIST
+		// =========================
+		$accountList = $customers
+			->where('type', Customer::TYPE_ACCOUNT)
+			->values();
+
+		$bankList = $customers
+			->where('type', Customer::TYPE_BANK)
+			->values();
 
 		// =========================
-		// 3. QUERY TUNGGAL (SUPER OPTIMIZED)
+		// 5. QUERY TRANSACTION (TETAP OPTIMIZED)
 		// =========================
-		// Filter langsung di DB menggunakan sender_type dan receiver_type
 		$rows = Transaction::whereBetween('date', [$startDate, $endDate])
 			->where(function ($q) {
-				// Kondisi A: Dari Account ke Bank
 				$q->where(function ($q2) {
 					$q2->where('sender_type', Customer::TYPE_ACCOUNT)
 						->where('receiver_type', Customer::TYPE_BANK);
 				})
-					// Kondisi B: Dari Bank ke Account
 					->orWhere(function ($q2) {
 						$q2->where('sender_type', Customer::TYPE_BANK)
 							->where('receiver_type', Customer::TYPE_ACCOUNT);
@@ -1323,52 +1493,46 @@ class ReportController extends Controller
 			->get();
 
 		// =========================
-		// 4. INIT REPORT
+		// 6. INIT REPORT
 		// =========================
 		$accountReport = [
-			'cashIn'  => [], // Sender = Account, Receiver = Bank
-			'cashOut' => [], // Sender = Bank, Receiver = Account
+			'cashIn'  => [],
+			'cashOut' => [],
 		];
 
 		$bankReport = [
-			'cashIn'  => [], // Sender = Bank, Receiver = Account
-			'cashOut' => [], // Sender = Account, Receiver = Bank
+			'cashIn'  => [],
+			'cashOut' => [],
 		];
 
 		// =========================
-		// 5. LOOP DATA (CORE LOGIC)
+		// 7. LOOP
 		// =========================
 		foreach ($rows as $row) {
 
-			// ---------------------------------------------------------
-			// KONDISI A: Uang mengalir dari ACCOUNT ke BANK
-			// ---------------------------------------------------------
+			// ACCOUNT → BANK
 			if ($row->sender_type == Customer::TYPE_ACCOUNT && $row->receiver_type == Customer::TYPE_BANK) {
-				// Jurnal (Account): Cash IN
+
 				$accountReport['cashIn'][$row->sender_id] =
 					($accountReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
 
-				// Bank: Cash OUT
 				$bankReport['cashOut'][$row->receiver_id] =
 					($bankReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
 			}
 
-			// ---------------------------------------------------------
-			// KONDISI B: Uang mengalir dari BANK ke ACCOUNT
-			// ---------------------------------------------------------
+			// BANK → ACCOUNT
 			if ($row->sender_type == Customer::TYPE_BANK && $row->receiver_type == Customer::TYPE_ACCOUNT) {
-				// Jurnal (Account): Cash OUT (Account sebagai receiver)
+
 				$accountReport['cashOut'][$row->receiver_id] =
 					($accountReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
 
-				// Bank: Cash IN (Bank sebagai sender)
 				$bankReport['cashIn'][$row->sender_id] =
 					($bankReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
 			}
 		}
 
 		// =========================
-		// 6. YEAR LIST
+		// 8. YEAR LIST
 		// =========================
 		$yearList = [];
 		for ($i = 2019; $i <= date('Y'); $i++) {
@@ -1377,7 +1541,7 @@ class ReportController extends Controller
 		$yearList = array_reverse($yearList);
 
 		// =========================
-		// 7. RETURN VIEW
+		// 9. RETURN
 		// =========================
 		return view('report.biaya_jurnal_bank', [
 			'accountList'   => $accountList,
