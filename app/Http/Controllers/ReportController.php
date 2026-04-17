@@ -461,6 +461,7 @@ class ReportController extends Controller
 
 		$invalidBank = $trxBank->diff($bankMaster)->values();
 
+		dd($invalidBank);
 
 		// ================= RETURN =================
 		return view('report.cash', [
