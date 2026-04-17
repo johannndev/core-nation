@@ -447,97 +447,19 @@ class ReportController extends Controller
 			->groupBy('sender_type')
 			->pluck('total', 'sender_type');
 
-		$bankDelete = Customer::onlyTrashed()->where('type', Customer::TYPE_BANK)->pluck('id')->toArray();
+		$bankMaster = Customer::whereIn('type', [
+			Customer::TYPE_BANK,
+		])->pluck('id')->unique()->values();
 
-		dd(['bankDelete' => $bankDelete]);
+		$trxBank = Transaction::whereBetween('date', [$startDate, $endDate])
+			->where('receiver_type', Customer::TYPE_BANK)
+			->where('sender_type',Customer::TYPE_CUSTOMER)
+			->pluck('receiver_id')
+			->filter()
+			->unique()
+			->values();
 
-
-		// ================= DD =================
-		// dd([
-		// 	'date_range' => [$startDate, $endDate],
-
-		// 	// 🔥 sesuai kebutuhan audit kamu
-		// 	'cashin_sender_customer_reseller__receiver_breakdown' => $cashIn,
-		// 	'cashout_receiver_customer_reseller__sender_breakdown' => $cashOut,
-		// ]);
-
-		// ================= SET A =================
-		// CUSTOMER + RESELLER (sender)
-		// $A = Transaction::whereBetween('date', [$startDate, $endDate])
-		// 	->where('type', Transaction::TYPE_CASH_OUT)
-		// 	->whereIn('receiver_type', [
-		// 		Customer::TYPE_CUSTOMER,
-		// 		Customer::TYPE_RESELLER
-		// 	])
-		// 	->pluck('id');
-
-		// // // ================= SET B =================
-		// // // BANK (receiver)
-		// $B = Transaction::whereBetween('date', [$startDate, $endDate])
-		// 	->where('type', Transaction::TYPE_CASH_OUT)
-		// 	->where('receiver_type', Customer::TYPE_BANK)
-		// 	->pluck('id');
-
-		// // // ================= SELISIH =================
-		// $onlyCustomerReseller = $A->diff($B)->values();
-		// $onlyBank             = $B->diff($A)->values();
-
-		// // // ================= DETAIL =================
-
-		// // // 🔴 CUSTOMER / RESELLER → TIDAK MASUK BANK
-		// $detailCustomerReseller = Transaction::whereIn('id', $onlyCustomerReseller)
-		// 	->get([
-		// 		'id',
-		// 		'sender_type',
-		// 		'receiver_type', // 🔥 ini yang kita butuh
-		// 		'total'
-		// 	]);
-
-		// // // 🔴 BANK → BUKAN DARI CUSTOMER / RESELLER
-		// $detailBank = Transaction::whereIn('id', $onlyBank)
-		// 	->get([
-		// 		'id',
-		// 		'sender_type',   // 🔥 ini yang kita butuh
-		// 		'receiver_type',
-		// 		'total'
-		// 	]);
-
-		// // // ================= OUTPUT =================
-		// dd([
-		// 	'CUSTOMER_RESELLER_CASH_OUT' => [
-		// 		'count' => $detailCustomerReseller->count(),
-		// 		'data' => $detailCustomerReseller->map(function ($row) {
-		// 			return [
-		// 				'id' => $row->id,
-		// 				'receiver_type' => $row->receiver_type, // 🔥 fokus sini
-		// 				'total' => $row->total,
-		// 			];
-		// 		}),
-		// 	],
-
-		// 	'CUSTOMER_RESELLER_TIDAK_MASUK_BANK' => [
-		// 		'count' => $detailCustomerReseller->count(),
-		// 		'data' => $detailCustomerReseller->map(function ($row) {
-		// 			return [
-		// 				'id' => $row->id,
-		// 				'receiver_type' => $row->receiver_type, // 🔥 fokus sini
-		// 				'total' => $row->total,
-		// 			];
-		// 		}),
-		// 	],
-
-		// 	'BANK_TIDAK_DARI_CUSTOMER_RESELLER' => [
-		// 		'count' => $detailBank->count(),
-		// 		'data' => $detailBank->map(function ($row) {
-		// 			return [
-		// 				'id' => $row->id,
-		// 				'sender_type' => $row->sender_type, // 🔥 fokus sini
-		// 				'total' => $row->total,
-		// 			];
-		// 		}),
-		// 	],
-		// ]);
-
+		$invalidBank = $trxBank->diff($bankMaster)->values();
 
 
 		// ================= RETURN =================
