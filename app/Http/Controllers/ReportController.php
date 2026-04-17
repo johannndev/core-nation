@@ -252,7 +252,7 @@ class ReportController extends Controller
 								Customer::TYPE_CUSTOMER,
 								Customer::TYPE_RESELLER
 							])
-							->whereHas('receiverWithoutTrashed') // bank valid
+							->whereHas('sender') // bank valid
 							->whereHas('senderWithoutTrashed');  // sender valid
 					});
 			})
