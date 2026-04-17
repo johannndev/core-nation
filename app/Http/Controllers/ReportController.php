@@ -221,41 +221,8 @@ class ReportController extends Controller
 			$endDate   = Carbon::createFromDate($year, 12, 31)->endOfYear()->toDateString();
 		}
 
-		// ================= GET CUSTOMER ID FROM TRANSACTION =================
+		// ================= GET CUSTOMER ID FROM TRANSACTION (FIX 🔥) =================
 		$trxCustomerIds = Transaction::whereBetween('date', [$startDate, $endDate])
-			->selectRaw('sender_id, receiver_id')
-			->get()
-			->flatMap(function ($row) {
-				return [$row->sender_id, $row->receiver_id];
-			})
-			->filter()
-			->unique()
-			->values();
-
-		// ================= CUSTOMER LIST (ACTIVE + USED DELETED) =================
-		$customers = Customer::withTrashed()
-			->whereIn('type', [
-				Customer::TYPE_CUSTOMER,
-				Customer::TYPE_RESELLER,
-				Customer::TYPE_BANK
-			])
-			->where(function ($q) use ($trxCustomerIds) {
-				$q->whereNull('deleted_at') // aktif
-					->orWhereIn('id', $trxCustomerIds); // deleted tapi dipakai
-			})
-			->get();
-
-		$customerList = $customers->where('type', Customer::TYPE_CUSTOMER)->values();
-		$resellerList = $customers->where('type', Customer::TYPE_RESELLER)->values();
-		$bankList     = $customers->where('type', Customer::TYPE_BANK)->values();
-
-		// ================= VALID IDS (OPTIMIZED) =================
-		$customerIds = array_flip($customerList->pluck('id')->toArray());
-		$resellerIds = array_flip($resellerList->pluck('id')->toArray());
-		$bankIds     = array_flip($bankList->pluck('id')->toArray());
-
-		// ================= QUERY (NO whereHas 🔥) =================
-		$rows = Transaction::whereBetween('date', [$startDate, $endDate])
 			->where(function ($q) {
 
 				// CASH IN → sender
@@ -289,6 +256,82 @@ class ReportController extends Controller
 					})
 
 					// BANK → receiver
+					->orWhere(function ($sub) {
+						$sub->where('receiver_type', Customer::TYPE_BANK)
+							->whereIn('sender_type', [
+								Customer::TYPE_CUSTOMER,
+								Customer::TYPE_RESELLER
+							]);
+					});
+			})
+			->get()
+			->flatMap(function ($row) {
+				return [$row->sender_id, $row->receiver_id];
+			})
+			->filter()
+			->unique()
+			->values();
+
+		// ================= CUSTOMER LIST (STRICT 🔥) =================
+		$customers = Customer::withTrashed()
+			->whereIn('type', [
+				Customer::TYPE_CUSTOMER,
+				Customer::TYPE_RESELLER,
+				Customer::TYPE_BANK
+			])
+			->where(function ($q) use ($trxCustomerIds) {
+
+				// ✅ semua aktif
+				$q->whereNull('deleted_at')
+
+					// ✅ hanya deleted yang ada di transaksi
+					->orWhere(function ($sub) use ($trxCustomerIds) {
+						$sub->whereNotNull('deleted_at')
+							->whereIn('id', $trxCustomerIds);
+					});
+			})
+			->get();
+
+		$customerList = $customers->where('type', Customer::TYPE_CUSTOMER)->values();
+		$resellerList = $customers->where('type', Customer::TYPE_RESELLER)->values();
+		$bankList     = $customers->where('type', Customer::TYPE_BANK)->values();
+
+		// ================= VALID IDS =================
+		$customerIds = array_flip($customerList->pluck('id')->toArray());
+		$resellerIds = array_flip($resellerList->pluck('id')->toArray());
+		$bankIds     = array_flip($bankList->pluck('id')->toArray());
+
+		// ================= QUERY =================
+		$rows = Transaction::whereBetween('date', [$startDate, $endDate])
+			->where(function ($q) {
+
+				$q->where(function ($sub) {
+					$sub->where('type', Transaction::TYPE_CASH_IN)
+						->whereIn('sender_type', [
+							Customer::TYPE_CUSTOMER,
+							Customer::TYPE_RESELLER
+						]);
+				})
+
+					->orWhere(function ($sub) {
+						$sub->whereIn('type', [
+							Transaction::TYPE_CASH_OUT,
+							Transaction::TYPE_SELL
+						])
+							->whereIn('receiver_type', [
+								Customer::TYPE_CUSTOMER,
+								Customer::TYPE_RESELLER
+							]);
+					})
+
+					->orWhere(function ($sub) {
+						$sub->where('type', Transaction::TYPE_RETURN)
+							->whereIn('sender_type', [
+								Customer::TYPE_CUSTOMER,
+								Customer::TYPE_RESELLER
+							]);
+					})
+
 					->orWhere(function ($sub) {
 						$sub->where('receiver_type', Customer::TYPE_BANK)
 							->whereIn('sender_type', [
@@ -335,7 +378,6 @@ class ReportController extends Controller
 		// ================= LOOP =================
 		foreach ($rows as $row) {
 
-			// ===== CASH IN =====
 			if ($row->type == Transaction::TYPE_CASH_IN) {
 
 				if ($row->sender_type == Customer::TYPE_CUSTOMER && isset($customerIds[$row->sender_id])) {
@@ -351,7 +393,6 @@ class ReportController extends Controller
 				}
 			}
 
-			// ===== CASH OUT =====
 			if ($row->type == Transaction::TYPE_CASH_OUT) {
 
 				if ($row->receiver_type == Customer::TYPE_CUSTOMER && isset($customerIds[$row->receiver_id])) {
@@ -367,7 +408,6 @@ class ReportController extends Controller
 				}
 			}
 
-			// ===== SELL =====
 			if ($row->type == Transaction::TYPE_SELL) {
 
 				if ($row->receiver_type == Customer::TYPE_CUSTOMER && isset($customerIds[$row->receiver_id])) {
@@ -383,7 +423,6 @@ class ReportController extends Controller
 				}
 			}
 
-			// ===== RETURN =====
 			if ($row->type == Transaction::TYPE_RETURN) {
 
 				if ($row->sender_type == Customer::TYPE_CUSTOMER && isset($customerIds[$row->sender_id])) {
@@ -429,7 +468,6 @@ class ReportController extends Controller
 		// ================= YEAR LIST =================
 		$yearList = collect(range(2019, date('Y')))->reverse()->values();
 
-		// ================= RETURN =================
 		return view('report.cash', [
 			'customerList' => $customerList,
 			'resellerList' => $resellerList,
