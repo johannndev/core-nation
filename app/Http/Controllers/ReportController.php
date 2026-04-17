@@ -222,7 +222,7 @@ class ReportController extends Controller
 		}
 
 		// ================= CUSTOMER LIST =================
-		$customers = Customer::whereIn('type', [
+		$customers = Customer::withTrashed()->whereIn('type', [
 			Customer::TYPE_CUSTOMER,
 			Customer::TYPE_RESELLER,
 			Customer::TYPE_BANK
