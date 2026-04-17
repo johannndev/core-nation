@@ -447,13 +447,9 @@ class ReportController extends Controller
 			->groupBy('sender_type')
 			->pluck('total', 'sender_type');
 
-		$cekCashIn = Transaction::whereBetween('date', [$startDate, $endDate])
-			->where('type',Transaction::TYPE_CASH_IN)
-			->where('sender_type', Customer::TYPE_CUSTOMER)
-			->where('receiver_type', Customer::TYPE_CUSTOMER)
-			->pluck('id');
+		$bankDelete = Customer::onlyTrashed()->where('type', Customer::TYPE_BANK)->pluck('id')->toArray();
 
-		// dd(['cashInCustomerToCustomer' => $cekCashIn]);
+		dd(['bankDelete' => $bankDelete]);
 
 
 		// ================= DD =================
