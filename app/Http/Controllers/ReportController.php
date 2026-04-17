@@ -417,6 +417,29 @@ class ReportController extends Controller
 		// ================= YEAR LIST =================
 		$yearList = collect(range(2019, date('Y')))->reverse()->values();
 
+		// ================= DD TYPE =================
+		dd([
+			// ✅ Cash In / Return → lihat receiver_type
+			'cashin_receiver_types' => Transaction::whereBetween('date', [$startDate, $endDate])
+				->whereIn('type', [
+					Transaction::TYPE_CASH_IN,
+					Transaction::TYPE_RETURN,
+				])
+				->pluck('receiver_type')
+				->unique()
+				->values(),
+
+			// ✅ Cash Out / Sell → lihat sender_type
+			'cashout_sender_types' => Transaction::whereBetween('date', [$startDate, $endDate])
+				->whereIn('type', [
+					Transaction::TYPE_CASH_OUT,
+					Transaction::TYPE_SELL,
+				])
+				->pluck('sender_type')
+				->unique()
+				->values(),
+		]);
+
 		// ================= SET A =================
 		// CUSTOMER + RESELLER (sender)
 		// $A = Transaction::whereBetween('date', [$startDate, $endDate])
