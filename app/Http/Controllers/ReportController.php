@@ -1393,6 +1393,170 @@ class ReportController extends Controller
 	// 	]);
 	// }
 
+	// public function laporanBiaya(Request $request)
+	// {
+	// 	// =========================
+	// 	// 1. FILTER TANGGAL
+	// 	// =========================
+	// 	$datesNow = Carbon::now();
+
+	// 	$month = $request->month;
+	// 	$year  = $request->year ?? $datesNow->year;
+
+	// 	if ($month) {
+	// 		$date = Carbon::createFromDate($year, $month, 1);
+	// 		$startDate = $date->startOfMonth()->toDateString();
+	// 		$endDate   = $date->endOfMonth()->toDateString();
+	// 	} else {
+	// 		$startDate = Carbon::createFromDate($year, 1, 1)->startOfYear()->toDateString();
+	// 		$endDate   = Carbon::createFromDate($year, 12, 31)->endOfYear()->toDateString();
+	// 	}
+
+	// 	// =========================
+	// 	// 2. AMBIL ID CUSTOMER DARI TRANSAKSI
+	// 	// =========================
+	// 	$transactionCustomerIds = Transaction::whereBetween('date', [$startDate, $endDate])
+	// 		->where(function ($q) {
+	// 			$q->where(function ($q2) {
+	// 				$q2->where('sender_type', Customer::TYPE_ACCOUNT)
+	// 					->where('receiver_type', Customer::TYPE_BANK);
+	// 			})->orWhere(function ($q2) {
+	// 				$q2->where('sender_type', Customer::TYPE_BANK)
+	// 					->where('receiver_type', Customer::TYPE_ACCOUNT);
+	// 			});
+	// 		})
+	// 		->selectRaw('sender_id as id')
+	// 		->union(
+	// 			Transaction::whereBetween('date', [$startDate, $endDate])
+	// 				->where(function ($q) {
+	// 					$q->where(function ($q2) {
+	// 						$q2->where('sender_type', Customer::TYPE_ACCOUNT)
+	// 							->where('receiver_type', Customer::TYPE_BANK);
+	// 					})->orWhere(function ($q2) {
+	// 						$q2->where('sender_type', Customer::TYPE_BANK)
+	// 							->where('receiver_type', Customer::TYPE_ACCOUNT);
+	// 					});
+	// 				})
+	// 				->selectRaw('receiver_id as id')
+	// 		)
+	// 		->pluck('id')
+	// 		->unique()
+	// 		->toArray();
+
+	// 	// =========================
+	// 	// 3. AMBIL CUSTOMER (FINAL RULE)
+	// 	// =========================
+	// 	$customers = Customer::withTrashed()
+	// 		->whereIn('type', [
+	// 			Customer::TYPE_ACCOUNT,
+	// 			Customer::TYPE_BANK
+	// 		])
+	// 		->where(function ($q) use ($transactionCustomerIds) {
+	// 			$q->whereNull('deleted_at') // aktif
+	// 				->orWhereIn('id', $transactionCustomerIds); // deleted tapi ada transaksi
+	// 		})
+	// 		->get();
+
+	// 	// =========================
+	// 	// 4. SPLIT LIST
+	// 	// =========================
+	// 	$accountList = $customers
+	// 		->where('type', Customer::TYPE_ACCOUNT)
+	// 		->values();
+
+	// 	$bankList = $customers
+	// 		->where('type', Customer::TYPE_BANK)
+	// 		->values();
+
+	// 	// =========================
+	// 	// 5. QUERY TRANSACTION (TETAP OPTIMIZED)
+	// 	// =========================
+	// 	$rows = Transaction::whereBetween('date', [$startDate, $endDate])
+	// 		->where(function ($q) {
+	// 			$q->where(function ($q2) {
+	// 				$q2->where('sender_type', Customer::TYPE_ACCOUNT)
+	// 					->where('receiver_type', Customer::TYPE_BANK);
+	// 			})
+	// 				->orWhere(function ($q2) {
+	// 					$q2->where('sender_type', Customer::TYPE_BANK)
+	// 						->where('receiver_type', Customer::TYPE_ACCOUNT);
+	// 				});
+	// 		})
+	// 		->selectRaw("
+	//         sender_id,
+	//         receiver_id,
+	//         sender_type,
+	//         receiver_type,
+	//         SUM(total) as total
+	//     ")
+	// 		->groupBy('sender_id', 'receiver_id', 'sender_type', 'receiver_type')
+	// 		->get();
+
+	// 	// =========================
+	// 	// 6. INIT REPORT
+	// 	// =========================
+	// 	$accountReport = [
+	// 		'cashIn'  => [],
+	// 		'cashOut' => [],
+	// 	];
+
+	// 	$bankReport = [
+	// 		'cashIn'  => [],
+	// 		'cashOut' => [],
+	// 	];
+
+	// 	// =========================
+	// 	// 7. LOOP
+	// 	// =========================
+	// 	foreach ($rows as $row) {
+
+	// 		// ACCOUNT → BANK
+	// 		if ($row->sender_type == Customer::TYPE_ACCOUNT && $row->receiver_type == Customer::TYPE_BANK) {
+
+	// 			$accountReport['cashIn'][$row->sender_id] =
+	// 				($accountReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
+
+	// 			$bankReport['cashOut'][$row->receiver_id] =
+	// 				($bankReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
+	// 		}
+
+	// 		// BANK → ACCOUNT
+	// 		if ($row->sender_type == Customer::TYPE_BANK && $row->receiver_type == Customer::TYPE_ACCOUNT) {
+
+	// 			$accountReport['cashOut'][$row->receiver_id] =
+	// 				($accountReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
+
+	// 			$bankReport['cashIn'][$row->sender_id] =
+	// 				($bankReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
+	// 		}
+	// 	}
+
+	// 	// =========================
+	// 	// 8. YEAR LIST
+	// 	// =========================
+	// 	$yearList = [];
+	// 	for ($i = 2019; $i <= date('Y'); $i++) {
+	// 		$yearList[] = $i;
+	// 	}
+	// 	$yearList = array_reverse($yearList);
+
+	// 	// =========================
+	// 	// 9. RETURN
+	// 	// =========================
+	// 	return view('report.biaya_jurnal_bank', [
+	// 		'accountList'   => $accountList,
+	// 		'accountReport' => $accountReport,
+
+	// 		'bankList'      => $bankList,
+	// 		'bankReport'    => $bankReport,
+
+	// 		'month'    => $month,
+	// 		'year'     => $year,
+	// 		'yearList' => $yearList,
+	// 		'datesNow' => $datesNow,
+	// 	]);
+	// }
+
 	public function laporanBiaya(Request $request)
 	{
 		// =========================
@@ -1469,7 +1633,7 @@ class ReportController extends Controller
 			->values();
 
 		// =========================
-		// 5. QUERY TRANSACTION (TETAP OPTIMIZED)
+		// 5. QUERY TRANSACTION
 		// =========================
 		$rows = Transaction::whereBetween('date', [$startDate, $endDate])
 			->where(function ($q) {
@@ -1506,28 +1670,32 @@ class ReportController extends Controller
 		];
 
 		// =========================
-		// 7. LOOP
+		// 7. LOOP (FIXED LOGIC)
 		// =========================
 		foreach ($rows as $row) {
 
 			// ACCOUNT → BANK
 			if ($row->sender_type == Customer::TYPE_ACCOUNT && $row->receiver_type == Customer::TYPE_BANK) {
 
+				// Account: uang masuk
 				$accountReport['cashIn'][$row->sender_id] =
 					($accountReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
 
-				$bankReport['cashOut'][$row->receiver_id] =
-					($bankReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
+				// Bank: uang masuk (FIX)
+				$bankReport['cashIn'][$row->receiver_id] =
+					($bankReport['cashIn'][$row->receiver_id] ?? 0) + $row->total;
 			}
 
 			// BANK → ACCOUNT
 			if ($row->sender_type == Customer::TYPE_BANK && $row->receiver_type == Customer::TYPE_ACCOUNT) {
 
+				// Account: uang keluar
 				$accountReport['cashOut'][$row->receiver_id] =
 					($accountReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
 
-				$bankReport['cashIn'][$row->sender_id] =
-					($bankReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
+				// Bank: uang keluar (FIX)
+				$bankReport['cashOut'][$row->sender_id] =
+					($bankReport['cashOut'][$row->sender_id] ?? 0) + $row->total;
 			}
 		}
 
