@@ -1647,12 +1647,12 @@ class ReportController extends Controller
 					});
 			})
 			->selectRaw("
-            sender_id,
-            receiver_id,
-            sender_type,
-            receiver_type,
-            SUM(total) as total
-        ")
+			sender_id,
+			receiver_id,
+			sender_type,
+			receiver_type,
+			SUM(total) as total
+		")
 			->groupBy('sender_id', 'receiver_id', 'sender_type', 'receiver_type')
 			->get();
 
@@ -1674,26 +1674,25 @@ class ReportController extends Controller
 		// =========================
 		foreach ($rows as $row) {
 
-			// ACCOUNT → BANK
+			// ACCOUNT → BANK (uang masuk ke BANK)
 			if ($row->sender_type == Customer::TYPE_ACCOUNT && $row->receiver_type == Customer::TYPE_BANK) {
 
-				// Account: uang masuk
+				// Account menerima perspektif pencatatan kamu (tetap)
 				$accountReport['cashIn'][$row->sender_id] =
 					($accountReport['cashIn'][$row->sender_id] ?? 0) + $row->total;
 
-				// Bank: uang masuk (FIX)
+				// ✅ FIX: Bank = cashIn
 				$bankReport['cashIn'][$row->receiver_id] =
 					($bankReport['cashIn'][$row->receiver_id] ?? 0) + $row->total;
 			}
 
-			// BANK → ACCOUNT
+			// BANK → ACCOUNT (uang keluar dari BANK)
 			if ($row->sender_type == Customer::TYPE_BANK && $row->receiver_type == Customer::TYPE_ACCOUNT) {
 
-				// Account: uang keluar
 				$accountReport['cashOut'][$row->receiver_id] =
 					($accountReport['cashOut'][$row->receiver_id] ?? 0) + $row->total;
 
-				// Bank: uang keluar (FIX)
+				// ✅ FIX: Bank = cashOut
 				$bankReport['cashOut'][$row->sender_id] =
 					($bankReport['cashOut'][$row->sender_id] ?? 0) + $row->total;
 			}
