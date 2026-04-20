@@ -196,8 +196,6 @@ class RestockController extends Controller
             foreach ($items as $item) {
 
                 $restock = Restock::where('item_id', $item['code'])
-                    ->where('date', $request->date)
-                    ->where('status', 1)
                     ->lockForUpdate() // 🔒 penting untuk race condition
                     ->first();
 
