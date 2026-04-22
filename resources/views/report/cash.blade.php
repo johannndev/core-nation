@@ -177,7 +177,13 @@
                                     <tbody>
                                         @forelse ($bankList as $item)
                                             <tr class="border-b">
-                                                <td class="px-4 py-3">{{ $item->name }}</td>
+                                                <td class="px-4 py-3">
+                                                    <a href="{{ route('account.transaction', $item->id) }}"
+                                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                                        {{ $item->name }}
+                                                    </a>
+                                                   
+                                                </td>
                                                 <td class="px-4 py-3 text-right">{{ Number::format($bankReport['cashIn'][$item->id] ?? 0) }}</td>
                                                 <td class="px-4 py-3 text-right">{{ Number::format($bankReport['cashOut'][$item->id] ?? 0) }}</td>
                                                 <td class="px-4 py-3 text-right">{{ Number::format($bankReport['sell'][$item->id] ?? 0) }}</td>
