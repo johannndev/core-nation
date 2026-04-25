@@ -15,16 +15,16 @@ class CashFlowController extends Controller
         $groupBySender = Transaction::whereIn('type', [Transaction::TYPE_BUY, Transaction::TYPE_SELL, Transaction::TYPE_CASH_OUT, Transaction::TYPE_CASH_IN, Transaction::TYPE_RETURN, Transaction::TYPE_RETURN_SUPPLIER]);
 
         if($request->tahun){
-            $groupBySender = $groupBySender->whereYear('created_at', $request->tahun);
+            $groupBySender = $groupBySender->whereYear('date', $request->tahun);
             $currentYear = $request->tahun;
         }else{
 
             $currentYear = carbon::now()->year;;
-            $groupBySender = $groupBySender->whereYear('created_at', $currentYear);
+            $groupBySender = $groupBySender->whereYear('date', $currentYear);
         }
 
         if($request->bulan){
-            $groupBySender = $groupBySender->whereMonth('created_at', $request->bulan);
+            $groupBySender = $groupBySender->whereMonth('date', $request->bulan);
         }
 
 
@@ -49,16 +49,16 @@ class CashFlowController extends Controller
         $groupByReceiver = Transaction::whereIn('type', [Transaction::TYPE_BUY, Transaction::TYPE_SELL, Transaction::TYPE_CASH_OUT, Transaction::TYPE_CASH_IN, Transaction::TYPE_RETURN, Transaction::TYPE_RETURN_SUPPLIER]);
 
         if($request->tahun){
-            $groupByReceiver = $groupByReceiver->whereYear('created_at', $request->tahun);
+            $groupByReceiver = $groupByReceiver->whereYear('date', $request->tahun);
             $currentYear = $request->tahun;
         }else{
 
             $currentYear = carbon::now()->year;;
-            $groupByReceiver = $groupByReceiver->whereYear('created_at', $currentYear);
+            $groupByReceiver = $groupByReceiver->whereYear('date', $currentYear);
         }
 
         if($request->bulan){
-            $groupByReceiver = $groupByReceiver->whereMonth('created_at', $request->bulan);
+            $groupByReceiver = $groupByReceiver->whereMonth('date', $request->bulan);
         }
 
 
