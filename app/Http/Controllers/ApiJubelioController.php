@@ -1183,8 +1183,8 @@ class ApiJubelioController extends Controller
             //https://api2.jubelio.com/inventory/adjustments/warehouse
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-                'authorization' => $token,
-            ])->post('https://api2.jubelio.com/inventory/adjustments/', $dataArray);
+                'Authorization' => 'Bearer ' . $token,
+            ])->post('https://api2.jubelio.com/inventory/adjustments/warehouse', $dataArray);
 
             if ($response->successful()) {
                 $data = json_decode($response->body(), true);
