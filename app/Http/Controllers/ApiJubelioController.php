@@ -1239,6 +1239,13 @@ class ApiJubelioController extends Controller
 
                 $message = $error['message'] ?? 'Terjadi kesalahan.';
                 $code = $error['code'] ?? '500';
+                log::info("Gagal melakukan adjustment stock ke Jubelio",
+                    [
+                        'transaction_id' => $id,
+                        'error_code' => $code,
+                        'error_message' => $message,
+                    ]
+                );
         
                 return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Gagal adujustment stock: ' . $code);
             }
