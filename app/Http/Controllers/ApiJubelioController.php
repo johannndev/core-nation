@@ -1637,4 +1637,23 @@ class ApiJubelioController extends Controller
             }
         }
     }
+
+    public function jubelioLoginTest()
+    {
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])->post(env('JUBELIO_URL'), [
+            'email' => env('JUBELIO_EMAIL'),
+            'password' => env('JUBELIO_PASSWORD'),
+        ]);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Failed to authenticate with Jubelio API'
+        ], 500);
+    }
 }
