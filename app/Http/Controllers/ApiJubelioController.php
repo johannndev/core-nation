@@ -1187,7 +1187,7 @@ class ApiJubelioController extends Controller
                 'Authorization' => 'Bearer ' . $token,
             ])->post('https://api2.jubelio.com/inventory/adjustments/', $dataArray);
 
-            dd($response->body());
+            // dd($response->body());
 
             if ($response->successful()) {
                 $data = json_decode($response->body(), true);
