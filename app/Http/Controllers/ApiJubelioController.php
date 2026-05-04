@@ -1648,42 +1648,60 @@ class ApiJubelioController extends Controller
         ]);
 
         if ($response->successful()) {
-            return $response->json();
+            $data = $response->json();
+            return $data['token'] ?? null; // ✅ langsung token
         }
 
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Failed to authenticate with Jubelio API'
-        ], 500);
+        return null;
     }
 
     public function getStock()
     {
-        $jubelio = JubelioHelper::getJubelioCache();
+        $token = $this->getToken();
 
-        if (!$jubelio || !isset($jubelio['token'])) {
-            return 'Token tidak tersedia';
+        if (!$token) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Token tidak tersedia'
+            ], 500);
         }
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'authorization' => 'Bearer ' . $jubelio['token'],
-        ])->get('https://api2.jubelio.com/inventory/', [
+        $url = 'https://api2.jubelio.com/inventory/';
+
+        $response = Http::withToken($token)->get($url, [
             'page' => 1,
             'pageSize' => 50,
-            'sortBy' => 'name',        // optional
-            'sortDirection' => 'ASC',  // optional
-            'q' => null,               // optional
+            'sortBy' => 'name',
+            'sortDirection' => 'ASC',
         ]);
 
-        if ($response->successful()) {
-            return $response->json();
+        // 🔁 retry kalau token expired
+        if ($response->status() == 401) {
+
+            Cache::forget('jubelio_token');
+
+            $token = $this->getToken();
+
+            $response = Http::withToken($token)->get($url, [
+                'page' => 1,
+                'pageSize' => 50,
+            ]);
         }
 
-        return [
-            'error' => true,
-            'status' => $response->status(),
-            'body' => $response->body(),
-        ];
+        if ($response->successful()) {
+
+            return response()->json([
+                'status' => true,
+                'token' => $token, // ✅ token ikut dikirim
+                'data' => $response->json(),
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'token' => $token, // tetap kirim biar bisa debug
+            'error_code' => $response->status(),
+            'error_body' => $response->body(),
+        ], $response->status());
     }
 }
