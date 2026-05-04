@@ -1180,10 +1180,11 @@ class ApiJubelioController extends Controller
                 return redirect()->back()->with('fail', 'Token Jubelio tidak tersedia');
             }
 
+            //https://api2.jubelio.com/inventory/adjustments/warehouse
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'authorization' => 'Bearer ' . $token,
-            ])->post('https://api2.jubelio.com/inventory/adjustments/warehouse', $dataArray);
+            ])->post('https://api2.jubelio.com/inventory/adjustments/', $dataArray);
 
             if ($response->successful()) {
                 $data = json_decode($response->body(), true);
