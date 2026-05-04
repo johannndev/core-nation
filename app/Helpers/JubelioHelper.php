@@ -54,8 +54,10 @@ class JubelioHelper
                 'token' => $jubelioApi['token'],
             ];
 
-            return $jubelio; // Sesuaikan dengan query yang dibutuhkan
+            //return $jubelio; // Sesuaikan dengan query yang dibutuhkan
         });
+
+        
     }
 
     public static function checkOrUpdateData(string $slug, $newKeyValue = null)
