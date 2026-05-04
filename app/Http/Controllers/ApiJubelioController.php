@@ -1656,7 +1656,7 @@ class ApiJubelioController extends Controller
     }
     public function getStock()
     {
-        $token = $this->jubelioLoginTest(); // 🔥 selalu ambil baru
+        $token = $this->jubelioLoginTest(); // selalu ambil token baru
 
         if (!$token) {
             return response()->json([
@@ -1667,7 +1667,10 @@ class ApiJubelioController extends Controller
 
         $url = 'https://api2.jubelio.com/inventory/';
 
-        $response = Http::withToken($token)->get($url, [
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token, // ✅ manual bearer
+        ])->get($url, [
             'page' => 1,
             'pageSize' => 50,
             'sortBy' => 'name',
