@@ -1167,7 +1167,7 @@ class ApiJubelioController extends Controller
 
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-                'authorization' => Cache::get('jubelio_data')['token'],
+                'authorization' => 'Bearer ' . Cache::get('jubelio_data')['token'],
             ])->post('https://api2.jubelio.com/inventory/adjustments/warehouse', $dataArray);
 
             if ($response->successful()) {
@@ -1205,7 +1205,7 @@ class ApiJubelioController extends Controller
                     ]
                 );
 
-                return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Gagal adujustment stock: ' . $code);
+                return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Gagal adujustment stock: ' . $message);
             }
         } catch (\Exception $e) {
             DB::rollBack();
