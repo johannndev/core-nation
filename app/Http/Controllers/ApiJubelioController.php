@@ -1656,4 +1656,34 @@ class ApiJubelioController extends Controller
             'message' => 'Failed to authenticate with Jubelio API'
         ], 500);
     }
+
+    public function getStock()
+    {
+        $jubelio = JubelioHelper::getJubelioCache();
+
+        if (!$jubelio || !isset($jubelio['token'])) {
+            return 'Token tidak tersedia';
+        }
+
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'authorization' => $jubelio['token'],
+        ])->get('https://api2.jubelio.com/inventory/', [
+            'page' => 1,
+            'pageSize' => 50,
+            'sortBy' => 'name',        // optional
+            'sortDirection' => 'ASC',  // optional
+            'q' => null,               // optional
+        ]);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return [
+            'error' => true,
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ];
+    }
 }
