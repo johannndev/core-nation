@@ -39,6 +39,30 @@ class JubelioHelper
         return null;
     }
 
+    public static function jubelioLogin()
+    {
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])->post(env('JUBELIO_URL'), [
+            'email' => env('JUBELIO_EMAIL'),
+            'password' => env('JUBELIO_PASSWORD'),
+        ]);
+
+        if ($response->successful()) {
+            $data = $response->json();
+            return $data['token'] ?? null;
+        }
+
+        // ambil error dari API
+        $error = $response->json();
+
+        return [
+            'error' => true,
+            'status' => $response->status(),
+            'message' => $error['message'] ?? $response->body(),
+        ];
+    }
+
     public static function getJubelioCache()
     {
         $cacheKey = 'jubelio_data';

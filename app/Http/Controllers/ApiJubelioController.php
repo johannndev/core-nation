@@ -1074,11 +1074,25 @@ class ApiJubelioController extends Controller
 
         $trans = Transaction::with(['receiver', 'sender', 'user', 'transactionDetail', 'transactionDetail.item', 'transactionDetail.item.group'])->where('id', $id)->first();
 
-        $jubelio = JubelioHelper::getJubelioCache();
+        $login = JubelioHelper::jubelioLogin();
 
-        if (!$jubelio || !isset($jubelio['token'])) {
-            return redirect()->back()->with('fail', 'Token Jubelio tidak tersedia');
+        // ❗ handle kalau gagal login
+        if (is_array($login) && isset($login['error'])) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal login Jubelio',
+                'error_code' => $login['status'],
+                'error_message' => $login['message'],
+            ], $login['status']);
         }
+
+        $token = $login;
+
+        if (!$token) {
+             return redirect()->back()->with('fail', 'Token Jubelio tidak tersedia');
+        
+        }
+
 
         if ($request->side == 1) {
 
@@ -1167,7 +1181,7 @@ class ApiJubelioController extends Controller
 
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-                'authorization' => 'Bearer ' . Cache::get('jubelio_data')['token'],
+                'authorization' => 'Bearer ' . $token,
             ])->post('https://api2.jubelio.com/inventory/adjustments/warehouse', $dataArray);
 
             if ($response->successful()) {
