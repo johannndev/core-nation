@@ -1667,7 +1667,7 @@ class ApiJubelioController extends Controller
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-            'authorization' => $jubelio['token'],
+            'authorization' => 'Bearer ' . $jubelio['token'],
         ])->get('https://api2.jubelio.com/inventory/', [
             'page' => 1,
             'pageSize' => 50,
