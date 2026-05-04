@@ -1,0 +1,48 @@
+array:2 [▼ // app/Http/Controllers/ApiJubelioController.php:1318
+  "REQUEST" => array:3 [▼
+    "url" => "https://api2.jubelio.com/inventory/adjustments"
+    "headers" => array:2 [▼
+      "Content-Type" => "application/json"
+      "Authorization" => "
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImNvcmUifQ.eyJpZCI6IlVTRVI6YXJpQGNvcmVuYXRpb25hY3RpdmUuY29tOjE5Mi4xNjguMTkuMTcxIiwiZXhwIjoxNzc3OTE4NzkwNjA0LC
+ ▶
+"
+    ]
+    "payload" => array:7 [▼
+      "item_adj_id" => 0
+      "item_adj_no" => "[auto]"
+      "transaction_date" => "2026-05-04T06:19:49.000Z"
+      "note" => "Adjust form aria with order no. 555002"
+      "location_id" => 4
+      "is_opening_balance" => false
+      "items" => array:1 [▼
+        0 => array:14 [▼
+          "item_adj_detail_id" => 0
+          "item_id" => 21086
+          "serial_no" => null
+          "qty_in_base" => -1.0
+          "original_item_adj_detail_id" => 0
+          "unit" => "Buah"
+          "amount" => "999000.00"
+          "location_id" => 4
+          "account_id" => 75
+          "description" => "Item DUMBELL-06-BLACK"
+          "batch_no" => null
+          "expired_date" => null
+          "bin_id" => null
+          "cost" => 0
+        ]
+      ]
+    ]
+  ]
+  "RESPONSE" => array:4 [▼
+    "status" => 404
+    "headers" => array:6 [▶]
+    "body" => "{"statusCode":404,"error":"Not Found","message":"Not Found"}"
+    "json" => array:3 [▼
+      "statusCode" => 404
+      "error" => "Not Found"
+      "message" => "Not Found"
+    ]
+  ]
+]

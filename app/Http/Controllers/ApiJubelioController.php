@@ -1069,179 +1069,52 @@ class ApiJubelioController extends Controller
         return $qtyValue;
     }
 
-    // public function adjustStok($id, Request $request)
-    // {
-
-    //     $trans = Transaction::with(['receiver', 'sender', 'user', 'transactionDetail', 'transactionDetail.item', 'transactionDetail.item.group'])->where('id', $id)->first();
-
-
-
-
-    //     if ($request->side == 1) {
-
-    //         if ($trans->submit_a_count > 0) {
-
-    //             return redirect()->route('transaction.warningJubelioSync', ['id' => $id, 'side' => $request->side]);
-    //         } else {
-    //             DB::table('transactions')->where('id', $id)->increment('submit_a_count');
-    //         }
-    //     }
-
-    //     if ($request->side == 2) {
-
-    //         if ($trans->submit_b_count > 0) {
-
-    //             return redirect()->route('transaction.warningJubelioSync', ['id' => $id, 'side' => $request->side]);
-    //         } else {
-    //             DB::table('transactions')->where('id', $id)->increment('submit_b_count');
-    //         }
-    //     }
-
-
-
-    //     try {
-    //         DB::beginTransaction();
-
-    //         if ($request->side == 1) {
-
-    //             if ($trans->a_submit_by) {
-    //                 return redirect()->route('transaction.getDetail', $id);
-    //             }
-    //         } else if ($request->side == 2) {
-
-    //             if ($trans->b_submit_by) {
-    //                 return redirect()->route('transaction.getDetail', $id);
-    //             }
-    //         } else {
-    //             return redirect()->route('transaction.getDetail', $id);
-    //         }
-
-    //         $jubelioLocation = [];
-
-    //         if ($request->whType == 1) {
-    //             $jubelioLocation = Jubeliosync::where('warehouse_id', $trans->receiver_id)->first();
-    //         } else if ($request->whType == 2) {
-    //             $jubelioLocation = Jubeliosync::where('warehouse_id', $trans->sender_id)->first();
-    //         }
-
-    //         if (is_null($jubelioLocation)) {
-    //             return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Type transaction tidak valid');
-    //         }
-
-    //         $now = Carbon::now('UTC');
-    //         $formatted = $now->format('Y-m-d\TH:i:s.000\Z');
-
-    //         $detailItem = [];
-
-    //         foreach ($trans->transactionDetail as $row) {
-    //             $detailItem[] = [
-    //                 "item_adj_detail_id" => 0,
-    //                 "item_id" => $row->item->jubelio_item_id,
-    //                 "serial_no" => null,
-    //                 "qty_in_base" => $this->qtyType($request->adjustType, $row->quantity),
-    //                 "original_item_adj_detail_id" => 0,
-    //                 "unit" => "Buah",
-    //                 "amount" => $row->total,
-    //                 "location_id" => $jubelioLocation->jubelio_location_id,
-    //                 "account_id" => 75,
-    //                 "description" => "Item " . $row->item->code,
-    //                 "batch_no" => null,
-    //                 "expired_date" => null,
-    //                 "bin_id" => $jubelioLocation->jubelio_location_bin,
-    //                 "cost" => 0,
-    //             ];
-    //         }
-
-    //         $dataArray = [
-    //             "item_adj_id" => 0,
-    //             "item_adj_no" => "[auto]",
-    //             "transaction_date" => $formatted,
-    //             "note" => "Adjust form aria with order no. " . $trans->invoice,
-    //             "location_id" => $jubelioLocation->jubelio_location_id,
-    //             "is_opening_balance" => false,
-    //             "items" => $detailItem
-    //         ];
-
-    //         $login = JubelioHelper::jubelioLogin();
-
-    //         // ❗ handle kalau gagal login
-    //         if (is_array($login) && isset($login['error'])) {
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => 'Gagal login Jubelio',
-    //                 'error_code' => $login['status'],
-    //                 'error_message' => $login['message'],
-    //             ], $login['status']);
-    //         }
-
-    //         $token = $login;
-
-    //         if (!$token) {
-    //             return redirect()->back()->with('fail', 'Token Jubelio tidak tersedia');
-    //         }
-
-    //         //https://api2.jubelio.com/inventory/adjustments/warehouse
-    //         $response = Http::withHeaders([
-    //             'Content-Type' => 'application/json',
-    //             'Authorization' => 'Bearer ' . $token,
-    //         ])->post('https://api2.jubelio.com/inventory/adjustments', $dataArray);
-
-    //         if ($response->successful()) {
-    //             $data = json_decode($response->body(), true);
-
-    //             if ($request->side == 1) {
-    //                 $trans->a_submit_by = Auth::user()->id;
-    //                 $trans->a_reference_id = $data['id'];
-    //             } elseif ($request->side == 2) {
-    //                 $trans->b_submit_by = Auth::user()->id;
-    //                 $trans->b_reference_id = $data['id'];
-    //             }
-
-    //             $trans->save();
-    //             DB::commit();
-
-    //             return redirect()->route('transaction.detailJubelioSync', $id)->with('success', 'Jubelio adjustment updated');
-    //         } else {
-    //             DB::rollBack();
-
-    //             $error = json_decode($response->body(), true);
-
-    //             // dd($error['code']);
-
-    //             // throw new \Exception("Jubelio API Error: $error");
-
-    //             $message = $error['message'] ?? 'Terjadi kesalahan.';
-    //             $code = $error['code'] ?? '500';
-    //             log::info(
-    //                 "Gagal melakukan adjustment stock ke Jubelio",
-    //                 [
-    //                     'transaction_id' => $id,
-    //                     'error_code' => $code,
-    //                     'error_message' => $message,
-    //                 ]
-    //             );
-
-    //             return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Gagal adujustment stock: ' . $message);
-    //         }
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Gagal melakukan proses. Error: ' . $e->getMessage());
-    //     }
-    // }
-
     public function adjustStok($id, Request $request)
     {
-        $trans = Transaction::with([
-            'receiver',
-            'sender',
-            'user',
-            'transactionDetail',
-            'transactionDetail.item',
-            'transactionDetail.item.group'
-        ])->where('id', $id)->first();
+
+        $trans = Transaction::with(['receiver', 'sender', 'user', 'transactionDetail', 'transactionDetail.item', 'transactionDetail.item.group'])->where('id', $id)->first();
+
+
+
+
+        if ($request->side == 1) {
+
+            if ($trans->submit_a_count > 0) {
+
+                return redirect()->route('transaction.warningJubelioSync', ['id' => $id, 'side' => $request->side]);
+            } else {
+                DB::table('transactions')->where('id', $id)->increment('submit_a_count');
+            }
+        }
+
+        if ($request->side == 2) {
+
+            if ($trans->submit_b_count > 0) {
+
+                return redirect()->route('transaction.warningJubelioSync', ['id' => $id, 'side' => $request->side]);
+            } else {
+                DB::table('transactions')->where('id', $id)->increment('submit_b_count');
+            }
+        }
+
+
 
         try {
             DB::beginTransaction();
+
+            if ($request->side == 1) {
+
+                if ($trans->a_submit_by) {
+                    return redirect()->route('transaction.getDetail', $id);
+                }
+            } else if ($request->side == 2) {
+
+                if ($trans->b_submit_by) {
+                    return redirect()->route('transaction.getDetail', $id);
+                }
+            } else {
+                return redirect()->route('transaction.getDetail', $id);
+            }
 
             $jubelioLocation = [];
 
@@ -1252,7 +1125,7 @@ class ApiJubelioController extends Controller
             }
 
             if (is_null($jubelioLocation)) {
-                return redirect()->back()->with('fail', 'Type transaction tidak valid');
+                return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Type transaction tidak valid');
             }
 
             $now = Carbon::now('UTC');
@@ -1289,55 +1162,182 @@ class ApiJubelioController extends Controller
                 "items" => $detailItem
             ];
 
-            // 🔥 LOGIN
             $login = JubelioHelper::jubelioLogin();
 
+            // ❗ handle kalau gagal login
             if (is_array($login) && isset($login['error'])) {
-                dd([
-                    'LOGIN ERROR' => $login
-                ]);
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Gagal login Jubelio',
+                    'error_code' => $login['status'],
+                    'error_message' => $login['message'],
+                ], $login['status']);
             }
 
             $token = $login;
 
             if (!$token) {
-                dd('Token kosong');
+                return redirect()->back()->with('fail', 'Token Jubelio tidak tersedia');
             }
 
-            $url = 'https://api2.jubelio.com/inventory/adjustments';
-
-            $headers = [
+            //https://api2.jubelio.com/inventory/adjustments/warehouse
+            $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $token,
-            ];
+            ])->post('https://api2.jubelio.com/inventory/adjustments', $dataArray);
 
-            // 🔥 REQUEST
-            $response = Http::withHeaders($headers)->post($url, $dataArray);
+            if ($response->successful()) {
+                $data = json_decode($response->body(), true);
 
-            // 🔥 DEBUG SEMUA
-            dd([
-                'REQUEST' => [
-                    'url' => $url,
-                    'headers' => $headers,
-                    'payload' => $dataArray,
-                ],
-                'RESPONSE' => [
-                    'status' => $response->status(),
-                    'headers' => $response->headers(),
-                    'body' => $response->body(),
-                    'json' => $response->json(),
-                ]
-            ]);
+                if ($request->side == 1) {
+                    $trans->a_submit_by = Auth::user()->id;
+                    $trans->a_reference_id = $data['id'];
+                } elseif ($request->side == 2) {
+                    $trans->b_submit_by = Auth::user()->id;
+                    $trans->b_reference_id = $data['id'];
+                }
 
-            // ⛔ kode bawah tidak akan jalan karena dd()
+                $trans->save();
+                DB::commit();
+
+                return redirect()->route('transaction.detailJubelioSync', $id)->with('success', 'Jubelio adjustment updated');
+            } else {
+                DB::rollBack();
+
+                $error = json_decode($response->body(), true);
+
+                // dd($error['code']);
+
+                // throw new \Exception("Jubelio API Error: $error");
+
+                $message = $error['message'] ?? 'Terjadi kesalahan.';
+                $code = $error['code'] ?? '500';
+                log::info(
+                    "Gagal melakukan adjustment stock ke Jubelio",
+                    [
+                        'transaction_id' => $id,
+                        'error_code' => $code,
+                        'error_message' => $message,
+                    ]
+                );
+
+                return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Gagal adujustment stock: ' . $message);
+            }
         } catch (\Exception $e) {
             DB::rollBack();
-
-            dd([
-                'EXCEPTION' => $e->getMessage()
-            ]);
+            return redirect()->route('transaction.detailJubelioSync', $id)->with('fail', 'Gagal melakukan proses. Error: ' . $e->getMessage());
         }
     }
+
+    // public function adjustStok($id, Request $request)
+    // {
+    //     $trans = Transaction::with([
+    //         'receiver',
+    //         'sender',
+    //         'user',
+    //         'transactionDetail',
+    //         'transactionDetail.item',
+    //         'transactionDetail.item.group'
+    //     ])->where('id', $id)->first();
+
+    //     try {
+    //         DB::beginTransaction();
+
+    //         $jubelioLocation = [];
+
+    //         if ($request->whType == 1) {
+    //             $jubelioLocation = Jubeliosync::where('warehouse_id', $trans->receiver_id)->first();
+    //         } else if ($request->whType == 2) {
+    //             $jubelioLocation = Jubeliosync::where('warehouse_id', $trans->sender_id)->first();
+    //         }
+
+    //         if (is_null($jubelioLocation)) {
+    //             return redirect()->back()->with('fail', 'Type transaction tidak valid');
+    //         }
+
+    //         $now = Carbon::now('UTC');
+    //         $formatted = $now->format('Y-m-d\TH:i:s.000\Z');
+
+    //         $detailItem = [];
+
+    //         foreach ($trans->transactionDetail as $row) {
+    //             $detailItem[] = [
+    //                 "item_adj_detail_id" => 0,
+    //                 "item_id" => $row->item->jubelio_item_id,
+    //                 "serial_no" => null,
+    //                 "qty_in_base" => $this->qtyType($request->adjustType, $row->quantity),
+    //                 "original_item_adj_detail_id" => 0,
+    //                 "unit" => "Buah",
+    //                 "amount" => $row->total,
+    //                 "location_id" => $jubelioLocation->jubelio_location_id,
+    //                 "account_id" => 75,
+    //                 "description" => "Item " . $row->item->code,
+    //                 "batch_no" => null,
+    //                 "expired_date" => null,
+    //                 "bin_id" => $jubelioLocation->jubelio_location_bin,
+    //                 "cost" => 0,
+    //             ];
+    //         }
+
+    //         $dataArray = [
+    //             "item_adj_id" => 0,
+    //             "item_adj_no" => "[auto]",
+    //             "transaction_date" => $formatted,
+    //             "note" => "Adjust form aria with order no. " . $trans->invoice,
+    //             "location_id" => $jubelioLocation->jubelio_location_id,
+    //             "is_opening_balance" => false,
+    //             "items" => $detailItem
+    //         ];
+
+    //         // 🔥 LOGIN
+    //         $login = JubelioHelper::jubelioLogin();
+
+    //         if (is_array($login) && isset($login['error'])) {
+    //             dd([
+    //                 'LOGIN ERROR' => $login
+    //             ]);
+    //         }
+
+    //         $token = $login;
+
+    //         if (!$token) {
+    //             dd('Token kosong');
+    //         }
+
+    //         $url = 'https://api2.jubelio.com/inventory/adjustments';
+
+    //         $headers = [
+    //             'Content-Type' => 'application/json',
+    //             'Authorization' => 'Bearer ' . $token,
+    //         ];
+
+    //         // 🔥 REQUEST
+    //         $response = Http::withHeaders($headers)->post($url, $dataArray);
+
+    //         // 🔥 DEBUG SEMUA
+    //         dd([
+    //             'REQUEST' => [
+    //                 'url' => $url,
+    //                 'headers' => $headers,
+    //                 'payload' => $dataArray,
+    //             ],
+    //             'RESPONSE' => [
+    //                 'status' => $response->status(),
+    //                 'headers' => $response->headers(),
+    //                 'body' => $response->body(),
+    //                 'json' => $response->json(),
+    //             ]
+    //         ]);
+
+    //         // ⛔ kode bawah tidak akan jalan karena dd()
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+
+    //         dd([
+    //             'EXCEPTION' => $e->getMessage()
+    //         ]);
+    //     }
+    // }
 
     public function getSaleOrder()
     {
