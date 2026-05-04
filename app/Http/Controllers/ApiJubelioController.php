@@ -1654,15 +1654,14 @@ class ApiJubelioController extends Controller
 
         return null;
     }
-
     public function getStock()
     {
-        $token = $this->getToken();
+        $token = $this->jubelioLoginTest(); // 🔥 selalu ambil baru
 
         if (!$token) {
             return response()->json([
                 'status' => false,
-                'message' => 'Token tidak tersedia'
+                'message' => 'Gagal login Jubelio'
             ], 500);
         }
 
@@ -1675,31 +1674,17 @@ class ApiJubelioController extends Controller
             'sortDirection' => 'ASC',
         ]);
 
-        // 🔁 retry kalau token expired
-        if ($response->status() == 401) {
-
-            Cache::forget('jubelio_token');
-
-            $token = $this->getToken();
-
-            $response = Http::withToken($token)->get($url, [
-                'page' => 1,
-                'pageSize' => 50,
-            ]);
-        }
-
         if ($response->successful()) {
-
             return response()->json([
                 'status' => true,
-                'token' => $token, // ✅ token ikut dikirim
+                'token' => $token, // optional
                 'data' => $response->json(),
             ]);
         }
 
         return response()->json([
             'status' => false,
-            'token' => $token, // tetap kirim biar bisa debug
+            'token' => $token,
             'error_code' => $response->status(),
             'error_body' => $response->body(),
         ], $response->status());
