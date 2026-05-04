@@ -1649,45 +1649,59 @@ class ApiJubelioController extends Controller
 
         if ($response->successful()) {
             $data = $response->json();
-            return $data['token'] ?? null; // ✅ langsung token
+            return $data['token'] ?? null;
         }
 
-        return null;
+        // ❗ ambil error dari API
+        $error = $response->json();
+
+        return [
+            'error' => true,
+            'status' => $response->status(),
+            'message' => $error['message'] ?? $response->body(),
+        ];
     }
     public function getStock()
     {
-        $token = $this->jubelioLoginTest(); // selalu ambil token baru
+        $login = $this->jubelioLoginTest();
+
+        // ❗ kalau gagal login
+        if (is_array($login) && isset($login['error'])) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal login Jubelio',
+                'error_code' => $login['status'],
+                'error_message' => $login['message'],
+            ], $login['status']);
+        }
+
+        $token = $login;
 
         if (!$token) {
             return response()->json([
                 'status' => false,
-                'message' => 'Gagal login Jubelio'
+                'message' => 'Token kosong dari Jubelio'
             ], 500);
         }
 
         $url = 'https://api2.jubelio.com/inventory/';
 
         $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $token, // ✅ manual bearer
+            'Authorization' => 'Bearer ' . $token,
         ])->get($url, [
             'page' => 1,
             'pageSize' => 50,
-            'sortBy' => 'name',
-            'sortDirection' => 'ASC',
         ]);
 
         if ($response->successful()) {
             return response()->json([
                 'status' => true,
-                'token' => $token, // optional
                 'data' => $response->json(),
             ]);
         }
 
         return response()->json([
             'status' => false,
-            'token' => $token,
             'error_code' => $response->status(),
             'error_body' => $response->body(),
         ], $response->status());
