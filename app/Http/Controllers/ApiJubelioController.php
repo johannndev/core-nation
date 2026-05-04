@@ -1162,29 +1162,29 @@ class ApiJubelioController extends Controller
                 "items" => $detailItem
             ];
 
-            // $login = JubelioHelper::jubelioLogin();
+            $login = JubelioHelper::jubelioLogin();
 
-            // // ❗ handle kalau gagal login
-            // if (is_array($login) && isset($login['error'])) {
-            //     return response()->json([
-            //         'status' => false,
-            //         'message' => 'Gagal login Jubelio',
-            //         'error_code' => $login['status'],
-            //         'error_message' => $login['message'],
-            //     ], $login['status']);
-            // }
+            // ❗ handle kalau gagal login
+            if (is_array($login) && isset($login['error'])) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Gagal login Jubelio',
+                    'error_code' => $login['status'],
+                    'error_message' => $login['message'],
+                ], $login['status']);
+            }
 
-            // $token = $login;
+            $token = $login;
 
-            // if (!$token) {
-            //     return redirect()->back()->with('fail', 'Token Jubelio tidak tersedia');
-            // }
+            if (!$token) {
+                return redirect()->back()->with('fail', 'Token Jubelio tidak tersedia');
+            }
 
             //https://api2.jubelio.com/inventory/adjustments/warehouse
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json', // ← tambahkan
-                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImNvcmUifQ.eyJpZCI6IlVTRVI6YXJpQGNvcmVuYXRpb25hY3RpdmUuY29tOjE5Mi4xNjguMTkuMTcxIiwiZXhwIjoxNzc3OTE4NzkwNjA0LCJpc193bXNfbWlncmF0ZWQiOnRydWUsImlzcyI6Imp1YmVsaW86b21uaTpsb2dpbiIsImF1ZCI6WyJqdWJlbGlvLW9tbmljaGFubmVsIl0sInR5cGUiOiJhdCIsImlhdCI6MTc3Nzg3NTU5MCwianRpIjoiODFjMTA4MDgtZjg3Ni00ZWNkLWJiZTAtZmE2NTc0MjZkMGFmIn0.kph6tNnyJgnnmiRj_bLogOBF9LhEYNOFFdMO8hqaHtY',
+                'Authorization' => 'Bearer ' . $token,
             ])->post('https://api2.jubelio.com/inventory/adjustments/', $dataArray);
 
             dd($response->body());
