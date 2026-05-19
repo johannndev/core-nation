@@ -44,7 +44,7 @@ class JubelioStockCheckController extends Controller
 
         JubelioStockCheck::create([
             'page_tracking' => $request->page_tracking,
-            'status' => 'created',
+            'status' => 'processing',
         ]);
 
         return redirect()->route('jubelio-stock-checks.index')

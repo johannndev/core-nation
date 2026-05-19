@@ -41,10 +41,9 @@ class JubelioStockCheck extends Command
         $job = ModelsJubelioStockCheck::whereIn('status', ['created', 'processing'])->orderBy('created_at', 'desc')->first();
 
         if (! $job) {
-            $job = ModelsJubelioStockCheck::create([
-                'page_tracking' => $this->option('page') ?: 1,
-                'status' => 'processing',
-            ]);
+            $this->info('Tidak ada job yang harus diproses.');
+
+            return Command::SUCCESS;
         } elseif ($this->option('page')) {
             $job->update(['page_tracking' => $this->option('page')]);
         }
@@ -58,7 +57,7 @@ class JubelioStockCheck extends Command
 
         if ($totalDiscrepancies >= 200) {
             $this->warn('Job sudah memiliki 200 atau lebih ketidakcocokan. Menghentikan.');
-            $job->update(['status' => 'stopped']);
+            $job->update(['status' => 'completed']);
 
             return 0;
         }
@@ -75,19 +74,19 @@ class JubelioStockCheck extends Command
         }
 
         if (isset($response['error'])) {
-            $this->error('Gagal dari Jubelio: '.($response['error']['message'] ?? 'Unknown Error'));
+            $this->error('Gagal dari Jubelio: ' . ($response['error']['message'] ?? 'Unknown Error'));
             if (isset($response['error']['raw'])) {
-                $this->warn('Raw Error Message: '.$response['error']['raw']);
+                $this->warn('Raw Error Message: ' . $response['error']['raw']);
             }
             if (isset($response['statusCode'])) {
-                $this->error('Status Code: '.$response['statusCode']);
+                $this->error('Status Code: ' . $response['statusCode']);
             }
 
             return 1;
         }
 
         if (! isset($response['data'])) {
-            $this->warn('Koneksi Berhasil, tapi format data tidak sesuai: '.json_encode($response));
+            $this->warn('Koneksi Berhasil, tapi format data tidak sesuai: ' . json_encode($response));
 
             return 1;
         }
@@ -160,7 +159,7 @@ class JubelioStockCheck extends Command
         // Update page tracking untuk dijalankan cron berikutnya
         $job->increment('page_tracking');
 
-        $this->info('Halaman '.($job->page_tracking - 1).' selesai diproses. Page tracking sekarang: '.$job->page_tracking);
+        $this->info('Halaman ' . ($job->page_tracking - 1) . ' selesai diproses. Page tracking sekarang: ' . $job->page_tracking);
         $this->info("Total ketidakcocokan saat ini: {$totalDiscrepancies}");
 
         return 0;
