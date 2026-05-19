@@ -148,7 +148,9 @@ class JubelioHelper
 
             $response = $request->get('https://api2.jubelio.com/inventory/', [
                 'page' => $page,
-                'pageSize' => 50, // Kecilkan pageSize agar lebih ringan
+                'pageSize' => 200,
+                'sortBy' =>'item_id',
+                'sortDirection' => 'DESC', // Kecilkan pageSize agar lebih ringan
             ]);
 
             Log::info("Jubelio API Response Status: {$response->status()}");
