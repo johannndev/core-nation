@@ -25,7 +25,7 @@ class JubelioStockCheckController extends Controller
      */
     public function create()
     {
-        return view('jubelio.StockCheck.Create', [
+        return view('jubelio.StockCheck.create', [
             'activeJob' => JubelioStockCheck::whereIn('status', ['created', 'processing'])->first(),
         ]);
     }
@@ -56,7 +56,7 @@ class JubelioStockCheckController extends Controller
      */
     public function show(string $id)
     {
-        return view('jubelio.StockCheck.Show', [
+        return view('jubelio.StockCheck.show', [
             'stockCheck' => JubelioStockCheck::findOrFail($id)->load('discrepancies.warehouse', 'discrepancies.item'),
         ]);
     }
