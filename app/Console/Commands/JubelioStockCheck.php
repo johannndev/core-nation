@@ -146,7 +146,7 @@ class JubelioStockCheck extends Command
                     if ($totalDiscrepancies >= 200) {
                         $this->warn('Mencapai batas 200 ketidakcocokan. Menghentikan.');
                         $job->update([
-                            'status' => 'stopped',
+                            'status' => 'completed',
                             'page_tracking' => $job->page_tracking + 1, // Tetap simpan progress halaman terakhir
                         ]);
 
