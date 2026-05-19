@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class JubelioHelper
 {
@@ -122,5 +123,65 @@ class JubelioHelper
         }
 
         return $data;
+    }
+
+    public function fetchInventory(int $page = 1, int $pageSize = 200): ?array
+    {
+        Log::info("Fetching inventory for page {$page}...");
+        $token = Cache::get('jubelio_data')['token'] ?? null;
+
+        if (! $token) {
+            Log::error('Failed to get token for fetchInventory.');
+
+            return null;
+        }
+
+        $config = config('services.jubelio');
+
+        try {
+            $request = Http::withToken($token)
+                ->withHeaders(['Accept' => 'application/json']);
+
+            if (! ($config['verify_ssl'] ?? true)) {
+                $request->withoutVerifying();
+            }
+
+            $response = $request->get('https://api2.jubelio.com/inventory/', [
+                'page' => $page,
+                'pageSize' => 50, // Kecilkan pageSize agar lebih ringan
+            ]);
+
+            Log::info("Jubelio API Response Status: {$response->status()}");
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            $errorBody = $response->body();
+            Log::error('Jubelio fetch inventory failed.', [
+                'status' => $response->status(),
+                'response' => $errorBody,
+                'page' => $page,
+            ]);
+
+            return [
+                'error' => [
+                    'message' => 'API Return HTTP '.$response->status(),
+                    'raw' => $errorBody,
+                ],
+                'statusCode' => $response->status(),
+            ];
+        } catch (\Exception $e) {
+            Log::error('Jubelio fetch inventory error: '.$e->getMessage());
+
+            return [
+                'error' => [
+                    'message' => 'Connection Exception',
+                    'raw' => $e->getMessage(),
+                ],
+            ];
+        }
+
+        return null;
     }
 }

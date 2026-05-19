@@ -47,6 +47,7 @@ use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\VAccountController;
 use App\Http\Controllers\VWarehouseController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\JubelioStockCheckController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
@@ -255,6 +256,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/jubelio/solved/{id}/store', [LogJubelioController::class, 'storeSolved'])->name('jubelio.solved.store');
 
     Route::post('/jubelio/adjust/{id}/warehouse', [ApiJubelioController::class, 'adjustStok'])->name('jubelio.adjustStok');
+
+       // Jubelio Stock Check Routes
+    Route::resource('jubelio-stock-checks', JubelioStockCheckController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
+
 
     Route::get('/cash-flow', [CashFlowController::class, 'index'])->name('cashflow.index');
     Route::get('/cash-flow/book-addrs', [CashFlowController::class, 'book'])->name('cashflow.book');
