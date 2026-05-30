@@ -106,15 +106,24 @@ class RestockImport implements ToCollection, WithStartRow
         //     return;
         // }
 
-        $notFoundItems = $keys->diff($validIds)->diff($validCodes);
+        foreach ($rows as $index => $row) {
 
-        if ($notFoundItems->isNotEmpty()) {
+            $key = trim((string) ($row[0] ?? ''));
 
-            foreach ($notFoundItems as $item) {
+            if (
+                $key !== '' &&
+                !$validIds->contains($key) &&
+                !$validCodes->contains($key)
+            ) {
+
+                $excelRow = $index + 2;
+
                 $this->errors[] =
-                    "Item '{$item}' tidak ditemukan pada master item";
+                    "Baris {$excelRow}: Item '{$key}' tidak ditemukan pada master item";
             }
+        }
 
+        if (!empty($this->errors)) {
             return;
         }
 
@@ -124,9 +133,10 @@ class RestockImport implements ToCollection, WithStartRow
         // 3️⃣ LOAD RESTOCK TODAY
         // ================================
         $restocks = Restock::whereIn('item_id', $itemIds)
-            ->whereDate('date', $date)
+            ->orderByDesc('date')
             ->get()
-            ->keyBy('item_id');
+            ->groupBy('item_id')
+            ->map(fn($rows) => $rows->first());
 
         // ================================
         // 4️⃣ VALIDATE RESTOCK FOR NORMAL MODE
@@ -139,26 +149,7 @@ class RestockImport implements ToCollection, WithStartRow
         //     }
         // }
 
-        if (!$isReset && in_array($type, ['production', 'shipped', 'missing'])) {
 
-            $missingRestock = $itemIds->diff($restocks->keys());
-
-            if ($missingRestock->isNotEmpty()) {
-
-                foreach ($missingRestock as $itemId) {
-
-                    $item = $items->firstWhere('id', $itemId);
-
-                    $this->errors[] =
-                        "Restock tanggal {$date} belum dibuat | "
-                        . "ID: {$item->id} | "
-                        . "Code: {$item->code} | "
-                        . "Nama: {$item->name}";
-                }
-
-                return;
-            }
-        }
 
         $restockCreates = [];
         $restockUpdates = [];
@@ -254,13 +245,25 @@ class RestockImport implements ToCollection, WithStartRow
                 $action = 'created';
             } else {
 
+                if (!$restocks->has($itemId)) {
+
+                    $item = $items->firstWhere('id', $itemId);
+
+                    $this->errors[] =
+                        "Baris {$excelRow}: Item belum memiliki data stok | "
+                        . "Code: {$item->code} | "
+                        . "Nama: {$item->name}";
+
+                    continue;
+                }
+
                 $r = $restocks[$itemId];
 
                 if ($decField && $r->$decField < $qty) {
                     $item = $items->firstWhere('id', $itemId);
 
                     $fieldName = match ($decField) {
-                        'restocked_quantity' => 'Restocked',
+                        'restocked_quantity' => 'Restock',
                         'in_production_quantity' => 'Production',
                         default => $decField,
                     };
@@ -335,9 +338,16 @@ class RestockImport implements ToCollection, WithStartRow
             }
 
             // map restock_id for new rows
-            $newRestocks = Restock::whereDate('date', $date)
+            $newRestocks = Restock::whereIn(
+                'item_id',
+                collect($historyInsert)
+                    ->pluck('item_id')
+                    ->unique()
+            )
+                ->orderByDesc('id')
                 ->get(['id', 'item_id'])
-                ->keyBy('item_id');
+                ->groupBy('item_id')
+                ->map(fn($rows) => $rows->first());
 
             foreach ($historyInsert as &$h) {
                 if (!$h['restock_id']) {
