@@ -8,14 +8,20 @@ use App\Models\RestockHistory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class RestockImport implements ToCollection
+class RestockImport implements ToCollection, WithStartRow
 {
     /**
      * @param array $row
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
+
+    public function startRow(): int
+    {
+        return 2;
+    }
 
     public $date, $type;
     public $errors = [];
