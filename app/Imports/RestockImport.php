@@ -33,6 +33,9 @@ class RestockImport implements ToCollection
 
     public function collection(Collection $rows)
     {
+
+        dd($rows->take(5));
+
         if ($rows->isEmpty()) return;
 
         $date = $this->date;
