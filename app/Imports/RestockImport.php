@@ -69,9 +69,20 @@ class RestockImport implements ToCollection
         // ================================
         $keys = $rows->pluck(0)->map(fn($v) => trim($v))->unique();
 
+        // $items = Item::whereIn('id', $keys)
+        //     ->orWhereIn('code', $keys)
+        //     ->get(['id', 'code']);
+
         $items = Item::whereIn('id', $keys)
             ->orWhereIn('code', $keys)
-            ->get(['id', 'code']);
+            ->get(['id', 'code', 'name']);
+
+        $itemMap = [];
+
+        foreach ($items as $item) {
+            $itemMap[$item->id] = $item;
+            $itemMap[$item->code] = $item;
+        }
 
         $idMap = $items->pluck('id', 'code')->toArray();
         $validIds   = $items->pluck('id');
@@ -80,9 +91,21 @@ class RestockImport implements ToCollection
         // ================================
         // 2️⃣ VALIDATE ITEM EXIST
         // ================================
+        // $notFoundItems = $keys->diff($validIds)->diff($validCodes);
+        // if ($notFoundItems->isNotEmpty()) {
+        //     $this->errors = $notFoundItems->toArray();
+        //     return;
+        // }
+
         $notFoundItems = $keys->diff($validIds)->diff($validCodes);
+
         if ($notFoundItems->isNotEmpty()) {
-            $this->errors = $notFoundItems->toArray();
+
+            foreach ($notFoundItems as $item) {
+                $this->errors[] =
+                    "Item '{$item}' tidak ditemukan pada master item";
+            }
+
             return;
         }
 
@@ -99,10 +122,31 @@ class RestockImport implements ToCollection
         // ================================
         // 4️⃣ VALIDATE RESTOCK FOR NORMAL MODE
         // ================================
+        // if (!$isReset && in_array($type, ['production', 'shipped', 'missing'])) {
+        //     $missingRestock = $itemIds->diff($restocks->keys());
+        //     if ($missingRestock->isNotEmpty()) {
+        //         $this->errors = $missingRestock->toArray();
+        //         return;
+        //     }
+        // }
+
         if (!$isReset && in_array($type, ['production', 'shipped', 'missing'])) {
+
             $missingRestock = $itemIds->diff($restocks->keys());
+
             if ($missingRestock->isNotEmpty()) {
-                $this->errors = $missingRestock->toArray();
+
+                foreach ($missingRestock as $itemId) {
+
+                    $item = $items->firstWhere('id', $itemId);
+
+                    $this->errors[] =
+                        "Restock tanggal {$date} belum dibuat | "
+                        . "ID: {$item->id} | "
+                        . "Code: {$item->code} | "
+                        . "Nama: {$item->name}";
+                }
+
                 return;
             }
         }
@@ -114,11 +158,26 @@ class RestockImport implements ToCollection
         // ================================
         // 5️⃣ LOOP DATA
         // ================================
-        foreach ($rows as $row) {
+        foreach ($rows as $index => $row) {
 
-            $key = trim($row[0]);
-            $qty = (int)($row[1] ?? 0);
-            $itemId = is_numeric($key) ? $key : $idMap[$key];
+            $excelRow = $index + 2; // +2 karena baris 1 biasanya header
+
+            $key = trim((string) ($row[0] ?? ''));
+
+            if ($key === '') {
+
+                $this->errors[] =
+                    "Baris {$excelRow}: Item ID / Code tidak boleh kosong";
+
+                continue;
+            }
+
+            $qty = (int) ($row[1] ?? 0);
+            $itemId = is_numeric($key)
+                ? $key
+                : $idMap[$key];
+
+
 
             // ================= RESET MODE =================
             if ($isReset) {
@@ -155,7 +214,13 @@ class RestockImport implements ToCollection
 
             // ================= NORMAL MODE (WAJIB QTY) =================
             if ($qty <= 0) {
-                $this->errors[] = "Qty required for item {$itemId}";
+                $item = $items->firstWhere('id', $itemId);
+
+                $this->errors[] =
+                    "Baris {$excelRow}: Qty harus lebih dari 0 | "
+                    . "Code: {$item->code} | "
+                    . "Nama: {$item->name}";
+
                 continue;
             }
 
@@ -183,7 +248,22 @@ class RestockImport implements ToCollection
                 $r = $restocks[$itemId];
 
                 if ($decField && $r->$decField < $qty) {
-                    throw new \Exception("Stock {$decField} not enough for item {$itemId}");
+                    $item = $items->firstWhere('id', $itemId);
+
+                    $fieldName = match ($decField) {
+                        'restocked_quantity' => 'Restocked',
+                        'in_production_quantity' => 'Production',
+                        default => $decField,
+                    };
+
+                    $this->errors[] =
+                        "Baris {$excelRow}: Stock {$fieldName} tidak cukup | "
+                        . "Code: {$item->code} | "
+                        . "Nama: {$item->name} | "
+                        . "Available: {$r->$decField} | "
+                        . "Request: {$qty}";
+
+                    continue;
                 }
 
                 $before = $r->$incField;
@@ -223,16 +303,26 @@ class RestockImport implements ToCollection
         // ================================
         // 6️⃣ EXECUTE DB
         // ================================
+
+        if (!empty($this->errors)) {
+            return;
+        }
+
         DB::transaction(function () use ($restockCreates, $restockUpdates, &$historyInsert, $date) {
 
             if ($restockCreates) {
                 Restock::insert($restockCreates);
             }
 
-            if ($restockUpdates) {
-                $cols = array_keys($restockUpdates[0]);
-                $cols = array_diff($cols, ['id']); // jangan update PK
-                Restock::upsert($restockUpdates, ['id'], $cols);
+            if (!empty($restockUpdates)) {
+                $cols = array_keys(reset($restockUpdates));
+                $cols = array_diff($cols, ['id']);
+
+                Restock::upsert(
+                    $restockUpdates,
+                    ['id'],
+                    $cols
+                );
             }
 
             // map restock_id for new rows

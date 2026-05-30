@@ -35,21 +35,24 @@
 
     </div>
 
-    @if ($errors->any())
-        <div class="mb-4 rounded-lg border border-red-300 bg-red-50 p-4">
-            <div class="mb-2 text-sm font-semibold text-red-700">
-                Terjadi kesalahan:
+    @if (session('import_errors'))
+        <div class="mb-6 rounded-lg border border-red-300 bg-red-50 p-4">
+
+            <div class="font-semibold text-red-700 mb-3">
+                Import gagal
             </div>
-            <ul class="list-disc space-y-1 pl-5 text-sm text-red-600">
-                @foreach ($errors->all() as $error)
+
+            <ul class="list-disc pl-5 space-y-1 text-sm text-red-600">
+                @foreach (session('import_errors') as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
+
         </div>
     @endif
 
     <section class="bg-gray-50 dark:bg-gray-900 mb-8">
-       
+
         <div class="mx-auto  ">
             <!-- Start coding here -->
             <div class="">
@@ -64,7 +67,7 @@
 
                             <div class="grid gap-6 mb-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-1 items-end "id="">
                                 <div class="mb-3 space-y-2">
-                                    @foreach (['restocked', 'production', 'shipped','missing','restocked_reset','production_reset','shipped_reset','missing_reset'] as $type)
+                                    @foreach (['restocked', 'production', 'shipped', 'missing', 'restocked_reset', 'production_reset', 'shipped_reset', 'missing_reset'] as $type)
                                         <label class="flex items-center gap-2 text-sm">
                                             <input type="radio" name="type" value="{{ $type }}" required>
                                             {{ ucfirst(str_replace('_', ' ', $type)) }}
@@ -83,15 +86,18 @@
                                 </div>
 
                                 <div class="">
-                                    <label class="block mb-2.5 text-sm font-medium text-heading" for="file_input">Upload file</label>
-                                    <input class="cursor-pointer bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full shadow-xs placeholder:text-body" id="file_input" type="file" name="file">
+                                    <label class="block mb-2.5 text-sm font-medium text-heading" for="file_input">Upload
+                                        file</label>
+                                    <input
+                                        class="cursor-pointer bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full shadow-xs placeholder:text-body"
+                                        id="file_input" type="file" name="file">
                                 </div>
 
-                              
+
 
                             </div>
 
-                            <x-layout.submit-button  />
+                            <x-layout.submit-button />
 
                         </div>
 
@@ -162,9 +168,7 @@
 
 
     @push('jsBody')
-        <script>
-           
-        </script>
+        <script></script>
     @endpush
 
 

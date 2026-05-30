@@ -761,7 +761,7 @@ class RestockController extends Controller
             $restock = Restock::lockForUpdate()->findOrFail($id);
             $type = $request->type; // 🔥 dari query string
 
-            if($type === 'restocked'){
+            if ($type === 'restocked') {
                 $before = $restock->restocked_quantity;
                 $restock->restocked_quantity = 0;
             }
@@ -803,6 +803,27 @@ class RestockController extends Controller
         return view('restock.upload_excel');
     }
 
+    // public function importExcel(Request $request)
+    // {
+    //     $request->validate([
+    //         'file' => 'required|mimes:xlsx,csv',
+    //         'date' => 'required|date',
+    //         'type' => 'required'
+    //     ]);
+
+    //     $import = new \App\Imports\RestockImport($request->date, $request->type);
+    //     Excel::import($import, $request->file('file'));
+
+    //     if ($import->errors) {
+    //         return back()->withErrors([
+    //             'import' => 'Data tidak ditemukan / restock belum ada: '.implode(', ',$import->errors)
+    //         ]);
+    //     }
+
+    //     // Setelah proses impor selesai
+    //     return redirect()->route('restock.index')->with('success', 'Import Restock Berhasil');
+    // }
+
     public function importExcel(Request $request)
     {
         $request->validate([
@@ -811,16 +832,22 @@ class RestockController extends Controller
             'type' => 'required'
         ]);
 
-        $import = new \App\Imports\RestockImport($request->date, $request->type);
+        $import = new \App\Imports\RestockImport(
+            $request->date,
+            $request->type
+        );
+
         Excel::import($import, $request->file('file'));
 
-        if ($import->errors) {
-            return back()->withErrors([
-                'import' => 'Data tidak ditemukan / restock belum ada: '.implode(', ',$import->errors)
-            ]);
+        if (!empty($import->errors)) {
+
+            return back()
+                ->withInput()
+                ->with('import_errors', $import->errors);
         }
 
-        // Setelah proses impor selesai
-        return redirect()->route('restock.index')->with('success', 'Import Restock Berhasil');
+        return redirect()
+            ->route('restock.index')
+            ->with('success', 'Import Restock Berhasil');
     }
 }
