@@ -40,7 +40,7 @@ class RestockImport implements ToCollection, WithStartRow
     public function collection(Collection $rows)
     {
 
-        dd($rows->take(5));
+        // dd($rows->take(5));
 
         if ($rows->isEmpty()) return;
 
