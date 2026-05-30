@@ -77,7 +77,7 @@ class TransactionsController extends Controller
 				$query->where('location_id', Auth::user()->location_id);
 			})->pluck('id');
 
-			$dataList = $dataList->whereIn('sender_id', $customers)->whereIn('receiver_id', $customers);
+			$dataList = $dataList->whereIn('sender_id', $customers)->orWhereIn('receiver_id', $customers);
 
 			// dd($customers);
 
