@@ -40,102 +40,157 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionsController extends Controller
 {
+	// public function index(Request $request)
+	// {
+
+	// 	$allType = Transaction::$typesJSON;
+
+	// 	$dataList = Transaction::with('receiver', 'sender');
+
+	// 	if ($request->from && $request->to) {
+	// 		$dataList = $dataList->whereDate('date', '>=', $request->from)->whereDate('date', '<=', $request->to);
+	// 	}
+
+	// 	if ($request->invoice) {
+	// 		$dataList = $dataList->where('invoice', $request->invoice);
+	// 	}
+
+	// 	if ($request->total) {
+	// 		$dataList = $dataList->where('total', $request->total);
+	// 	}
+
+	// 	if ($request->type) {
+	// 		$dataList = $dataList->where('type', $request->type);
+	// 	}
+
+	// 	if ($request->order_date) {
+	// 		$dataList = $dataList->orderBy($request->order_date, 'desc');
+	// 	} else {
+	// 		$dataList = $dataList->orderBy('date', 'desc');
+	// 	}
+
+	// 	$datalist = $dataList->orderBy('id', 'desc');
+
+	// 	if (Auth::user()->location_id > 0) {
+
+	// 		$customers = Customer::whereHas('locations', function ($query) {
+	// 			$query->where('location_id', Auth::user()->location_id);
+	// 		})->pluck('id');
+
+	// 		$dataList = $dataList->whereIn('sender_id', $customers)->orWhereIn('receiver_id', $customers);
+
+	// 		dd($customers);
+
+	// 		$userLocationId = Auth::user()->location_id;
+
+	// 		$dataList = $dataList->where(function ($query) use ($userLocationId) {
+	// 			// Jika sender_type atau recaiver_type = 1, tampilkan semua data
+	// 			$query->where('sender_type', Customer::TYPE_CUSTOMER)
+	// 				->orWhere('receiver_type', Customer::TYPE_CUSTOMER);
+	// 		})
+	// 		->orWhere(function ($query) use ($userLocationId) {
+	// 			// Jika sender_type atau receiver_type adalah [2,3,4], cek lokasi sender/receiver
+	// 			$query->whereIn('sender_type', [Customer::TYPE_BANK, Customer::TYPE_WAREHOUSE, Customer::TYPE_RESELLER])
+	// 				->orWhereIn('receiver_type', [Customer::TYPE_BANK, Customer::TYPE_WAREHOUSE, Customer::TYPE_RESELLER])
+	// 				->where(function ($q) use ($userLocationId) {
+	// 					$q->whereHas('sender.locations', function ($subQuery) use ($userLocationId) {
+	// 						$subQuery->whereIn('locations.id', [$userLocationId]);
+	// 					})->orWhereHas('receiver.locations', function ($subQuery) use ($userLocationId) {
+	// 						$subQuery->whereIn('locations.id', [$userLocationId]);
+	// 					});
+	// 				});
+	// 		});
+
+
+
+
+	// 		$datList = $dataList->filterLocation();
+
+	// 		$dataList = $dataList->whereIn('sender_type',[Customer::TYPE_CUSTOMER, Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])->orWhereIn('receiver_type', [Customer::TYPE_CUSTOMER, Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER]);
+
+	// 		$dataList = $dataList->where(function ($query) {
+	// 			$query->whereHas('sender', function ($q) {
+	// 				$q->where(function ($q2) {
+	// 					$q2->whereIn('type', [Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])
+	// 					   ->whereHas('locations', function ($q3) {
+	// 						   $q3->where('location_id', Auth::user()->location_id);
+	// 					   });
+	// 				});
+	// 			})->orWhereHas('receiver', function ($q) {
+	// 				$q->where(function ($q2) {
+	// 					$q2->whereIn('type', [Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])
+	// 					   ->whereHas('locations', function ($q3) {
+	// 						   $q3->where('location_id', Auth::user()->location_id);
+	// 					   });
+	// 				});
+	// 			});
+	// 		});
+
+
+
+
+	// 	}
+
+	// 	$dataList = $dataList->paginate(20)->withQueryString();
+
+
+
+	// 	// dd($dataList);
+
+	// 	return view('transactions.index', compact('dataList', 'allType'));
+	// }
+
 	public function index(Request $request)
 	{
-
 		$allType = Transaction::$typesJSON;
 
-		$dataList = Transaction::with('receiver', 'sender');
+		$dataList = Transaction::with(['receiver', 'sender']);
 
-		if ($request->from && $request->to) {
-			$dataList = $dataList->whereDate('date', '>=', $request->from)->whereDate('date', '<=', $request->to);
+		// Filter tanggal
+		if ($request->filled('from') && $request->filled('to')) {
+			$dataList->whereDate('date', '>=', $request->from)
+				->whereDate('date', '<=', $request->to);
 		}
 
-		if ($request->invoice) {
-			$dataList = $dataList->where('invoice', $request->invoice);
+		// Filter invoice
+		if ($request->filled('invoice')) {
+			$dataList->where('invoice', $request->invoice);
 		}
 
-		if ($request->total) {
-			$dataList = $dataList->where('total', $request->total);
+		// Filter total
+		if ($request->filled('total')) {
+			$dataList->where('total', $request->total);
 		}
 
-		if ($request->type) {
-			$dataList = $dataList->where('type', $request->type);
+		// Filter type
+		if ($request->filled('type')) {
+			$dataList->where('type', $request->type);
 		}
 
-		if ($request->order_date) {
-			$dataList = $dataList->orderBy($request->order_date, 'desc');
-		} else {
-			$dataList = $dataList->orderBy('date', 'desc');
-		}
-
-		$datalist = $dataList->orderBy('id', 'desc');
-
+		// Filter berdasarkan lokasi user
 		if (Auth::user()->location_id > 0) {
 
-			$customers = Customer::whereHas('locations', function ($query) {
+			$customerIds = Customer::whereHas('locations', function ($query) {
 				$query->where('location_id', Auth::user()->location_id);
 			})->pluck('id');
 
-			$dataList = $dataList->whereIn('sender_id', $customers)->orWhereIn('receiver_id', $customers);
-
-			// dd($customers);
-
-			// $userLocationId = Auth::user()->location_id;
-
-			// $dataList = $dataList->where(function ($query) use ($userLocationId) {
-			// 	// Jika sender_type atau recaiver_type = 1, tampilkan semua data
-			// 	$query->where('sender_type', Customer::TYPE_CUSTOMER)
-			// 		->orWhere('receiver_type', Customer::TYPE_CUSTOMER);
-			// })
-			// ->orWhere(function ($query) use ($userLocationId) {
-			// 	// Jika sender_type atau receiver_type adalah [2,3,4], cek lokasi sender/receiver
-			// 	$query->whereIn('sender_type', [Customer::TYPE_BANK, Customer::TYPE_WAREHOUSE, Customer::TYPE_RESELLER])
-			// 		->orWhereIn('receiver_type', [Customer::TYPE_BANK, Customer::TYPE_WAREHOUSE, Customer::TYPE_RESELLER])
-			// 		->where(function ($q) use ($userLocationId) {
-			// 			$q->whereHas('sender.locations', function ($subQuery) use ($userLocationId) {
-			// 				$subQuery->whereIn('locations.id', [$userLocationId]);
-			// 			})->orWhereHas('receiver.locations', function ($subQuery) use ($userLocationId) {
-			// 				$subQuery->whereIn('locations.id', [$userLocationId]);
-			// 			});
-			// 		});
-			// });
-
-
-
-
-			// $datList = $dataList->filterLocation();
-
-			// $dataList = $dataList->whereIn('sender_type',[Customer::TYPE_CUSTOMER, Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])->orWhereIn('receiver_type', [Customer::TYPE_CUSTOMER, Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER]);
-
-			// $dataList = $dataList->where(function ($query) {
-			// 	$query->whereHas('sender', function ($q) {
-			// 		$q->where(function ($q2) {
-			// 			$q2->whereIn('type', [Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])
-			// 			   ->whereHas('locations', function ($q3) {
-			// 				   $q3->where('location_id', Auth::user()->location_id);
-			// 			   });
-			// 		});
-			// 	})->orWhereHas('receiver', function ($q) {
-			// 		$q->where(function ($q2) {
-			// 			$q2->whereIn('type', [Customer::TYPE_BANK,Customer::TYPE_WAREHOUSE,Customer::TYPE_RESELLER])
-			// 			   ->whereHas('locations', function ($q3) {
-			// 				   $q3->where('location_id', Auth::user()->location_id);
-			// 			   });
-			// 		});
-			// 	});
-			// });
-
-
-
-
+			$dataList->where(function ($query) use ($customerIds) {
+				$query->whereIn('sender_id', $customerIds)
+					->orWhereIn('receiver_id', $customerIds);
+			});
 		}
 
-		$dataList = $dataList->paginate(20)->withQueryString();
+		// Sorting
+		if ($request->filled('order_date')) {
+			$dataList->orderBy($request->order_date, 'desc');
+		} else {
+			$dataList->orderBy('date', 'desc');
+		}
 
-
-
-		// dd($dataList);
+		$dataList = $dataList
+			->orderBy('id', 'desc')
+			->paginate(20)
+			->withQueryString();
 
 		return view('transactions.index', compact('dataList', 'allType'));
 	}
@@ -983,7 +1038,7 @@ class TransactionsController extends Controller
 			'receiver' => null
 		];
 
-		
+
 
 		switch ($data->type) {
 
@@ -1096,7 +1151,7 @@ class TransactionsController extends Controller
 				break;
 		}
 
-	
+
 
 		return view(
 			'transactions.detail-desty-sync',
