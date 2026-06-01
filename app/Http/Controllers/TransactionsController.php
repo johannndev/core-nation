@@ -73,11 +73,11 @@ class TransactionsController extends Controller
 
 		if (Auth::user()->location_id > 0) {
 
-			// $customers = Customer::whereHas('locations', function ($query) {
-			// 	$query->where('location_id', Auth::user()->location_id);
-			// })->pluck('id');
+			$customers = Customer::whereHas('locations', function ($query) {
+				$query->where('location_id', Auth::user()->location_id);
+			})->pluck('id');
 
-			// $dataList = $dataList->whereIn('sender_id', $customers)->orWhereIn('receiver_id', $customers);
+			$dataList = $dataList->whereIn('sender_id', $customers)->orWhereIn('receiver_id', $customers);
 
 			// dd($customers);
 
