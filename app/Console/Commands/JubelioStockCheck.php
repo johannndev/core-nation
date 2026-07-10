@@ -113,6 +113,7 @@ class JubelioStockCheck extends Command
 
             foreach ($jubelioItem['location_stocks'] as $locStock) {
                 $jubelioLocId = $locStock['location_id'];
+                if($jubelioLocId != -1) continue;
                 $jubelioQty = $locStock['on_hand'];
 
                 // Cari pemetaan warehouse di Jubeliosync
