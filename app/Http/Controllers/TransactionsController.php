@@ -163,7 +163,7 @@ class TransactionsController extends Controller
 		}
 
 		// Filter type
-		if ($request->filled('type')) {
+		if ($request->filled('type') && $request->type > 0) {
 			$dataList->where('type', $request->type);
 		}
 

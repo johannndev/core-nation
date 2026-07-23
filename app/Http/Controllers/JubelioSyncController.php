@@ -15,10 +15,9 @@ class JubelioSyncController extends Controller
 {
 
     public function index(){
+        Cache::forget('jubelio_data');
+        JubelioHelper::getJubelioCache();
         $dataList = Jubeliosync::with(['warehouse','customer']);
-
-       
-
         if(Request('name')) {
 			$name = str_replace(' ', '%', Request('name'));
 			$dataList = $dataList->where('jubelio_location_name','LIKE',"%$name%");
@@ -26,10 +25,6 @@ class JubelioSyncController extends Controller
 		if($id = Request('id')) {
 			$dataList = $dataList->where('memberId','=', $id);
 		}
-
-      
-
-		
         
         $dataList = $dataList->orderBy('created_at','desc')->paginate(50)->withQueryString();
 
