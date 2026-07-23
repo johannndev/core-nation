@@ -15,6 +15,7 @@ class JubelioSyncController extends Controller
 {
 
     public function index(){
+        JubelioHelper::jubelioAuth();
         $dataList = Jubeliosync::with(['warehouse','customer']);
 
        
