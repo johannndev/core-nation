@@ -15,8 +15,6 @@ class JubelioSyncController extends Controller
 {
 
     public function index(){
-        Cache::forget('jubelio_data');
-        JubelioHelper::getJubelioCache();
         $dataList = Jubeliosync::with(['warehouse','customer']);
         if(Request('name')) {
 			$name = str_replace(' ', '%', Request('name'));
