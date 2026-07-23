@@ -53,6 +53,8 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +82,15 @@ Route::get('/jubelio-token', function () {
     $auth = JubelioHelper::jubelioAuth();
 
     dd($auth);
+});
+
+Route::get('/reset-jubelio-cache', function () {
+    Cache::forget('jubelio_data');
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Cache jubelio_data berhasil dihapus.',
+    ]);
 });
 
 Route::get('/cache-role-reset', function () {
